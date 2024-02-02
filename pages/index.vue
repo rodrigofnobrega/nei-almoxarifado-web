@@ -1,5 +1,5 @@
 <template>
-  <Tutorial/>
+  <h1>CI/CD TESTE</h1>
 </template>
 
 <script lang="ts">
