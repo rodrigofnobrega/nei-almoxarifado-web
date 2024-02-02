@@ -1,5 +1,5 @@
 # nei-almoxarifado-web
-T
+
 ## Build Setup
 
 ```bash
