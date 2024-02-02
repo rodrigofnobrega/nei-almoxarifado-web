@@ -3,7 +3,10 @@ name: Vercel Deployment
 on:
   push:
     branches:
-      - main
+      - '*'
+  pull_request:
+    branches:
+      - '*'
 
 jobs:
   deploy:
@@ -20,9 +23,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: Debug VERCEL_TOKEN
-        run: echo "VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}"
 
       - name: Build and deploy
         run: npx vercel --token ${{ secrets.VERCEL_TOKEN }}
