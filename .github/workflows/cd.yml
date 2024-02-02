@@ -29,7 +29,7 @@ jobs:
 
       - name: Build and deploy
         run:
-          vercel login
+          vercel --token ${{ secrets.VERCEL_TOKEN }}
 
           vercel --prod
 
