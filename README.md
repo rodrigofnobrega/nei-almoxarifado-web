@@ -1,5 +1,5 @@
 # nei-almoxarifado-web
-Teste pull
+
 ## Build Setup
 
 ```bash
