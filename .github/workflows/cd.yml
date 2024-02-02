@@ -1,12 +1,12 @@
-name: CI
+name: CD
 
 on:
-  pull_request:
+  push:
     branches:
-      - '*'
+      - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,8 +21,10 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-    - name: Run Tests
-      run: npm run test
-
     - name: Build Application
-      run: npm run build
+      run: npm run generate
+
+    - name: Deploy to Vercel
+      run: |
+        npm install -g vercel
+        vercel --token ${{ secrets.VERCEL_AUTH_TOKEN }}
