@@ -13,11 +13,6 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Clear Node.js cache and install dependencies
-      run: |
-        rm -rf node_modules
-        npm install
-
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
