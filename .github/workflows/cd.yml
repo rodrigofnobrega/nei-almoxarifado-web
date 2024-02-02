@@ -28,7 +28,7 @@ jobs:
         run: npm install -g vercel
 
       - name: Build and deploy
-        run: npx vercel --token ${{ secrets.NEI }} --yes
+        run: npx vercel --token NEI --yes
 
   check_status:
     runs-on: ubuntu-latest
