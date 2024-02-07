@@ -19,10 +19,10 @@ jobs:
         node-version: 21
 
     - name: Install Dependencies
-      run: npm install
+      run: yarn install
 
     #- name: Run Tests
       #run: npm run test
 
     - name: Build Application
-      run: npm run build
+      run: yarn build
