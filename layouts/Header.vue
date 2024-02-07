@@ -1,5 +1,5 @@
 <template>
-    <header class="app-header custom-header d-flex">
+    <header class="custom-header d-flex m-0">
         <div class="row mr-auto d-flex align-items-center">
             <div class="col logo">
                 <router-link class="navbar-brand" to="/">
@@ -25,18 +25,3 @@
         </div>
     </header>
 </template>
-
-<script lang="ts">
-
-export default {
-    name: 'header',
-
-}
-
-</script>
-
-<style>
-    .custom-header{
-        background-color: #0B3B69;
-    }
-</style>
