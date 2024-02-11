@@ -1,6 +1,7 @@
 $theme-colors: (
     "primary": purple,
-    "sucess": black,    
+    "success": black,
 );
 
-@import 'bootstrap/scss/bootstrap'
+@import 'bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/_variables'
