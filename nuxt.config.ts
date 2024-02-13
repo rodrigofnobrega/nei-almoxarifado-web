@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   alias: {"@": "/<rootDir>"},
   css: [
+    'bootstrap/dist/css/bootstrap.min.css',
     '~/assets/scss/styles.scss'
   ],
   modules: [
