@@ -1,7 +1,28 @@
+/*
+xs(smartphone <= 576px)
+sm(celular 576px <= 768px), 
+md(tablet 576px <= 992px),
+lg(note 992px <= 1200px),
+xl(pc 1200px <= 1400px), 
+xxl(televisão >= 1400px).*/
+
 $theme-colors: (
-    "primary": purple,
-    "success": black,
+    "primary": #0B3B69,
+    "secondary": #1F69B1,
+    "light-sucess": #4CAF50,
+    "dark-sucess": #388E3C,
+    "light-alert": #E53935,
+    "dark-alert": #B71C1C,
+    "warning": #FED51E,
+    "light": #FFFFFF,
+    "dark": #000000,
+    "light-emphasis": #F2F2F2,
+    "dark-emphasis": #333333,
+    "loan": #A5971E,
+    "refund": #7BBB12,
 );
 
+$input-color: red;
+$input-border-color:  red;
+
 @import 'bootstrap/scss/bootstrap';
-@import 'bootstrap/scss/_variables'
