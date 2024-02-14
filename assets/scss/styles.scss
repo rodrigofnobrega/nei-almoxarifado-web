@@ -4,12 +4,13 @@ sm(celular 576px <= 768px),
 md(tablet 576px <= 992px),
 lg(note 992px <= 1200px),
 xl(pc 1200px <= 1400px), 
-xxl(televisão >= 1400px).*/
+xxl(televisão >= 1400px).*/ 
 
+// Cores da aplicação
 $theme-colors: (
     "primary": #0B3B69,
     "secondary": #1F69B1,
-    "light-sucess": #4CAF50,
+    "light-success": #4CAF50,
     "dark-sucess": #388E3C,
     "light-alert": #E53935,
     "dark-alert": #B71C1C,
@@ -22,7 +23,39 @@ $theme-colors: (
     "refund": #7BBB12,
 );
 
-$input-color: red;
-$input-border-color:  red;
+/*ESTILOS DO THEME SWITCH*/
+
+$form-switch-width: 2.5em;
+$form-switch-color: white;
+$form-check-input-checked-color: map-get($theme-colors, "dark-emphasis");
+$form-check-input-checked-bg-color: map-get($theme-colors, "dark-emphasis");
+$form-switch-checked-color: map-get($theme-colors, "dark-emphasis");
+$form-switch-focus-color: map-get($theme-colors, "warning");
+$form-switch-checked-color: map-get($theme-colors, "warning");
+$form-switch-bg-image: url('/sun.svg');
+$form-switch-focus-bg-image: url('/sun.svg');
+$form-switch-checked-bg-image: url('/moon.svg');
+
+.form-check-input{
+    padding: 9px;
+}
 
 @import 'bootstrap/scss/bootstrap';
+
+/*ESTILOS DA SEARCH BAR*/
+@mixin my-button-outline-success($text-color, $hover-bg, $hover-border-radius){
+    color: $text-color;
+
+    &:hover {
+        background-color: $hover-bg;
+        border-radius: $hover-border-radius;
+    }
+}
+
+$search-buttom: map-get($theme-colors, "warning");
+
+// Personalizando o botão de contorno de sucesso    
+.btn-outline-success {
+    @include my-button-outline-success(gray, $search-buttom, 0px);
+}
+
