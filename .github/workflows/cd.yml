@@ -36,12 +36,15 @@ jobs:
       - name: Checkout to gh-pages
         run:
           git checkout --orphan gh-pages
-      - name: Adding output directory
+      - name: Moving Files
         run:
-          git --work-tree ./output add --all
+          mv dist/* .
+      - name: Adding output files
+        run: 
+          git add --all
       - name: Commiting output directory
         run:
-          git --work-tree ./output commit -m "Deploying to GitHub Pages"
+          git commit -m "Deploying to GitHub Pages"
       - name: Pushing to Github Pages
         run:
           git push origin HEAD:gh-pages --force
