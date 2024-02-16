@@ -30,21 +30,31 @@ jobs:
       - name: Configure actions username
         run:
           git config --global user.name 'GitHub Actions'
+
       - name: Configure actions email
         run: 
           git config --global user.email 'actions@users.noreply.github.com'
+
       - name: Checkout to gh-pages
         run:
           git checkout --orphan gh-pages
+
+      - name: Checking Dirs
+        run:
+          ls
+
       - name: Moving Files
         run:
-          mv dist/* .
+          mv output/* .
+
       - name: Adding output files
         run: 
           git add --all
+
       - name: Commiting output directory
         run:
           git commit -m "Deploying to GitHub Pages"
+          
       - name: Pushing to Github Pages
         run:
           git push origin HEAD:gh-pages --force

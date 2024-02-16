@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid d-flex justify-content-between align-items-center bg-primary">  
+    <div class="fixed-top container-fluid d-flex justify-content-between align-items-center bg-primary">  
       <div class="d-flex align-items-center">
         <div class="logo">
           <a class="navbar-brand" href="/">
@@ -14,7 +14,7 @@
               <span class="ms-3">Pesquisar</span>
             </button>
         </div>
-        <div class="modal fade" id="scrollableModal" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true">
+        <div class="modal fade" id="scrollableModal" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
           <div class="modal-dialog moda-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
               <div class="modal-header">
@@ -97,8 +97,6 @@
       </div>     
     </div>
 </template>
-
-
 
 <style scoped>
 .custom-logo{
