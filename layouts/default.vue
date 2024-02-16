@@ -15,6 +15,6 @@
   }
 
   #content-wrap { 
-    padding-bottom: 13rem; 
+    padding-bottom: 12rem; 
   }
 </style>

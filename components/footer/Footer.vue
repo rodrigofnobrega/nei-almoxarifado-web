@@ -31,7 +31,7 @@
   background-color: #0b3b69;
   width: 100%;
   bottom: 0;
-  height: 13rem;
+  height: 12rem;
   position: absolute;
   color: white;
 }
