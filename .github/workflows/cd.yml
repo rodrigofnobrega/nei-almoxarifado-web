@@ -51,11 +51,13 @@ jobs:
       - name: Configure SSH Key
         run: mkdir -p ~/.ssh
       - name: Configure SSH Key 1
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
       - name: Configure SSH Key 2
-        run: chmod 600 ~/.ssh/id_rsa
+        run: chmod 600 ssh_key
       - name: Configure SSH Key 3
         run: ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - name: Configure SSH Key 4 
+        run: mv ssh_key ~/.ssh/id_rsa 
 
       - name: Pushing to Github Pages
         env:
