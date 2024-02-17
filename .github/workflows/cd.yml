@@ -45,7 +45,7 @@ jobs:
 
       - name: Moving to Dir
         run:
-          cd .output
+          cd ~/.output
 
       - name: Checking Dirs
         run:
