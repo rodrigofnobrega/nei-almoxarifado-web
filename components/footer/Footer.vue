@@ -22,7 +22,6 @@
     </div>
   </section>
 </footer>
-<!--CFI-->
 </template>
 
 <style> 

@@ -53,4 +53,3 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git push https://github.com/${{ github.repository }} HEAD:gh-pages --force
-
