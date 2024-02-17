@@ -30,9 +30,8 @@ jobs:
       - name: Configure actions email
         run: git config --global user.email 'actions@users.noreply.github.com'
 
-       - name: Checkout to gh-pages
-        run:
-          git checkout --orphan gh-pages
+     - name: Checkout to gh-pages
+        run: git checkout --orphan gh-pages
 
       - name: Build aplication
         run: yarn build
