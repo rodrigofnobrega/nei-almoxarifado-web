@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid d-flex justify-content-between align-items-center bg-primary">  
+    <div class="fixed-top container-fluid d-flex justify-content-between align-items-center bg-primary">  
       <div class="d-flex align-items-center">
         <div class="logo">
           <a class="navbar-brand" href="/">
@@ -14,7 +14,7 @@
               <span class="ms-3">Pesquisar</span>
             </button>
         </div>
-        <div class="modal fade" id="scrollableModal" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true">
+        <div class="modal fade" id="scrollableModal" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
           <div class="modal-dialog moda-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
               <div class="modal-header">
@@ -73,12 +73,12 @@
             </ul>
           </div>
             <div class="nav-item dropdown">
-              <button class="svg-button  d-flex bg-primary align-items-center" data-bs-toggle="dropdown" data-bs-offset="10,10" aria-expanded="false">
+              <button class="svg-button  d-flex bg-primary align-items-center" data-bs-toggle="dropdown" data-bs-offset="10,10" data-bs-auto-close="outside" aria-expanded="false">
                   <p class="user-text text-light fw-light px-1 m-0">Amauri</p>
                   <IconsDownArrow width="24px" height="24px"/>
               </button>
               <ul class="dropdown-menu">
-                <li class="dropdown-item">Amauri Junior Lima da Silva</li>
+                <li class="dropdown-item info">Amauri Junior Lima da Silva</li>
                 <li><a class="dropdown-item d-flex align-items-center justify-content-between" href="/perfil">
                   Perfil
                   <IconsProfile />
@@ -97,8 +97,6 @@
       </div>     
     </div>
 </template>
-
-
 
 <style scoped>
 .custom-logo{

@@ -18,6 +18,7 @@ $theme-colors: (
     "light": #FFFFFF,
     "dark": #000000,
     "light-emphasis": #F2F2F2,
+    "gray-light": #D9D9D9,
     "dark-emphasis": #333333,
     "loan": #A5971E,
     "refund": #7BBB12,
@@ -44,11 +45,17 @@ $form-switch-checked-bg-image: url('/moon.svg');
 
 /* ESTILOS DROPDOWN*/
 $dropdown-link-hover-color: white;
-$dropdown-link-hover-bg: #FED51E; 
 
 /*ESTILOS MODAIS*/
 $list-group-hover-bg: #FED51E;
 $list-group-active-bg: #FED51E;
+
+/*Sidebar*/
+$offcanvas-backdrop-opacity: 0%;
+$offcanvas-horizontal-width: 298px;
+
+/*List Group*/
+
 @import "bootstrap/scss/bootstrap";
 
 /*ESTILOS DA SEARCH BAR*/
@@ -104,3 +111,26 @@ $search-text: rgb(51, 51, 51, 0.7);
 .form-check-input{
     box-shadow: 0px;
 }
+.offcanvas{
+    top: 0;
+    margin-top: 55px;
+    overflow-y: hidden;
+}
+.modal-backdrop{
+    z-index: -1;
+}
+.modal{
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.dropdown-item {
+    &:hover {
+        &.info {
+            color: black;
+            background-color: white;
+        } 
+        background-color: #FED51E;
+    }
+}
+
+
