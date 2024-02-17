@@ -25,40 +25,29 @@ jobs:
         run: yarn install
 
       - name: Configure actions username
-        run:
-          git config --global user.name 'GitHub Actions'
+        run: git config --global user.name 'GitHub Actions'
 
       - name: Configure actions email
-        run: 
-          git config --global user.email 'actions@users.noreply.github.com'
-
-      - name: Checkout to gh-pages
-        run:
-          git checkout --orphan gh-pages
+        run: git config --global user.email 'actions@users.noreply.github.com'
 
       - name: Build aplication
         run: yarn build
 
       - name: Checking Dirs
-        run:
-          ls -a
+        run: ls -a $GITHUB_WORKSPACE/.output
 
       - name: Moving to Dir
-        run:
-          cd ./.output
-
-      - name: Checking Dirs
-        run:
-          ls -a
+        run: cd $GITHUB_WORKSPACE/.output
 
       - name: Adding output files
-        run: 
-          git add --all
+        run: git add --all
 
       - name: Commiting output directory
-        run:
-          git commit -m "Deploying to GitHub Pages"
+        run: git commit -m "Deploying to GitHub Pages"
           
       - name: Pushing to Github Pages
-        run:
-          git push origin HEAD:gh-pages --force
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          git push https://github.com/${{ github.repository }} HEAD:gh-pages --force
+
