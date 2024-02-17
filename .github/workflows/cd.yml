@@ -41,11 +41,9 @@ jobs:
 
       - name: Checking Dirs
         run:
-          ls
-
-      - name: Moving Files
+          cd .output
         run:
-          mv output/* .
+          ls
 
       - name: Adding output files
         run: 
