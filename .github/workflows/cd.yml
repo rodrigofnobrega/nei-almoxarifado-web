@@ -30,6 +30,10 @@ jobs:
       - name: Configure actions email
         run: git config --global user.email 'actions@users.noreply.github.com'
 
+       - name: Checkout to gh-pages
+        run:
+          git checkout --orphan gh-pages
+
       - name: Build aplication
         run: yarn build
 
@@ -38,9 +42,6 @@ jobs:
 
       - name: Moving to Dir
         run: cd $GITHUB_WORKSPACE/.output
-
-      - name: Checking Dirs
-        run: ls -a $GITHUB_WORKSPACE/.output
 
       - name: Adding output files
         run: git add --all
