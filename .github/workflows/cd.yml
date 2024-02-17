@@ -39,6 +39,9 @@ jobs:
       - name: Moving to Dir
         run: cd $GITHUB_WORKSPACE/.output
 
+      - name: Checking Dirs
+        run: ls -a $GITHUB_WORKSPACE/.output
+
       - name: Adding output files
         run: git add --all
 
