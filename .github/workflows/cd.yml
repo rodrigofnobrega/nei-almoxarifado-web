@@ -24,9 +24,6 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Build aplication
-        run: yarn build
-
       - name: Configure actions username
         run:
           git config --global user.name 'GitHub Actions'
@@ -42,6 +39,9 @@ jobs:
       - name: Checking Dirs
         run:
           ls
+
+      - name: Build aplication
+        run: yarn build
 
       - name: Moving Files
         run:
