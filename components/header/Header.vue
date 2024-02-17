@@ -73,12 +73,12 @@
             </ul>
           </div>
             <div class="nav-item dropdown">
-              <button class="svg-button  d-flex bg-primary align-items-center" data-bs-toggle="dropdown" data-bs-offset="10,10" aria-expanded="false">
+              <button class="svg-button  d-flex bg-primary align-items-center" data-bs-toggle="dropdown" data-bs-offset="10,10" data-bs-auto-close="outside" aria-expanded="false">
                   <p class="user-text text-light fw-light px-1 m-0">Amauri</p>
                   <IconsDownArrow width="24px" height="24px"/>
               </button>
               <ul class="dropdown-menu">
-                <li class="dropdown-item">Amauri Junior Lima da Silva</li>
+                <li class="dropdown-item info">Amauri Junior Lima da Silva</li>
                 <li><a class="dropdown-item d-flex align-items-center justify-content-between" href="/perfil">
                   Perfil
                   <IconsProfile />
