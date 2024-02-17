@@ -20,7 +20,7 @@ yarn install
 bun install
 ```
 
-## Dev Server
+## Developer Server
 
 Start the development server on `http://localhost:3000`:
 
