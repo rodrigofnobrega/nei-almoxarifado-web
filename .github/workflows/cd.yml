@@ -47,7 +47,16 @@ jobs:
 
       - name: Commiting output directory
         run: git commit -m "Deploying to GitHub Pages"
-          
+
+      - name: Configure SSH Key
+        run: mkdir -p ~/.ssh
+      -name: Configure SSH Key 1
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+      -name: Configure SSH Key 2
+        run: chmod 600 ~/.ssh/id_rsa
+      -name: Configure SSH Key 3
+        run: ssh-keyscan github.com >> ~/.ssh/known_hosts
+
       - name: Pushing to Github Pages
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
