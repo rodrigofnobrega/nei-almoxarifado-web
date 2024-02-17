@@ -72,6 +72,7 @@ export default {
 <style scoped>
 .nav-sidebar{
     z-index: 0;
+     display: flex;
     width: 14.5%;
     transition: width 0.6s ease-in-out;
 }

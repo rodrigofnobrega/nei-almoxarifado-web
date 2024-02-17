@@ -1,11 +1,13 @@
 <template>
   <div id="content">
     <Header />
-    <NavbarNavSideBar id="sidebar"/>  
+    <div class="container-fluid d-block col-1">
+      <NavbarNavSideBar id="sidebar"/>
+      <Footer />
+    </div>  
     <div id="content-wrap">
       <slot />
     </div>
-    <Footer />
   </div>
 </template>
 
@@ -17,7 +19,7 @@
 
   #content-wrap { 
     padding-left: 3rem;
-    padding-bottom: 12rem;
+    padding-bottom: 18rem;
     padding-top: 9rem;  
   }
 </style>

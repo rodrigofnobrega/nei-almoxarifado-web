@@ -24,9 +24,6 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Build aplication
-        run: yarn build
-
       - name: Configure actions username
         run:
           git config --global user.name 'GitHub Actions'
@@ -39,13 +36,16 @@ jobs:
         run:
           git checkout --orphan gh-pages
 
+      - name: Build aplication
+        run: yarn build
+
+      - name: Moving to Dir
+        run:
+          cd .output
+
       - name: Checking Dirs
         run:
           ls
-
-      - name: Moving Files
-        run:
-          mv output/* .
 
       - name: Adding output files
         run: 
