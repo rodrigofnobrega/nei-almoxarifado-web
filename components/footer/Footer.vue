@@ -1,7 +1,6 @@
 <script setup> </script>
 
 <template>
-
 <footer class="custom-footer border-top text-center text-lg-start align-items-center">
   <section id="info">
     <div class="container text-center text-md-start mt-5">
@@ -16,9 +15,9 @@
 	        <p> Telefone: +55 (84) 98768-4609 </p>
           <p class="text-underline text-break"> almoxarifado957@gmail.com </p> 
         </div>
-	<div class="d-none d-lg-block col-md-1 col-lg-1 col-xl-1"> 
-	   <a href="/"> <IconsLogo width="63" height="64" /> </a>
-	</div>
+	      <div class="d-none d-lg-block col-md-1 col-lg-1 col-xl-1"> 
+	        <a href="/"> <IconsLogo width="63" height="64" /> </a>
+	      </div>
        </div>
     </div>
   </section>
@@ -27,7 +26,6 @@
 </template>
 
 <style> 
-
 .custom-footer {    
   z-index: 0;
   margin-top: 5px;

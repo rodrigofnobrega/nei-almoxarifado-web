@@ -9,7 +9,6 @@
   </div>
 </template>
 
-
 <style> 
   #content { 
     position: relative;
