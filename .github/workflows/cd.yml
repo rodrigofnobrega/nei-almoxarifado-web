@@ -52,4 +52,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git push https://github.com/${{ github.repository }} HEAD:gh-pages --force
+          git push git@github.com:AdministratorNei/nei-almoxarifado-web.git HEAD:gh-pages --force
+
