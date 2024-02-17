@@ -36,12 +36,12 @@ jobs:
         run:
           git checkout --orphan gh-pages
 
+      - name: Build aplication
+        run: yarn build
+
       - name: Checking Dirs
         run:
           ls
-
-      - name: Build aplication
-        run: yarn build
 
       - name: Moving Files
         run:
