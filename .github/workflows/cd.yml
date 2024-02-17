@@ -39,9 +39,11 @@ jobs:
       - name: Build aplication
         run: yarn build
 
-      - name: Checking Dirs
+      - name: Moving to Dir
         run:
           cd .output
+
+      - name: Checking Dirs
         run:
           ls
 
