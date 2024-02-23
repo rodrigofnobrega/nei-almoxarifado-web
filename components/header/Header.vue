@@ -9,7 +9,7 @@
           </a>
         </div>
         <div class="d-flex search-bar mx-5">
-            <button class="search-button d-flex btn btn-outline-success align-items-center" type="button" data-bs-target="#scrollableModal" data-bs-toggle="modal">
+            <button class="d-flex btn btn-search  align-items-center" type="button" data-bs-target="#scrollableModal" data-bs-toggle="modal">
               <IconsSearchGlass width="25px" height="25px"/>
               <span class="ms-3">Pesquisar</span>
             </button>
@@ -121,10 +121,7 @@ export default{
 .custom-logo{
     transition: transform 0.3s ease-in-out;
 }
-.search-button{
-    border-radius: 4px;
-}
-.search-button span{
+.btn-search span{
   margin-right: 110px;
 }
 .search-icon{
@@ -136,6 +133,8 @@ export default{
     width: 210px;
 }
 .form-control{
+    border: 1;
+    border-left: 0;
     height: 41px;
     width: 420px;
     border-radius: 0px 4px 4px 0px;
@@ -150,9 +149,6 @@ export default{
     font-size: 24px;
     font-weight: 100; /* 200 é o valor para a fonte ExtraLight da família Roboto */
 }
-.search-button:active{
-  background: rgba(254, 213, 30, 0.9);
-}
 .custom-logo:hover{
   transform: scale(1.07);
 }
@@ -163,5 +159,10 @@ export default{
 .profile-drop:hover{
   transition: filter 0.3s ease-in;
   filter: drop-shadow(0px 1px 1px rgba(254, 213, 30, 1));
+}
+.btn-search:active{
+    background-color: #FED51E;
+    color: white;
+    border-color: #FED51E;
 }
 </style>

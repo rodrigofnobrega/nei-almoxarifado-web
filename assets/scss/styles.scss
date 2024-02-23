@@ -59,11 +59,17 @@ $offcanvas-horizontal-width: 298px;
 @import "bootstrap/scss/bootstrap";
 
 /*ESTILOS DA SEARCH BAR*/
-@mixin my-button-outline-success($text-color, $bg-color, $hover-bg, $hover-border-radius){
+@mixin my-button-search($text-color, $bg-color, $hover-text, $hover-bg, $hover-border-radius){
     color: $text-color;
     background-color: $bg-color;
-
+    border-radius: $hover-border-radius;
     &:hover {
+        color: $hover-text;
+        background-color: $hover-bg;
+        border-radius: $hover-border-radius;
+    }
+    &:active{
+        color: $hover-text;
         background-color: $hover-bg;
         border-radius: $hover-border-radius;
     }
@@ -74,27 +80,30 @@ $offcanvas-horizontal-width: 298px;
 }
 
 
-$search-buttom: map-get($theme-colors, "warning");
-$search-text: rgb(51, 51, 51, 0.7);
+$btn-search-bg: map-get($theme-colors, "warning");
+$btn-search-text: rgb(51, 51, 51, 0.7);
 
 // Personalizando o botão de contorno de sucesso    
-.btn-outline-success    {
-    @include my-button-outline-success($search-text, white, $search-buttom, 4px);
+.btn-search {
+    @include my-button-search($btn-search-text, white, white, $btn-search-bg, 4px);
     border: 1;
     border-right: 0;
 }
-.btn-outline-success:focus{
+/*
+.btn-outline-search:hover{
     border-radius: 4px;
+    background: rgba(254, 213, 30, 0.9);
+    color: white;
 }
+*/
+
 .form-control{
-    @include my-form-control($search-text, white);
-    border: 1;
-    border-left: 0;
-    font-size: 22px;
+    @include my-form-control($btn-search-text, white);  
+    font-size: 19px;
 }
 .form-control::placeholder {
-    font-size: 22px;
-    color: $search-text; 
+    font-size: 19px;
+    color: $btn-search-text; 
 }
 .form-control:focus {
     box-shadow: 0 0 0 0;
