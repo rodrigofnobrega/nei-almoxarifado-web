@@ -9,7 +9,7 @@
           </a>
         </div>
         <div class="d-flex search-bar mx-5">
-            <button class="search-button d-flex btn btn-outline-success align-items-center" type="button" data-bs-target="#scrollableModal" data-bs-toggle="modal">
+            <button class="search-button d-flex btn btn-outline-search align-items-center" type="button" data-bs-target="#scrollableModal" data-bs-toggle="modal">
               <IconsSearchGlass width="25px" height="25px"/>
               <span class="ms-3">Pesquisar</span>
             </button>
