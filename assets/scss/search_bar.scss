@@ -1,0 +1,48 @@
+@import 'variables.scss';
+/*ESTILOS DA SEARCH BAR*/
+@mixin my-button-search($text-color, $bg-color, $hover-text, $hover-bg, $hover-border-radius){
+    color: $text-color;
+    background-color: $bg-color;
+    border-radius: $hover-border-radius;
+    &:hover {
+        color: $hover-text;
+        background-color: $hover-bg;
+        border-radius: $hover-border-radius;
+    }
+    &:active{
+        color: $hover-text;
+        background-color: $hover-bg;
+        border-radius: $hover-border-radius;
+    }
+    &:focus{
+        color: $hover-text;
+        background-color: $hover-bg;
+        border-radius: $hover-border-radius;
+    }
+}
+@mixin my-form-control($text-color, $bg-color){
+    color: $text-color;
+    background-color: $bg-color;
+}
+
+
+$btn-search-bg: map-get($theme-colors, "warning");
+$btn-search-text: rgb(51, 51, 51, 0.7);
+
+// Personalizando o botão de contorno de sucesso    
+.btn-search {
+    @include my-button-search($btn-search-text, white, white, $btn-search-bg, 4px);
+    border: 1;
+    border-right: 0;
+}
+
+.form-control{
+    @include my-form-control($btn-search-text, white);  
+}
+.form-control::placeholder {
+    color: $btn-search-text; 
+}
+.form-control:focus {
+    box-shadow: 0 0 0 0;
+    text-shadow: 0;
+}

@@ -1,121 +1,24 @@
 /*
 xs(smartphone <= 576px)
 sm(celular 576px <= 768px), 
-md(tablet 576px <= 992px),
+md(tablet 576px <= 992px),  
 lg(note 992px <= 1200px),
 xl(pc 1200px <= 1400px), 
 xxl(televisão >= 1400px).*/ 
-
 @import 'card.scss';
 @import 'variables.scss';
+@import 'theme_switch.scss';
+@import 'sidebar.scss';
 
-// Cores da aplicação
-
-$font-family-sans-serif: "Poppins";
-
-/*ESTILOS DO THEME SWITCH*/
-
-$form-switch-width: 2.5em;
-$form-switch-color: white;
-$form-check-input-checked-color: map-get($theme-colors, "dark-emphasis");
-$form-check-input-checked-bg-color: map-get($theme-colors, "dark-emphasis");
-$form-switch-checked-color: map-get($theme-colors, "dark-emphasis");
-$form-switch-focus-color: map-get($theme-colors, "warning");
-$form-switch-checked-color: map-get($theme-colors, "warning");
-$form-switch-bg-image: url('/sun.svg');
-$form-switch-focus-bg-image: url('/sun.svg');
-$form-switch-checked-bg-image: url('/moon.svg');
-
-.form-check-input{
-    padding: 8px;
-}
-
-/* ESTILOS DROPDOWN*/
 $dropdown-link-hover-color: white;
+$list-group-hover-bg: map-get($theme-colors, "warning");
+$list-group-active-bg: map-get($theme-colors, "warning");
 
-/*ESTILOS MODAIS*/
-$list-group-hover-bg: #FED51E;
-$list-group-active-bg: #FED51E;
+$font-family-sans-serif: "Poppins", sans-serif;
+$modal-backdrop-opacity: 0; 
 
-/*Sidebar*/
-$offcanvas-backdrop-opacity: 0%;
-$offcanvas-horizontal-width: 298px;
-
-/*List Group*/
 
 @import "bootstrap/scss/bootstrap";
-
-/*ESTILOS DA SEARCH BAR*/
-@mixin my-button-outline-search($text-color, $bg-color, $hover-bg, $hover-border-radius){
-    color: $text-color;
-    background-color: $bg-color;
-
-    &:hover {
-        background-color: $hover-bg;
-        border-radius: $hover-border-radius;
-    }
-}
-@mixin my-form-control($text-color, $bg-color){
-    color: $text-color;
-    background-color: $bg-color;
-}
-
-
-$search-buttom: map-get($theme-colors, "warning");
-$search-text: rgb(51, 51, 51, 0.7);
-
-// Personalizando o botão de contorno de sucesso    
-.btn-outline-search {
-    @include my-button-outline-search($search-text, white, $search-buttom, 4px);
-    border: 1;
-    border-right: 0;
-}
-.btn-outline-search:focus{
-    border-radius: 4px;
-}
-
-.form-control{
-    @include my-form-control($search-text, white);
-}
-.form-control::placeholder {
-    color: $search-text; 
-}
-.form-control:focus {
-    box-shadow: 0 0 0 0;
-    text-shadow: 0;
-}
-.modal-header{
-    color: white;
-    background-color: #0B3B69;
-}
-.modal-content{
-    border-radius: 17px;   
-    box-shadow: inset 0px 0px 3px 1px rgba(0, 0, 0, 0.6);
-}
-
-.form-check-input{
-    box-shadow: 0px;
-}
-.offcanvas{
-    top: 0;
-    margin-top: 55px;
-    overflow-y: hidden;
-}
-.modal-backdrop{
-    z-index: -1;
-}
-.modal{
-    background-color: rgba(0, 0, 0, 0.7);
-}
-
-.dropdown-item {
-    &:hover {
-        &.info {
-            color: black;
-            background-color: white;
-        } 
-        background-color: #FED51E;
-    }
-}
-
-
+@import 'dropdown.scss';
+@import 'modal.scss';
+@import 'search_bar.scss'

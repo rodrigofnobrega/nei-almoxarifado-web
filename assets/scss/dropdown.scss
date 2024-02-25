@@ -1,0 +1,16 @@
+.dropdown-item {
+    &:hover {
+        &.info {
+            color: black;
+            background-color: white;
+        } 
+        background-color: #FED51E;
+    }
+}
+
+/*List group styles*/
+.list-group-item{
+    &:hover{
+        color: white;
+    }
+}
