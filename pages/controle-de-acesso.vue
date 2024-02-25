@@ -1,28 +1,52 @@
+<script setup lang="ts"> 
+	const person = { name: 'Gabriel' };
+	const item = { name: 'Monitor Multilaser', quantity: 2, itemTagging: 2029103923 };
+	const requests = [
+	{ 
+		requestedAt: new Date(Date.now()).toLocaleDateString(),
+		expirationDate: new Date(Date.now()).toLocaleDateString(),
+		message: "Solicito o item para a sala A308",
+		quantity: 1,
+		person: person.name,
+		item: item.name,
+		itemTagging: item.itemTagging,
+		itemQuantity: item.quantity
+	 }, 
+	{
+		requestedAt: new Date(Date.now()).toLocaleDateString(),
+		expirationDate: new Date(Date.now()).toLocaleDateString(),
+		message: "Solicito o item para a sala B204",
+		quantity: 15,
+		person: "Clezio",
+		item: "Copo descartável",
+		itemTagging: 20191029301, 
+		itemQuantity: 200
+	},
+	]; 
+</script>
 <template>
-    <div class="container col-1 d-block" style="margin-left: 170px;">
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
-        <p>Controle de Acesso</p>
+    <div class="container d-flex content">
+	<div class="row">
+		<div v-for="req in requests" class="col-xl-6 col-12 mb-3 mb-xl-0"> 
+			<CardsSolicitation 
+				:person="req.person"
+				:requestedAt="req.requestedAt"
+				:expirationDate="req.expirationDate"
+				:message="req.message"
+				:itemName="req.item"
+				:itemTagging="req.itemTagging"
+				:quantity="req.quantity"
+				:itemQuantity="req.itemQuantity"
+			> 
+			</CardsSolicitation>
+		</div>
+	</div>
     </div>
 </template>
+
+<style scoped>
+	.content {
+		margin-left: 3vh;
+		margin-right: 3vh;
+	}
+ </style>

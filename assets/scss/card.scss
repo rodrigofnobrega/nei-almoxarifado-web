@@ -1,0 +1,7 @@
+@import 'variables.scss';
+
+.card-header { 
+		color: white !important;
+    		background-color: map-get($theme-colors, "primary") !important;
+}
+
