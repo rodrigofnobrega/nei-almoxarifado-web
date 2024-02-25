@@ -46,7 +46,7 @@ jobs:
         run: git add --all
 
       - name: Commiting output directory
-        run: git commit -m "Deploying"
+        run: git commit -m "Deploying to GitHub Pages"
 
       - name: Pushing to Github Pages
         env:
