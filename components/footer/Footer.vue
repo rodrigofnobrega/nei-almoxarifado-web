@@ -25,16 +25,8 @@
 </template>
 
 <style> 
-.custom-footer {    
-  width: 99.3vw;
-  z-index: -1;
-  flex-shrink: 0;
-  padding-left: 20vw;
-  margin-left: -46vw;
-  margin-top: 5px;
+.custom-footer {   
   background-color: #0b3b69;
-  bottom: 0;
-  position: absolute;
   color: white;
 }
 </style>

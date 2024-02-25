@@ -21,7 +21,7 @@
 		item: "Copo descartável",
 		itemTagging: 20191029301, 
 		itemQuantity: 200
-	}
+	},
 	]; 
 </script>
 <template>
@@ -46,7 +46,7 @@
 
 <style scoped>
 	.content {
-		margin-left: 14rem;
-		margin-right: 14rem;
+		margin-left: 3vh;
+		margin-right: 3vh;
 	}
  </style>
