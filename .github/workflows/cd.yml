@@ -1,7 +1,3 @@
-# Sample workflow for building and deploying a Nuxt site to GitHub Pages
-#
-# To get started with Nuxt see: https://nuxtjs.org/docs/get-started/installation
-#
 name: Deploy Nuxt site to Pages
 
 on:
@@ -88,3 +84,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Print Deployment URL
+        run: echo "Deployed to ${{ steps.deployment.outputs.page_url }}"
