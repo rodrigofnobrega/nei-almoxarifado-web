@@ -188,9 +188,11 @@ export default{
   transition: filter 0.3s ease-in;
   filter: drop-shadow(0px 1px 1px rgba(254, 213, 30, 1));
 }
+
 .btn-search:active{
     background-color: #FED51E;
     color: white;
     border-color: #FED51E;
 }
+
 </style>

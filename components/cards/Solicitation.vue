@@ -14,15 +14,15 @@ export default {
 				<div class="col-6">
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Solicitador </label>
-						<input readonly class="form-control" type="text" :value="person">
+						<input readonly class="form-control" type="text" :value="person"> </input>
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Data </label>
-						<input readonly class="form-control" :value="requestedAt"> 
+						<input readonly class="form-control" :value="requestedAt"> </input> 
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Data prevista para devolução </label>
-						<input readonly class="form-control" :value="expirationDate"> <slot name="devolutionDate" /> 
+						<input readonly class="form-control" :value="expirationDate"> <slot name="devolutionDate" /> </input> 
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Mensagem da solicitação </label>
@@ -32,19 +32,19 @@ export default {
 				<div class="col-6">
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Item solicitado </label>
-						<input readonly class="form-control" :value="itemName"> 
+						<input readonly class="form-control" :value="itemName"> </input> 
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Tombamento </label>
-						<input readonly class="form-control" :value="itemTagging">
+						<input readonly class="form-control" :value="itemTagging"> </input>
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Quantidade Solicitada </label>
-						<input readonly class="form-control" :value="quantity"> 
+						<input readonly class="form-control" :value="quantity"> </input> 
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Quantidade Disponível </label>
-						<input readonly class="form-control" :value="itemQuantity"> 
+						<input readonly class="form-control" :value="itemQuantity"> </input> 
 					</div>	
 				</div>
 			</div>
