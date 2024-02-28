@@ -1,10 +1,13 @@
-<script setup> </script>
+<script setup>
+ </script>
 
 <template>
 	<div class="modal fade" tabindex="-1"> 
 		<div class="modal-dialog"> 
 			<div class="modal-content"> 
-				<slot name="header" />	
+				<div class="modal-header">
+					<slot name="header" />	
+				</div>
 				<div class="modal-body">
 					<slot name="body" />
 				</div>
