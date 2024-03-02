@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import SearchBar from "./search/SearchBar.vue";
+import SearchBar from "./SearchBar.vue";
 import Brand from "./Brand.vue";
-import ThemeSwitch from "./theme_switch/ThemeSwitch.vue";
-import Profile from "./profile/Profile.vue";
+import ThemeSwitch from "./ThemeSwitch.vue";
+import Profile from "./Profile.vue";
 export default{
     components: { SearchBar, Brand, ThemeSwitch, Profile }
 }

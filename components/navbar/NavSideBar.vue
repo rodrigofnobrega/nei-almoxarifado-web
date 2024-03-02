@@ -1,6 +1,6 @@
 <template>
-    <div class="nav bg-light-emphasis d-flex   offcanvas show" :class="{ 'collapsed': isCollapsed }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-        <div class="offcanvas-body">
+    <div class="nav bg-light-emphasis d-flex offcanvas show" :class="{ 'collapsed': isCollapsed }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-body ps-3">
                 <ul class="list-group-flush container d-block ">
                     <a class="nav-route text-decoration-none" href="/" aria-current="true">
                         <div class="nav-container item-bg text-dark-emphasis py-2">
@@ -80,81 +80,80 @@
         };
       },
     }
-    </script>
+</script>
     
-    <style scoped>
-    .offcanvas{
-        border: none;
-        width: 200px;
-        height: 95vh;  
-        top: 5%;
-        padding-top: 30px;
-    }
-    .offcanvas-body{
-        bottom: 0;
-        margin-right: 0px;
-        padding-right: 0px;
-        margin-bottom: -200px;
-    }
-    .nav{   
-        margin: 0;
-        position: sticky;
-        display: flex;
-        transition: width 0.6s ease-in-out;
-    }
-    .list-group-item{
-        display: inline-block;
-        font-size: 13px;
-        margin-left: 7px;
-        padding-top: 8px;
-        text-decoration: none;
-        transition: opacity 0.9s ease-in-out;
-    }
-    .collapsed {
-      width: 50px; 
-    }
-    
-    .colapse-btn{
-        padding: 0;
-        width: 200px;
-        bottom: 0;
-        height: 55px;
-        transition: width 0.6s ease-in-out;
-    }
-    .collapsed .colapse-btn{
-        width: 50px;
-        height: 55px;
-    }
-    .collapsed .list-group-item{
-        visibility: hidden;
-        opacity: 0;
-    }
-    .collapsed .item-bg{
-        width: 35px;
-        height: 50px;
-    }
-    .rotate-arrow{
-        transition: transform 0.6s ease-in-out;
-    }
-    .list-group-flush{
-        margin-left: -20px;
-    }
-    .item-bg{
-        overflow: hidden;
-        transition: width 0.32s, height 0.6s ease-in-out;
-        margin-top: 15px;
-        padding-left: 5px;
-        height: 52px;
-        width: 180px;
-    }
-    .active{
-        color: white;
-        background: #0B3B69;
-        border-radius: 9px;
-    }
-    .item-bg:hover{
-        background: #D9D9D9;
-        color: #333333;
-        border-radius: 9px;
-    }
-    </style>
+<style scoped>
+.offcanvas{
+    border: none;
+    width: 200px;
+    height: 95vh;  
+    top: 5%;
+    padding-top: 30px;
+}
+.offcanvas-body{
+    bottom: 0;
+    margin-right: 0px;
+    padding-right: 0px;
+    margin-bottom: -200px;
+}
+.nav{   
+    margin: 0;
+    position: sticky;
+    display: flex;
+    transition: width 0.6s ease-in-out;
+}
+.list-group-item{
+    display: inline-block;
+    font-size: 13px;
+    margin-left: 7px;
+    padding-top: 8px;
+    text-decoration: none;
+    transition: opacity 0.9s ease-in-out;
+}
+.collapsed {
+  width: 50px; 
+}
+.colapse-btn{
+    padding: 0;
+    width: 200px;
+    bottom: 0;
+    height: 55px;
+    transition: width 0.6s ease-in-out;
+}
+.collapsed .colapse-btn{
+    width: 50px;
+    height: 55px;
+}
+.collapsed .list-group-item{
+    visibility: hidden;
+    opacity: 0;
+}
+.collapsed .item-bg{
+    width: 35px;
+    height: 40px;
+}
+.rotate-arrow{
+    transition: transform 0.6s ease-in-out;
+}
+.list-group-flush{
+    margin-left: -20px;
+}
+.item-bg{
+    overflow: hidden;
+    transition: width 0.32s, height 0.6s ease-in-out;
+    margin-top: 15px;
+    padding-left: 5px;
+    height: 52px;
+    width: 180px;
+}
+.active{
+    color: white;
+    background: #0B3B69;
+    border-radius: 9px;
+}
+.item-bg:hover{
+    background: #D9D9D9;
+    color: #333333;
+    border-radius: 9px;
+}
+</style>
