@@ -17,7 +17,7 @@
                     <a class="nav-route text-decoration-none" href="/inventario" aria-current="true">
                         <div class="nav-container item-bg text-dark-emphasis py-2">
                             <IconsSpreadSheet />
-                            <span class="list-group-item">Inventário</span>
+                            <span class="list-group-item">Catálogo</span>
                         </div>
                     </a>
                     <a class="nav-route text-decoration-none" href="/configuracoes-de-inventario" aria-current="true"> 
@@ -88,7 +88,7 @@
         width: 200px;
         height: 95vh;  
         top: 5%;
-        padding-top: 10%;
+        padding-top: 30px;
     }
     .offcanvas-body{
         bottom: 0;

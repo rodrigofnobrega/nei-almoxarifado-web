@@ -9,16 +9,6 @@
         background-color: $hover-bg;
         border-radius: $hover-border-radius;
     }
-    &:active{
-        color: $hover-text;
-        background-color: $hover-bg;
-        border-radius: $hover-border-radius;
-    }
-    &:focus{
-        color: $hover-text;
-        background-color: $hover-bg;
-        border-radius: $hover-border-radius;
-    }
 }
 @mixin my-form-control($text-color, $bg-color){
     color: $text-color;

@@ -1,5 +1,3 @@
-<script setup> </script>
-
 <template>
 	<div class="modal fade" tabindex="-1"> 
 		<div class="modal-dialog"> 
