@@ -3,7 +3,7 @@
       <div class="d-flex align-items-center">
         <Brand />
         <SearchBar />
-        <ModalBackDrop />
+        <ModalSearch />
       </div> 
       <div class="d-flex justify-content-end align-items-center">
         <ThemeSwitch />
@@ -28,5 +28,4 @@ export default{
   position: fixed;
   z-index: 1050;
 }
-
 </style>

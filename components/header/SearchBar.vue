@@ -1,15 +1,17 @@
-<script setup> </script>
-
 <template>
-    <div class="d-flex search-bar mx-5">
-            <button class="d-flex btn btn-search  align-items-center ps-0" type="button" data-bs-target="#scrollableModal" data-bs-toggle="modal">
+    <div class="d-flex search-bar mx-5" tabindex="-1">
+            <button class="d-flex btn btn-search  align-items-center ps-0" type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal">
               <IconsSearchGlass />
               <span class="ms-1">Pesquisar</span>
             </button>
         </div>
 </template>
 
+
 <style scoped>
+.btn-search{
+  outline: none;
+}
 .btn-search span{
   margin-right: 110px;
 }
@@ -19,6 +21,7 @@
   background-color: white;
 }
 .search-bar{
+    outline: none;
     height: 27px;
     width: 210px;
 }
