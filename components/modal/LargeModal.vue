@@ -19,6 +19,8 @@
 </template>
 
 <style scoped>
-
+	.modal { 
+		background-color: rgb(10 10 10 / 50%) !important;
+	}
 </style>
 
