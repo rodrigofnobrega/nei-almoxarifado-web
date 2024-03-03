@@ -3,13 +3,13 @@
 	const itemOperations = reactive([
 		{
 			 date: new Date(Date.now()).toLocaleDateString(),
-			 operation: 'Consumo',
+			 operation: 'Cadastro',
 			 quantity: 3,
 			 author: 'Andriel',
 		},
 		{
 			 date: new Date(Date.now()).toLocaleDateString(),
-			 operation: 'Dado',
+			 operation: 'Consumo',
 			 quantity: 3,
 			 author: 'Andriel',
 		},
@@ -22,10 +22,10 @@
 	]);
 	
 	const isCreate = (data) => {
-		return data.operation == 'Consumo'; 
+		return data.operation == 'Cadastro'; 
 	};
 	const isRequest = (data) => {
-		return data.operation == 'Dado'; 
+		return data.operation == 'Consumo'; 
 	};
 	const isDelete = (data) => {
 		return data.operation == 'Exclusão'; 
