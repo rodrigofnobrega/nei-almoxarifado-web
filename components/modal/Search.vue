@@ -10,15 +10,18 @@
                 </form>
             </div>
         </template>
-        <template v-if="showResults" v-slot:body>
+        <template v-slot:body>
+          <template v-if="showResults">
             <ul class="list-group">
               <a class="text-decoration-none" v-for="result in searchResults" :href="result.route" :key="result.name">
-                <li class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center"  tabindex="0"> 
+                <li class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
                   {{ result.name }} 
-                  <span class="badge bg-primary rounded-pill" v-if="result.item = true"> {{ result.quantity }} </span>
+                  <span class="badge bg-primary rounded-pill" v-if="result.item"> {{ result.quantity }} </span>
                 </li>
               </a>
             </ul>
+          </template>
+          <p class="d-flex justify-content-center align-items-center pt-3" v-else>Nenhum Resultado Encontrado.</p>
         </template>
         <template v-slot:footer>
             <p class="fs-6"><IconsEnter class="bg-primary text-light" style="border-radius: 3px;"/> para selecionar <IconsBottomArrow class="bg-primary text-light" style="border-radius: 3px;"/> <IconsUpArrow class="bg-primary text-light" style="border-radius: 3px;"/> para navegar e <span class="bg-primary text-light" style="border-radius: 3px;">esc</span> para fechar</p>
