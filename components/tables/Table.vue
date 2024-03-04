@@ -117,7 +117,7 @@
                     <button class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }">
                         Detalhes
                     </button>
-                    <button class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }">
+                    <button class="table-btn btn btn-primary " :style="{ display: isEditable ? 'none': 'inline-block' }">
                         Histórico
                     </button>
                     <button @click="editQuantity" class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }">
