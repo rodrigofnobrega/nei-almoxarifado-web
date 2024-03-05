@@ -63,51 +63,20 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th scope="row"><p>Cartolina Amarela</p></th>
-                <th><p>283492354</p></th>
-                <th><p>Unidade</p></th>
-                <th class="ps-3 align-items-center">
-                    <div class="d-flex">
-                        <button :style="{ opacity: isEditable ? '100': '0' }" class="rm-btn btn btn-sm btn-light-alert rounded-circle mx-2">
-                            -
-                        </button>
-                        <p>200</p>
-                        <button :style="{ opacity: isEditable ? '100': '0' }" class="add-btn btn btn-sm btn-light-success rounded-circle mx-2">
-                            +
-                        </button>
-                    </div>
-                </th>
-                <th><p>03/03/2023 13:30:00</p></th>
-                <th class="end">
-                    <button class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }">
-                        Detalhes
-                    </button>
-                    <button class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }">
-                        Histórico
-                    </button>
-                    <button @click="editQuantity" class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }">
-                        Editar
-                    </button>
-                    <button @click="editQuantity" class="action-btn btn btn-light-success text-light mx-1" :style="{ display: isEditable ? 'inline-block': 'none' }">
-                        Confirmar
-                    </button>
-                    <button @click="editQuantity" class="action-btn btn btn-light-alert text-light mx-1" :style="{ display: isEditable ? 'inline-block': 'none' }">
-                        Cancelar
-                    </button>
-                </th>
+            <tr v-for="items in ">
+
             </tr>
             <tr>
                 <th scope="row"><p>Cartolina Amarela</p></th>
                 <th><p>283492354</p></th>
                 <th><p>Unidade</p></th>
-                <th class="ps-3 align-items-center">
-                    <div class="d-flex">
-                        <button :style="{ opacity: isEditable ? '100': '0' }" class="rm-btn btn btn-sm btn-light-alert rounded-circle mx-2">
+                <th class="align-items-center">
+                    <div class="item-quantity d-flex">
+                        <button :style="{ opacity: isEditable ? '100': '0' }" class="rm-btn btn btn-sm btn-light-alert rounded-circle me-1">
                             -
                         </button>
                         <p>200</p>
-                        <button :style="{ opacity: isEditable ? '100': '0' }" class="add-btn btn btn-sm btn-light-success rounded-circle mx-2">
+                        <button :style="{ opacity: isEditable ? '100': '0' }" class="add-btn btn btn-sm btn-light-success rounded-circle ms-1">
                             +
                         </button>
                     </div>
@@ -117,7 +86,7 @@
                     <button class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }">
                         Detalhes
                     </button>
-                    <button class="table-btn btn btn-primary " :style="{ display: isEditable ? 'none': 'inline-block' }">
+                    <button class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }">
                         Histórico
                     </button>
                     <button @click="editQuantity" class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }">
@@ -147,7 +116,6 @@ export default{
         editQuantity(){
             this.isEditable = !this.isEditable;
         }
-
     }
 }
 
@@ -178,12 +146,14 @@ th{
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-
-    padding-right: 25px;
 }
 p{
     padding-top: 13px;
     margin: 0;
+}
+.item-quantity{
+    position: relative;
+    left: 32px;
 }
 .add-btn, .rm-btn{
     position: relative;
@@ -198,10 +168,10 @@ p{
     top: 12px;
 }
 .action-btn{
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 5px;
-    padding-left: 5px;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-right: 10px;
+    padding: 5px 5px 5px 5px;
 }
 .options-btn{
     text-align: center; 
