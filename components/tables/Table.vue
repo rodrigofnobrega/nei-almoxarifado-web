@@ -63,9 +63,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="items in ">
 
-            </tr>
             <tr>
                 <th scope="row"><p>Cartolina Amarela</p></th>
                 <th><p>283492354</p></th>
