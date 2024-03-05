@@ -1,10 +1,23 @@
 @import 'variables.scss';
+
+
 .modal-header{
     color: white;
     background-color: #0B3B69;
+    box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
+    &[class*="search"] {
+        height: 3vw;
+        border-radius: 8px;
+        color: white;
+        background-color: #0B3B69;
+        box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
+    }
 }
+
+
+
 .modal-content{
-    border-radius: 17px;   
+    border-radius: 12px;
     box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
 }
 .offcanvas{
