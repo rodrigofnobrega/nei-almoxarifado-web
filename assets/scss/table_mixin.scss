@@ -1,0 +1,10 @@
+@import 'variables.scss';
+
+@mixin custom-table-th($font-size, $font-weight, $opacity){
+    font-size: $font-size;
+    font-weight: $font-weight;
+    opacity: $opacity;
+};
+.table th p{ 
+    @include custom-table-th(13px, 500, 60%);  
+}

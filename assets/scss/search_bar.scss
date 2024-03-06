@@ -9,12 +9,7 @@
         background-color: $hover-bg;
         border-radius: $hover-border-radius;
     }
-    &:active{
-        color: $hover-text;
-        background-color: $hover-bg;
-        border-radius: $hover-border-radius;
-    }
-    &:focus{
+    &:active {
         color: $hover-text;
         background-color: $hover-bg;
         border-radius: $hover-border-radius;
@@ -35,7 +30,10 @@ $btn-search-text: rgb(51, 51, 51, 0.7);
     border: 1;
     border-right: 0;
 }
-
+.btn-search:focus{
+    background-color: white;
+    color: rgb(51, 51, 51, 0.7);
+}
 .form-control{
     @include my-form-control($btn-search-text, white);  
 }

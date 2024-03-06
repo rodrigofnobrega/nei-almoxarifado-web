@@ -36,7 +36,7 @@
 				:person="req.person"
 				:requestedAt="req.requestedAt"
 				:message="req.message"
-				:itemName="req.item"
+				:itemName="req.item"	
 				:itemTagging="req.itemTagging"
 				:quantity="req.quantity"
 				:itemQuantity="req.itemQuantity"
