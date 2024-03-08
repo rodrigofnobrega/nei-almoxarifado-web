@@ -11,7 +11,7 @@
                <label for="item-name">Nome do item</label> 
                <input class="form-control" id="item-name" type="text">
             </div>
-            <div class="mb-3">
+            <div class="sipac-container mb-3">
                <label for="item-sipac">Código Sipac <span class="text-light-emphasis ms-3">*opcional*</span></label> 
                <input class="form-control" id="item-sipac" type="text">
             </div>
@@ -23,8 +23,6 @@
                      <option value="unidade">unidade</option>
                      <option value="sacola">sacola</option>
                      <option value="unidade">caixa</option>
-                     <option value="unidade">unidade</option> 
-                     <option value="unidade">unidade</option>
                     </select>
                </div>
                <div class="d-block ms-5">
@@ -44,8 +42,6 @@
 </template>
 
 <script>
-export default{
-}
 
 </script>
 
@@ -64,5 +60,11 @@ export default{
 }
 .btn{
     border-radius: 10px;
+}
+.sipac-container{
+    opacity: 50%;
+}
+.sipac-container:hover{
+    opacity: 100%;
 }
 </style>
