@@ -1,7 +1,7 @@
 <template>
     <Modal id="itemRegistration" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
-                <p class="header-title d-flex justify-content-start align-items-center">Cadastro de Item</p>
+                <h5 class="header-title d-flex justify-content-start align-items-center">Cadastro de Item</h5>
                 <button class="btn btn-transparent text-light" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close mt-1 ms-5 s-5" width="1.7em" height="1.7em"/>
                 </button>
@@ -45,10 +45,6 @@
 
 <script>
 export default{
-    mounted(){
-        const modal = document.getElementsByClassName('modal-header');
-        modal[1].classList.add('search');
-    }
 }
 
 </script>
@@ -62,7 +58,6 @@ export default{
     left: 20px;
 }
 .header-title{
-    font-size: 26px;
     font-weight: semibold;
     margin: -1px 0 -1px 0;
     padding: 0;

@@ -1,5 +1,7 @@
 <template>
     <ModalItemRegister />
+    <ModalItemDetails />
+    <ModalItemHistory />
     <div class="catalog-header d-flex align-items-center">
         <h2>Almoxarifado Escolar</h2>
         <div class="d-flex">
@@ -63,7 +65,6 @@
             </tr>
         </thead>
         <tbody>
-
             <tr>
                 <th scope="row"><p>Cartolina Amarela</p></th>
                 <th><p>283492354</p></th>
@@ -81,10 +82,10 @@
                 </th>
                 <th><p>03/03/2023 13:30:00</p></th>
                 <th class="end">
-                    <button class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }">
+                    <button class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         Detalhes
                     </button>
-                    <button class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }">
+                    <button class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }" data-bs-toggle="modal" data-bs-target="#itemHistory">
                         Histórico
                     </button>
                     <button @click="editQuantity" class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }">
@@ -113,6 +114,12 @@ export default{
     methods: {
         editQuantity(){
             this.isEditable = !this.isEditable;
+        }
+    },
+    mounted(){
+        const itemModals = document.getElementsByClassName('modal-header');
+        for(let i = 0; i < itemModals.length; i++){
+            itemModals[i].classList.add('small');
         }
     }
 }

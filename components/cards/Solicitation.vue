@@ -35,7 +35,7 @@ export default {
 						<input readonly class="form-control" :value="itemName"> </input> 
 					</div>	
 					<div class="mb-3"> 
-						<label class="form-label fw-bold"> Tombamento </label>
+						<label class="form-label fw-bold"> Código Sipac </label>
 						<input readonly class="form-control" :value="itemTagging"> </input>
 					</div>	
 					<div class="mb-3"> 
