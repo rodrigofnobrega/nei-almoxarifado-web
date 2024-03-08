@@ -70,32 +70,15 @@
                 <th><p>283492354</p></th>
                 <th><p>Unidade</p></th>
                 <th class="align-items-center">
-                    <div class="item-quantity d-flex">
-                        <button :style="{ opacity: isEditable ? '100': '0' }" class="rm-btn btn btn-sm btn-light-alert rounded-circle me-1">
-                            -
-                        </button>
-                        <p>200</p>
-                        <button :style="{ opacity: isEditable ? '100': '0' }" class="add-btn btn btn-sm btn-light-success rounded-circle ms-1">
-                            +
-                        </button>
-                    </div>
+                    <p>200</p>
                 </th>
                 <th><p>03/03/2023 13:30:00</p></th>
                 <th class="end">
-                    <button class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                    <button class="table-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         Detalhes
                     </button>
-                    <button class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                    <button class="table-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemHistory">
                         Histórico
-                    </button>
-                    <button @click="editQuantity" class="table-btn btn btn-primary" :style="{ display: isEditable ? 'none': 'inline-block' }">
-                        Editar
-                    </button>
-                    <button @click="editQuantity" class="action-btn btn btn-light-success text-light mx-1" :style="{ display: isEditable ? 'inline-block': 'none' }">
-                        Confirmar
-                    </button>
-                    <button @click="editQuantity" class="action-btn btn btn-light-alert text-light mx-1" :style="{ display: isEditable ? 'inline-block': 'none' }">
-                        Cancelar
                     </button>
                 </th>
             </tr>
@@ -118,7 +101,7 @@ export default{
     },
     mounted(){
         const itemModals = document.getElementsByClassName('modal-header');
-        for(let i = 0; i < itemModals.length; i++){
+        for(let i = 1; i < itemModals.length; i++){
             itemModals[i].classList.add('small');
         }
     }
@@ -159,18 +142,6 @@ p{
 .item-quantity{
     position: relative;
     left: 32px;
-}
-.add-btn, .rm-btn{
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 15px;
-    color: white;
-    padding: 0;
-    width: 20px;
-    height: 20px;  
-    top: 12px;
 }
 .action-btn{
     font-size: 14px;
