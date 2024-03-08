@@ -11,7 +11,12 @@ export default defineNuxtConfig({
   app: {
     head: {
       link: [ 
-        {rel: 'icon', type: 'svg', href: '/logo.svg'} 
+        {rel: 'icon', type: 'svg', href: '/logo.svg'},
+      ],
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { hid: 'description', name: 'description', content: 'Gerenciador de Almoxarifado' },
       ]
     }
   }
