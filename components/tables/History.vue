@@ -1,5 +1,4 @@
 <script setup lang="ts"> 
-	import { reactive, computed } from 'vue';
 	const itemOperations = reactive([
 		{
 			 date: new Date(Date.now()).toLocaleDateString(),
@@ -43,10 +42,10 @@
 			</tr>
 		 </thead>
 		<tbody>
-			<tr v-for="line in itemOperations" > 
+			<tr v-for="line in itemOperations" :key="line.author"> 
 				<td scope="row" class="p-2 mb-3"> {{line.date}} </td>
 				<td class="fw-bolder p-2 mb-3" style="--bs-bg-opacity: .99"
-					:class="{'text-success': isCreate(line), 'text-danger': isDelete(line), 'text-warning': isRequest(line)}"> {{line.operation}} </td>
+					:class="{'text-light bg-success border-0': isCreate(line), 'text-light bg-danger border-0': isDelete(line), 'text-light bg-warning border-0': isRequest(line)}"> {{line.operation}} </td>
 				<td > {{line.quantity}} </td>
 				<td > {{line.author}} </td>
 			</tr>

@@ -71,8 +71,8 @@ export default{
             searchResult[this.searchCount - 1].focus();
         },
         handleSearch() {
-        this.searchResults = this.searchData.filter(result => result.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
-        this.showResults = true; // Mostrar resultados da pesquisa
+          this.searchResults = this.searchData.filter(result => result.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+          this.showResults = true; 
       }
         
     },
