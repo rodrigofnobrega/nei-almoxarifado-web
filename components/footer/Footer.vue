@@ -26,6 +26,7 @@
 
 <style> 
 .custom-footer {   
+  width: 100vw;
   background-color: #0b3b69;
   color: white;
 }
