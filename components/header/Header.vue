@@ -18,7 +18,7 @@ import Brand from "./Brand.vue";
 import ThemeSwitch from "./ThemeSwitch.vue";
 import Profile from "./Profile.vue";
 export default{
-    components: { SearchBar, Brand, ThemeSwitch, Profile }
+    components: { SearchBar, Brand, ThemeSwitch, Profile },
 }
 
 </script>

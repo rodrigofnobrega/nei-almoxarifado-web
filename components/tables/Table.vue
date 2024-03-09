@@ -87,15 +87,7 @@
 
 <script>
 export default{
-    data(){
-        return{
-            isEditable: false
-        }
-    },
     methods: {
-        editQuantity(){
-            this.isEditable = !this.isEditable;
-        },
         colorFocus(e){
             e.target.style.color = "white";
         },
@@ -193,7 +185,7 @@ tr:hover p{
         padding: 3px 0px 3px 0px;
     }
 }
-@media screen and (max-width: 872px){
+@media screen and (max-width: 900px){
     .catalog-header{
         display: block !important;
         text-align: center;
@@ -203,12 +195,18 @@ tr:hover p{
         align-content: center;
     }
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 820px) {
     table {
         width: 50vw;
     }
     .col-title{
-        font-size: 16px;
+        font-size: 12px;
+    }
+    p{
+        font-size: 11px;
+    }
+    .table-btn{
+        font-size: 11px;
     }
 }
 </style>
