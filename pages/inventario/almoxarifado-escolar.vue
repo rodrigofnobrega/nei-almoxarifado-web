@@ -6,7 +6,7 @@
 
 <style scoped>
 .container{
-    margin-left: 20px; 
+    margin-left: 0px; 
     padding: 0px;
 }
 @media screen and (max-width: 870px){

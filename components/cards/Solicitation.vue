@@ -14,15 +14,11 @@ export default {
 				<div class="col-6">
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Solicitador </label>
-						<input readonly class="form-control" type="text" :value="person"> </input>
+						<input readonly class="form-control" type="text" :value="person"> 
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Data </label>
-						<input readonly class="form-control" :value="requestedAt"> </input> 
-					</div>	
-					<div class="mb-3"> 
-						<label class="form-label fw-bold"> Data prevista para devolução </label>
-						<input readonly class="form-control" :value="expirationDate"> <slot name="devolutionDate" /> </input> 
+						<input readonly class="form-control" :value="requestedAt">  
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Mensagem da solicitação </label>
@@ -32,26 +28,26 @@ export default {
 				<div class="col-6">
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Item solicitado </label>
-						<input readonly class="form-control" :value="itemName"> </input> 
+						<input readonly class="form-control" :value="itemName"> 
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Código Sipac </label>
-						<input readonly class="form-control" :value="itemTagging"> </input>
+						<input readonly class="form-control" :value="itemTagging"> 
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Quantidade Solicitada </label>
-						<input readonly class="form-control" :value="quantity"> </input> 
+						<input readonly class="form-control" :value="quantity">
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Quantidade Disponível </label>
-						<input readonly class="form-control" :value="itemQuantity"> </input> 
+						<input readonly class="form-control" :value="itemQuantity"> 
 					</div>	
 				</div>
 			</div>
 			</template>
 		<template v-slot:footer>
 			<div class="row justify-content-evenly"> 
-				<button class="btn btn-danger col-2 mx-2" data-bs-toggle="modal" data-bs-target="#rejectModal"> Rejeitar </button>
+				<button class="btn btn-danger col-2 mx-2" data-bs-toggle="modal" data-bs-target="#rejectModal" style="white-space: nowrap;"> Rejeitar </button>
 				<button class="btn btn-outline-success col-2 mx-2" data-bs-toggle="modal" data-bs-target="#acceptModal"> Aceitar </button>
 			</div>
 		</template>

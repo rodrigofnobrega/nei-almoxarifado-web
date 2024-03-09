@@ -9,46 +9,8 @@
                 Novo
                 <IconsPlus class="mx-1" width="1.5em" height="1.5em"/>
             </button>
-            <div class="dropdown">
-                <button @focusin="colorFocus" @focusout="colorUnfocus" class="action-btn d-flex btn btn-outline-primary border-0" data-bs-toggle="dropdown" data-bs-offset="0,2" data-bs-auto-close="outside" aria-expanded="false">
-                    Filtro
-                    <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
-                </button>
-                <ul class="dropdown-menu">
-                    <li class="dropdown-item">
-                        <button class="btn btn-transparent" type="button">Mais recentes</button>
-                    </li>
-                    <li class="dropdown-item">
-                        <button class="btn btn-transparent" type="button">Mais antigos</button>
-                    </li>
-                    <li class="dropdown-item">
-                        <button class="btn btn-transparent" type="button">Disponíveis</button>
-                    </li>
-                    <li class="dropdown-item">
-                        <button class="btn btn-transparent" type="button">Indisponíveis</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="dropdown">
-                <button @focusin="colorFocus" @focusout="colorUnfocus" class="action-btn d-flex btn btn-outline-primary border-0" data-bs-toggle="dropdown" data-bs-offset="0,2" data-bs-auto-close="outsite" aria-expanded="false">
-                    Configurações
-                    <IconsSettings class="mx-1" width="1.5em" height="1.5em"/>
-                </button>
-                <ul class="dropdown-menu">
-                    <li class="dropdown-item">
-                        <button class="btn btn-transparent" type="button">Mais recentes</button>
-                    </li>
-                    <li class="dropdown-item">
-                        <button class="btn btn-transparent" type="button">Mais antigos</button>
-                    </li>
-                    <li class="dropdown-item">
-                        <button class="btn btn-transparent" type="button">Disponíveis</button>
-                    </li>
-                    <li class="dropdown-item">
-                        <button class="btn btn-transparent" type="button">Indisponíveis</button>
-                    </li> 
-                </ul>
-            </div>  
+            <ButtonsFilter />
+            <ButtonsConfigure />
         </div>
      </div>
     <hr>
@@ -87,28 +49,12 @@
 
 <script>
 export default{
-    data(){
-        return{
-            isEditable: false
+    mounted() {
+        const itemModals = document.getElementsByClassName("modal-header");
+        for (let i = 1; i < itemModals.length; i++) {
+            itemModals[i].classList.add("small");
         }
     },
-    methods: {
-        editQuantity(){
-            this.isEditable = !this.isEditable;
-        },
-        colorFocus(e){
-            e.target.style.color = "white";
-        },
-        colorUnfocus(e){
-            e.target.style.color = "rgb(51, 51, 51, 0.7)";
-        }
-    },
-    mounted(){
-        const itemModals = document.getElementsByClassName('modal-header');
-        for(let i = 1; i < itemModals.length; i++){
-            itemModals[i].classList.add('small');
-        }
-    }
 }
 
 </script>
@@ -193,7 +139,7 @@ tr:hover p{
         padding: 3px 0px 3px 0px;
     }
 }
-@media screen and (max-width: 872px){
+@media screen and (max-width: 900px){
     .catalog-header{
         display: block !important;
         text-align: center;
@@ -203,12 +149,18 @@ tr:hover p{
         align-content: center;
     }
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 820px) {
     table {
         width: 50vw;
     }
     .col-title{
-        font-size: 16px;
+        font-size: 12px;
+    }
+    p{
+        font-size: 11px;
+    }
+    .table-btn{
+        font-size: 11px;
     }
 }
 </style>

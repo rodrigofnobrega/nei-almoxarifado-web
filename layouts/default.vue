@@ -3,7 +3,6 @@
     <Header />
     <div class="d-flex"> 
       <div class="fluid-container">
-        
         <NavbarNavSideBar /> 
       </div>
       <div class="main">
@@ -18,10 +17,16 @@
   </div>
   </template>
   
+<script>
+
+
+</script>
+  
   <style>
   .main{
     margin-top: 100px;
-    margin-bottom: 50px;
+    margin-bottom: 10vw;
+    padding-left: 15px;
   } 
   .fluid-container{
     position: static;

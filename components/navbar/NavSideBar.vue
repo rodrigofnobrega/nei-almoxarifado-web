@@ -20,12 +20,6 @@
                             <span class="list-group-item">Catálogo</span>
                         </div>
                     </a>
-                    <a class="nav-route text-decoration-none" href="/configuracoes-de-inventario" aria-current="true"> 
-                        <div class="nav-container item-bg text-dark-emphasis py-1">
-                            <IconsOrganizingTables class="nav-icon"/>
-                            <span class="list-group-item">Organizar Inventário</span>
-                        </div>
-                    </a>
                     <a class="nav-route text-decoration-none" href="/registro" aria-current="true">
                         <div class="nav-container item-bg text-dark-emphasis">
                             <IconsDirectory class="nav-icon"/>
