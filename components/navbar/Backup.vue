@@ -1,7 +1,7 @@
 <template>
     <div class="nav bg-light-emphasis d-flex offcanvas show" :class="{ 'collapsed': isCollapsed }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-        <div class="offcanvas-body ps-3" >
-                <ul class="list-group-flush container d-block" :class="{ 'collapsed': isCollapsed }">
+        <div class="offcanvas-body ps-3" :class="{ 'collapsed': isCollapsed }">
+                <ul class="list-group-flush container d-block ">
                     <a class="nav-route text-decoration-none" href="/" aria-current="true">
                         <div class="nav-container item-bg text-dark-emphasis">
                             <IconsHome class="nav-icon"/>
@@ -89,6 +89,7 @@
     height: 95vh;  
     top: 5%;
     padding-top: 30px;
+
     transition: width 0.6s ease-in-out;
 }
 .offcanvas-body{
@@ -96,6 +97,7 @@
     margin-right: 0px;
     padding-right: 0px;
     margin-bottom: -200px;
+    transition: width 0.6s ease-in-out;
 }
 .nav{   
     margin: 0;
@@ -108,9 +110,7 @@
     font-size: 13px;
     margin-left: 7px;
     text-decoration: none;
-    text-align: start;
-    white-space: nowrap;
-    transition: opacity 1.5s ease-in-out;
+    transition: opacity 1.0s ease-in-out;
 }
 .item-bg{
     transition: width 0.6s ease-in-out;
@@ -125,7 +125,6 @@
 }
 .collapsed {
   width: 50px; 
-  
 }
 .colapse-btn{
     padding: 0;
