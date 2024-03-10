@@ -27,12 +27,15 @@
             </tr>
            </thead>
            <tbody>
-             <tr>
-               <th scope="row"><p>Cartolina Amarela</p></th>
-               <th><p>283492354</p></th>
-                <th><p>Unidade</p></th>
-               <th><p>200</p></th>
-               <th><p>03/03/2023 13:30:00</p></th>
+             <tr v-for="item in store.items" :key="item.name">
+               <th scope="row"><p>{{ item.name }}</p></th>
+               <th>
+                    <p v-if="item.sipac">{{ item.sipac }}</p>
+                    <p v-else>nenhum</p>
+               </th>
+                <th><p>{{ item.type }}</p></th>
+               <th><p>{{ item.qtd }}</p></th>
+               <th><p>{{ item.history[0]}}</p></th>
                <th class="end">
                     <button class="table-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         Detalhes
@@ -47,18 +50,20 @@
      </div>
 </template>
 
-<script>
-export default{
-    mounted() {
-        const itemModals = document.getElementsByClassName("modal-header");
-        for (let i = 1; i < itemModals.length; i++) {
-            itemModals[i].classList.add("small");
-        }
-    },
-}
+<script setup>
+import { useStorageStore } from '../../stores/storage';
+import { onMounted } from 'vue'; 
+const store = useStorageStore();
+
+
+onMounted(() => {
+  const itemModals = document.getElementsByClassName("modal-header");
+  for (let i = 1; i < itemModals.length; i++) {
+    itemModals[i].classList.add("small");
+  }
+});
 
 </script>
-
 <style scoped>
 table{
     width: 80vw;

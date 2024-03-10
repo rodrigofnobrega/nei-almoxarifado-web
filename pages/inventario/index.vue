@@ -17,9 +17,9 @@
           </div>
         </div>
         <div class="card mx-2 rounded-3" style="width: 34rem;">
-          <img src="/almo.png" class="card-img-top" alt="...">
+          <img src="/almo2.png" class="card-img-top" alt="...">
           <div class="card-body text-dark-emphasis">
-            <a href="/inventario/almoxarifado-escolar" class="fs-5 stretched-link text-dark-emphasis" style="text-decoration: none;">Almoxarifado Escolar</a>
+            <a href="/inventario/almoxarifado-funcionarios" class="fs-5 stretched-link text-dark-emphasis" style="text-decoration: none;">Almoxarifado Funcionários</a>
             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
           </div>
         </div>
