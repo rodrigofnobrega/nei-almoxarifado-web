@@ -1,9 +1,7 @@
 <template>
     <ModalItemRegister />
-    <ModalItemDetails />
-    <ModalItemHistory />
     <div class="catalog-header d-flex align-items-center">
-        <h2>Almoxarifado Escolar</h2>
+        <h2><slot name="title"/></h2>
         <div class="actions-buttons d-flex">
             <button class="action-btn d-flex btn btn-outline-primary border-0" data-bs-toggle="modal" data-bs-target="#itemRegistration">
                 Novo
@@ -27,24 +25,7 @@
             </tr>
            </thead>
            <tbody>
-             <tr v-for="item in store.items" :key="item.name">
-               <th scope="row"><p>{{ item.name }}</p></th>
-               <th>
-                    <p v-if="item.sipac">{{ item.sipac }}</p>
-                    <p v-else>nenhum</p>
-               </th>
-                <th><p>{{ item.type }}</p></th>
-               <th><p>{{ item.qtd }}</p></th>
-               <th><p>{{ item.history[0]}}</p></th>
-               <th class="end">
-                    <button class="table-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemDetailing">
-                        Detalhes
-                    </button>
-                    <button class="table-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemHistory">
-                        Histórico
-                    </button>
-                </th>
-             </tr>
+            <slot name="items" />
            </tbody>
          </table>
      </div>
