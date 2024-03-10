@@ -3,10 +3,6 @@
     <div class="container d-block" style="margin-left: 0px;">
         <div class="catalog-header d-flex align-items-center">
         <h2>Controle de Acesso</h2>
-        <div class="d-flex">   
-            <ButtonsFilter />
-            <ButtonsConfigure /> 
-        </div>
         </div>
         <hr>
         <div class="containerf-fluid d-flex justify-content-center aligm-items-center">
@@ -36,10 +32,6 @@
     <div class="container d-block mt-5" style="margin-left: 0px;">
         <div class="catalog-header d-flex align-items-center">
         <h2>Almoxarifados</h2>
-        <div class="d-flex">   
-            <ButtonsFilter />
-            <ButtonsConfigure /> 
-        </div>
         </div>
         <hr>
         <div class="containerf-fluid d-flex justify-content-center aligm-items-center">
@@ -69,10 +61,6 @@
     <div class="container d-block mt-5" style="margin-left: 0px;">
         <div class="catalog-header d-flex align-items-center">
         <h2>Registro</h2>
-        <div class="d-flex">   
-            <ButtonsFilter />
-            <ButtonsConfigure /> 
-        </div>
         </div>
         <hr>
         <div class="containerf-fluid d-flex justify-content-center aligm-items-center">

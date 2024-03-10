@@ -13,10 +13,10 @@
         <template v-slot:body>
           <template v-if="showResults">
             <ul class="list-group">
-              <a class="text-decoration-none" v-for="result in searchResults" :href="result.route" :key="result.name">
+              <a class="text-decoration-none" v-for="result in searchResults" :href="`/inventario/${result.storage}`" :key="result.name">
                 <li class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
                   {{ result.name }} 
-                  <span class="badge bg-primary rounded-pill" v-if="result.item"> {{ result.quantity }} </span>
+                  <span class="badge bg-primary rounded-pill" v-if="result"> {{ result.qtd }} </span>
                 </li>
               </a>
             </ul>
@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import { useStorageStore } from '../../stores/storage';
+
 export default{
     data() {
         return {
@@ -38,15 +40,6 @@ export default{
             searchCount: 0,
             searchResults: [],
             showResults: false,
-            searchData: [
-              {route: "/inventario", name: "Cartolina Amarela", item: true, quantity: 5},
-              {route: "/inventario", name: "Lápis Colorido", item: true, quantity: 20},
-              {route: "/inventario", name: "Álcool em gel", item: true, quantity: 11},
-              {route: "/inventario", name: "Pacote de Folha A4", item: true, quantity: 8},
-              {route: "/inventario", name: "Tinta vermelha", item: true, quantity: 2},
-              {route: "/configuracoes", name: "Configuracoes", item: false},
-              {route: "/controle-de-acesso", name: "Controle de Acesso", item: false},
-            ]
         };
     },
     methods: {
@@ -71,11 +64,16 @@ export default{
             searchResult[this.searchCount - 1].focus();
         },
         handleSearch() {
-          this.searchResults = this.searchData.filter(result => result.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+          this.searchResults = this.store.items.filter(result => result.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
           this.showResults = true; 
       }
-        
     },
+    setup(){
+      const store = useStorageStore();
+      return{
+        store
+      }
+    }
 } 
 </script>
 
@@ -106,4 +104,4 @@ export default{
   font-size: 19px;
 }
 
-</style>
+</style>../../stores/storage
