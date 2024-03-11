@@ -20,14 +20,18 @@
 		itemTagging: 20191029301, 
 		itemQuantity: 200
 	},
-	]; 
+	];
+
 </script>
 <template>
-    <div class="row ms-3 mb-5 justify-content-between"> 
-       <div class="text-center text-xl-start">
-	  <h3> Solicitações </h3>
+    <div class="catalog-header d-flex align-items-center">
+        <h2>Controle de Acesso</h2>
+        <div class="actions-buttons d-flex">
+            <ButtonsFilter />
+            <ButtonsConfigure /> 
         </div>
-    </div>
+     </div>
+	 <hr>
     <div class="container d-flex content">
 	<!-- TODO: transformar em tabela com linhas !-->
 	<div class="row">
@@ -47,9 +51,28 @@
     </div>
 </template>
 
+
 <style scoped>
 	.content {
 		margin-left: 3vh;
 		margin-right: 3vh;
 	}
+
+h2{
+    font-weight: 300;
+    color: rgb(51,51,51, 0.8);
+}
+.catalog-header{
+    justify-content: space-between;
+}
+@media screen and (max-width: 872px){
+    .catalog-header{
+        display: block !important;
+        text-align: center;
+    }
+    .actions-buttons{
+        justify-content: center;
+        align-content: center;
+    }
+}
  </style>

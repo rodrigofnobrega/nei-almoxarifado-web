@@ -1,7 +1,7 @@
 <template>
     <Modal id="itemRegistration" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
-                <p class="header-title d-flex justify-content-start align-items-center">Cadastro de Item</p>
+                <h5 class="header-title d-flex justify-content-start align-items-center">Cadastro de Item</h5>
                 <button class="btn btn-transparent text-light" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close mt-1 ms-5 s-5" width="1.7em" height="1.7em"/>
                 </button>
@@ -11,7 +11,7 @@
                <label for="item-name">Nome do item</label> 
                <input class="form-control" id="item-name" type="text">
             </div>
-            <div class="mb-3">
+            <div class="sipac-container mb-3">
                <label for="item-sipac">Código Sipac <span class="text-light-emphasis ms-3">*opcional*</span></label> 
                <input class="form-control" id="item-sipac" type="text">
             </div>
@@ -23,8 +23,6 @@
                      <option value="unidade">unidade</option>
                      <option value="sacola">sacola</option>
                      <option value="unidade">caixa</option>
-                     <option value="unidade">unidade</option> 
-                     <option value="unidade">unidade</option>
                     </select>
                </div>
                <div class="d-block ms-5">
@@ -44,12 +42,6 @@
 </template>
 
 <script>
-export default{
-    mounted(){
-        const modal = document.getElementsByClassName('modal-header');
-        modal[1].classList.add('search');
-    }
-}
 
 </script>
 
@@ -62,12 +54,17 @@ export default{
     left: 20px;
 }
 .header-title{
-    font-size: 26px;
     font-weight: semibold;
     margin: -1px 0 -1px 0;
     padding: 0;
 }
 .btn{
     border-radius: 10px;
+}
+.sipac-container{
+    opacity: 50%;
+}
+.sipac-container:hover{
+    opacity: 100%;
 }
 </style>

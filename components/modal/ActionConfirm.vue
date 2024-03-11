@@ -4,7 +4,7 @@
 	<Modal>
 		<template v-slot:header>
 			<h5 class="modal-title"> Confirmação de ação </h5>
-			<button type="button" class="btn-close" data-bs-dismiss="modal"/>
+			<IconsClose class="close mt-1 ms-5 s-5" width="1.7em" height="1.7em"/>
 		</template>
 		<template v-slot:body>
 			<slot name="text" />
