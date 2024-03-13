@@ -28,7 +28,7 @@
             <slot name="items" />
            </tbody>
          </table>
-     </div>
+    </div>
 </template>
 
 <script setup>
@@ -43,8 +43,8 @@ onMounted(() => {
     itemModals[i].classList.add("small");
   }
 });
-
 </script>
+
 <style scoped>
 table{
     width: 80vw;

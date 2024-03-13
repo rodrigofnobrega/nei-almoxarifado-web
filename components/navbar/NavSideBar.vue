@@ -1,9 +1,9 @@
 <template>
-    <div class="nav bg-light-emphasis d-flex offcanvas show" :class="{ 'collapsed': isCollapsed }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+    <div class="nav bg-light-emphasis d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-body ps-3" >
                 <ul class="list-group-flush container d-block" :class="{ 'collapsed': isCollapsed }">
                     <a class="nav-route text-decoration-none" href="/" aria-current="true">
-                        <div class="nav-container item-bg text-dark-emphasis">
+                        <div class="nav-container item-bg item-top text-dark-emphasis">
                             <IconsHome class="nav-icon"/>
                             <span class="list-group-item">Home</span>
                         </div>
@@ -80,8 +80,8 @@
 .offcanvas{
     border: none;
     width: 200px;
-    height: 95vh;  
-    top: 5%;
+    height: 97vh;  
+    top: 3%;
     padding-top: 30px;
     transition: width 0.6s ease-in-out;
 }
@@ -101,10 +101,14 @@
     display: flex;
     font-size: 13px;
     margin-left: 7px;
+    margin-top: 3px;
     text-decoration: none;
     text-align: start;
     white-space: nowrap;
     transition: opacity 1.5s ease-in-out;
+}
+.item-top{
+    margin-bottom: -9px;
 }
 .item-bg{
     transition: width 0.6s ease-in-out;
@@ -112,7 +116,7 @@
     justify-content: flex-start;
     align-items: center;
     overflow: hidden;
-    margin-top: 15px;
+    margin-top: 25px;
     padding-left: 5px;
     height: 52px;
     width: 180px;
