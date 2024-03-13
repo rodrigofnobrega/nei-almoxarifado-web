@@ -10,7 +10,7 @@
           </div>
             <div class="nav-item dropdown">
               <button class="svg-button  d-flex bg-primary align-items-center" @click="rotate" data-bs-toggle="dropdown" data-bs-offset="10,10" data-bs-auto-close="inside" aria-expanded="false">
-                  <p class="profile-drop user-text text-light fw-light px-1 m-0 fs-5"> {{ user.username }} </p>
+                  <p class="profile-drop user-text text-light px-1 m-0 fw-lighter"> {{ user.username }} </p>
                   <IconsDownArrow class="rotate-arrow" :style="{ transform: isRoted ? 'rotate(180deg)' : 'rotate(0deg)'}" width="24px" height="24px"/>
               </button>
               <ul class="dropdown-menu">
@@ -61,8 +61,7 @@ export default{
     background: none;
 }
 .user-text {
-    font-size: 24px;
-    font-weight: 100; /* 200 é o valor para a fonte ExtraLight da família Roboto */
+    font-size: 20px;
 }
 .svg-button:hover img{
   transition: filter 0.3s ease-in-out;
@@ -70,6 +69,6 @@ export default{
 }
 .profile-drop:hover{
   transition: filter 0.3s ease-in;
-  filter: drop-shadow(0px 1px 1px rgba(254, 213, 30, 1));
+  filter: drop-shadow(0px 0px 8px rgba(254, 213, 30, 1));
 }
 </style>

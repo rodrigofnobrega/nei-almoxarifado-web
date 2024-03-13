@@ -95,9 +95,6 @@ h2{
     font-weight: 300;
     color: rgb(51,51,51, 0.8);
 }
-hr{
-    width: 82vw;
-}
 .catalog-header{
     justify-content: space-between;
 }
