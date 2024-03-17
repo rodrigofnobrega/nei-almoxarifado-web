@@ -1,5 +1,5 @@
 <template>
-<div class="container d-block" style="margin-left: 0px;">
+<div class=" d-block" style="margin-left: 0px;">
     <div class="catalog-header d-flex align-items-center">
         <h2>Almoxarifados</h2>
         <div class="actions-buttons d-flex">   
