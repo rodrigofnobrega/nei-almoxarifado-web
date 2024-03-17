@@ -3,37 +3,37 @@
         <div class="offcanvas-body ps-3" >
                 <ul class="list-group-flush container d-block" :class="{ 'collapsed': isCollapsed }">
                     <a class="nav-route text-decoration-none" href="/" aria-current="true">
-                        <div class="nav-container item-bg item-top text-dark-emphasis">
+                        <div class="nav-container item-bg item-top" :class="{'active': $route.path === '/', 'text-dark-emphasis': $route.path !== '/'}">
                             <IconsHome class="nav-icon"/>
                             <span class="list-group-item">Home</span>
                         </div>
                     </a>
                     <a class="nav-route text-decoration-none" href="/controle-de-acesso" aria-current="true">
-                        <div class="nav-container item-bg text-dark-emphasis">
+                        <div class="nav-container item-bg" :class="{'active': $route.path === '/controle-de-acesso', 'text-dark-emphasis': $route.path !== '/controle-de-acesso' }">
                             <IconsControl class="nav-icon"/>
                             <span class="list-group-item">Controle de Acesso</span>
                         </div>
                     </a>
                     <a class="nav-route text-decoration-none" href="/inventario" aria-current="true">
-                        <div class="nav-container item-bg text-dark-emphasis">
+                        <div class="nav-container item-bg" :class="{'active': $route.path === '/inventario', 'text-dark-emphasis': $route.path !== '/inventario'}">
                             <IconsSpreadSheet class="nav-icon"/>
                             <span class="list-group-item">Catálogo</span>
                         </div>
                     </a>
                     <a class="nav-route text-decoration-none" href="/registro" aria-current="true">
-                        <div class="nav-container item-bg text-dark-emphasis">
+                        <div class="nav-container item-bg" :class="{'active': $route.path === '/registro', 'text-dark-emphasis': $route.path !== '/registro'}">
                             <IconsDirectory class="nav-icon"/>
                             <span class="list-group-item">Registro</span>
                         </div>
                     </a>
                     <a class="nav-route text-decoration-none" href="/configuracoes" aria-current="true">
-                        <div class="nav-container item-bg text-dark-emphasis">
-                        <IconsSettings width="25px" height="25px" class="nav-icon"/>
+                        <div class="nav-container item-bg" :class="{'active': $route.path === '/configuracoes', 'text-dark-emphasis': $route.path !== '/configuracoes'}">
+                            <IconsSettings width="25px" height="25px" class="nav-icon"/>
                             <span class="list-group-item">Configurações</span>
                         </div>
                     </a>
                     <a class="nav-route text-decoration-none" href="/sobre" aria-current="true">
-                        <div class="nav-container item-bg text-start text-dark-emphasis">
+                        <div class="nav-container item-bg text-start" :class="{'active': $route.path === '/sobre', 'text-dark-emphasis': $route.path !== '/sobre'}">
                             <IconsInformation class="nav-icon"/>
                             <span class="d-inline-block list-group-item">Sobre</span>
                         </div>
@@ -61,28 +61,17 @@
           this.isCollapsed = !this.isCollapsed;
         }
       },
-      mounted(){
-        /*Código para aplicar o actvie na sidebar*/ 
-        const currentRoute = this.$route.path;
-        let navRoutes = document.getElementsByClassName("nav-route");
-        let navContainers = document.getElementsByClassName("nav-container");
-        for(let i = 0; i < navRoutes.length; i++){
-            if(navRoutes[i].getAttribute('href') === currentRoute){
-                navContainers[i].classList.add('active');
-                navContainers[i].classList.remove('text-dark-emphasis');
-            };
-        };
-      },
     }
 </script>
     
 <style scoped>
 .offcanvas{
     border: none;
-    width: 200px;
+    width: 160px;
     height: 97vh;  
     top: 3%;
-    padding-top: 30px;
+    padding-top: 20px;
+    overflow-x: hidden;
     transition: width 0.6s ease-in-out;
 }
 .offcanvas-body{
@@ -99,9 +88,9 @@
 }
 .list-group-item{
     display: flex;
-    font-size: 13px;
+    font-size: 12px;
     margin-left: 7px;
-    margin-top: 3px;
+    margin-top: 2px;
     text-decoration: none;
     text-align: start;
     white-space: nowrap;
@@ -118,8 +107,8 @@
     overflow: hidden;
     margin-top: 25px;
     padding-left: 5px;
-    height: 52px;
-    width: 180px;
+    height: 42px;
+    width: 145px;
 }
 .collapsed {
   width: 50px; 
@@ -127,15 +116,15 @@
 }
 .colapse-btn{
     padding: 0;
-    width: 200px;
+    width: 160px;
     bottom: 0;
-    height: 55px;
+    height: 40px;
     transition: width 0.6s ease-in-out;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 .collapsed .colapse-btn{
     width: 50px;
-    height: 55px;
+    height: 40px;
 }
 .collapsed .list-group-item{
     visibility: hidden;

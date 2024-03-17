@@ -11,8 +11,8 @@
             <ButtonsConfigure />
         </div>
      </div>
-    <hr>
-     <div class="table-responsive mt-4">
+     <hr>
+     <div class="col-xxl-12 table-responsive mt-4">
          <table class="table table-hover">
            <thead>
             <tr>
@@ -28,7 +28,7 @@
             <slot name="items" />
            </tbody>
          </table>
-    </div>
+     </div>
 </template>
 
 <script setup>
@@ -47,7 +47,7 @@ onMounted(() => {
 
 <style scoped>
 table{
-    width: 80vw;
+    width: 85vw;
 }
 h2{
     font-weight: 300;
@@ -84,11 +84,7 @@ p{
 .btn-outline-primary:hover{
     color: white !important;  
 }
-.end{
-    position: relative;
-    text-align: end;
-    padding: 0;
-}
+
 .table-btn{
     font-size: 15px;
     opacity: 0%;
@@ -102,12 +98,17 @@ tr:hover .table-btn{
 tr:hover p{
     opacity: 70%;
 }
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1666px) {
+    table {
+        width: 80vw;
+    }
+}
+@media screen and (max-width: 1300px) {
     table {
         width: 75vw;
     }
 }
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1050px) {
     table {
         width: 70vw;
     }
@@ -125,7 +126,10 @@ tr:hover p{
         padding: 3px 0px 3px 0px;
     }
 }
-@media screen and (max-width: 900px){
+@media screen and (max-width: 930px){
+    table {
+        width: 60vw;
+    }
     .catalog-header{
         display: block !important;
         text-align: center;
@@ -135,7 +139,7 @@ tr:hover p{
         align-content: center;
     }
 }
-@media screen and (max-width: 820px) {
+@media screen and (max-width: 880px) {
     table {
         width: 50vw;
     }

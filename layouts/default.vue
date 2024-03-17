@@ -24,10 +24,12 @@
   
 <style>
 .main{
-  width: 80vw;
+  width: 85vw;
+  margin-left: 0;
+  margin-right: 0;
   margin-top: 100px;
   margin-bottom: 15vw;
-  padding-left: 15px;
+  padding-left: 25px;
 } 
 .fluid-container{
   position: static;
@@ -35,14 +37,17 @@
 .teste{
   position: static;
 }
-@media screen and (max-width: 1200px){
-    .main{
+@media screen and (max-width: 1050px){
+  .main{
         width: 75vw;
     }
 }
-@media screen and (max-width: 900px){
+@media screen and (max-width: 930px){
   .container{
-        width: 65vw;
-    }
+      width: 65vw;
+  }
+  .main{
+    padding-left: 0px;
+  }
 }
 </style>
