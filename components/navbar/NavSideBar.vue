@@ -14,19 +14,19 @@
                             <span class="list-group-item">Controle de Acesso</span>
                         </div>
                     </a>
-                    <a class="text-decoration-none" href="/inventario" aria-current="true">
-                        <div class="item-bg" :class="{'active': $route.path === '/inventario', 'text-dark-emphasis': $route.path !== '/inventario'}">
+                    <div class="item-bg" :class="{'active': $route.path === '/inventario', 'text-dark-emphasis': $route.path !== '/inventario'}">
+                        <a class="text-decoration-none" :class="{'text-light': $route.path === '/inventario', 'text-dark-emphasis': $route.path !== '/inventario'}"  href="/inventario" aria-current="true">
                             <IconsSpreadSheet class="nav-icon"/>
                             <span class="list-group-item">Catálogo</span>
-                            <button class="svg-button" @click="rotate" data-bs-toggle="dropdown" aria-expanded="false">
-                                <IconsDownArrow class="small-rotate-arrow" :style="{ transform: isRoted ? 'rotate(180deg)' : 'rotate(0deg)'}" :class="{'text-dark-emphasis': $route.path !== '/inventario'}" width="24px" height="24px"/>
-                            </button>
-                        </div>
-                    </a>
-                    <div :class="{'hiden': !isRoted}">
-                        <a class="text-decoration-none" v-for="route in dropdwonRoutes" :href="route.path" :key="route.name"  aria-current="true">
-                            <div class="item-bg" :class="{'active': $route.path === route.path, 'text-dark-emphasis': $route.path !== route.path }">
-                                <span class="list-group-item">{{route.name}}</span>
+                        </a>
+                        <button class="svg-button" @click="rotate">
+                            <IconsDownArrow class="small-rotate-arrow" :style="{ transform: isRotated ? 'rotate(180deg)' : 'rotate(0deg)'}" :class="{'text-dark-emphasis': $route.path !== '/inventario'}" width="24px" height="24px"/>
+                        </button>
+                    </div>
+                    <div :class="{'hidden': !isRotated}">
+                        <a class="text-decoration-none" v-for="sublink in dropdwonRoutes" :href="sublink.path" aria-current="true">
+                            <div class="item-bg" :class="{'active': $route.path === sublink.path, 'text-dark-emphasis': $route.path !== sublink.path }">
+                                <span class="list-group-item">{{sublink.name}}</span>
                             </div>
                         </a>
                     </div>
@@ -64,33 +64,37 @@ import { useStorageStore } from '../../stores/storage';
 export default {
     data() {
         return {
-            isRoted: false,
             isCollapsed: false,
             dropdwonRoutes: []
+        }
+    },
+    computed: {
+        isRotated() {
+            return useStorageStore().isRotated;
         }
     },
     methods: {
         sidebarColapse() {
           this.isCollapsed = !this.isCollapsed;
         },
-        rotate(){
-            console.log(this.dropdwonRoutes);
-            this.isRoted = !this.isRoted;
-        },
+        rotate() {
+            useStorageStore().setRotated();
+        }
       },
-    mounted(){
+    created(){
         const store = useStorageStore();
         const routes  = useRoutes();
+        let tempSublinks = [];
         for(let i = 0; i < routes.length; i++){
             if(routes[i].includes('/inventario/')){
-                store.setSublink({
+                tempSublinks.push({
                     path: routes[i],
                     name: routes[i].split('/')[2]
                 });
             }
         }
-        console.log(store.sidebarSublinks);
-        this.dropdownRoutes = store.sidebarSublinks;
+        store.setSublink(tempSublinks);
+        this.dropdwonRoutes = store.sidebarSublinks;
     }
 }
 </script>
@@ -151,6 +155,12 @@ export default {
     height: 42px;
     width: 145px;
 }
+.item-bg a{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+}
 .collapsed {
     width: 50px; 
     
@@ -188,7 +198,7 @@ export default {
     background: #0B3B69;
     border-radius: 9px;
 }
-.hiden{
+.hidden{
     display: none;
 }
 .item-bg:hover{

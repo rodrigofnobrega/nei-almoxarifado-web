@@ -6,7 +6,8 @@ export default defineNuxtConfig({
     '~/assets/scss/styles.scss'
   ],
   modules: [
-    '@pinia/nuxt' 
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt' 
   ],
   app: {
     head: {

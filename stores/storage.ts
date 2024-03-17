@@ -10,13 +10,16 @@ export const useStorageStore = defineStore('storage', {
         {name: "Esponja", sipac: "6442342354", type: "Sacola", qtd: 3, history: ["03/04/2023 16:00:00 - Solicitado"], storage: "almoxarifado-escolar"},
         {name: "Vassoura", sipac: null, type: "Unidade", qtd: 5, history: ["03/03/2023 13:30:00 - Adicionado"], storage: "almoxarifado-funcionarios"},
     ],
-    sidebarSublinks: [
-
-    ]
+    sidebarSublinks: [],
+    isRotated: false,
     }),
     actions: {
-      setSublink(sublink) {
-          this.sidebarSublinks.push(sublink);
+      setSublink(sublinks) {
+          this.sidebarSublinks = sublinks;
+      },
+      setRotated(){
+        this.isRotated = !this.isRotated;
       }
-  }
+  },
+  persist: true,
 });
