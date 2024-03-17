@@ -1,39 +1,49 @@
 <template>
-    <div class="nav bg-light-emphasis d-flex offcanvas show" :class="{ 'collapsed': isCollapsed }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+    <div class="nav bg-light-emphasis d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-body ps-3" >
                 <ul class="list-group-flush container d-block" :class="{ 'collapsed': isCollapsed }">
-                    <a class="nav-route text-decoration-none" href="/" aria-current="true">
-                        <div class="nav-container item-bg text-dark-emphasis">
+                    <a class="text-decoration-none" href="/" aria-current="true">
+                        <div class="item-bg item-top" :class="{'active': $route.path === '/', 'text-dark-emphasis': $route.path !== '/'}">
                             <IconsHome class="nav-icon"/>
                             <span class="list-group-item">Home</span>
                         </div>
                     </a>
-                    <a class="nav-route text-decoration-none" href="/controle-de-acesso" aria-current="true">
-                        <div class="nav-container item-bg text-dark-emphasis">
+                    <a class="text-decoration-none" href="/controle-de-acesso" aria-current="true">
+                        <div class="item-bg" :class="{'active': $route.path === '/controle-de-acesso', 'text-dark-emphasis': $route.path !== '/controle-de-acesso' }">
                             <IconsControl class="nav-icon"/>
                             <span class="list-group-item">Controle de Acesso</span>
                         </div>
                     </a>
-                    <a class="nav-route text-decoration-none" href="/inventario" aria-current="true">
-                        <div class="nav-container item-bg text-dark-emphasis">
+                    <div class="item-bg" :class="{'active': $route.path === '/inventario', 'text-dark-emphasis': $route.path !== '/inventario'}">
+                        <a class="text-decoration-none" :class="{'text-light': $route.path === '/inventario', 'text-dark-emphasis': $route.path !== '/inventario'}"  href="/inventario" aria-current="true">
                             <IconsSpreadSheet class="nav-icon"/>
                             <span class="list-group-item">Catálogo</span>
-                        </div>
-                    </a>
-                    <a class="nav-route text-decoration-none" href="/registro" aria-current="true">
-                        <div class="nav-container item-bg text-dark-emphasis">
+                        </a>
+                        <button class="svg-button" @click="rotate">
+                            <IconsDownArrow class="small-rotate-arrow" :style="{ transform: isRotated ? 'rotate(180deg)' : 'rotate(0deg)'}" :class="{'text-dark-emphasis': $route.path !== '/inventario'}" width="24px" height="24px"/>
+                        </button>
+                    </div>
+                    <div :class="{'hidden': !isRotated}">
+                        <a class="text-decoration-none" v-for="sublink in dropdwonRoutes" :href="sublink.path" aria-current="true">
+                            <div class="item-bg" :class="{'active': $route.path === sublink.path, 'text-dark-emphasis': $route.path !== sublink.path }">
+                                <span class="list-group-item">{{sublink.name}}</span>
+                            </div>
+                        </a>
+                    </div>
+                    <a class="text-decoration-none" href="/registro" aria-current="true">
+                        <div class="item-bg" :class="{'active': $route.path === '/registro', 'text-dark-emphasis': $route.path !== '/registro'}">
                             <IconsDirectory class="nav-icon"/>
                             <span class="list-group-item">Registro</span>
                         </div>
                     </a>
-                    <a class="nav-route text-decoration-none" href="/configuracoes" aria-current="true">
-                        <div class="nav-container item-bg text-dark-emphasis">
-                        <IconsSettings width="25px" height="25px" class="nav-icon"/>
+                    <a class="text-decoration-none" href="/configuracoes" aria-current="true">
+                        <div class="item-bg" :class="{'active': $route.path === '/configuracoes', 'text-dark-emphasis': $route.path !== '/configuracoes'}">
+                            <IconsSettings class="nav-icon"/>
                             <span class="list-group-item">Configurações</span>
                         </div>
                     </a>
-                    <a class="nav-route text-decoration-none" href="/sobre" aria-current="true">
-                        <div class="nav-container item-bg text-start text-dark-emphasis">
+                    <a class="text-decoration-none" href="/sobre" aria-current="true">
+                        <div class="item-bg text-start" :class="{'active': $route.path === '/sobre', 'text-dark-emphasis': $route.path !== '/sobre'}">
                             <IconsInformation class="nav-icon"/>
                             <span class="d-inline-block list-group-item">Sobre</span>
                         </div>
@@ -46,43 +56,57 @@
                 </button>
             </div>
     </div>
-    </template>
+</template>
     
-    <script >
+<script >
+import { useStorageStore } from '../../stores/storage';
     
-    export default {
-      data() {
+export default {
+    data() {
         return {
-          isCollapsed: false
+            isCollapsed: false,
+            dropdwonRoutes: []
         }
-      },
-      methods: {
+    },
+    computed: {
+        isRotated() {
+            return useStorageStore().isRotated;
+        }
+    },
+    methods: {
         sidebarColapse() {
           this.isCollapsed = !this.isCollapsed;
+        },
+        rotate() {
+            useStorageStore().setRotated();
         }
       },
-      mounted(){
-        /*Código para aplicar o actvie na sidebar*/ 
-        const currentRoute = this.$route.path;
-        let navRoutes = document.getElementsByClassName("nav-route");
-        let navContainers = document.getElementsByClassName("nav-container");
-        for(let i = 0; i < navRoutes.length; i++){
-            if(navRoutes[i].getAttribute('href') === currentRoute){
-                navContainers[i].classList.add('active');
-                navContainers[i].classList.remove('text-dark-emphasis');
-            };
-        };
-      },
+    created(){
+        const store = useStorageStore();
+        const routes  = useRoutes();
+        let tempSublinks = [];
+        for(let i = 0; i < routes.length; i++){
+            if(routes[i].includes('/inventario/')){
+                tempSublinks.push({
+                    path: routes[i],
+                    name: routes[i].split('/')[2]
+                });
+            }
+        }
+        store.setSublink(tempSublinks);
+        this.dropdwonRoutes = store.sidebarSublinks;
     }
+}
 </script>
     
 <style scoped>
 .offcanvas{
     border: none;
-    width: 200px;
-    height: 95vh;  
-    top: 5%;
-    padding-top: 30px;
+    width: 160px;
+    height: 97vh;  
+    top: 3%;
+    padding-top: 20px;
+    overflow-x: hidden;
     transition: width 0.6s ease-in-out;
 }
 .offcanvas-body{
@@ -90,6 +114,16 @@
     margin-right: 0px;
     padding-right: 0px;
     margin-bottom: -200px;
+}
+.small-rotate-arrow{
+  transition: transform 0.3s ease-in-out;
+  margin-left: 35px;
+}
+.svg-button{
+    border: none;
+    padding: 0;
+    margin: 0;
+    background: none;
 }
 .nav{   
     margin: 0;
@@ -99,12 +133,16 @@
 }
 .list-group-item{
     display: flex;
-    font-size: 13px;
+    font-size: 12px;
     margin-left: 7px;
+    margin-top: 2px;
     text-decoration: none;
     text-align: start;
     white-space: nowrap;
     transition: opacity 1.5s ease-in-out;
+}
+.item-top{
+    margin-bottom: -9px;
 }
 .item-bg{
     transition: width 0.6s ease-in-out;
@@ -112,26 +150,32 @@
     justify-content: flex-start;
     align-items: center;
     overflow: hidden;
-    margin-top: 15px;
+    margin-top: 25px;
     padding-left: 5px;
-    height: 52px;
-    width: 180px;
+    height: 42px;
+    width: 145px;
+}
+.item-bg a{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
 }
 .collapsed {
-  width: 50px; 
-  
+    width: 50px; 
+    
 }
 .colapse-btn{
     padding: 0;
-    width: 200px;
+    width: 160px;
     bottom: 0;
-    height: 55px;
+    height: 40px;
     transition: width 0.6s ease-in-out;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 .collapsed .colapse-btn{
     width: 50px;
-    height: 55px;
+    height: 40px;
 }
 .collapsed .list-group-item{
     visibility: hidden;
@@ -154,9 +198,15 @@
     background: #0B3B69;
     border-radius: 9px;
 }
+.hidden{
+    display: none;
+}
 .item-bg:hover{
     background: #D9D9D9;
     color: #333333;
     border-radius: 9px;
+}
+.list-group-item:hover{
+    color: #333333;
 }
 </style>

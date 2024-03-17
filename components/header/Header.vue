@@ -1,7 +1,7 @@
 <template>
-    <div class="header container-fluid d-flex justify-content-between align-items-center bg-primary">  
+    <div class="header container-fluid d-flex justify-content-between align-items-center bg-primary p-0">  
       <div class="d-flex align-items-center">
-        <Brand />
+        <Brand class="ms-2"/>
         <SearchBar />
         <ModalSearch />
       </div> 

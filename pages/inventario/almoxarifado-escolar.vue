@@ -1,7 +1,7 @@
 <template>
     <ModalItemDetails />
     <ModalItemHistory />
-    <div class="container d-block">
+    <div class="row d-block">
         <TablesTable>
             <template v-slot:title>Almoxarifado Escolar</template>
             <template v-slot:items>
@@ -36,10 +36,7 @@ const items = store.items.filter(item => item.storage.includes("almoxarifado-esc
 
 
 <style scoped>
-.container{
-    margin-left: 0px; 
-    padding: 0px;
-}
+
 
 th{
     padding: 16px 0 16px 0;
@@ -81,9 +78,6 @@ tr:hover p{
     opacity: 70%;
 }
 @media screen and (max-width: 1000px) {
-    table {
-        width: 70vw;
-    }
     .col-title{
         font-size: 14px;
     }
@@ -103,17 +97,10 @@ tr:hover p{
         display: block !important;
         text-align: center;
     }
-    .actions-buttons{
-        justify-content: center;
-        align-content: center;
-    }
 }
 @media screen and (max-width: 820px) {
     .container{
         margin-left: 0px;
-    }
-    table {
-        width: 50vw;
     }
     .col-title{
         font-size: 12px;

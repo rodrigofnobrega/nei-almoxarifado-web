@@ -89,14 +89,12 @@
     </div>
 </div>
 </template>
-
+feat: adicionado responsividade e media querys nas páginas #26
+Adicionado responsividade e media querys no layout default, corrigido alguns erros de estilização nos botões de filtro, configure, profile dropdown e sidebar.
 <style scoped>
 h2{
     font-weight: 300;
     color: rgb(51,51,51, 0.8);
-}
-hr{
-    width: 82vw;
 }
 .catalog-header{
     justify-content: space-between;

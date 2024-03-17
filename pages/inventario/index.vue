@@ -1,14 +1,14 @@
 <template>
-    <div class="container d-block" style="margin-left: 0px;">
-        <div class="catalog-header d-flex align-items-center">
+<div class=" d-block" style="margin-left: 0px;">
+    <div class="catalog-header d-flex align-items-center">
         <h2>Almoxarifados</h2>
-        <div class="d-flex">   
+        <div class="actions-buttons d-flex">   
             <ButtonsFilter />
             <ButtonsConfigure /> 
         </div>
     </div>
     <hr>
-    <div class="containerf-fluid d-flex justify-content-center aligm-items-center">
+    <div class="container-fluid d-flex justify-content-center aligm-items-center">
         <div class="card me-2 rounded-3" style="width: 34rem;">
           <img src="/almo.png" class="card-img-top" alt="...">
           <div class="card-body text-dark-emphasis">
@@ -31,7 +31,7 @@
           </div>
         </div>
     </div>
-    </div>
+</div>
 </template>
 
 
@@ -40,9 +40,7 @@ h2{
     font-weight: 300;
     color: rgb(51,51,51, 0.8);
 }
-hr{
-    width: 82vw;
-}
+
 .catalog-header{
     justify-content: space-between;
 }
@@ -55,7 +53,7 @@ hr{
     opacity: 90%;
 }
 .card-body{
-    transition: color, background-color 0.4s ease-in-out;
+    transition: background-color 0.4s ease-in-out;
 }
 .card:hover{
     transform: scale(1.04);
@@ -70,5 +68,17 @@ hr{
 .card:hover .stretched-link{
     color: white !important;
 }
-
+.action-btn{
+    margin-right: 10px;
+}
+@media screen and (max-width: 900px){
+    .catalog-header{
+        display: block !important;
+        text-align: center;
+    }
+    .actions-buttons{
+        justify-content: center;
+        align-content: center;
+    }
+}
 </style>

@@ -22,16 +22,32 @@
 
 </script>
   
-  <style>
+<style>
+.main{
+  width: 85vw;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 100px;
+  margin-bottom: 15vw;
+  padding-left: 25px;
+} 
+.fluid-container{
+  position: static;
+}
+.teste{
+  position: static;
+}
+@media screen and (max-width: 1050px){
   .main{
-    margin-top: 100px;
-    margin-bottom: 10vw;
-    padding-left: 15px;
-  } 
-  .fluid-container{
-    position: static;
+        width: 75vw;
+    }
+}
+@media screen and (max-width: 930px){
+  .container{
+      width: 65vw;
   }
-  .teste{
-    position: static;
+  .main{
+    padding-left: 0px;
   }
-  </style>
+}
+</style>
