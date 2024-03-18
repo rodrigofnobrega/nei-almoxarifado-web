@@ -1,11 +1,11 @@
 <template>
-    <ModalItemDetails />
-    <ModalItemHistory />
+    <ModalItemDetails :item_details="currentItem" />
+    <ModalItemHistory :item_history="currentItem"/>
     <div class="row d-block">
         <TablesTable>
             <template v-slot:title>Almoxarifado Escolar</template>
             <template v-slot:items>
-             <tr v-for="item in items" :key="item.name">
+             <tr v-for="(item, index) in items" :key="index">
                <th scope="row"><p>{{ item.name }}</p></th>
                <th>
                     <p v-if="item.sipac">{{ item.sipac }}</p>
@@ -15,10 +15,10 @@
                <th><p>{{ item.qtd }}</p></th>
                <th><p>{{ item.history[0]}}</p></th>
                <th class="end">
-                    <button class="table-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                    <button class="table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         Detalhes
                     </button>
-                    <button class="table-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                    <button class="table-btn btn btn-primary" @click="showHistory(index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
                         Histórico
                     </button>
                 </th>
@@ -30,8 +30,21 @@
 
 <script setup>
 import { useStorageStore } from '../../stores/storage';
+import { ref } from 'vue';
+
 const store = useStorageStore();
 const items = store.items.filter(item => item.storage.includes("almoxarifado-escolar"));
+
+const itemIndex = ref(0);
+const currentItem = computed(() => {
+  return items[itemIndex.value];
+});
+const showDetails = (index) => {
+    itemIndex.value = index;
+}
+const showHistory = (index) => {
+    itemIndex.value = index;
+}
 </script>
 
 

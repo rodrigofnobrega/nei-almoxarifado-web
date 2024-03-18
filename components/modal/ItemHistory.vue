@@ -4,7 +4,7 @@
 			<h5 class="modal-title"> Histórico mais recente do item </h5>
 		</template>
 	    <template v-slot:body>
-			<TablesHistory />
+			<TablesHistory :item_tb_history="item_history"/>
 		</template>
 		<template v-slot:footer> 
 			<div class="container-fluid d-flex justify-content-center align-items-center">
@@ -14,8 +14,14 @@
 	</Modal>
 </template>
 
-<script>
+<script lang="ts">
 export default{
+	props: {
+		item_history: {
+			type: Object,
+			required: true
+		}
+	}
 }
 
 </script>

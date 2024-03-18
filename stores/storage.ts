@@ -17,7 +17,7 @@ export const useStorageStore = defineStore('storage', {
       setItem(item){
         this.items.push(item);
       },
-      removeItem(){
+      deleteItem(){
         this.items.pop();
       },
       setSublink(sublinks) {

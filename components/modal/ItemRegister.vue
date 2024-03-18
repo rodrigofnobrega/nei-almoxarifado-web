@@ -57,7 +57,7 @@ export default{
             this.store.setItem({name: this.itemName, sipac: this.itemSipac, type: this.itemSipac, qtd: this.itemQtd, history: '', storage: this.$route.path.split('/')[2]})
         },
         itemRemove(){
-            this.store.removeItem();
+            this.store.deleteItem();
         }
     },
     setup(){
