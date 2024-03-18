@@ -13,21 +13,21 @@
           <img src="/almo.png" class="card-img-top" alt="...">
           <div class="card-body text-dark-emphasis">
             <a href="/inventario/almoxarifado-escolar" class="fs-5 stretched-link text-dark-emphasis" style="text-decoration: none;">Almoxarifado Escolar</a>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <p class="card-text">Itens relacionados as práticas escolar de arte, desenho, escrita, gincana e quaisquer atividades escolar que necessitem de insumos para realização.</p>
           </div>
         </div>
         <div class="card mx-2 rounded-3" style="width: 34rem;">
           <img src="/almo2.png" class="card-img-top" alt="...">
           <div class="card-body text-dark-emphasis">
             <a href="/inventario/almoxarifado-funcionarios" class="fs-5 stretched-link text-dark-emphasis" style="text-decoration: none;">Almoxarifado Funcionários</a>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <p class="card-text">Insumos para uso dos funcionários da limpeza, manuntenção e administração da instituição.</p>
           </div>
         </div>
         <div class="card mx-2 rounded-3" style="width: 34rem;">
-          <img src="/almo.png" class="card-img-top" alt="...">
+          <img src="/almo3.png" class="card-img-top" alt="...">
           <div class="card-body text-dark-emphasis">
-            <a href="/inventario/almoxarifado-escolar" class="fs-5 stretched-link text-dark-emphasis" style="text-decoration: none;">Almoxarifado Escolar</a>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="/inventario/almoxarifado-escolar" class="fs-5 stretched-link text-dark-emphasis" style="text-decoration: none;">Almoxarifado Informático</a>
+            <p class="card-text">Materiais que possuem relação com equipamentos e ferramentas de informática.</p>
           </div>
         </div>
     </div>

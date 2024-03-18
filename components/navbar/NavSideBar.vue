@@ -14,13 +14,13 @@
                             <span class="list-group-item">Controle de Acesso</span>
                         </div>
                     </a>
-                    <div class="item-bg" :class="{'active': $route.path === '/inventario', 'text-dark-emphasis': $route.path !== '/inventario'}">
-                        <a class="text-decoration-none" :class="{'text-light': $route.path === '/inventario', 'text-dark-emphasis': $route.path !== '/inventario'}"  href="/inventario" aria-current="true">
-                            <IconsSpreadSheet class="nav-icon"/>
+                    <div class="item-bg" :class="{'active': $route.path === '/inventario' || isRotated, 'text-dark-emphasis': $route.path !== '/inventario' && !isRotated}">
+                        <IconsSpreadSheet class="nav-icon"/>
+                        <a class="text-decoration-none text-light" :class="{'text-light': $route.path === '/inventario', 'text-dark-emphasis': $route.path !== '/inventario' && !isRotated}"  href="/inventario" aria-current="true">
                             <span class="list-group-item">Catálogo</span>
                         </a>
                         <button class="svg-button" @click="rotate">
-                            <IconsDownArrow class="small-rotate-arrow" :style="{ transform: isRotated ? 'rotate(180deg)' : 'rotate(0deg)'}" :class="{'text-dark-emphasis': $route.path !== '/inventario'}" width="24px" height="24px"/>
+                            <IconsDownArrow class="small-rotate-arrow text-light" :style="{ transform: isRotated ? 'rotate(180deg)' : 'rotate(0deg)'}" :class="{'text-dark-emphasis': $route.path !== '/inventario' && !isRotated}" width="24px" height="24px"/>
                         </button>
                     </div>
                     <div :class="{'hidden': !isRotated}">
@@ -75,7 +75,9 @@ export default {
     },
     methods: {
         sidebarColapse() {
+          useStorageStore().isRotated = false;
           this.isCollapsed = !this.isCollapsed;
+
         },
         rotate() {
             useStorageStore().setRotated();
@@ -114,10 +116,6 @@ export default {
     margin-right: 0px;
     padding-right: 0px;
     margin-bottom: -200px;
-}
-.small-rotate-arrow{
-  transition: transform 0.3s ease-in-out;
-  margin-left: 35px;
 }
 .svg-button{
     border: none;
@@ -184,8 +182,15 @@ export default {
 .collapsed .item-bg{
     width: 35px;
 }
+.collapsed .small-rotate-arrow{
+    opacity: 0;
+}
 .rotate-arrow{
     transition: transform 0.6s ease-in-out;
+}
+.small-rotate-arrow{
+  transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out;
+  margin-left: 35px;
 }
 .list-group-flush{
     margin-left: -20px;

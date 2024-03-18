@@ -20,7 +20,6 @@ $list-group-active-bg: map-get($theme-colors, "warning");
 $font-family-sans-serif: "Poppins", sans-serif;
 $modal-backdrop-opacity: 0; 
 
-
 @import "bootstrap/scss/bootstrap";
 @import 'dropdown.scss';
 @import 'modal.scss';

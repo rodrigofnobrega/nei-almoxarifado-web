@@ -14,6 +14,12 @@ export const useStorageStore = defineStore('storage', {
     isRotated: false,
     }),
     actions: {
+      setItem(item){
+        this.items.push(item);
+      },
+      removeItem(){
+        this.items.pop();
+      },
       setSublink(sublinks) {
           this.sidebarSublinks = sublinks;
       },
