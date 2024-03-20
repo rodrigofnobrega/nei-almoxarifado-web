@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { sipacHandeling } from '../../composables/inputHandler';
 import { useStorageStore } from '../../stores/storage';
 export default{
     data() {
@@ -53,8 +54,13 @@ export default{
         }
     },
     methods: {
+        itemQtdHandler(quantity){
+            if(this.itemQtd == 0){
+                //acionar notificação de aviso
+            }
+        },
         itemRegister(){
-            this.store.setItem({name: this.itemName, sipac: this.itemSipac, type: this.itemSipac, qtd: this.itemQtd, history: '', storage: this.$route.path.split('/')[2]})
+            this.store.setItem({name: this.itemName, sipac: sipacHandeling(this.itemSipac), type: this.itemType, /*Faltando o handler de qtd*/  qtd: this.itemQtd, history: '', storage: this.$route.path.split('/')[2]})
         },
         itemRemove(){
             this.store.deleteItem();
@@ -89,6 +95,9 @@ export default{
     border: none;
 }
 .sipac-container:hover{
+    opacity: 100% !important;
+}
+.sipac-container:active {
     opacity: 100% !important;
 }
 </style>

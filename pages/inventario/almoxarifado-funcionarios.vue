@@ -1,7 +1,7 @@
 <template>
     <ModalItemDetails :item_details="currentItem" />
     <ModalItemHistory :item_history="currentItem"/>
-    <div class="container d-block">
+    <div class="row d-block">
         <TablesTable>
             <template v-slot:title>Almoxarifado Funcionários</template>
             <template v-slot:items>

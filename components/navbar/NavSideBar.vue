@@ -105,8 +105,8 @@ export default {
 .offcanvas{
     border: none;
     width: 160px;
-    height: 97vh;  
-    top: 3%;
+    height: 100vh;  
+    top: 0%;
     padding-top: 20px;
     overflow-x: hidden;
     transition: width 0.6s ease-in-out;
