@@ -189,7 +189,7 @@ export default {
     transition: transform 0.6s ease-in-out;
 }
 .small-rotate-arrow{
-  transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out;
+  transition: transform 0.3s ease-in-out, opacity 0.1s ease-in-out;
   margin-left: 35px;
 }
 .list-group-flush{

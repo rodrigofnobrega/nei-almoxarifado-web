@@ -11,7 +11,7 @@
                <label for="item-name">Nome do item</label> 
                <input class="form-control" v-model="itemName" type="text">
             </div>
-            <div class="sipac-container mb-3">
+            <div class="sipac-container mb-3" :style="{opacity: itemSipac ? '100%' : '50%'}">
                <label for="item-sipac">Código Sipac <span class="text-light-emphasis ms-3">*opcional*</span></label> 
                <input class="form-control" v-model="itemSipac" type="text">
             </div>
@@ -88,10 +88,7 @@ export default{
 .close-btn{
     border: none;
 }
-.sipac-container{
-    opacity: 50%;
-}
 .sipac-container:hover{
-    opacity: 100%;
+    opacity: 100% !important;
 }
 </style>
