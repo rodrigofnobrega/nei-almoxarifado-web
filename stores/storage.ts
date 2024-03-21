@@ -14,18 +14,26 @@ export const useStorageStore = defineStore('storage', {
     isRotated: false,
     }),
     actions: {
-      setItem(item){
+      addItem(item){
         this.items.push(item);
       },
       deleteItem(){
-        this.items.pop();
+        this.items.pop(); 
+      },
+      updateItemName(index, newName) {
+        this.items[index].name = newName;
       },
       setSublink(sublinks) {
           this.sidebarSublinks = sublinks;
       },
       setRotated(){
         this.isRotated = !this.isRotated;
-      }
+      },
+  },
+  getters: {
+    getItems() {
+        return this.items;
+    }
   },
   persist: true,
 });

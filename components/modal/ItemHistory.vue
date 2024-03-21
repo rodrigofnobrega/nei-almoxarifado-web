@@ -57,9 +57,6 @@ export default{
 		}
 	},
   },
-  mounted(){
-	console.log(this.item_history.history.length);	
-  }
 }
 
 </script>

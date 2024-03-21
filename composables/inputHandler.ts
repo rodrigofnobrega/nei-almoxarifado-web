@@ -1,5 +1,5 @@
 export const sipacHandeling = (sipac:string) => {
-    const sipacForm = "abcdefghijklmnopqrstuvwxyz1234567890";
+    const sipacForm = "1234567890";
     let sipacState:boolean = false;
     for(let i = 0; i < sipacForm.length; i++){
         if(sipac.includes(sipacForm[i])){

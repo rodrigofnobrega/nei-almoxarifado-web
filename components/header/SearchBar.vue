@@ -9,6 +9,11 @@
 
 
 <style scoped>
+.search-bar{
+  outline: none;
+  height: 27px;
+  width: 210px;
+}
 .btn-search{
   outline: none;
 }
@@ -20,14 +25,19 @@
   color: #333333;
   background-color: white;
 }
-.search-bar{
-    outline: none;
-    height: 27px;
-    width: 210px;
-}
 .btn-search:active{
     background-color: #FED51E;
     color: white;
     border-color: #FED51E;
+}
+.search-bar::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  right: 212px;
+  bottom: 0;
+  height: 25px;
+  width: 1px; /* Largura da barra */
+  background-color: white; /* Cor da barra */
 }
 </style>

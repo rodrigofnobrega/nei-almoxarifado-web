@@ -60,7 +60,7 @@ export default{
             }
         },
         itemRegister(){
-            this.store.setItem({name: this.itemName, sipac: sipacHandeling(this.itemSipac), type: this.itemType, /*Faltando o handler de qtd*/  qtd: this.itemQtd, history: '', storage: this.$route.path.split('/')[2]})
+            this.store.addItem({name: this.itemName, sipac: sipacHandeling(this.itemSipac), type: this.itemType, /*Faltando o handler de qtd*/  qtd: this.itemQtd, history: '', storage: this.$route.path.split('/')[2]})
         },
         itemRemove(){
             this.store.deleteItem();

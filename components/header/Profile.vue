@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex profile align-items-center mx-3">
+    <div class="d-flex profile align-items-center me-3">
           <div class="nav-item dropdown">
             <button class="svg-button bg-primary px-2" data-bs-toggle="dropdown" data-bs-offset="20,15" aria-expanded="false">
                 <IconsBell with="16px" height="16px"/>
