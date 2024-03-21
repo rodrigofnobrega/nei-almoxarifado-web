@@ -149,7 +149,7 @@ export default {
     align-items: center;
     overflow: hidden;
     margin-top: 25px;
-    padding-left: 5px;
+    padding-left: 7px;
     height: 42px;
     width: 145px;
 }

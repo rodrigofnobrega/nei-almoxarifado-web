@@ -2,7 +2,7 @@
     <div class="d-flex profile align-items-center mx-3">
           <div class="nav-item dropdown">
             <button class="svg-button bg-primary px-2" data-bs-toggle="dropdown" data-bs-offset="20,15" aria-expanded="false">
-                <img src="/bell.svg" with="16px" height="16px">
+                <IconsBell with="16px" height="16px"/>
             </button>
             <ul class="dropdown-menu py-2">
               <li class="dropdown-item text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
