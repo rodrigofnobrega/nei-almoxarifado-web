@@ -5,7 +5,7 @@
         <TablesTable>
             <template v-slot:title>Almoxarifado Funcionários</template>
             <template v-slot:items>
-               <tr v-for="(item, index) in items" :key="index">
+               <tr v-for="(item, index) in filteredItems" :key="index">
                <th scope="row"><p>{{ item.name }}</p></th>
                <th>
                     <p v-if="item.sipac">{{ item.sipac }}</p>
@@ -30,14 +30,13 @@
 
 <script setup>
 import { useStorageStore } from '../../stores/storage';
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 const store = useStorageStore();
-const items = store.items.filter(item => item.storage.includes("almoxarifado-funcionarios"));
+const items = ref(store.items);
+const filteredItems = computed(() => items.value.filter(item => item.storage.includes("almoxarifado-funcionarios")));
 
 const itemIndex = ref(0);
-const currentItem = computed(() => {
-  return items[itemIndex.value];
-});
+const currentItem = computed(() => filteredItems.value[itemIndex.value]);
 const showDetails = (index) => {
     itemIndex.value = index;
 }

@@ -1,8 +1,10 @@
 @import 'variables.scss';
 $form-switch-width: 2.5em;
 $form-switch-color: white;
-$form-check-input-checked-color: map-get($theme-colors, "dark-emphasis");
+
+
 $form-check-input-checked-bg-color: map-get($theme-colors, "dark-emphasis");
+
 $form-switch-checked-color: map-get($theme-colors, "dark-emphasis");
 $form-switch-focus-color: map-get($theme-colors, "warning");
 $form-switch-checked-color: map-get($theme-colors, "warning");
@@ -10,9 +12,6 @@ $form-switch-bg-image: url('/sun.svg');
 $form-switch-focus-bg-image: url('/sun.svg');
 $form-switch-checked-bg-image: url('/moon.svg');
 
-.form-check-input{
-    padding: 8px;
-}
 .form-check-input{
     box-shadow: 0px;
 }

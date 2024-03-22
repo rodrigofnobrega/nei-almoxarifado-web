@@ -9,9 +9,10 @@ export const useStorageStore = defineStore('storage', {
         {name: "Sabão em pó", sipac: "5442342354", type: "Unidade", qtd: 12, history: ["03/03/2023 11:23:30 - Excluido"], storage: "almoxarifado-escolar"},
         {name: "Esponja", sipac: "6442342354", type: "Sacola", qtd: 3, history: ["03/04/2023 16:00:00 - Excluido"], storage: "almoxarifado-escolar"},
         {name: "Vassoura", sipac: 'nenhum', type: "Unidade", qtd: 5, history: ["03/03/2023 13:30:00 - Adicionado"], storage: "almoxarifado-funcionarios"},
-    ],
-    sidebarSublinks: [],
-    isRotated: false,
+      ],
+      sidebarSublinks: [],
+      isRotated: false,
+      deleteMode: false
     }),
     actions: {
       addItem(item){
@@ -29,6 +30,9 @@ export const useStorageStore = defineStore('storage', {
       setRotated(){
         this.isRotated = !this.isRotated;
       },
+      setDeleteMode(){
+        this.deleteMode = !this.deleteMode;
+      }
   },
   getters: {
     getItems() {
