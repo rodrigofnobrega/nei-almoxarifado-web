@@ -2,7 +2,7 @@
     <Modal id="itemDetailing" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
             <h5 class="header-title d-flex justify-content-start align-items-center">Detalhes do Item</h5>
-            <button class="btn btn-transparent text-light" type="button" data-bs-dismiss="modal">
+            <button class="btn btn-transparent border-0 text-light" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close mt-1 ms-5 s-5" width="1.7em" height="1.7em"/>
             </button>
         </template>
@@ -48,11 +48,11 @@
         </template>
         <template v-slot:footer>
             <div class="container-fluid d-flex justify-content-center align-items-center">
-                <button type="button" class="btn btn-warning mx-3" data-bs-dismiss="modal">Voltar</button>
+                <button type="button" class="modal-btn btn btn-warning mx-3" data-bs-dismiss="modal">Voltar</button>
             </div>
         </template> 
     </Modal>
-</template>background-color: red;
+</template>
 
 <script>
 export default {
@@ -100,8 +100,6 @@ export default {
 }
 </script>
 
-
-
 <style scoped>
 .modal-header{
     background-color: red;
@@ -115,9 +113,8 @@ export default {
     margin: -1px 0 -1px 0;
     padding: 0;
 }
-.btn{
+.modal-btn{
     border-radius: 10px;
 }
-
 
 </style>

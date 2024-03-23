@@ -2,6 +2,9 @@
 	<Modal id="itemHistory" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
 	 	<template v-slot:header> 
 			<h5 class="modal-title"> Histórico mais recente do item </h5>
+			<button class="btn btn-transparent border-0 text-light close-btn" type="button" data-bs-dismiss="modal">
+                    <IconsClose class="close mt-1 ms-5 s-5" width="1.7em" height="1.7em"/>
+            </button>
 		</template>
 	    <template v-slot:body>
 			<table class="table text-center"> 
@@ -26,7 +29,7 @@
 		</template>
 		<template v-slot:footer> 
 			<div class="container-fluid d-flex justify-content-center align-items-center">
-				<button class="btn btn-warning" data-bs-dismiss="modal"> Voltar </button>
+				<button class="modal-btn btn btn-warning" data-bs-dismiss="modal"> Voltar </button>
 			</div>
 		</template>
 	</Modal>
@@ -75,7 +78,7 @@ export default{
     margin: -1px 0 -1px 0;
     padding: 0;
 }
-.btn{
+.modal-btn{
     border-radius: 10px;
 }
 </style>

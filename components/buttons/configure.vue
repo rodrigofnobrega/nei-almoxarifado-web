@@ -7,7 +7,7 @@
         <ul class="dropdown-menu">
             <li class="dropdown-item">
                 <div class="form-check form-check-reverse">
-                    <label class="form-check-label pe-1" for="flexCheckEdit">Habilitar Balanço</label>
+                    <label class="form-check-label pe-1" for="flexCheckEdit">Habilitar Edição</label>
                     <input @change="updateEditMode" class="form-check-input" type="checkbox" value="" id="flexCheckEdit">
                 </div>
             </li>

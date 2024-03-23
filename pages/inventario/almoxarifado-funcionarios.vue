@@ -1,7 +1,7 @@
 <template>
     <ModalItemDetails v-if="filteredItemsSize > 0" :item_details="currentItem" />
     <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
-    <ModalItemBalance v-if="filteredItems > 0"/>
+    <ModalItemBalance :item_index="itemIndex"/>
     <div class="row d-block">
         <TablesTable>
             <template v-slot:title>Almoxarifado Funcionários</template>
@@ -14,11 +14,13 @@
                </th>
                 <th :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle,'normal': !deleteBackgroundStyle && !editBackgroundStyle}">
                     <p>{{ item.type }}</p>
-                    <button v-if="deleteBackgroundStyle" @click="store.deleteItem(index)" class="btn mode-btn btn-dark-alert">Excluir</button>
+                    <button v-if="deleteBackgroundStyle" class="btn mode-btn btn-dark-alert" @click="store.deleteItem(index)">Excluir</button>
+                    <button v-if="editBackgroundStyle" class="btn mode-btn btn-primary" @click="showEdition(index)" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Atualizar Item
+                    </button>
                 </th>
                <th :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle, 'normal': !deleteBackgroundStyle && !editBackgroundStyle}">
                 <p>{{ item.qtd }}</p>
-                <button v-if="editBackgroundStyle" class="btn mode-btn btn-secondary" @click="store.updateItemQtd(index, 1)" data-bs-toggle="modal" data-bs-target="#itemBalance">Balanço</button>
             </th>
                <th :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle, 'normal': !deleteBackgroundStyle && !editBackgroundStyle}"><p>{{ item.history[0]}}</p></th>
                <th class="end" :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle, 'normal': !deleteBackgroundStyle && !editBackgroundStyle}">
@@ -62,6 +64,10 @@ const filteredItemsSize = computed(() => filteredItems.value.length);
 
 const itemIndex = ref(0);
 const currentItem = computed(() => filteredItems.value[itemIndex.value]);
+
+const showEdition = (index) => {
+    itemIndex.value = index;
+}
 
 const showDetails = (index) => {
     itemIndex.value = index;
@@ -117,7 +123,7 @@ p{
     display: none;
     position: absolute;
     margin-top: -28px;
-    margin-left: 110px;
+    margin-left: 210px;
     opacity: 0%;
 }
 .warning-text{
@@ -131,12 +137,14 @@ tr:hover .mode-btn{
 }
 tr:hover .delete{
     background-color: rgb(255, 0, 0, 0.2);
+    color: rgb(0, 0, 0, 0.5);
 }
 tr:hover .normal{
     background-color: rgb(254, 213, 30, 0.4);
 }
 tr:hover .edit{
     background-color: rgb(31, 105, 177, 0.3);
+    color: rgb(0, 0, 0, 0.5);
 }
 
 tr:hover .table-btn{
