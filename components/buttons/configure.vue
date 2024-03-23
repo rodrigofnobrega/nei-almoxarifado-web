@@ -7,12 +7,15 @@
         <ul class="dropdown-menu">
             <li class="dropdown-item">
                 <div class="form-check form-check-reverse">
-                    <label class="form-check-label pe-1"  for="flexCheckDefault">Habilitar Exclusão</label>
-                    <input @change="uptadeDeleteMode" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label pe-1" for="flexCheckEdit">Habilitar Balanço</label>
+                    <input @change="updateEditMode" class="form-check-input" type="checkbox" value="" id="flexCheckEdit">
                 </div>
             </li>
             <li class="dropdown-item">
-                <button class="btn btn-transparent border-0" type="button">Mais antigos</button>
+                <div class="form-check form-check-reverse">
+                    <label class="form-check-label pe-1"  for="flexCheckDelete">Habilitar Exclusão</label>
+                    <input @change="uptadeDeleteMode" class="form-check-input" type="checkbox" value="" id="flexCheckDelete">
+                </div>
             </li>
             <li class="dropdown-item">
                 <button class="btn btn-transparent border-0" type="button">Disponíveis</button>
@@ -30,6 +33,9 @@ import { useStorageStore } from '../../stores/storage';
 const store = useStorageStore();
 const uptadeDeleteMode = () => {
     store.setDeleteMode();
+};
+const updateEditMode = () => {
+    store.setEditMode();
 };
 </script>
 

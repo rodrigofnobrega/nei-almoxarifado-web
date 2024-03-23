@@ -1,24 +1,24 @@
 <template>
-    <ModalItemDetails :item_details="currentItem" />
-    <ModalItemHistory :item_history="currentItem"/>
+    <ModalItemDetails v-if="filteredItemsSize > 0" :item_details="currentItem" />
+    <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
     <div class="row d-block">
         <TablesTable>
             <template v-slot:title>Almoxarifado Escolar</template>
             <template v-slot:items>
-                <tr v-for="(item, index) in filteredItems" :key="index">
-                    <th scope="row" :class="{'delete':  backgroundStyle, 'nmr': !backgroundStyle}"><p>{{ item.name }}</p></th>
-                    <th :class="{'delete':  backgroundStyle, 'nmr': !backgroundStyle}">
+                <tr v-if="filteredItemsSize > 0" v-for="(item, index) in filteredItems" :key="index">
+                    <th scope="row" :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}"><p>{{ item.name }}</p></th>
+                    <th :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}">
                         <p v-if="item.sipac">{{ item.sipac }}</p>
                         <p v-else>nenhum</p>
                     </th>
-                    <th :class="{'delete':  backgroundStyle, 'nmr': !backgroundStyle}">
+                    <th :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}">
                             
                         <p>{{ item.type }}</p>
-                        <button v-if="backgroundStyle" @click="store.deleteItem()" class="btn delete-btn btn-dark-alert">Excluir</button>
+                        <button v-if="backgroundStyle" @click="store.deleteItem(index)" class="btn delete-btn btn-dark-alert">Excluir</button>
                     </th>
-                    <th :class="{'delete':  backgroundStyle, 'nmr': !backgroundStyle}"><p>{{ item.qtd }}</p></th>
-                    <th :class="{'delete':  backgroundStyle, 'nmr': !backgroundStyle}"><p>{{ item.history[0] }}</p></th>
-                    <th class="end" :class="{'delete':  backgroundStyle, 'nmr': !backgroundStyle}">
+                    <th :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}"><p>{{ item.qtd }}</p></th>
+                    <th :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}"><p>{{ item.history[0] }}</p></th>
+                    <th class="end" :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}">
                         <button class="table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                             Detalhes
                         </button>
@@ -27,6 +27,9 @@
                         </button>
                     </th>
                 </tr>
+                <div v-else class="warning-text d-flex aling-items-center justify-content-center">
+                 <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
+                </div>
             </template>
         </TablesTable>
     </div>
@@ -48,6 +51,7 @@ onMounted(() => {
 })
 
 const filteredItems = computed(() => items.value.filter(item => item.storage.includes("almoxarifado-escolar")));
+const filteredItemsSize = computed(() => filteredItems.value.length);
 
 const itemIndex = ref(0);
 const currentItem = computed(() => filteredItems.value[itemIndex.value]);
@@ -105,14 +109,19 @@ p{
     margin-left: 110px;
     opacity: 0%;
 }
+.warning-text{
+    position: absolute;
+    margin-top: 5%;
+    margin-left: 35%;
+}
 tr:hover .delete{
-    background-color: rgb(255, 0, 0, 0.5);
+    background-color: rgb(255, 0, 0, 0.25);
 }
 tr:hover .delete-btn{
     display: block;
     opacity: 100%;
 }
-tr:hover .nmr{
+tr:hover .normal{
     background-color: rgb(254, 213, 30, 0.4);
 }
 tr:hover .table-btn{

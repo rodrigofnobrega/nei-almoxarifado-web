@@ -12,17 +12,18 @@ export const useStorageStore = defineStore('storage', {
       ],
       sidebarSublinks: [],
       isRotated: false,
-      deleteMode: false
+      deleteMode: false,
+      editMode: false,
     }),
     actions: {
       addItem(item){
         this.items.push(item);
       },
-      deleteItem(){
-        this.items.pop(); 
+      deleteItem(index){
+        this.items.splice(index, 1); 
       },
-      updateItemName(index, newName) {
-        this.items[index].name = newName;
+      updateItemQtd(index, newQtd) {
+        this.items[index].qtd = newQtd;
       },
       setSublink(sublinks) {
           this.sidebarSublinks = sublinks;
@@ -32,6 +33,9 @@ export const useStorageStore = defineStore('storage', {
       },
       setDeleteMode(){
         this.deleteMode = !this.deleteMode;
+      },
+      setEditMode(){
+        this.editMode = !this.editMode;
       }
   },
   getters: {

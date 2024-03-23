@@ -8,4 +8,5 @@
 .form-check-input{
     padding: 8px;
 }
-</style>
+
+</style>    

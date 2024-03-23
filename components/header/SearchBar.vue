@@ -30,14 +30,5 @@
     color: white;
     border-color: #FED51E;
 }
-.search-bar::after {
-  content: "";
-  position: absolute;
-  top: 12px;
-  right: 212px;
-  bottom: 0;
-  height: 25px;
-  width: 1px; /* Largura da barra */
-  background-color: white; /* Cor da barra */
-}
+
 </style>
