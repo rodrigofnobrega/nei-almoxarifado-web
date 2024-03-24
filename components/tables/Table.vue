@@ -8,7 +8,7 @@
                 <IconsPlus class="mx-1" width="1.5em" height="1.5em"/>
             </button>
             <ButtonsFilter />
-            <ButtonsConfigure />
+            <ButtonsConfigure @deleteMode="delActived"/>
         </div>
      </div>
      <hr>
@@ -32,10 +32,11 @@
 </template>
 
 <script setup>
-import { useStorageStore } from '../../stores/storage';
 import { onMounted } from 'vue'; 
-const store = useStorageStore();
 
+const delActived = (mode) => {
+    console.log(mode);
+}
 
 onMounted(() => {
   const itemModals = document.getElementsByClassName("modal-header");

@@ -2,7 +2,7 @@
     <Modal id="itemDetailing" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
             <h5 class="header-title d-flex justify-content-start align-items-center">Detalhes do Item</h5>
-            <button class="btn btn-transparent text-light" type="button" data-bs-dismiss="modal">
+            <button class="btn btn-transparent border-0 text-light" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close mt-1 ms-5 s-5" width="1.7em" height="1.7em"/>
             </button>
         </template>
@@ -11,48 +11,48 @@
 				<div class="col-6">
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Nome </label>
-						<input readonly class="form-control" type="text" :value="item.itemName">
+						<input readonly class="form-control" type="text" :value="item_details.name">
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Código Sipac </label>
-						<input readonly class="form-control" :value="item.itemTagging"> 
+						<input readonly class="form-control" :value="item_details.sipac"> 
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Tipo </label>
-						<input readonly class="form-control" :value="item.type"> 
+						<input readonly class="form-control" :value="item_details.type"> 
 					</div>
                     <div class="mb-3"> 
 						<label class="form-label fw-bold"> Quantidade </label>
-						<input readonly class="form-control" :value="item.quantity"> 
+						<input readonly class="form-control" :value="item_details.qtd"> 
 					</div>	
 				</div>
 				<div class="col-6">
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Inventário </label>
-						<input readonly class="form-control" :value="item.catalog"> 
+						<input readonly class="form-control" :value="item_details.storage"> 
 					</div>	
 					<div class="mb-4">
                         <label class="form-label fw-bold"> Última atualização </label>
-                        <input readonly id="expansible-form" class="form-control" @mouseover="inputExpand" @mouseleave="inputContract" :value="item.lastUpdate">
+                        <input readonly id="expansible-form" class="form-control" @mouseover="inputExpand" @mouseleave="inputContract" :value="item_details.history[0]">
                     </div>
 					<div class="mb-3"> 
 						<label class="form fw-bold"> Data de Registro </label>
-						<input readonly class="form-control" :value="item.registerData"> 
+						<input readonly class="form-control" :value="'03/12/2004 00:00'"> 
 					</div>	
                     <div class="mb-4"> 
 						<label class="form-label fw-bold"> Criador </label>
-						<input readonly class="form-control" :value="item.creator"> 
+						<input readonly class="form-control" :value="'Amauri'"> 
 					</div>	
 				</div>
 			</div>
         </template>
         <template v-slot:footer>
             <div class="container-fluid d-flex justify-content-center align-items-center">
-                <button type="button" class="btn btn-warning mx-3" data-bs-dismiss="modal">Voltar</button>
+                <button type="button" class="modal-btn btn btn-warning mx-3" data-bs-dismiss="modal">Voltar</button>
             </div>
         </template> 
     </Modal>
-</template>background-color: red;
+</template>
 
 <script>
 export default {
@@ -62,16 +62,6 @@ export default {
             expansibleInput: null, 
             shadowInput: null,
             mouseOverFlag: false,
-            item: {
-                itemName: "Lapiseira",
-                itemTagging: 5737829,
-                type: "Unitário",
-                quantity: 5,
-                catalog: "Almoxarifado escolar",
-                lastUpdate: "26/02/2024 16:04:01 - Consumo",
-                registerData: "03/12/2023 13:04:00",
-                creator: "Luciana Almeida"
-            }
         }
     },
     methods: {
@@ -100,11 +90,15 @@ export default {
                 this.expansibleInput.style.width = "230px";
             }
         }
-    }
+    },
+    props: {
+        item_details: {
+            type: Object,
+            required: true
+        }
+    },
 }
 </script>
-
-
 
 <style scoped>
 .modal-header{
@@ -119,9 +113,8 @@ export default {
     margin: -1px 0 -1px 0;
     padding: 0;
 }
-.btn{
+.modal-btn{
     border-radius: 10px;
 }
-
 
 </style>

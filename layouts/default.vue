@@ -24,11 +24,12 @@
   
 <style>
 .main{
+  height: 100%;
   width: 85vw;
   margin-left: 0;
   margin-right: 0;
   margin-top: 100px;
-  margin-bottom: 15vw;
+  margin-bottom: 3vw;
   padding-left: 25px;
 } 
 .fluid-container{

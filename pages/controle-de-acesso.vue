@@ -24,14 +24,17 @@
 
 </script>
 <template>
-    <div class="catalog-header d-flex align-items-center">
-        <h2>Controle de Acesso</h2>
-        <div class="actions-buttons d-flex">
-            <ButtonsFilter />
-            <ButtonsConfigure /> 
-        </div>
-     </div>
-	 <hr>
+	<div class="row d-block">
+		<div class="catalog-header d-flex align-items-center">
+			<h2>Controle de Acesso</h2>
+			<div class="actions-buttons d-flex">
+				<ButtonsFilter />
+				<ButtonsConfigure /> 
+			</div>
+		</div>
+		 <hr>
+	</div>
+
     <div class="container d-flex content">
 	<!-- TODO: transformar em tabela com linhas !-->
 	<div class="row">

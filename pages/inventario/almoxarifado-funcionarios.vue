@@ -1,28 +1,40 @@
 <template>
-    <ModalItemDetails />
-    <ModalItemHistory />
-    <div class="container d-block">
+    <ModalItemDetails v-if="filteredItemsSize > 0" :item_details="currentItem" />
+    <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
+    <ModalItemBalance :item_index="itemIndex"/>
+    <div class="row d-block">
         <TablesTable>
             <template v-slot:title>Almoxarifado Funcionários</template>
             <template v-slot:items>
-             <tr v-for="item in items" :key="item.name">
-               <th scope="row"><p>{{ item.name }}</p></th>
-               <th>
+            <tr v-if="filteredItemsSize > 0" v-for="(item, index) in filteredItems" :key="index">
+               <th scope="row" :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle, 'normal': !deleteBackgroundStyle && !editBackgroundStyle}"><p>{{ item.name }}</p></th>
+               <th :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle, 'normal': !deleteBackgroundStyle && !editBackgroundStyle}">
                     <p v-if="item.sipac">{{ item.sipac }}</p>
                     <p v-else>nenhum</p>
                </th>
-                <th><p>{{ item.type }}</p></th>
-               <th><p>{{ item.qtd }}</p></th>
-               <th><p>{{ item.history[0]}}</p></th>
-               <th class="end">
-                    <button class="table-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                <th :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle,'normal': !deleteBackgroundStyle && !editBackgroundStyle}">
+                    <p>{{ item.type }}</p>
+                    <button v-if="deleteBackgroundStyle" class="btn mode-btn btn-dark-alert" @click="store.deleteItem(index)">Excluir</button>
+                    <button v-if="editBackgroundStyle" class="btn mode-btn btn-primary" @click="showEdition(index)" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Atualizar Item
+                    </button>
+                </th>
+               <th :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle, 'normal': !deleteBackgroundStyle && !editBackgroundStyle}">
+                <p>{{ item.qtd }}</p>
+            </th>
+               <th :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle, 'normal': !deleteBackgroundStyle && !editBackgroundStyle}"><p>{{ item.history[0]}}</p></th>
+               <th class="end" :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle, 'normal': !deleteBackgroundStyle && !editBackgroundStyle}">
+                    <button class="table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         Detalhes
                     </button>
-                    <button class="table-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                    <button class="table-btn btn btn-primary" @click="showHistory(index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
                         Histórico
                     </button>
                 </th>
              </tr>
+             <div v-else class="warning-text d-flex aling-items-center justify-content-center">
+                 <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
+             </div>
             </template>
         </TablesTable>
     </div>
@@ -30,9 +42,40 @@
 
 <script setup>
 import { useStorageStore } from '../../stores/storage';
-const store = useStorageStore();
-const items = store.items.filter(item => item.storage.includes("almoxarifado-funcionarios"));
+import { ref, computed, onMounted } from 'vue';
 
+const store = useStorageStore();
+const items = ref(store.items); 
+
+const deleteBackgroundStyle = computed(() => {
+    return store.deleteMode;
+});
+const editBackgroundStyle = computed(() => {
+    return store.editMode;
+})
+
+onMounted(() => {
+    store.deleteMode = false,
+    store.editMode = false
+})
+
+const filteredItems = computed(() => items.value.filter(item => item.storage.includes("almoxarifado-funcionarios")));
+const filteredItemsSize = computed(() => filteredItems.value.length);
+
+const itemIndex = ref(0);
+const currentItem = computed(() => filteredItems.value[itemIndex.value]);
+
+const showEdition = (index) => {
+    itemIndex.value = index;
+}
+
+const showDetails = (index) => {
+    itemIndex.value = index;
+}
+
+const showHistory = (index) => {
+    itemIndex.value = index;
+}
 </script>
 
 <style scoped>
@@ -74,6 +117,36 @@ p{
     margin-right: 10px;
     padding: 5px 5px 5px 5px;
 }
+.mode-btn{
+    margin: 0;
+    z-index: 1000;
+    display: none;
+    position: absolute;
+    margin-top: -28px;
+    margin-left: 210px;
+    opacity: 0%;
+}
+.warning-text{
+    position: absolute;
+    margin-top: 5%;
+    margin-left: 35%;
+}
+tr:hover .mode-btn{
+    display: block;
+    opacity: 100%;
+}
+tr:hover .delete{
+    background-color: rgb(255, 0, 0, 0.2);
+    color: rgb(0, 0, 0, 0.5);
+}
+tr:hover .normal{
+    background-color: rgb(254, 213, 30, 0.4);
+}
+tr:hover .edit{
+    background-color: rgb(31, 105, 177, 0.3);
+    color: rgb(0, 0, 0, 0.5);
+}
+
 tr:hover .table-btn{
     opacity: 100%;
 }

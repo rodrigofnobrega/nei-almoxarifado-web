@@ -9,6 +9,11 @@
 
 
 <style scoped>
+.search-bar{
+  outline: none;
+  height: 27px;
+  width: 210px;
+}
 .btn-search{
   outline: none;
 }
@@ -20,14 +25,10 @@
   color: #333333;
   background-color: white;
 }
-.search-bar{
-    outline: none;
-    height: 27px;
-    width: 210px;
-}
 .btn-search:active{
     background-color: #FED51E;
     color: white;
     border-color: #FED51E;
 }
+
 </style>

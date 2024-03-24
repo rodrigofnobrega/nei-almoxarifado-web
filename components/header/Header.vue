@@ -1,11 +1,11 @@
 <template>
     <div class="header container-fluid d-flex justify-content-between align-items-center bg-primary p-0">  
       <div class="d-flex align-items-center">
-        <Brand class="ms-2"/>
-        <SearchBar />
-        <ModalSearch />
+        <Brand class="ms-3"/>
       </div> 
       <div class="d-flex justify-content-end align-items-center">
+        <SearchBar />
+        <ModalSearch />
         <ThemeSwitch />
         <Profile />
       </div>     

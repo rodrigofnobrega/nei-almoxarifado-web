@@ -1,28 +1,35 @@
 <template>
-    <ModalItemDetails />
-    <ModalItemHistory />
+    <ModalItemDetails v-if="filteredItemsSize > 0" :item_details="currentItem" />
+    <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
     <div class="row d-block">
         <TablesTable>
             <template v-slot:title>Almoxarifado Escolar</template>
             <template v-slot:items>
-             <tr v-for="item in items" :key="item.name">
-               <th scope="row"><p>{{ item.name }}</p></th>
-               <th>
-                    <p v-if="item.sipac">{{ item.sipac }}</p>
-                    <p v-else>nenhum</p>
-               </th>
-                <th><p>{{ item.type }}</p></th>
-               <th><p>{{ item.qtd }}</p></th>
-               <th><p>{{ item.history[0]}}</p></th>
-               <th class="end">
-                    <button class="table-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemDetailing">
-                        Detalhes
-                    </button>
-                    <button class="table-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemHistory">
-                        Histórico
-                    </button>
-                </th>
-             </tr>
+                <tr v-if="filteredItemsSize > 0" v-for="(item, index) in filteredItems" :key="index">
+                    <th scope="row" :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}"><p>{{ item.name }}</p></th>
+                    <th :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}">
+                        <p v-if="item.sipac">{{ item.sipac }}</p>
+                        <p v-else>nenhum</p>
+                    </th>
+                    <th :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}">
+                            
+                        <p>{{ item.type }}</p>
+                        <button v-if="backgroundStyle" @click="store.deleteItem(index)" class="btn delete-btn btn-dark-alert">Excluir</button>
+                    </th>
+                    <th :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}"><p>{{ item.qtd }}</p></th>
+                    <th :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}"><p>{{ item.history[0] }}</p></th>
+                    <th class="end" :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}">
+                        <button class="table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                            Detalhes
+                        </button>
+                        <button class="table-btn btn btn-primary" @click="showHistory(index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                            Histórico
+                        </button>
+                    </th>
+                </tr>
+                <div v-else class="warning-text d-flex aling-items-center justify-content-center">
+                 <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
+                </div>
             </template>
         </TablesTable>
     </div>
@@ -30,14 +37,36 @@
 
 <script setup>
 import { useStorageStore } from '../../stores/storage';
+import { ref, computed, onMounted } from 'vue';
+
 const store = useStorageStore();
-const items = store.items.filter(item => item.storage.includes("almoxarifado-escolar"));
+const items = ref(store.items); 
+
+const backgroundStyle = computed(() => {
+    return store.deleteMode;
+});
+
+onMounted(() => {
+    store.deleteMode = false
+})
+
+const filteredItems = computed(() => items.value.filter(item => item.storage.includes("almoxarifado-escolar")));
+const filteredItemsSize = computed(() => filteredItems.value.length);
+
+const itemIndex = ref(0);
+const currentItem = computed(() => filteredItems.value[itemIndex.value]);
+
+const showDetails = (index) => {
+    itemIndex.value = index;
+}
+
+const showHistory = (index) => {
+    itemIndex.value = index;
+}
 </script>
 
 
 <style scoped>
-
-
 th{
     padding: 16px 0 16px 0;
     text-decoration: none;
@@ -70,6 +99,30 @@ p{
     margin-top: 8px;
     margin-right: 10px;
     padding: 5px 5px 5px 5px;
+}
+.delete-btn{
+    margin: 0;
+    z-index: 1000;
+    display: none;
+    position: fixed;
+    margin-top: -28px;
+    margin-left: 110px;
+    opacity: 0%;
+}
+.warning-text{
+    position: absolute;
+    margin-top: 5%;
+    margin-left: 35%;
+}
+tr:hover .delete{
+    background-color: rgb(255, 0, 0, 0.25);
+}
+tr:hover .delete-btn{
+    display: block;
+    opacity: 100%;
+}
+tr:hover .normal{
+    background-color: rgb(254, 213, 30, 0.4);
 }
 tr:hover .table-btn{
     opacity: 100%;
