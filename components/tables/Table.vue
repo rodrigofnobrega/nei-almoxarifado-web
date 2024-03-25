@@ -32,10 +32,7 @@
 </template>
 
 <script setup>
-import { useStorageStore } from '../../stores/storage';
 import { onMounted } from 'vue'; 
-const store = useStorageStore();
-
 
 onMounted(() => {
   const itemModals = document.getElementsByClassName("modal-header");

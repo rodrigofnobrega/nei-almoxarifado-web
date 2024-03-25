@@ -15,8 +15,8 @@
                         </div>
                     </a>
                     <div class="item-bg" :class="{'active': $route.path === '/inventario', 'text-dark-emphasis': $route.path !== '/inventario'}">
-                        <a class="text-decoration-none" :class="{'text-light': $route.path === '/inventario', 'text-dark-emphasis': $route.path !== '/inventario'}"  href="/inventario" aria-current="true">
-                            <IconsSpreadSheet class="nav-icon"/>
+                        <IconsSpreadSheet class="nav-icon"/>
+                        <a class="text-decoration-none text-light" :class="{'text-dark-emphasis': $route.path !== '/inventario'}"  href="/inventario" aria-current="true">
                             <span class="list-group-item">Catálogo</span>
                         </a>
                         <button class="svg-button" @click="rotate">
@@ -75,7 +75,9 @@ export default {
     },
     methods: {
         sidebarColapse() {
+          useStorageStore().isRotated = false;
           this.isCollapsed = !this.isCollapsed;
+
         },
         rotate() {
             useStorageStore().setRotated();
@@ -103,8 +105,8 @@ export default {
 .offcanvas{
     border: none;
     width: 160px;
-    height: 97vh;  
-    top: 3%;
+    height: 100vh;  
+    top: 0%;
     padding-top: 20px;
     overflow-x: hidden;
     transition: width 0.6s ease-in-out;
@@ -113,11 +115,7 @@ export default {
     bottom: 0;
     margin-right: 0px;
     padding-right: 0px;
-    margin-bottom: -200px;
-}
-.small-rotate-arrow{
-  transition: transform 0.3s ease-in-out;
-  margin-left: 35px;
+    margin-bottom: -200px;  
 }
 .svg-button{
     border: none;
@@ -150,8 +148,8 @@ export default {
     justify-content: flex-start;
     align-items: center;
     overflow: hidden;
-    margin-top: 25px;
-    padding-left: 5px;
+    margin-top: 30px;
+    padding-left: 7px;
     height: 42px;
     width: 145px;
 }
@@ -184,8 +182,15 @@ export default {
 .collapsed .item-bg{
     width: 35px;
 }
+.collapsed .small-rotate-arrow{
+    opacity: 0;
+}
 .rotate-arrow{
     transition: transform 0.6s ease-in-out;
+}
+.small-rotate-arrow{
+  transition: transform 0.3s ease-in-out, opacity 0.1s ease-in-out;
+  margin-left: 35px;
 }
 .list-group-flush{
     margin-left: -20px;

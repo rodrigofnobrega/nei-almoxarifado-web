@@ -1,10 +1,10 @@
 <script setup> </script>
 
 <template>
-	<Modal>
+	<Modal id="actionConfirm">
 		<template v-slot:header>
 			<h5 class="modal-title"> Confirmação de ação </h5>
-			 <button class="btn btn-transparent text-light" type="button" data-bs-dismiss="modal">
+			 <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close mt-1 ms-5 s-5" width="1.7em" height="1.7em"/>
             </button>
 		</template>
@@ -12,15 +12,15 @@
 			<slot name="text" />
 		</template>
 		<template v-slot:footer>
-			<div class=""> 
+			<div class="container-fluid d-flex justify-content-center align-items-center">
 				<slot name="buttons" />
-			</div>
+            </div>
 		</template>
 	</Modal>
 </template>
 
 <style scoped>
-.btn{
+.close-btn{
 	padding: 0;
 	margin: 0;
 	border: none;
