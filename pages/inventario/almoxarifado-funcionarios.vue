@@ -1,40 +1,25 @@
 <template>
-    <ModalItemDetails v-if="filteredItemsSize > 0" :item_details="currentItem" />
+    <ModalItemDetails v-if="filteredItemsSize > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
     <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
-    <ModalItemBalance :item_index="itemIndex"/>
-    <ModalActionConfirm id="deleteConfirm">
-	    <template v-slot:title> Confirmar aceitação </template>
-	    <template v-slot:text> 
-		<h5 class="my-4 d-flex justify-content-center">Tem Certeza do que estás a fazer?</h5>
-	    </template>
-        <template v-slot:buttons>
-            <button type="button" @click="store.deleteItem(itemIndex, `${currentRoute}`)" class="btn btn-light-success text-light mx-3" data-bs-dismiss="modal">Confirmar</button>
-            <button type="button" class="btn btn-light-alert text-light mx-3" data-bs-dismiss="modal">Cancelar</button>
-        </template>
-    </ModalActionConfirm>
     <Popup :isPopup="isPopup"/>
     <div class="row d-block">
         <TablesTable>
             <template v-slot:title>Almoxarifado Funcionários</template>
             <template v-slot:items>
             <tr v-if="filteredItemsSize > 0" v-for="(item, index) in filteredItems" :key="index">
-               <th scope="row" :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle, 'normal': !deleteBackgroundStyle && !editBackgroundStyle}"><p>{{ item.name }}</p></th>
-               <th :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle, 'normal': !deleteBackgroundStyle && !editBackgroundStyle}">
+               <th scope="row"><p>{{ item.name }}</p></th>
+               <th>
                     <p v-if="item.sipac">{{ item.sipac }}</p>
                     <p v-else>nenhum</p>
                </th>
-                <th :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle,'normal': !deleteBackgroundStyle && !editBackgroundStyle}">
+                <th>
                     <p>{{ item.type }}</p>
-                    <button v-if="deleteBackgroundStyle" class="btn mode-btn btn-dark-alert" data-bs-toggle="modal" data-bs-target="#deleteConfirm">Excluir</button>
-                    <button v-if="editBackgroundStyle" class="btn mode-btn btn-primary" @click="showEdition(index)" data-bs-toggle="modal" data-bs-target="#itemBalance">
-                        Atualizar Item
-                    </button>
                 </th>
-               <th :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle, 'normal': !deleteBackgroundStyle && !editBackgroundStyle}">
+               <th>
                 <p>{{ item.qtd }}</p>
             </th>
-               <th :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle, 'normal': !deleteBackgroundStyle && !editBackgroundStyle}"><p>{{ item.history[0]}}</p></th>
-               <th class="end" :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle, 'normal': !deleteBackgroundStyle && !editBackgroundStyle}">
+               <th><p>{{ item.history[0]}}</p></th>
+               <th class="end">
                     <button class="table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         Detalhes
                     </button>
@@ -62,13 +47,6 @@ const items = ref(store.items);
 const isPopup = computed(() => {
     return store.popupActive
 })
-
-const deleteBackgroundStyle = computed(() => {
-    return store.deleteMode;
-});
-const editBackgroundStyle = computed(() => {
-    return store.editMode;
-});
 const currentRoute = useRoute().fullPath.split('/')[2];
 
 onMounted(() => {
@@ -81,10 +59,6 @@ const filteredItemsSize = computed(() => filteredItems.value.length);
 
 const itemIndex = ref(0);
 const currentItem = computed(() => filteredItems.value[itemIndex.value]);
-
-const showEdition = (index) => {
-    itemIndex.value = index;
-}
 
 const showDetails = (index) => {
     itemIndex.value = index;
@@ -151,17 +125,6 @@ p{
 tr:hover .mode-btn{
     display: block;
     opacity: 100%;
-}
-tr:hover .delete{
-    background-color: rgb(255, 0, 0, 0.2);
-    color: rgb(0, 0, 0, 0.5);
-}
-tr:hover .normal{
-    background-color: rgb(254, 213, 30, 0.4);
-}
-tr:hover .edit{
-    background-color: rgb(31, 105, 177, 0.3);
-    color: rgb(0, 0, 0, 0.5);
 }
 
 tr:hover .table-btn{

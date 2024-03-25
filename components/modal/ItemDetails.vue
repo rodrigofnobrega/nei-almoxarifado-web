@@ -1,4 +1,6 @@
 <template>
+    
+    <ModalItemBalance :item_index="item_index"/>
     <Modal id="itemDetailing" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
             <h5 class="header-title d-flex justify-content-start align-items-center">Detalhes do Item</h5>
@@ -48,13 +50,17 @@
         </template>
         <template v-slot:footer>
             <div class="container-fluid d-flex justify-content-center align-items-center">
+                <button @click="store.deleteItem(item_index, item_route)" class="btn mode-btn btn-dark-alert" data-bs-dismiss="modal">Excluir</button>
                 <button type="button" class="btn btn-secondary text-light mx-3" data-bs-dismiss="modal">Fechar</button>
+                <button class="btn mode-btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemBalance">Editar</button>
             </div>
         </template> 
     </Modal>
 </template>
 
 <script>
+import { useStorageStore } from '../../stores/storage';
+
 export default {
     data() {
         return {
@@ -91,9 +97,23 @@ export default {
             }
         }
     },
+    setup(){
+        const store = useStorageStore();
+        return {
+            store
+        }
+    },
     props: {
         item_details: {
             type: Object,
+            required: true
+        },
+        item_index:{
+            type: Number,
+            required: true
+        },
+        item_route:{
+            type: String,
             required: true
         }
     },
