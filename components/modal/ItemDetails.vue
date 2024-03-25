@@ -13,46 +13,47 @@
 				<div class="col-6">
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Nome </label>
-						<input readonly class="form-control" type="text" :value="item_details.name">
+						<input readonly class="form-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" type="text" :value="item_details.name">
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Código Sipac </label>
-						<input readonly class="form-control" :value="item_details.sipac"> 
+						<input readonly class="form-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.sipac"> 
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Tipo </label>
-						<input readonly class="form-control" :value="item_details.type"> 
+						<input readonly class="form-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.type"> 
 					</div>
                     <div class="mb-3"> 
 						<label class="form-label fw-bold"> Quantidade </label>
-						<input readonly class="form-control" :value="item_details.qtd"> 
+						<input readonly class="form-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.qtd"> 
 					</div>	
 				</div>
 				<div class="col-6">
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Inventário </label>
-						<input readonly class="form-control" :value="item_details.storage"> 
+						<input readonly class="form-control bg-light-emphasis" :value="item_details.storage"> 
 					</div>	
 					<div class="mb-4">
                         <label class="form-label fw-bold"> Última atualização </label>
-                        <input readonly id="expansible-form" class="form-control" @mouseover="inputExpand" @mouseleave="inputContract" :value="item_details.history[0]">
+                        <input readonly id="expansible-form" class="form-control bg-light-emphasis" @mouseover="inputExpand" @mouseleave="inputContract" :value="item_details.history[0]">
                     </div>
 					<div class="mb-3"> 
 						<label class="form fw-bold"> Data de Registro </label>
-						<input readonly class="form-control" :value="'03/12/2004 00:00'"> 
+						<input readonly class="form-control bg-light-emphasis" :value="'03/12/2004 00:00'"> 
 					</div>	
                     <div class="mb-4"> 
 						<label class="form-label fw-bold"> Criador </label>
-						<input readonly class="form-control" :value="'Amauri'"> 
+						<input readonly class="form-control bg-light-emphasis" :value="'Amauri'"> 
 					</div>	
 				</div>
 			</div>
         </template>
         <template v-slot:footer>
             <div class="container-fluid d-flex justify-content-center align-items-center">
-                <button @click="store.deleteItem(item_index, item_route)" class="btn mode-btn btn-dark-alert" data-bs-dismiss="modal">Excluir</button>
-                <button type="button" class="btn btn-secondary text-light mx-3" data-bs-dismiss="modal">Fechar</button>
-                <button class="btn mode-btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemBalance">Editar</button>
+                <button class="btn mode-btn btn-dark-alert mx-2" :class="{'d-none': editionActive, 'd-block': !editionActive}" @click="store.deleteItem(item_index, item_route)" id="itemDelete" data-bs-dismiss="modal">Excluir</button>
+                <button type="button" class="btn btn-light-alert text-light mx-3" :class="{'d-none': !editionActive, 'd-block': editionActive}" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn mode-btn btn-primary mx-2" @click="Edition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>
+                <button class="btn btn-light-success text-light mx-3" id="fetch-inputs" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="fetchNewData" data-bs-dismiss="modal">Confirmar</button>
             </div>
         </template> 
     </Modal>
@@ -68,10 +69,12 @@ export default {
             expansibleInput: null, 
             shadowInput: null,
             mouseOverFlag: false,
+            inputs: [],
+            editionActive: false
         }
     },
     methods: {
-        inputExpand() {
+        inputExpand() { 
             if (!this.mouseOverFlag) { 
                 this.mouseOverFlag = true;
                 this.shadowInput = document.createElement("input");
@@ -95,6 +98,16 @@ export default {
                 this.expansibleInput.style.position = "static";
                 this.expansibleInput.style.width = "230px";
             }
+        },
+        Edition(){       
+            this.editionActive = !this.editionActive;
+            this.inputs = document.getElementsByClassName("form-control");
+            for(let i = 0; i < this.inputs.length; i++){
+                this.inputs[i].removeAttribute('readonly');
+            }
+        },
+        fetchNewData(){
+            this.store.updateItemQtd(this.item_index, this.inputs[5].value, this.item_route);
         }
     },
     setup(){
