@@ -109,4 +109,4 @@ export default{
   font-size: 19px;
 }
 
-</style>../../stores/storage
+</style>

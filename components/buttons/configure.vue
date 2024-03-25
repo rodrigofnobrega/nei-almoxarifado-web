@@ -6,35 +6,38 @@
         </button>
         <ul class="dropdown-menu">
             <li class="dropdown-item">
-                <div class="form-check form-check-reverse">
-                    <label class="form-check-label pe-1" for="flexCheckEdit">Habilitar Edição</label>
-                    <input @change="updateEditMode" class="form-check-input" type="checkbox" value="" id="flexCheckEdit">
-                </div>
-            </li>
-            <li class="dropdown-item">
-                <div class="form-check form-check-reverse">
-                    <label class="form-check-label pe-1"  for="flexCheckDelete">Habilitar Exclusão</label>
+                <div class="form-check form-check-reverse d-flex justify-content-between">
+                    <label class="form-check-label pe-1 text-align-center"  for="flexCheckDelete">Habilitar Exclusão</label>
                     <input @change="uptadeDeleteMode" class="form-check-input" type="checkbox" value="" id="flexCheckDelete">
                 </div>
             </li>
             <li class="dropdown-item">
-                <button class="btn btn-transparent border-0" type="button">Disponíveis</button>
+                <div class="form-check form-check-reverse d-flex justify-content-between">
+                    <label class="form-check-label pe-1" for="flexCheckEdit">Habilitar Edição</label>
+                    <input @change="updateEditMode" class="form-check-input" type="checkbox" value="" id="flexCheckEdit">
+                </div>
             </li>
-            <li class="dropdown-item">
-                <button class="btn btn-transparent border-0" type="button">Indisponíveis</button>
-            </li> 
         </ul>
     </div>  
 </template>
 
 <script setup>
-import { computed, watch } from 'vue';
 import { useStorageStore } from '../../stores/storage';
+import { onMounted } from 'vue';
 const store = useStorageStore();
+
+onMounted(() => {
+    const deleteInput = document.getElementById("flexCheckDelete");
+});
+
 const uptadeDeleteMode = () => {
     store.setDeleteMode();
 };
 const updateEditMode = () => {
+    if(deleteInput.getAttribute('disabled', '') == true){
+        deleteInput.removeAttribute('disabled')
+    }
+    document.getElementById("flexCheckDelete").setAttribute('disabled', '');
     store.setEditMode();
 };
 </script>

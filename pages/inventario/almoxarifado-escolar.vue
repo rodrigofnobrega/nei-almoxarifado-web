@@ -1,53 +1,57 @@
 <template>
-    <ModalItemDetails v-if="filteredItemsSize > 0" :item_details="currentItem" />
+    <ModalItemDetails v-if="filteredItemsSize > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
     <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
+    <Popup :isPopup="isPopup"/>
     <div class="row d-block">
         <TablesTable>
             <template v-slot:title>Almoxarifado Escolar</template>
             <template v-slot:items>
-                <tr v-if="filteredItemsSize > 0" v-for="(item, index) in filteredItems" :key="index">
-                    <th scope="row" :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}"><p>{{ item.name }}</p></th>
-                    <th :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}">
-                        <p v-if="item.sipac">{{ item.sipac }}</p>
-                        <p v-else>nenhum</p>
-                    </th>
-                    <th :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}">
-                            
-                        <p>{{ item.type }}</p>
-                        <button v-if="backgroundStyle" @click="store.deleteItem(index)" class="btn delete-btn btn-dark-alert">Excluir</button>
-                    </th>
-                    <th :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}"><p>{{ item.qtd }}</p></th>
-                    <th :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}"><p>{{ item.history[0] }}</p></th>
-                    <th class="end" :class="{'delete':  backgroundStyle, 'normal': !backgroundStyle}">
-                        <button class="table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
-                            Detalhes
-                        </button>
-                        <button class="table-btn btn btn-primary" @click="showHistory(index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
-                            Histórico
-                        </button>
-                    </th>
-                </tr>
-                <div v-else class="warning-text d-flex aling-items-center justify-content-center">
+            <tr v-if="filteredItemsSize > 0" v-for="(item, index) in filteredItems" :key="index">
+               <th scope="row"><p>{{ item.name }}</p></th>
+               <th>
+                    <p v-if="item.sipac">{{ item.sipac }}</p>
+                    <p v-else>nenhum</p>
+               </th>
+                <th>
+                    <p>{{ item.type }}</p>
+                </th>
+               <th>
+                <p>{{ item.qtd }}</p>
+            </th>
+               <th><p>{{ item.history[0]}}</p></th>
+               <th class="end">
+                    <button class="table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                        Detalhes
+                    </button>
+                    <button class="table-btn btn btn-primary" @click="showHistory(index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                        Histórico
+                    </button>
+                </th>
+             </tr>
+             <div v-else class="warning-text d-flex aling-items-center justify-content-center">
                  <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
-                </div>
+             </div>
             </template>
         </TablesTable>
     </div>
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router';
 import { useStorageStore } from '../../stores/storage';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted} from 'vue';
 
 const store = useStorageStore();
 const items = ref(store.items); 
 
-const backgroundStyle = computed(() => {
-    return store.deleteMode;
-});
+const isPopup = computed(() => {
+    return store.popupActive
+})
+const currentRoute = useRoute().fullPath.split('/')[2];
 
 onMounted(() => {
-    store.deleteMode = false
+    store.deleteMode = false,
+    store.editMode = false
 })
 
 const filteredItems = computed(() => items.value.filter(item => item.storage.includes("almoxarifado-escolar")));
@@ -65,8 +69,12 @@ const showHistory = (index) => {
 }
 </script>
 
-
 <style scoped>
+.container{
+    margin-left: 0px; 
+    padding: 0px;
+}
+
 th{
     padding: 16px 0 16px 0;
     text-decoration: none;
@@ -100,13 +108,13 @@ p{
     margin-right: 10px;
     padding: 5px 5px 5px 5px;
 }
-.delete-btn{
+.mode-btn{
     margin: 0;
     z-index: 1000;
     display: none;
-    position: fixed;
+    position: absolute;
     margin-top: -28px;
-    margin-left: 110px;
+    margin-left: 210px;
     opacity: 0%;
 }
 .warning-text{
@@ -114,16 +122,11 @@ p{
     margin-top: 5%;
     margin-left: 35%;
 }
-tr:hover .delete{
-    background-color: rgb(255, 0, 0, 0.25);
-}
-tr:hover .delete-btn{
+tr:hover .mode-btn{
     display: block;
     opacity: 100%;
 }
-tr:hover .normal{
-    background-color: rgb(254, 213, 30, 0.4);
-}
+
 tr:hover .table-btn{
     opacity: 100%;
 }
@@ -131,6 +134,9 @@ tr:hover p{
     opacity: 70%;
 }
 @media screen and (max-width: 1000px) {
+    table {
+        width: 70vw;
+    }
     .col-title{
         font-size: 14px;
     }
@@ -150,10 +156,17 @@ tr:hover p{
         display: block !important;
         text-align: center;
     }
+    .actions-buttons{
+        justify-content: center;
+        align-content: center;
+    }
 }
 @media screen and (max-width: 820px) {
     .container{
         margin-left: 0px;
+    }
+    table {
+        width: 50vw;
     }
     .col-title{
         font-size: 12px;
@@ -165,6 +178,4 @@ tr:hover p{
         font-size: 11px;
     }
 }
-
-
 </style>

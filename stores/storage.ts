@@ -14,16 +14,33 @@ export const useStorageStore = defineStore('storage', {
       isRotated: false,
       deleteMode: false,
       editMode: false,
+      popupActive: false
     }),
     actions: {
       addItem(item){
         this.items.push(item);
       },
-      deleteItem(index){
-        this.items.splice(index, 1); 
+      deleteItem(index, almoxarifado){
+        let aex = 0;
+        for(let i = 0; i < this.items.length; i++){
+          if(this.items[i].storage.includes(almoxarifado)){
+            if(index == aex){
+              this.items.splice(i, 1);
+            }
+            aex ++;
+          }
+        }
       },
-      updateItemQtd(index, newQtd) {
-        this.items[index].qtd = newQtd;
+      updateItemQtd(index, newQtd, almoxarifado) {
+        let aex = 0;
+        for(let i = 0; i < this.items.length; i++){
+          if(this.items[i].storage.includes(almoxarifado)){
+            if(index == aex){
+              this.items[i].qtd = newQtd;
+            }
+            aex ++;
+          }
+        }
       },
       setSublink(sublinks) {
           this.sidebarSublinks = sublinks;
@@ -36,6 +53,9 @@ export const useStorageStore = defineStore('storage', {
       },
       setEditMode(){
         this.editMode = !this.editMode;
+      },
+      throwPopup(){
+        this.popupActive = !this.popupActive;
       }
   },
   getters: {

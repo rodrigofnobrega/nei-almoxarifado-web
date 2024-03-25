@@ -115,7 +115,7 @@ export default {
     bottom: 0;
     margin-right: 0px;
     padding-right: 0px;
-    margin-bottom: -200px;
+    margin-bottom: -200px;  
 }
 .svg-button{
     border: none;
@@ -148,7 +148,7 @@ export default {
     justify-content: flex-start;
     align-items: center;
     overflow: hidden;
-    margin-top: 25px;
+    margin-top: 30px;
     padding-left: 7px;
     height: 42px;
     width: 145px;

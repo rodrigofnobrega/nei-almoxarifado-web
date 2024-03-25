@@ -1,7 +1,7 @@
 <script setup> </script>
 
 <template>
-	<Modal>
+	<Modal id="actionConfirm">
 		<template v-slot:header>
 			<h5 class="modal-title"> Confirmação de ação </h5>
 			 <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
@@ -12,9 +12,9 @@
 			<slot name="text" />
 		</template>
 		<template v-slot:footer>
-			<div class=""> 
+			<div class="container-fluid d-flex justify-content-center align-items-center">
 				<slot name="buttons" />
-			</div>
+            </div>
 		</template>
 	</Modal>
 </template>
