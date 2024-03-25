@@ -8,7 +8,7 @@
                 <IconsPlus class="mx-1" width="1.5em" height="1.5em"/>
             </button>
             <ButtonsFilter />
-            <ButtonsConfigure @deleteMode="delActived"/>
+            <ButtonsConfigure />
         </div>
      </div>
      <hr>
@@ -33,10 +33,6 @@
 
 <script setup>
 import { onMounted } from 'vue'; 
-
-const delActived = (mode) => {
-    console.log(mode);
-}
 
 onMounted(() => {
   const itemModals = document.getElementsByClassName("modal-header");

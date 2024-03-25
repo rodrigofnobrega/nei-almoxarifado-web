@@ -48,7 +48,7 @@
         </template>
         <template v-slot:footer>
             <div class="container-fluid d-flex justify-content-center align-items-center">
-                <button type="button" class="modal-btn btn btn-warning mx-3" data-bs-dismiss="modal">Voltar</button>
+                <button type="button" class="btn btn-secondary text-light mx-3" data-bs-dismiss="modal">Fechar</button>
             </div>
         </template> 
     </Modal>

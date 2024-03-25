@@ -2,6 +2,17 @@
     <ModalItemDetails v-if="filteredItemsSize > 0" :item_details="currentItem" />
     <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
     <ModalItemBalance :item_index="itemIndex"/>
+    <ModalActionConfirm id="deleteConfirm">
+	    <template v-slot:title> Confirmar aceitação </template>
+	    <template v-slot:text> 
+		<h5 class="my-4 d-flex justify-content-center">Tem Certeza do que estás a fazer?</h5>
+	    </template>
+        <template v-slot:buttons>
+            <button type="button" @click="store.deleteItem(itemIndex, `${currentRoute}`)" class="btn btn-light-success text-light mx-3" data-bs-dismiss="modal">Confirmar</button>
+            <button type="button" class="btn btn-light-alert text-light mx-3" data-bs-dismiss="modal">Cancelar</button>
+        </template>
+    </ModalActionConfirm>
+    <Popup :isPopup="isPopup"/>
     <div class="row d-block">
         <TablesTable>
             <template v-slot:title>Almoxarifado Funcionários</template>
@@ -14,8 +25,8 @@
                </th>
                 <th :class="{'delete':  deleteBackgroundStyle, 'edit':editBackgroundStyle,'normal': !deleteBackgroundStyle && !editBackgroundStyle}">
                     <p>{{ item.type }}</p>
-                    <button v-if="deleteBackgroundStyle" class="btn mode-btn btn-dark-alert" @click="store.deleteItem(index)">Excluir</button>
-                    <button v-if="editBackgroundStyle" class="btn mode-btn btn-primary" @click="showEdition(index)" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button v-if="deleteBackgroundStyle" class="btn mode-btn btn-dark-alert" data-bs-toggle="modal" data-bs-target="#deleteConfirm">Excluir</button>
+                    <button v-if="editBackgroundStyle" class="btn mode-btn btn-primary" @click="showEdition(index)" data-bs-toggle="modal" data-bs-target="#itemBalance">
                         Atualizar Item
                     </button>
                 </th>
@@ -41,18 +52,24 @@
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router';
 import { useStorageStore } from '../../stores/storage';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted} from 'vue';
 
 const store = useStorageStore();
 const items = ref(store.items); 
+
+const isPopup = computed(() => {
+    return store.popupActive
+})
 
 const deleteBackgroundStyle = computed(() => {
     return store.deleteMode;
 });
 const editBackgroundStyle = computed(() => {
     return store.editMode;
-})
+});
+const currentRoute = useRoute().fullPath.split('/')[2];
 
 onMounted(() => {
     store.deleteMode = false,
@@ -198,6 +215,4 @@ tr:hover p{
         font-size: 11px;
     }
 }
-
-
 </style>

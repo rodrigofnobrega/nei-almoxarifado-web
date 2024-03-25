@@ -1,5 +1,5 @@
 <template>
-    <Modal id="exampleModal">
+    <Modal id="itemBalance">
         <template v-slot:header>
                 <p class="header-title d-flex justify-content-start align-items-center fs-6">Atualizar Item</p>
                 <button class="btn btn-transparent border-0 text-light" type="button" data-bs-dismiss="modal">
@@ -7,12 +7,12 @@
                 </button>
         </template>
         <template v-slot:body>
-            <label class="fw-semibold" for="newQtdinput">Digite a nova Quantidade:</label>
+            <label class="fw-semibold" for="newQtdinput">Digite a nova quantidade:</label>
             <input v-model="qtdInput" class="form-control" id="newQtdinput">
         </template>
         <template v-slot:footer>
             <div class="container-fluid d-flex justify-content-center align-items-center">
-                <button type="button" @click="store.updateItemQtd(item_index, qtdInput)" class="btn btn-light-success text-light mx-3" data-bs-dismiss="modal">Atualizar</button>
+                <button type="button" @click="store.updateItemQtd(item_index, qtdInput, `${this.$route.path.split('/')[2]}`)" class="btn btn-light-success text-light mx-3" data-bs-dismiss="modal">Atualizar</button>
                 <button type="button" class="btn btn-light-alert text-light mx-3" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </template>
@@ -23,10 +23,12 @@
 import { useStorageStore } from '../../stores/storage';
 export default{
     data(){
-        qtdInput: 0
+        return{
+            qtdInput: 0
+        }
     },
     mounted() {
-        const modal = document.getElementById("exampleModal");
+        const modal = document.getElementById("itemBalance");
         const modalDialog = modal.getElementsByClassName("modal-dialog");
 
         modal.style.backgroundColor = 'rgb(0, 0, 0, 0)'; 
@@ -35,7 +37,6 @@ export default{
         modalDialog[0].style.width = '250px';
 
         modal.getElementsByClassName('modal-header')[0].style.height = '10px';
-        console.log(this.item_index);
     },
     setup(){
         const store = useStorageStore();
