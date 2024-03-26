@@ -8,7 +8,7 @@ export const useStorageStore = defineStore('storage', {
         {name: "Folha em Branco A4", sipac: "4442342354", type: "Sacola", qtd: 30, history: ["03/03/2023 12:01:23 - Consumido"], storage: "almoxarifado-escolar"},
         {name: "Sabão em pó", sipac: "5442342354", type: "Unidade", qtd: 12, history: ["03/03/2023 11:23:30 - Excluido"], storage: "almoxarifado-escolar"},
         {name: "Esponja", sipac: "6442342354", type: "Sacola", qtd: 3, history: ["03/04/2023 16:00:00 - Excluido"], storage: "almoxarifado-escolar"},
-        {name: "Vassoura", sipac: 'nenhum', type: "Unidade", qtd: 5, history: ["03/03/2023 13:30:00 - Adicionado"], storage: "almoxarifado-funcionarios"},
+        {name: "Vassoura", sipac: 'nenhum', type: "Unidade", qtd: 5, history: ["03/03/2023 13:30:00 - Adicionado"], storage: "almoxarifado-funcionarios"}
       ],
       sidebarSublinks: [],
       isRotated: false,
@@ -21,24 +21,25 @@ export const useStorageStore = defineStore('storage', {
         this.items.push(item);
       },
       deleteItem(index, almoxarifado){
-        let aex = 0;
+        let count = 0;
         for(let i = 0; i < this.items.length; i++){
           if(this.items[i].storage.includes(almoxarifado)){
-            if(index == aex){
+            if(index == count){
               this.items.splice(i, 1);
-            }
-            aex ++;
-          }
-        }
+              return 0;
+            };
+            count++;
+          };
+        };
       },
       updateItemQtd(index, newQtd, almoxarifado) {
-        let aex = 0;
+        let count = 0;
         for(let i = 0; i < this.items.length; i++){
           if(this.items[i].storage.includes(almoxarifado)){
-            if(index == aex){
+            if(index == count){
               this.items[i].qtd = newQtd;
             }
-            aex ++;
+            count ++;
           }
         }
       },
