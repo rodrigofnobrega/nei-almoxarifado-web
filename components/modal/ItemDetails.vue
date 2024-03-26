@@ -49,8 +49,8 @@
         <template v-slot:footer>
             <div class="container-fluid d-flex justify-content-center align-items-center">
                 <button class="btn mode-btn btn-dark-alert mx-2" :class="{'d-none': editionActive, 'd-block': !editionActive}" @click="deleteItem" id="itemDelete" data-bs-dismiss="modal">Excluir</button>
-                <button type="button" class="btn btn-light-alert text-light mx-3" :class="{'d-none': !editionActive, 'd-block': editionActive}" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn mode-btn btn-primary mx-2" @click="Edition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>
+                <button type="button" class="btn btn-light-alert text-light mx-3" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="revertEdition" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn mode-btn btn-primary mx-2" @click="setEdition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>
                 <button class="btn btn-light-success text-light mx-3" id="fetch-inputs" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="fetchNewData" data-bs-dismiss="modal">Confirmar</button>
             </div>
         </template> 
@@ -100,15 +100,23 @@ export default {
                 this.expansibleInput.style.width = "230px";
             }
         },
-        Edition(){       
+        setEdition(){       
             this.editionActive = !this.editionActive;
             this.inputs = document.getElementsByClassName("form-control");
             for(let i = 0; i < this.inputs.length; i++){
                 this.inputs[i].removeAttribute('readonly');
             }
         },
+        revertEdition(){
+            this.editionActive = false;
+            this.inputs = document.getElementsByClassName("form-control");
+            for(let i = 0; i < this.inputs.length; i++){
+                this.inputs[i].setAttribute('readonly', '');
+            }
+        },
         fetchNewData(){
-            this.store.updateItemQtd(this.item_index, this.inputs[5].value, this.item_route);
+            this.store.updateItemQtd(this.item_index, this.inputs[4].value, this.item_route);
+            this.revertEdition();
         }
     },
     props: {
