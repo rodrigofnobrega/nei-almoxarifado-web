@@ -1,6 +1,4 @@
 <template>
-    
-    <ModalItemBalance :item_index="item_index"/>
     <Modal id="itemDetailing" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
             <h5 class="header-title d-flex justify-content-start align-items-center">Detalhes do Item</h5>
@@ -9,7 +7,7 @@
             </button>
         </template>
         <template v-slot:body>
-            <div class="row">
+            <div v-if="item_details" class="row">
 				<div class="col-6">
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Nome </label>
@@ -31,7 +29,7 @@
 				<div class="col-6">
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Inventário </label>
-						<input readonly class="form-control bg-light-emphasis" :value="item_details.storage"> 
+						<input readonly class="form-control bg-light-emphasis" :value="item_route"> 
 					</div>	
 					<div class="mb-4">
                         <label class="form-label fw-bold"> Última atualização </label>
@@ -50,7 +48,7 @@
         </template>
         <template v-slot:footer>
             <div class="container-fluid d-flex justify-content-center align-items-center">
-                <button class="btn mode-btn btn-dark-alert mx-2" :class="{'d-none': editionActive, 'd-block': !editionActive}" @click="store.deleteItem(item_index, item_route)" id="itemDelete" data-bs-dismiss="modal">Excluir</button>
+                <button class="btn mode-btn btn-dark-alert mx-2" :class="{'d-none': editionActive, 'd-block': !editionActive}" @click="deleteItem" id="itemDelete" data-bs-dismiss="modal">Excluir</button>
                 <button type="button" class="btn btn-light-alert text-light mx-3" :class="{'d-none': !editionActive, 'd-block': editionActive}" data-bs-dismiss="modal">Cancelar</button>
                 <button class="btn mode-btn btn-primary mx-2" @click="Edition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>
                 <button class="btn btn-light-success text-light mx-3" id="fetch-inputs" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="fetchNewData" data-bs-dismiss="modal">Confirmar</button>
@@ -74,6 +72,9 @@ export default {
         }
     },
     methods: {
+        deleteItem(){
+            this.store.deleteItem(this.item_index, this.item_route);
+        },
         inputExpand() { 
             if (!this.mouseOverFlag) { 
                 this.mouseOverFlag = true;
@@ -110,24 +111,21 @@ export default {
             this.store.updateItemQtd(this.item_index, this.inputs[5].value, this.item_route);
         }
     },
+    props: {
+        item_details: {
+            type: Object
+        },
+        item_index:{
+            type: Number
+        },
+        item_route:{
+            type: String
+        }
+    },
     setup(){
         const store = useStorageStore();
         return {
             store
-        }
-    },
-    props: {
-        item_details: {
-            type: Object,
-            required: true
-        },
-        item_index:{
-            type: Number,
-            required: true
-        },
-        item_route:{
-            type: String,
-            required: true
         }
     },
 }

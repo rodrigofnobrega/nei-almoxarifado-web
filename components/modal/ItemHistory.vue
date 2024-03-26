@@ -17,7 +17,7 @@
 			</tr>
 		 </thead>
 		<tbody>
-			<tr v-for="history in item_history.history" :key="'Amauri'"> 
+			<tr v-if="item_history" v-for="history in item_history.history" :key="'Amauri'"> 
 				<td scope="row" class="p-2 mb-3"> {{ history }} </td>
 				<td class="fw-bolder p-2 mb-3" style="--bs-bg-opacity: .99"
 					:class="{'text-light bg-success border-0': isCreate(history), 'text-light bg-danger border-0': isDelete(history), 'text-light bg-warning border-0': isRequest(history)}"> {{ history.split('-')[1] }} </td>
@@ -39,8 +39,7 @@
 export default{
 	props: {
 		item_history: {
-			type: Object,
-			required: true
+			type: Object
 		}
 	},
 	methods:{

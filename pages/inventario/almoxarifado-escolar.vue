@@ -39,7 +39,7 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import { useStorageStore } from '../../stores/storage';
-import { ref, computed, onMounted} from 'vue';
+import { ref, computed, onMounted, onUpdated} from 'vue';
 
 const store = useStorageStore();
 const items = ref(store.items); 
