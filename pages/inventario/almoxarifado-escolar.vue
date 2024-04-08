@@ -5,8 +5,11 @@
     <div class="row d-block">
         <TablesTable>
             <template v-slot:title>Almoxarifado Escolar</template>
+            <template v-slot:search>
+                <input v-model="searchInput" class="table-searchbar form-control" placeholder="Pesquisar"/>
+            </template>
             <template v-slot:items>
-            <tr v-if="filteredItemsSize > 0" v-for="(item, index) in filteredItems" :key="index">
+            <tr v-if="filteredItemsSize > 0" v-for="(item, index) in filteredItems.slice(num, num1)" :key="index">
                <th scope="row"><p>{{ item.name }}</p></th>
                <th>
                     <p v-if="item.sipac">{{ item.sipac }}</p>
@@ -33,6 +36,15 @@
              </div>
             </template>
         </TablesTable>
+        <nav aria-label="Page navigation" class="mt-5 d-flex justify-content-center align-items-center">
+            <ul class="pagination mt-5 justify-content-center">
+                <li class="page-item"><button class="page-link bg-primary text-light" id="backPageBtn" @click="backPage">
+                    <span aria-hidden="true">&laquo;</span></button>
+                </li>
+                <li v-for="i in paginationSize" class="page-item"><button class="page-link bg-primary text-light" :class="{'bg-primary': pagesFocus[i], 'bg-secondary': pagesFocus[i]}">{{ i-1 }}</button></li>
+                <li class="page-item"><button class="page-link bg-primary text-light" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button></li>
+            </ul>
+        </nav>
     </div>
 </template>
 
@@ -42,7 +54,10 @@ import { useStorageStore } from '../../stores/storage';
 import { ref, computed, onMounted, onUpdated} from 'vue';
 
 const store = useStorageStore();
+store.loadItemsFromLocalStorage();
 const items = ref(store.items); 
+const searchInput = ref("");
+
 
 const isPopup = computed(() => {
     return store.popupActive
@@ -52,10 +67,42 @@ const currentRoute = useRoute().fullPath.split('/')[2];
 onMounted(() => {
     store.deleteMode = false,
     store.editMode = false
-})
+});
 
-const filteredItems = computed(() => items.value.filter(item => item.storage.includes("almoxarifado-escolar")));
+const filteredItems = computed(() => items.value.filter(item => item.storage.includes("almoxarifado-escolar") && item.name.includes(searchInput.value)));
 const filteredItemsSize = computed(() => filteredItems.value.length);
+/*TODO: refatorar nos composables*/
+const paginationSize = ref(parseInt(filteredItemsSize.value/15));
+const pagesFocus = [true];
+for(let i = 0; i < paginationSize.value-1; i++){
+    pagesFocus.push(false);
+};
+console.log(pagesFocus)
+const num = ref(0);
+const num1 = ref(15);
+const fowardPage = (() => {
+    num.value += 15;
+    num1.value += 15;
+    const fowardBtn = document.getElementById("fowardPageBtn");
+    document.getElementById("backPageBtn").classList.remove("disabled");
+    document.getElementById("backPageBtn").classList.remove("bg-dark");
+    if(num.value >= filteredItemsSize.value){
+        fowardBtn.classList.toggle("disabled");
+        fowardBtn.classList.toggle("bg-dark");
+    }
+});
+const backPage = (() => {
+    num.value -= 15;
+    num1.value -= 15;
+    const backBtn = document.getElementById("backPageBtn");
+    document.getElementById("fowardPageBtn").classList.remove("disabled");
+    document.getElementById("fowardPageBtn").classList.remove("bg-dark");
+    if(num.value < 0){
+        backBtn.classList.toggle('disabled');
+        backBtn.classList.toggle("bg-dark");
+    }
+});
+
 
 const itemIndex = ref(0);
 const currentItem = computed(() => filteredItems.value[itemIndex.value]);
@@ -89,6 +136,10 @@ p{
 }
 .action-btn{
     margin-right: 10px;
+}
+.table-searchbar{
+    margin-left: 190px;
+    width: 240px;
 }
 .btn-outline-primary{
     color: rgb(51,51,51, 0.7);

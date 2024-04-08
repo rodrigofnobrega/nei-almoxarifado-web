@@ -14,11 +14,22 @@ export const useStorageStore = defineStore('storage', {
       isRotated: false,
       deleteMode: false,
       editMode: false,
-      popupActive: false
+      popupActive: false,
+      tableSearch: " "
     }),
     actions: {
+      async fetchItems(items){
+        localStorage.setItem('items', JSON.stringify(items));
+      },
+      async loadItemsFromLocalStorage() {
+        const storedItems = localStorage.getItem('items');
+        if (storedItems) {
+          this.items = JSON.parse(storedItems);
+        }
+      },
       addItem(item){
         this.items.push(item);
+        this.fetchItems(this.items);
       },
       deleteItem(index, almoxarifado){
         let count = 0;
@@ -57,12 +68,11 @@ export const useStorageStore = defineStore('storage', {
       },
       throwPopup(){
         this.popupActive = !this.popupActive;
-      }
+      },
   },
   getters: {
     getItems() {
         return this.items;
     }
   },
-  persist: true,
 });
