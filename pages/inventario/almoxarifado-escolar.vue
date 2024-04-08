@@ -41,7 +41,7 @@
                 <li class="page-item"><button class="page-link bg-primary text-light" id="backPageBtn" @click="backPage">
                     <span aria-hidden="true">&laquo;</span></button>
                 </li>
-                <li v-for="i in paginationSize" class="page-item"><button class="page-link bg-primary text-light" :class="{'bg-primary': pagesFocus[i], 'bg-secondary': pagesFocus[i]}">{{ i-1 }}</button></li>
+                <li v-for="i in paginationSize" class="page-item"><button class="page-link bg-primary text-light" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i-1 }}</button></li>
                 <li class="page-item"><button class="page-link bg-primary text-light" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button></li>
             </ul>
         </nav>
@@ -73,14 +73,18 @@ const filteredItems = computed(() => items.value.filter(item => item.storage.inc
 const filteredItemsSize = computed(() => filteredItems.value.length);
 /*TODO: refatorar nos composables*/
 const paginationSize = ref(parseInt(filteredItemsSize.value/15));
-const pagesFocus = [true];
+let pagesFocus = ref([true]);
 for(let i = 0; i < paginationSize.value-1; i++){
-    pagesFocus.push(false);
+    pagesFocus.value.push(false);
 };
-console.log(pagesFocus)
 const num = ref(0);
 const num1 = ref(15);
+let count = 0;
 const fowardPage = (() => {
+    pagesFocus.value[count] = false;
+    count++;
+    pagesFocus.value[count] = true;
+    console.log(pagesFocus.value);
     num.value += 15;
     num1.value += 15;
     const fowardBtn = document.getElementById("fowardPageBtn");
@@ -92,6 +96,9 @@ const fowardPage = (() => {
     }
 });
 const backPage = (() => {
+    pagesFocus.value[count] = false;
+    count--;
+    pagesFocus.value[count] = true;
     num.value -= 15;
     num1.value -= 15;
     const backBtn = document.getElementById("backPageBtn");
