@@ -20,5 +20,5 @@ export default defineNuxtConfig({
         { hid: 'description', name: 'description', content: 'Gerenciador de Almoxarifado' },
       ]
     }
-  }
+  },
 })

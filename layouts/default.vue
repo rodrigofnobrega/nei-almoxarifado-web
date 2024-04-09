@@ -17,10 +17,6 @@
   </div>
 </template>
   
-<script setup>
-
-</script>
-  
 <style>
 .main{
   height: 100%;
