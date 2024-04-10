@@ -1,14 +1,15 @@
 import { defineStore } from "pinia";
 import itemsJson from "../static/items.json"
 
+const inter = itemsJson;
+
 export const useStorageStore = defineStore('storage', {
     state: () => ({
-      items: itemsJson,
+      items: inter,
       sidebarSublinks: [],
       isRotated: false,
       deleteMode: false,
       editMode: false,
-      popupActive: false,
       tableSearch: " "
     }),
     actions: {
@@ -70,9 +71,6 @@ export const useStorageStore = defineStore('storage', {
       },
       setEditMode(){
         this.editMode = !this.editMode;
-      },
-      throwPopup(){
-        this.popupActive = !this.popupActive;
       },
   },
   getters: {

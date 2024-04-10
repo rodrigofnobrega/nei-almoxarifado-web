@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { usePopupStore } from '~/stores/popup';
 import { sipacHandeling } from '../../composables/inputHandler';
 import { useStorageStore } from '../../stores/storage';
 export default{
@@ -61,7 +62,7 @@ export default{
         },
         itemRegister(){
             this.store.addItem({name: this.itemName, sipac: sipacHandeling(this.itemSipac), type: this.itemType, /*Faltando o handler de qtd*/  qtd: this.itemQtd, history: '', storage: this.$route.path.split('/')[2]})
-            this.store.throwPopup();
+            this.popup.throwPopup();
         },
         itemRemove(){
             this.store.deleteItem();
@@ -69,10 +70,11 @@ export default{
     },
     setup(){
         const store = useStorageStore();
+        const popup = usePopupStore();
         return{
-            store
+            store, popup
         }
-    },
+    }
 }
 </script>
 

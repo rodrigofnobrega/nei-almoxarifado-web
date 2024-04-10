@@ -1,7 +1,6 @@
 <template>
     <ModalItemDetails v-if="filteredItemsSize > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
     <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
-    <Popup :isPopup="isPopup"/>
     <div class="row d-block">
         <TablesTable>
             <template v-slot:title>Almoxarifado Escolar</template>
@@ -39,13 +38,13 @@
         <nav v-if="filteredItemsSize > 0" aria-label="Page navigation" class="mt-5 d-flex justify-content-center align-items-center">
             <ul class="pagination mt-5 justify-content-center">
                 <li class="page-item">
-                    <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': num == 0 && num1 == 15}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
+                    <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': num <= 0 && num1 <= 15}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
                 </li>
                 <li class="page-item" v-for="i in paginationSize" :key="i-1">
-                    <button class="page-link text-light" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
+                    <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
                 </li>
                 <li class="page-item">
-                    <button class="page-link bg-primary text-light" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
+                    <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': num >= filteredItemsSize-15 && num1 >= filteredItemsSize}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
                 </li>
             </ul>
         </nav>
@@ -62,20 +61,18 @@ const store = useStorageStore();
 const items = ref(store.items); 
 const searchInput = ref("");
 
-const isPopup = computed(() => {
-    return store.popupActive
-})
 const currentRoute = useRoute().fullPath.split('/')[2];
+
 onMounted(() => {
     store.deleteMode = false,
     store.editMode = false
 });
 
-
 const filteredItems = computed(() => items.value.filter(item => item.storage.includes("almoxarifado-escolar") && item.name.includes(searchInput.value)));
 const filteredItemsSize = computed(() => filteredItems.value.length);
 /*TODO: refatorar nos composables*/
-const paginationSize = ref(parseInt(filteredItemsSize.value/15));
+const paginationSize = ref(parseInt((filteredItemsSize.value/15)) == 0 ? 1 : (filteredItemsSize.value/15) % 1 == 0 ? parseInt(filteredItemsSize.value/15) : parseInt(filteredItemsSize.value/15)+1);
+console.log(filteredItemsSize.value)
 let pagesFocus = ref([true]);
 for(let i = 0; i < paginationSize.value-1; i++){
     pagesFocus.value.push(false);
@@ -83,6 +80,14 @@ for(let i = 0; i < paginationSize.value-1; i++){
 const num = ref(0);
 const num1 = ref(15);
 let count = 0;
+
+const page = ((index) => {
+    num.value = 15*index;
+    num1.value = 15*index+15;
+    pagesFocus.value[count] = false;
+    count = index;
+    pagesFocus.value[count] = true;
+});
 const fowardPage = (() => {
     pagesFocus.value[count] = false;
     count++;

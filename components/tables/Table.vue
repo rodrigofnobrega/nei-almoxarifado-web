@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'; 
+import { onMounted } from 'vue';
 
 onMounted(() => {
   const itemModals = document.getElementsByClassName("modal-header");

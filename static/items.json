@@ -61,74 +61,90 @@
     "storage": "almoxarifado-funcionarios"
   },
   {
-    "name": "Teste",
-    "sipac": "132321",
-    "type": "unidade",
-    "qtd": 10,
+    "name": "",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": 0,
     "history": "",
     "storage": "almoxarifado-escolar"
   },
   {
-    "name": "Teste1",
-    "sipac": "123132",
-    "type": "unidade",
-    "qtd": 10,
+    "name": "",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": 0,
     "history": "",
     "storage": "almoxarifado-escolar"
   },
   {
-    "name": "Teste12",
-    "sipac": "123",
-    "type": "unidade",
-    "qtd": 10,
+    "name": "",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": 0,
     "history": "",
     "storage": "almoxarifado-escolar"
   },
   {
-    "name": "Teste4",
-    "sipac": "34",
-    "type": "sacola",
-    "qtd": 10,
+    "name": "",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": 0,
     "history": "",
     "storage": "almoxarifado-escolar"
   },
   {
-    "name": "TesTe",
-    "sipac": "132",
-    "type": "unidade",
-    "qtd": 10,
+    "name": "",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": 0,
     "history": "",
     "storage": "almoxarifado-escolar"
   },
   {
-    "name": "34",
-    "sipac": "3434",
-    "type": "unidade",
-    "qtd": 30,
+    "name": "",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": 0,
     "history": "",
     "storage": "almoxarifado-escolar"
   },
   {
-    "name": "33",
-    "sipac": "33",
-    "type": "unidade",
-    "qtd": 30,
+    "name": "",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": 0,
     "history": "",
     "storage": "almoxarifado-escolar"
   },
   {
-    "name": "2222",
-    "sipac": "2222",
-    "type": "unidade",
-    "qtd": 20,
+    "name": "",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": 0,
     "history": "",
     "storage": "almoxarifado-escolar"
   },
   {
-    "name": "3322",
-    "sipac": "33222",
-    "type": "unidade",
-    "qtd": 20,
+    "name": "",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": 0,
+    "history": "",
+    "storage": "almoxarifado-escolar"
+  },
+  {
+    "name": "",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": 0,
+    "history": "",
+    "storage": "almoxarifado-escolar"
+  },
+  {
+    "name": "",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": 0,
     "history": "",
     "storage": "almoxarifado-escolar"
   }
