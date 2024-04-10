@@ -1,64 +1,30 @@
 [
   {
-    "name": "Cartolina Amarela",
+    "name": "",
     "sipac": "nenhum",
-    "type": "Unidade",
-    "qtd": 5,
-    "history": [
-      "03/03/2023 13:30:00 - Adicionado",
-      "03/03/2023 14:32:34 - Consumido"
-    ],
-    "storage": "almoxarifado-escolar"
+    "type": "",
+    "qtd": 0,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 0
   },
   {
-    "name": "Lapiseira",
-    "sipac": "2342342354",
-    "type": "Caixa",
-    "qtd": 7,
-    "history": [
-      "03/03/2023 14:32:34 - Consumido"
-    ],
-    "storage": "almoxarifado-escolar"
-  },
-  {
-    "name": "Folha em Branco A4",
-    "sipac": "4442342354",
-    "type": "Sacola",
-    "qtd": 30,
-    "history": [
-      "03/03/2023 12:01:23 - Consumido"
-    ],
-    "storage": "almoxarifado-escolar"
-  },
-  {
-    "name": "Sabão em pó",
-    "sipac": "5442342354",
-    "type": "Unidade",
-    "qtd": 12,
-    "history": [
-      "03/03/2023 11:23:30 - Excluido"
-    ],
-    "storage": "almoxarifado-escolar"
-  },
-  {
-    "name": "Esponja",
-    "sipac": "6442342354",
-    "type": "Sacola",
-    "qtd": 3,
-    "history": [
-      "03/04/2023 16:00:00 - Excluido"
-    ],
-    "storage": "almoxarifado-escolar"
-  },
-  {
-    "name": "Vassoura",
+    "name": "FAS",
     "sipac": "nenhum",
-    "type": "Unidade",
-    "qtd": 5,
-    "history": [
-      "03/03/2023 13:30:00 - Adicionado"
-    ],
-    "storage": "almoxarifado-funcionarios"
+    "type": "",
+    "qtd": 0,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 1
+  },
+  {
+    "name": "FASEES",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": 0,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 2
   },
   {
     "name": "",
@@ -66,7 +32,8 @@
     "type": "",
     "qtd": 0,
     "history": "",
-    "storage": "almoxarifado-escolar"
+    "storage": "almoxarifado-escolar",
+    "id": 3
   },
   {
     "name": "",
@@ -74,7 +41,8 @@
     "type": "",
     "qtd": 0,
     "history": "",
-    "storage": "almoxarifado-escolar"
+    "storage": "almoxarifado-escolar",
+    "id": 4
   },
   {
     "name": "",
@@ -82,7 +50,8 @@
     "type": "",
     "qtd": 0,
     "history": "",
-    "storage": "almoxarifado-escolar"
+    "storage": "almoxarifado-escolar",
+    "id": 5
   },
   {
     "name": "",
@@ -90,7 +59,8 @@
     "type": "",
     "qtd": 0,
     "history": "",
-    "storage": "almoxarifado-escolar"
+    "storage": "almoxarifado-escolar",
+    "id": 6
   },
   {
     "name": "",
@@ -98,7 +68,8 @@
     "type": "",
     "qtd": 0,
     "history": "",
-    "storage": "almoxarifado-escolar"
+    "storage": "almoxarifado-escolar",
+    "id": 7
   },
   {
     "name": "",
@@ -106,7 +77,8 @@
     "type": "",
     "qtd": 0,
     "history": "",
-    "storage": "almoxarifado-escolar"
+    "storage": "almoxarifado-escolar",
+    "id": 8
   },
   {
     "name": "",
@@ -114,7 +86,8 @@
     "type": "",
     "qtd": 0,
     "history": "",
-    "storage": "almoxarifado-escolar"
+    "storage": "almoxarifado-escolar",
+    "id": 9
   },
   {
     "name": "",
@@ -122,7 +95,8 @@
     "type": "",
     "qtd": 0,
     "history": "",
-    "storage": "almoxarifado-escolar"
+    "storage": "almoxarifado-escolar",
+    "id": 10
   },
   {
     "name": "",
@@ -130,7 +104,8 @@
     "type": "",
     "qtd": 0,
     "history": "",
-    "storage": "almoxarifado-escolar"
+    "storage": "almoxarifado-escolar",
+    "id": 11
   },
   {
     "name": "",
@@ -138,7 +113,8 @@
     "type": "",
     "qtd": 0,
     "history": "",
-    "storage": "almoxarifado-escolar"
+    "storage": "almoxarifado-escolar",
+    "id": 12
   },
   {
     "name": "",
@@ -146,6 +122,70 @@
     "type": "",
     "qtd": 0,
     "history": "",
-    "storage": "almoxarifado-escolar"
+    "storage": "almoxarifado-escolar",
+    "id": 13
+  },
+  {
+    "name": "",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": 0,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 14
+  },
+  {
+    "name": "",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": 0,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 15
+  },
+  {
+    "name": "",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": "1110",
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 16
+  },
+  {
+    "name": "",
+    "sipac": "nenhum",
+    "type": "Selecione o tipo",
+    "qtd": 0,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 17
+  },
+  {
+    "name": "FAS",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": "111",
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 18
+  },
+  {
+    "name": "FFA",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": "1",
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 19
+  },
+  {
+    "name": "FFAFFFA",
+    "sipac": "nenhum",
+    "type": "",
+    "qtd": "110",
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 20
   }
 ]

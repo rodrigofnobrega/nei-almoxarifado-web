@@ -8,7 +8,7 @@
                 <input v-model="searchInput" class="table-searchbar form-control" placeholder="Pesquisar"/>
             </template>
             <template v-slot:items>
-            <tr v-if="filteredItemsSize > 0" v-for="(item, index) in filteredItems.slice(num, num1)" :key="index">
+            <tr v-if="filteredItemsSize > 0" v-for="item in filteredItems.slice(num, num1)" :key="item.id">
                <th scope="row"><p>{{ item.name }}</p></th>
                <th>
                     <p v-if="item.sipac">{{ item.sipac }}</p>
@@ -22,10 +22,10 @@
             </th>
                <th><p>{{ item.history[0]}}</p></th>
                <th class="end">
-                    <button class="table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                    <button class="table-btn btn btn-primary" @click="showDetails(item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         Detalhes
                     </button>
-                    <button class="table-btn btn btn-primary" @click="showHistory(index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                    <button class="table-btn btn btn-primary" @click="showHistory(item.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
                         Histórico
                     </button>
                 </th>
@@ -58,21 +58,29 @@ import { ref, computed, onMounted } from 'vue';
 
 const store = useStorageStore();
 
-const items = ref(store.items); 
+const items = computed(() => store.items.map((item, index) => {
+    item.id = index;
+    return {...item}
+}));
 const searchInput = ref("");
 
-const currentRoute = useRoute().fullPath.split('/')[2];
 
-onMounted(() => {
+onMounted(() => {   
+    const storedItems = localStorage.getItem('items');
+    store.items = JSON.parse(storedItems); 
     store.deleteMode = false,
     store.editMode = false
 });
 
 const filteredItems = computed(() => items.value.filter(item => item.storage.includes("almoxarifado-escolar") && item.name.includes(searchInput.value)));
 const filteredItemsSize = computed(() => filteredItems.value.length);
+
+const itemIndex = ref(0);
+const currentItem = computed(() => store.items[itemIndex.value]);
+const currentRoute = useRoute().fullPath.split('/')[2];
+
 /*TODO: refatorar nos composables*/
 const paginationSize = ref(parseInt((filteredItemsSize.value/15)) == 0 ? 1 : (filteredItemsSize.value/15) % 1 == 0 ? parseInt(filteredItemsSize.value/15) : parseInt(filteredItemsSize.value/15)+1);
-console.log(filteredItemsSize.value)
 let pagesFocus = ref([true]);
 for(let i = 0; i < paginationSize.value-1; i++){
     pagesFocus.value.push(false);
@@ -82,8 +90,9 @@ const num1 = ref(15);
 let count = 0;
 
 const page = ((index) => {
+    console.log(index);
     num.value = 15*index;
-    num1.value = 15*index+15;
+    num1.value = (15*index)+15;
     pagesFocus.value[count] = false;
     count = index;
     pagesFocus.value[count] = true;
@@ -116,10 +125,6 @@ const backPage = (() => {
         backBtn.classList.toggle("bg-dark-emphasis");
     }
 });
-
-
-const itemIndex = ref(0);
-const currentItem = computed(() => filteredItems.value[itemIndex.value]);
 
 const showDetails = (index) => {
     itemIndex.value = index;

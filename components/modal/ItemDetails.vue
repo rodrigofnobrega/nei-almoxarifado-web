@@ -11,19 +11,19 @@
 				<div class="col-6">
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Nome </label>
-						<input readonly class="form-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" type="text" :value="item_details.name">
+						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" type="text" :value="item_details.name">
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Código Sipac </label>
-						<input readonly class="form-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.sipac"> 
+						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.sipac"> 
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Tipo </label>
-						<input readonly class="form-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.type"> 
+						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.type"> 
 					</div>
                     <div class="mb-3"> 
 						<label class="form-label fw-bold"> Quantidade </label>
-						<input readonly class="form-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.qtd"> 
+						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.qtd"> 
 					</div>	
 				</div>
 				<div class="col-6">
@@ -102,20 +102,20 @@ export default {
         },
         setEdition(){       
             this.editionActive = !this.editionActive;
-            this.inputs = document.getElementsByClassName("form-control");
+            this.inputs = document.getElementsByClassName("edit-control");
             for(let i = 0; i < this.inputs.length; i++){
                 this.inputs[i].removeAttribute('readonly');
             }
         },
         revertEdition(){
             this.editionActive = false;
-            this.inputs = document.getElementsByClassName("form-control");
+            this.inputs = document.getElementsByClassName("edit-control");
             for(let i = 0; i < this.inputs.length; i++){
                 this.inputs[i].setAttribute('readonly', '');
             }
         },
         fetchNewData(){
-            this.store.updateItemQtd(this.item_index, this.inputs[4].value, this.item_route);
+            this.store.updateItemQtd(this.item_index, this.inputs[3].value, this.item_route);
             this.revertEdition();
         }
     },

@@ -1,11 +1,8 @@
 import { defineStore } from "pinia";
-import itemsJson from "../static/items.json"
-
-const inter = itemsJson;
 
 export const useStorageStore = defineStore('storage', {
     state: () => ({
-      items: inter,
+      items: [],
       sidebarSublinks: [],
       isRotated: false,
       deleteMode: false,
@@ -28,7 +25,7 @@ export const useStorageStore = defineStore('storage', {
                     },
                     body: JSON.stringify({ items: JSON.parse(storedItems) })
                 });
-            } catch (error) {
+              } catch (error) {
                 console.error('Erro ao fazer a solicitação:', error);
             }
         }
@@ -43,11 +40,13 @@ export const useStorageStore = defineStore('storage', {
           if(this.items[i].storage.includes(almoxarifado)){
             if(index == count){
               this.items.splice(i, 1);
+              this.fetchItems(this.items);
               return 0;
             };
-            count++;
           };
+          count++;
         };
+        this.fetchItems(this.items);
       },
       updateItemQtd(index: number, newQtd: number, almoxarifado: string) {
         let count = 0;
@@ -56,9 +55,10 @@ export const useStorageStore = defineStore('storage', {
             if(index == count){
               this.items[i].qtd = newQtd;
             }
-            count ++;
-          }
-        }
+          };
+          count ++;
+        };
+        this.fetchItems(this.items);
       },
       setSublink(sublinks: string[]) {
           this.sidebarSublinks = sublinks;

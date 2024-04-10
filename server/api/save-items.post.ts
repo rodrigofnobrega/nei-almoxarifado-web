@@ -6,11 +6,11 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
         const itemsRes:H3Event<EventHandlerRequest> = await readBody(event);
         fs.writeFile('static/items.json', JSON.stringify(itemsRes.items, null, 2), 'utf-8', (err) => {
             if (err) return console.log('An error happened', err)
-            console.log('File fetched from {JSON} Placeholder and written locally!')
         });
+        const data = fs.readFileSync('static/items.json','utf-8');
         return { 
             status: 200, 
-            body: itemsRes.items 
+            body: 1
         };
     } catch (error) {
         return { 
