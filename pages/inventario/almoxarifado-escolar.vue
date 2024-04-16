@@ -54,7 +54,7 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import { useStorageStore } from '../../stores/storage';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 
 const store = useStorageStore();
 
@@ -64,10 +64,7 @@ const items = computed(() => store.items.map((item, index) => {
 }));
 const searchInput = ref("");
 
-
 onMounted(() => {   
-    const storedItems = localStorage.getItem('items');
-    store.items = JSON.parse(storedItems); 
     store.deleteMode = false,
     store.editMode = false
 });
@@ -80,7 +77,7 @@ const currentItem = computed(() => store.items[itemIndex.value]);
 const currentRoute = useRoute().fullPath.split('/')[2];
 
 /*TODO: refatorar nos composables*/
-const paginationSize = ref(parseInt((filteredItemsSize.value/15)) == 0 ? 1 : (filteredItemsSize.value/15) % 1 == 0 ? parseInt(filteredItemsSize.value/15) : parseInt(filteredItemsSize.value/15)+1);
+const paginationSize = computed( () => (parseInt(filteredItemsSize.value/15.5)+1));
 let pagesFocus = ref([true]);
 for(let i = 0; i < paginationSize.value-1; i++){
     pagesFocus.value.push(false);
@@ -90,7 +87,6 @@ const num1 = ref(15);
 let count = 0;
 
 const page = ((index) => {
-    console.log(index);
     num.value = 15*index;
     num1.value = (15*index)+15;
     pagesFocus.value[count] = false;
