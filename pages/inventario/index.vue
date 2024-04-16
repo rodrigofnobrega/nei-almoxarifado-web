@@ -34,7 +34,6 @@
 </div>
 </template>
 
-
 <style scoped>
 h2{
     font-weight: 300;
