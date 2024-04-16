@@ -5,7 +5,7 @@
                     <a class="text-decoration-none" href="/" aria-current="true">
                         <div class="item-bg item-top" :class="{'active': $route.path === '/', 'text-dark-emphasis': $route.path !== '/'}">
                             <IconsHome class="nav-icon"/>
-                            <span class="list-group-item">Home</span>
+                            <span class="list-group-item">Início</span>
                         </div>
                     </a>
                     <a class="text-decoration-none" href="/controle-de-acesso" aria-current="true">

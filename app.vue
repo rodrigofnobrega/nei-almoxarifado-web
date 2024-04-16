@@ -8,19 +8,21 @@
 
 <script setup>
 import { useStorageStore } from './stores/storage';
-import { onBeforeMount } from 'vue';
-import  itemsJson  from '/static/items.json';
-import fs from 'fs';
+import { onMounted } from 'vue';
 
 const store = useStorageStore();
 if(process.server){
   try{
     const dados = await $fetch('/api/read-items');
-    fs.writeFile('static/items.json', JSON.stringify(dados.body, null, 2), (err) => {});
     store.items = dados.body;
   } catch(err){};
 }
-
+onMounted(() => {
+  const itemModals = document.getElementsByClassName("modal-header");
+  for (let i = 1; i < itemModals.length; i++) {
+    itemModals[i].classList.add("small");
+  }
+});
 
 
 

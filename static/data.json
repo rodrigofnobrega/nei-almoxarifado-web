@@ -37,12 +37,23 @@
     "name": "Sabão em pó",
     "sipac": "5442342354",
     "type": "Unidade",
-    "qtd": "12222",
+    "qtd": 12,
     "history": [
       "03/03/2023 11:23:30 - Excluido"
     ],
     "storage": "almoxarifado-escolar",
     "id": 3
+  },
+  {
+    "name": "Esponja",
+    "sipac": "6442342354",
+    "type": "Sacola",
+    "qtd": 3,
+    "history": [
+      "03/04/2023 16:00:00 - Excluido"
+    ],
+    "storage": "almoxarifado-escolar",
+    "id": 4
   },
   {
     "name": "Vassoura",
@@ -53,15 +64,6 @@
       "03/03/2023 13:30:00 - Adicionado"
     ],
     "storage": "almoxarifado-funcionarios",
-    "id": 4
-  },
-  {
-    "name": "",
-    "sipac": "nenhum",
-    "type": "",
-    "qtd": "10",
-    "history": "",
-    "storage": "almoxarifado-escolar",
     "id": 5
   }
 ]

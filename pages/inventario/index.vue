@@ -45,14 +45,14 @@ h2{
 }
 .card{
     padding: 0px;
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.4s ease-in-out;
 }
 .card-img-top{
-    transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.4s ease-in-out;
     opacity: 90%;
 }
 .card-body{
-    transition: background-color 0.4s ease-in-out;
+    transition: background-color 0.2s ease-in-out;
 }
 .card:hover{
     transform: scale(1.04);

@@ -1,7 +1,6 @@
 <template>
     <ModalItemDetails v-if="filteredItemsSize > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
     <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
-    <Popup :isPopup="isPopup"/>
     <div class="row d-block">
         <TablesTable>
             <template v-slot:title>Almoxarifado Funcionários</template>
@@ -9,7 +8,7 @@
                 <input v-model="searchInput" class="table-searchbar form-control" placeholder="Pesquisar"/>
             </template>
             <template v-slot:items>
-            <tr v-if="filteredItemsSize > 0" v-for="(item, index) in filteredItems.slice(num, num1)" :key="index">
+            <tr v-if="filteredItemsSize > 0" v-for="item in filteredItems.slice(num, num1)" :key="item.id">
                <th scope="row"><p>{{ item.name }}</p></th>
                <th>
                     <p v-if="item.sipac">{{ item.sipac }}</p>
@@ -23,10 +22,10 @@
             </th>
                <th><p>{{ item.history[0]}}</p></th>
                <th class="end">
-                    <button class="table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                    <button class="table-btn btn btn-primary" @click="showDetails(item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         Detalhes
                     </button>
-                    <button class="table-btn btn btn-primary" @click="showHistory(index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                    <button class="table-btn btn btn-primary" @click="showHistory(item.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
                         Histórico
                     </button>
                 </th>
@@ -36,13 +35,17 @@
              </div>
             </template>
         </TablesTable>
-        <nav aria-label="Page navigation" class="mt-5 d-flex justify-content-center align-items-center">
+        <nav v-if="filteredItemsSize > 0" aria-label="Page navigation" class="mt-5 d-flex justify-content-center align-items-center">
             <ul class="pagination mt-5 justify-content-center">
-                <li class="page-item"><button class="page-link bg-primary text-light" id="backPageBtn" @click="backPage">
-                    <span aria-hidden="true">&laquo;</span></button>
+                <li class="page-item">
+                    <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': num <= 0 && num1 <= 15}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
                 </li>
-                <li v-for="i in paginationSize" class="page-item"><button class="page-link bg-primary text-light">{{ i-1 }}</button></li>
-                <li class="page-item"><button class="page-link bg-primary text-light" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button></li>
+                <li class="page-item" v-for="i in paginationSize" :key="i-1">
+                    <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
+                </li>
+                <li class="page-item">
+                    <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': num >= filteredItemsSize-15 && num1 >= filteredItemsSize}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
+                </li>
             </ul>
         </nav>
     </div>
@@ -51,56 +54,73 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import { useStorageStore } from '../../stores/storage';
-import { ref, computed, onMounted, onUpdated} from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 
 const store = useStorageStore();
-store.loadItemsFromLocalStorage();
-const items = ref(store.items); 
+
+const items = computed(() => store.items.map((item, index) => {
+    item.id = index;
+    return {...item}
+}));
 const searchInput = ref("");
 
-
-const isPopup = computed(() => {
-    return store.popupActive
-})
-const currentRoute = useRoute().fullPath.split('/')[2];
-
-onMounted(() => {
+onMounted(() => {   
     store.deleteMode = false,
     store.editMode = false
 });
 
 const filteredItems = computed(() => items.value.filter(item => item.storage.includes("almoxarifado-funcionarios") && item.name.includes(searchInput.value)));
 const filteredItemsSize = computed(() => filteredItems.value.length);
+
+const itemIndex = ref(0);
+const currentItem = computed(() => store.items[itemIndex.value]);
+const currentRoute = useRoute().fullPath.split('/')[2];
+
 /*TODO: refatorar nos composables*/
-const paginationSize = ref(parseInt(filteredItemsSize.value/15));
+const paginationSize = computed( () => (parseInt(filteredItemsSize.value/15.5)+1));
+let pagesFocus = ref([true]);
+for(let i = 0; i < paginationSize.value-1; i++){
+    pagesFocus.value.push(false);
+};
 const num = ref(0);
 const num1 = ref(15);
+let count = 0;
+
+const page = ((index) => {
+    num.value = 15*index;
+    num1.value = (15*index)+15;
+    pagesFocus.value[count] = false;
+    count = index;
+    pagesFocus.value[count] = true;
+});
 const fowardPage = (() => {
+    pagesFocus.value[count] = false;
+    count++;
+    pagesFocus.value[count] = true;
     num.value += 15;
     num1.value += 15;
     const fowardBtn = document.getElementById("fowardPageBtn");
     document.getElementById("backPageBtn").classList.remove("disabled");
-    document.getElementById("backPageBtn").classList.remove("bg-dark");
-    if(num.value >= filteredItemsSize.value){
+    document.getElementById("backPageBtn").classList.remove("bg-dark-emphasis");
+    if(num1.value >= filteredItemsSize.value){
         fowardBtn.classList.toggle("disabled");
-        fowardBtn.classList.toggle("bg-dark");
+        fowardBtn.classList.toggle("bg-dark-emphasis");
     }
 });
 const backPage = (() => {
+    pagesFocus.value[count] = false;
+    count--;
+    pagesFocus.value[count] = true;
     num.value -= 15;
     num1.value -= 15;
     const backBtn = document.getElementById("backPageBtn");
     document.getElementById("fowardPageBtn").classList.remove("disabled");
-    document.getElementById("fowardPageBtn").classList.remove("bg-dark");
+    document.getElementById("fowardPageBtn").classList.remove("bg-dark-emphasis");
     if(num.value < 0){
         backBtn.classList.toggle('disabled');
-        backBtn.classList.toggle("bg-dark");
+        backBtn.classList.toggle("bg-dark-emphasis");
     }
 });
-
-
-const itemIndex = ref(0);
-const currentItem = computed(() => filteredItems.value[itemIndex.value]);
 
 const showDetails = (index) => {
     itemIndex.value = index;

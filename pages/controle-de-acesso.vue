@@ -1,30 +1,5 @@
-<script setup lang="ts"> 
-	const person = { name: 'Gabriel' };
-	const item = { name: 'Monitor Multilaser', quantity: 2, itemTagging: 2029103923 };
-	const requests = [
-	{ 
-		requestedAt: new Date(Date.now()).toLocaleDateString(),
-		message: "Solicito o item para a sala A308",
-		quantity: 1,
-		person: person.name,
-		item: item.name,
-		itemTagging: item.itemTagging,
-		itemQuantity: item.quantity
-	 }, 
-	{
-		requestedAt: new Date(Date.now()).toLocaleDateString(),
-		message: "Solicito o item para a sala B204",
-		quantity: 15,
-		person: "Clezio",
-		item: "Copo descartável",
-		itemTagging: 20191029301, 
-		itemQuantity: 200
-	},
-	];
-
-</script>
 <template>
-	<div class="row d-block">
+	<div class="row d-block mb-4">
 		<div class="catalog-header d-flex align-items-center">
 			<h2>Controle de Acesso</h2>
 			<div class="actions-buttons d-flex">
@@ -34,32 +9,97 @@
 		</div>
 		 <hr>
 	</div>
-
     <div class="container d-flex content">
 	<!-- TODO: transformar em tabela com linhas !-->
-	<div class="row">
-		<div v-for="req in requests" class="col-xl-6 col-12 mb-3 mb-xl-0"> 
-			<CardsSolicitation 
-				:person="req.person"
-				:requestedAt="req.requestedAt"
-				:message="req.message"
-				:itemName="req.item"	
-				:itemTagging="req.itemTagging"
-				:quantity="req.quantity"
-				:itemQuantity="req.itemQuantity"
-			> 
-			</CardsSolicitation>
+		<div class="row">
+			<div v-for="req in requests" class="col-xl-4 col-12 mb-3 mb-xl-0"> 
+				<CardsSolicitation 
+					:person="req.person"
+					:requestedAt="req.requestedAt"	
+					:message="req.message"
+					:itemName="req.item"	
+					:itemTagging="req.itemTagging"
+					:quantity="req.quantity"
+					:itemQuantity="req.itemQuantity"
+					:itemType="req.itemType"
+					> 
+				</CardsSolicitation>
+			</div>
 		</div>
-	</div>
     </div>
 </template>
 
+<script setup lang="ts"> 
+	const requests = [
+	{ 
+		requestedAt: new Date(Date.now()).toLocaleDateString(),
+		message: "Solicito o item para a sala A308",
+		quantity: 1,
+		person: 'Gabriel',
+		item: 'Monitor Multilaser',
+		itemTagging: 2029103923,
+		itemQuantity: 2,
+		itemType: 'unidade'
+	 }, 
+	{
+		requestedAt: new Date(Date.now()).toLocaleDateString(),
+		message: "Solicito o item para a sala B204",
+		quantity: 15,
+		person: "Clezio",
+		item: "Copo descartável",
+		itemTagging: 20191029301, 
+		itemQuantity: 200,
+		itemType: 'unidade'
+	},
+	{
+		requestedAt: new Date(Date.now()).toLocaleDateString(),
+		message: "Solicito o item para a sala B204",
+		quantity: 15,
+		person: "Clezio",
+		item: "Copo descartável",
+		itemTagging: 20191029301, 
+		itemQuantity: 200,
+		itemType: 'unidade'
+	},
+	{
+		requestedAt: new Date(Date.now()).toLocaleDateString(),
+		message: "Solicito o item para a sala B204",
+		quantity: 15,
+		person: "Clezio",
+		item: "Copo descartável",
+		itemTagging: 20191029301, 
+		itemQuantity: 200,
+		itemType: 'unidade'
+	},
+	{
+		requestedAt: new Date(Date.now()).toLocaleDateString(),
+		message: "Solicito o item para a sala B204",
+		quantity: 15,
+		person: "Clezio",
+		item: "Copo descartável",
+		itemTagging: 20191029301, 
+		itemQuantity: 200,
+		itemType: 'unidade'
+	},
+	{
+		requestedAt: new Date(Date.now()).toLocaleDateString(),
+		message: "Solicito o item para a sala B204",
+		quantity: 15,
+		person: "Clezio",
+		item: "Copo descartável",
+		itemTagging: 20191029301, 
+		itemQuantity: 200,
+		itemType: 'unidade'
+	},
+	];
+
+</script>
 
 <style scoped>
-	.content {
-		margin-left: 3vh;
-		margin-right: 3vh;
-	}
+.content {
+	margin-left: 3vh;
+	margin-right: 3vh;
+}
 
 h2{
     font-weight: 300;

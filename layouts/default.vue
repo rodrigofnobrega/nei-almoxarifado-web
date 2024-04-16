@@ -24,9 +24,9 @@
   width: 85vw;
   margin-left: 0;
   margin-right: 0;
-  margin-top: 100px;
+  margin-top: 68px;
   margin-bottom: 3vw;
-  padding-left: 25px;
+  padding-left: 5px;
 } 
 .fluid-container{
   position: static;
