@@ -7,7 +7,7 @@ export const useStorageStore = defineStore('storage', {
       isRotated: false,
       deleteMode: false,
       editMode: false,
-      tableSearch: " "
+      tableSearch: " ",
     }),
     actions: {
       async fetchItems(items: object){

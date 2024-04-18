@@ -1,13 +1,4 @@
 <template>
-  <div class="page-title row d-block ms-0">
-		<div class="catalog-header d-flex align-items-center">
-			<h2 class="mt-3">Painel Administrativo Geral</h2>
-			<div class="actions-buttons d-flex mt-3">
-				<ButtonsFilter class="pe-2"/>
-				<ButtonsConfigure />
-			</div>
-		</div>
-	</div>
 <div class="container d-block" style="margin-left: 0px;">
     <div class="container d-block" style="margin-left: 0px;">
         <div class="containerf-fluid d-flex justify-content-center aligm-items-center">
@@ -95,7 +86,17 @@
 </div>
 </template>
 
+<script setup>
+import { inject } from 'vue';
 
+const setpageTitle = inject('setpageTitle');
+
+const sendDataToParent = () => {
+    const data = "Painel Geral";
+    setpageTitle(data);
+};
+sendDataToParent();
+</script>
 <style scoped>
 .page-title{
 	background-color: #F2F2F2;

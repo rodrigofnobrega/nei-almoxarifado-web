@@ -1,26 +1,36 @@
 <template>
     <ModalItemDetails v-if="filteredItemsSize > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
     <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
-    <div class="row teste d-block">
+    <div style="margin-left: 0.7%;">
+        <div class="d-flex justify-content-between aling-items-center">
+            <span class="d-flex align-items-center table-searchbar">
+            <IconsSearchGlass class="search-glass"/>
+            <input v-model="searchInput" class="searchbar form-control" placeholder="Pesquisar"/>          
+            </span>
+            <div class="d-flex">
+                <ButtonsNewItem />
+			    <ButtonsFilter class="m-0 p-0"/>
+			    <ButtonsConfigure/>
+            </div>
+        </div>
+    <div class="row d-block">
         <TablesTable>
-            <template v-slot:title>Almoxarifado Escolar</template>
-            <template v-slot:search>
-                <input v-model="searchInput" class="table-searchbar form-control" placeholder="Pesquisar"/>
-            </template>
             <template v-slot:items>
             <tr v-if="filteredItemsSize > 0" v-for="item in filteredItems.slice(num, num1)" :key="item.id">
-               <th scope="row"><p>{{ item.name }}</p></th>
-               <th>
+               <th class="border" scope="row"><p>{{ item.name }}</p></th>
+               <th class="border">
                     <p v-if="item.sipac">{{ item.sipac }}</p>
                     <p v-else>nenhum</p>
                </th>
-                <th>
+                <th class="border">
                     <p>{{ item.type }}</p>
                 </th>
-               <th>
+               <th class="border">
                 <p>{{ item.qtd }}</p>
-            </th>
-               <th><p>{{ item.history[0]}}</p></th>
+                </th>
+               <th>
+                <p>{{ item.history[0]}}</p>
+               </th>
                <th class="end">
                     <button class="table-btn btn btn-primary" @click="showDetails(item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         Detalhes
@@ -35,7 +45,7 @@
              </div>
             </template>
         </TablesTable>
-        <nav v-if="filteredItemsSize > 0" aria-label="Page navigation" class="mt-5 d-flex justify-content-center align-items-center">
+        <nav v-if="filteredItemsSize > 0" aria-label="Page navigation" class="mt-0 d-flex justify-content-center align-items-center" style="position: sticky;">
             <ul class="pagination mt-5 justify-content-center">
                 <li class="page-item">
                     <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': num <= 0 && num1 <= 15}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
@@ -49,14 +59,24 @@
             </ul>
         </nav>
     </div>
+</div>
 </template>
 
 <script setup>
 import { useRoute } from 'vue-router';
 import { useStorageStore } from '../../stores/storage';
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, onMounted, inject, defineProps } from 'vue';
 
 const store = useStorageStore();
+
+const setpageTitle = inject('setpageTitle');
+
+
+const sendDataToParent = () => {
+    const data = "Almoxarifado Escolar";
+    setpageTitle(data);
+};
+sendDataToParent();
 
 const items = computed(() => store.items.map((item, index) => {
     item.id = index;
@@ -132,8 +152,8 @@ const showHistory = (index) => {
 </script>
 
 <style scoped>
-.teste{
-    width: 88.5vw;
+.search-glass{
+    padding-left: 0px;
 }
 .container{
     margin-left: 0px; 
@@ -154,10 +174,19 @@ p{
 }
 .action-btn{
     margin-right: 10px;
+    border: none;
+    border-radius: 10px 10px 0px 0px;
+    border-bottom: 1px ridge #1F69B1;
 }
 .table-searchbar{
-    margin-left: 190px;
-    width: 240px;
+    border: none;
+    border-radius: 0px;
+    border-bottom: 1px ridge #1F69B1;
+    top: 70px;
+    width: 200px;
+}
+.searchbar{
+    border: none;
 }
 .btn-outline-primary{
     color: rgb(51,51,51, 0.7);

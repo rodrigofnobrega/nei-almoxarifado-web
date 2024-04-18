@@ -104,7 +104,7 @@ export default {
 <style scoped>
 .offcanvas{
     border: none;
-    width: 160px;
+    width: 10em;
     height: 100vh;  
     top: 0%;
     padding-top: 20px;

@@ -1,15 +1,6 @@
 <template>
-	<div class="page-title row d-block ms-0">
-		<div class="catalog-header d-flex align-items-center">
-			<h2 class="mt-3">Controle de Acesso</h2>
-			<div class="actions-buttons d-flex mt-3">
-				<ButtonsFilter class="pe-2"/>
-				<ButtonsConfigure />
-			</div>
-		</div>
-	</div>
     <div class="container d-flex content">
-	<!-- TODO: transformar em tabela com linhas !-->
+		<!-- TODO: transformar em tabela com linhas !-->
 		<div class="row">
 			<div v-for="req in requests" class="col-xl-4 px-xl-3 col-lg-6 px-lg-3 col-md-6 px-md-3 col-sm-12 col-xs-12 mb-3 mb-xl-0"> 
 				<CardsSolicitation 
@@ -29,6 +20,15 @@
 </template>
 
 <script setup lang="ts"> 
+import { inject } from 'vue';
+
+const setpageTitle = inject('setpageTitle');
+
+const sendDataToParent = () => {
+    const data = "Controle de Acesso";
+    setpageTitle(data);
+};
+sendDataToParent();
 	const requests = [
 	{ 
 		requestedAt: new Date(Date.now()).toLocaleDateString(),
@@ -95,33 +95,8 @@
 </script>
 
 <style scoped>
-.page-title{
-	background-color: #F2F2F2;
-	width: 87.6vw;
-	border-bottom: 1px ridge #D9D9D9;
-	margin-bottom: 20px;
-}
-
 .content {
 	margin-left: 3vh;
 	margin-right: 3vh;
 }
-
-h2{
-    font-weight: 300;
-    color: rgb(51,51,51, 0.8);
-}
-.catalog-header{
-    justify-content: space-between;
-}
-@media screen and (max-width: 872px){
-    .catalog-header{
-        display: block !important;
-        text-align: center;
-    }
-    .actions-buttons{
-        justify-content: center;
-        align-content: center;
-    }
-}
- </style>
+</style>
