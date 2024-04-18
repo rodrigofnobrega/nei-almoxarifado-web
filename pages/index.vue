@@ -1,10 +1,15 @@
 <template>
+  <div class="page-title row d-block ms-0">
+		<div class="catalog-header d-flex align-items-center">
+			<h2 class="mt-3">Painel Administrativo Geral</h2>
+			<div class="actions-buttons d-flex mt-3">
+				<ButtonsFilter class="pe-2"/>
+				<ButtonsConfigure />
+			</div>
+		</div>
+	</div>
 <div class="container d-block" style="margin-left: 0px;">
     <div class="container d-block" style="margin-left: 0px;">
-        <div class="catalog-header d-flex align-items-center">
-        <h2>Controle de Acesso</h2>
-        </div>
-        <hr>
         <div class="containerf-fluid d-flex justify-content-center aligm-items-center">
         <div class="card me-2 rounded-3" style="width: 34rem;">
           <img src="/almo.png" class="card-img-top" alt="...">
@@ -92,6 +97,12 @@
 
 
 <style scoped>
+.page-title{
+	background-color: #F2F2F2;
+	width: 87.6vw;
+	border-bottom: 1px ridge #D9D9D9;
+	margin-bottom: 20px;
+}
 h2{
     font-weight: 300;
     color: rgb(51,51,51, 0.8);

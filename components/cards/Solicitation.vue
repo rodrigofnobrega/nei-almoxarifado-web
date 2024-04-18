@@ -1,8 +1,15 @@
 <template>
-	<Card class="mb-5" style="width:103%;">
-		<template v-slot:header> <h5 class="d-flex"> Solicitação <span class="fs-6 resquest-time">20/05/24 14:00<IconsClock class="mb-1 ms-2"/></span> </h5> </template>
+	<Card class="mb-5 cards-grid">
+		<template v-slot:header>
+			<div class="d-flex justify-content-between">
+    		    <h5 class="justify-content-start">
+    		        Solicitação
+    		    </h5>
+    		    <p class="fs-6 resquest-time">20/05/24 14:00<IconsClock class="mb-1 ms-2"/></p>
+    		</div>
+		</template>
 		<template v-slot:default> 
-			<div class="row">
+			<div class="row cards-row">
 				<div class="col-6 me-0">
 					<div class="mb-3"> 
 						<label class="form-label fw-semibold"> Solicitador </label>
@@ -18,9 +25,11 @@
 					</div>
 				</div>
 				<div class="col-6">
-					<div class="mb-3" @mouseover="inputExpand" @mouseleave="inputContract"> 
+					<div class="mb-3"> 
 						<label class="form-label fw-semibold"> Item solicitado </label>
-						<input readonly class="form-control" id="expansible-form" :value="itemName"> 
+						<div class="overflow-x-auto">
+							<input readonly class="form-control overflow-x-auto" :value="itemName"> 
+						</div>
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-semibold"> Código Sipac </label>
@@ -72,52 +81,20 @@
 import Card from './Card.vue'
 export default {
 	components: { Card },
-	data(){
-		return{
-            expansibleContainer: null,
-            expansibleInput: null, 
-            shadowInput: null,
-            mouseOverFlag: false,
-		}
-	},
-	methods: {
-		inputExpand() { 
-			console.log("EXPNADI");
-            if (!this.mouseOverFlag) { 
-                this.mouseOverFlag = true;
-                this.shadowInput = document.createElement("input");
-                this.shadowInput.setAttribute("class", "form-control");
-                this.shadowInput.setAttribute("value", "");
-                this.shadowInput.setAttribute("readonly", "true");
-
-                this.expansibleInput = document.getElementById("expansible-form");
-                this.expansibleInput.style.position = "fixed";
-				this.expansibleInput.style.zIndex = "1000";
-                this.expansibleInput.style.width = "14%";
-				this.expansibleInput.style.backgroundColor = "#f5ee4c";
-                this.expansibleContainer = this.expansibleInput.parentNode;
-                this.expansibleContainer.appendChild(this.shadowInput);
-            }
-        },
-        inputContract() {
-            this.mouseOverFlag = false; 
-            if (this.shadowInput && this.expansibleContainer) {
-                this.expansibleContainer.removeChild(this.shadowInput);
-                this.shadowInput = null;
-                this.expansibleInput.style.position = "static";
-                this.expansibleInput.style.width = "100%";
-				this.expansibleInput.style.backgroundColor = "white";
-            }
-        }
-	},
-	props: ['person', 'requestedAt', 'expirationDate', 'message', 'itemName', 'itemTagging', 'quantity', 'itemQuantity', 'itemType']
+	props: ['person', 'requestedAt', 'expirationDate', 'message', 'itemName', 'itemTagging', 'quantity', 'itemQuantity', 'itemType', 'itemKey']
 }
 </script>
 
 
 <style scoped>
+.cards-grid{
+	width:calc(104%*0.99);
+}
+.cards-row{
+	margin-right: -20px; 
+	margin-left: -20px;
+}
 .resquest-time{
-	margin-left: 25%; 
 	margin-top: 3px;
 	opacity: 80%;
 }
@@ -132,6 +109,35 @@ export default {
 	width: 24%;
 	font-size: 17px;
 	white-space: nowrap;
+}
+@media screen and (max-width: 1250px){
+	.form-label{
+		font-size: 13.3px;
+	}
+}
+
+@media screen and (max-width: 1050px){
+	.cards-grid{
+		width:calc(104%*0.93);
+	}
+}
+@media screen and (max-width: 990px){
+	.cards-grid{
+		width: 102%;
+	}
+	.cards-row{
+		margin-right: -24px; 
+		margin-left: -24px;
+	}
+}
+@media screen and (max-width: 822px){
+	.cards-grid{
+		width: calc(99%*0.98);
+	}
+	.cards-row{
+		margin-right: -20px; 
+		margin-left: -20px;
+	}
 }
 </style>
 

@@ -110,6 +110,7 @@ export default {
     padding-top: 20px;
     overflow-x: hidden;
     transition: width 0.6s ease-in-out;
+    border-right: 1px ridge #D9D9D9;
 }
 .offcanvas-body{
     bottom: 0;

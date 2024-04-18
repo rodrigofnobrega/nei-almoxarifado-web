@@ -1,7 +1,7 @@
 <template>
     <ModalItemDetails v-if="filteredItemsSize > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
     <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
-    <div class="row d-block">
+    <div class="row teste d-block">
         <TablesTable>
             <template v-slot:title>Almoxarifado Escolar</template>
             <template v-slot:search>
@@ -132,6 +132,9 @@ const showHistory = (index) => {
 </script>
 
 <style scoped>
+.teste{
+    width: 88.5vw;
+}
 .container{
     margin-left: 0px; 
     padding: 0px;

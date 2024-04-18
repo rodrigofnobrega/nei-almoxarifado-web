@@ -1,6 +1,6 @@
 <template>
     <div class="dropdown">
-        <button @focusin="colorFocus" @focusout="colorUnfocus" class="action-btn d-flex btn btn-light text-dark-emphasis border-0" data-bs-toggle="dropdown" data-bs-offset="0,2" data-bs-auto-close="outsite" aria-expanded="false">
+        <button @focusin="colorFocus" @focusout="colorUnfocus" class="action-btn d-flex btn btn-outline-ligth text-dark-emphasis border-0" data-bs-toggle="dropdown" data-bs-offset="0,2" data-bs-auto-close="outsite" aria-expanded="false">
             Ferramentas
             <IconsSettings class="mx-1" width="1.5em" height="1.5em"/>
         </button>
@@ -47,7 +47,7 @@ const updateEditMode = () => {
     border: 1px solid rgb(0, 0, 0, 0.5);
 }
 
-.btn-light:hover{
+.btn-outline-ligth:hover{
     color: white !important; 
     background-color: #0B3B69 !important; 
 }
