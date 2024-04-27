@@ -1,0 +1,168 @@
+[
+  {
+    "name": "Cartolina Amarela",
+    "sipac": "nenhum",
+    "type": "Unidade",
+    "qtd": 5,
+    "history": [
+      "03/03/2023 13:30:00 - Adicionado",
+      "03/03/2023 14:32:34 - Consumido"
+    ],
+    "storage": "almoxarifado-escolar",
+    "id": 0
+  },
+  {
+    "name": "Lapiseira",
+    "sipac": "2342342354",
+    "type": "Caixa",
+    "qtd": 7,
+    "history": [
+      "03/03/2023 14:32:34 - Consumido"
+    ],
+    "storage": "almoxarifado-escolar",
+    "id": 1
+  },
+  {
+    "name": "Folha em Branco A4",
+    "sipac": "4442342354",
+    "type": "Sacola",
+    "qtd": 30,
+    "history": [
+      "03/03/2023 12:01:23 - Consumido"
+    ],
+    "storage": "almoxarifado-escolar",
+    "id": 2
+  },
+  {
+    "name": "Sabão em pó",
+    "sipac": "5442342354",
+    "type": "Unidade",
+    "qtd": 12,
+    "history": [
+      "03/03/2023 11:23:30 - Excluido"
+    ],
+    "storage": "almoxarifado-escolar",
+    "id": 3
+  },
+  {
+    "name": "Esponja",
+    "sipac": "6442342354",
+    "type": "Sacola",
+    "qtd": 3,
+    "history": [
+      "03/04/2023 16:00:00 - Excluido"
+    ],
+    "storage": "almoxarifado-escolar",
+    "id": 4
+  },
+  {
+    "name": "Vassoura",
+    "sipac": "nenhum",
+    "type": "Unidade",
+    "qtd": 5,
+    "history": [
+      "03/03/2023 13:30:00 - Adicionado"
+    ],
+    "storage": "almoxarifado-funcionarios",
+    "id": 5
+  },
+  {
+    "name": "Cargas de Piloto",
+    "sipac": "132132",
+    "type": "sacola",
+    "qtd": 3,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 6
+  },
+  {
+    "name": "Piloto Vermelho",
+    "sipac": "13213232",
+    "type": "unidade",
+    "qtd": 2,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 7
+  },
+  {
+    "name": "Lenços umedecidos",
+    "sipac": "13213232",
+    "type": "sacola",
+    "qtd": 10,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 8
+  },
+  {
+    "name": "Ligas",
+    "sipac": "13213232",
+    "type": "unidade",
+    "qtd": 5,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 9
+  },
+  {
+    "name": "Giz de ceira",
+    "sipac": "122312",
+    "type": "unidade",
+    "qtd": 3,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 10
+  },
+  {
+    "name": "Lápis coloridos",
+    "sipac": "122312",
+    "type": "unidade",
+    "qtd": 6,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 11
+  },
+  {
+    "name": "Desinfetante",
+    "sipac": "122312",
+    "type": "unidade",
+    "qtd": 12,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 12
+  },
+  {
+    "name": "Flanelas",
+    "sipac": "222312",
+    "type": "unidade",
+    "qtd": 19,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 13
+  },
+  {
+    "name": "Caixas de papelão",
+    "sipac": "442312",
+    "type": "unidade",
+    "qtd": 7,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 14
+  },
+  {
+    "name": "Sacolas plásticas",
+    "sipac": "55442312",
+    "type": "sacola",
+    "qtd": 9,
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 15
+  },
+  {
+    "name": "Itens de limpeza e lubrificação",
+    "sipac": "1221",
+    "type": "unidade",
+    "qtd": "110",
+    "history": "",
+    "storage": "almoxarifado-escolar",
+    "id": 16
+  }
+]

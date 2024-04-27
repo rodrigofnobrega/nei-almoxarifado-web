@@ -15,7 +15,7 @@
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Código Sipac </label>
-						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.sipac"> 
+						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.sipacCode"> 
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Tipo </label>
@@ -23,7 +23,7 @@
 					</div>
                     <div class="mb-3"> 
 						<label class="form-label fw-bold"> Quantidade </label>
-						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.qtd"> 
+						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.quantity"> 
 					</div>	
 				</div>
 				<div class="col-6">
@@ -33,7 +33,7 @@
 					</div>	
 					<div class="mb-4">
                         <label class="form-label fw-bold"> Última atualização </label>
-                        <input readonly id="expansible-form" class="form-control bg-light-emphasis" @mouseover="inputExpand" @mouseleave="inputContract" :value="item_details.history[0]">
+                        <input readonly id="expansible-form" class="form-control bg-light-emphasis" @mouseover="inputExpand" @mouseleave="inputContract" :value="'[]'">
                     </div>
 					<div class="mb-3"> 
 						<label class="form fw-bold"> Data de Registro </label>
@@ -115,7 +115,7 @@ export default {
             }
         },
         fetchNewData(){
-            this.store.updateItemQtd(this.item_index, this.inputs[3].value, this.item_route);
+            this.store.updateItemQtd(this.item_index, this.inputs[0].value, this.inputs[1].value,this.item_route);
             this.revertEdition();
         }
     },

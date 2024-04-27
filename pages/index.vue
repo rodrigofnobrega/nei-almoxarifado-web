@@ -1,10 +1,6 @@
 <template>
 <div class="container d-block" style="margin-left: 0px;">
     <div class="container d-block" style="margin-left: 0px;">
-        <div class="catalog-header d-flex align-items-center">
-        <h2>Controle de Acesso</h2>
-        </div>
-        <hr>
         <div class="containerf-fluid d-flex justify-content-center aligm-items-center">
         <div class="card me-2 rounded-3" style="width: 34rem;">
           <img src="/almo.png" class="card-img-top" alt="...">
@@ -90,8 +86,24 @@
 </div>
 </template>
 
+<script setup>
+import { inject } from 'vue';
 
+const setpageTitle = inject('setpageTitle');
+
+const sendDataToParent = () => {
+    const data = "Painel Geral";
+    setpageTitle(data);
+};
+sendDataToParent();
+</script>
 <style scoped>
+.page-title{
+	background-color: #F2F2F2;
+	width: 87.6vw;
+	border-bottom: 1px ridge #D9D9D9;
+	margin-bottom: 20px;
+}
 h2{
     font-weight: 300;
     color: rgb(51,51,51, 0.8);

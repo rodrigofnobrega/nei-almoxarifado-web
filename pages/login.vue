@@ -1,5 +1,5 @@
 <template>
-	<div class="container-fluid d-flex  col-1 justify-content-center">
+	<div class="container-fluid login-container d-flex  col-1 justify-content-center">
 		<div class="header">
 			<p class="texto"><strong>Entrar</strong></p>
 		</div>
@@ -19,14 +19,12 @@
 </template>
 
 <script setup lang="ts"> 
-	definePageMeta({
-	    layout: "login",
-		// Houve alteração no layout
+definePageMeta({
+  layout: 'login'
 })
 
-
 import { ref } from 'vue';
-
+	
 const username = ref('');
 const password = ref('');
 
@@ -44,8 +42,9 @@ const submitForm = () => {
 
 </script>
 
-<style>
-.container-fluid {
+<style scoped>
+
+.login-container{
 	width: 325px;
 	flex-direction: column;
 }

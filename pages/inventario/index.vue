@@ -1,13 +1,5 @@
 <template>
 <div class="row d-block" style="margin-left: 0px;">
-    <div class="catalog-header d-flex align-items-center">
-        <h2>Almoxarifados</h2>
-        <div class="actions-buttons d-flex">   
-            <ButtonsFilter />
-            <ButtonsConfigure /> 
-        </div>
-    </div>
-    <hr>
     <div class="container-fluid d-flex justify-content-center aligm-items-center">
         <div class="card me-2 rounded-3" style="width: 34rem;">
           <img src="/almo.png" class="card-img-top" alt="...">
@@ -34,7 +26,25 @@
 </div>
 </template>
 
+<script setup>
+import { inject } from 'vue';
+
+const setpageTitle = inject('setpageTitle');
+
+const sendDataToParent = () => {
+    const data = "Inventário";
+    setpageTitle(data);
+};
+sendDataToParent();
+</script>
+
 <style scoped>
+.page-title{
+	background-color: #F2F2F2;
+	width: 87.6vw;
+	border-bottom: 1px ridge #D9D9D9;
+	margin-bottom: 20px;
+}
 h2{
     font-weight: 300;
     color: rgb(51,51,51, 0.8);
@@ -45,14 +55,14 @@ h2{
 }
 .card{
     padding: 0px;
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.4s ease-in-out;
 }
 .card-img-top{
-    transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.4s ease-in-out;
     opacity: 90%;
 }
 .card-body{
-    transition: background-color 0.4s ease-in-out;
+    transition: background-color 0.2s ease-in-out;
 }
 .card:hover{
     transform: scale(1.04);

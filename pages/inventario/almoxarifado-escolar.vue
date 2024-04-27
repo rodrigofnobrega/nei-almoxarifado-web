@@ -1,31 +1,41 @@
 <template>
     <ModalItemDetails v-if="filteredItemsSize > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
     <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
+    <div style="margin-left: 0.7%;">
+        <div class="d-flex justify-content-between aling-items-center">
+            <span class="d-flex align-items-center table-searchbar">
+            <IconsSearchGlass class="search-glass"/>
+            <input v-model="searchInput" class="searchbar form-control" placeholder="Pesquisar"/>          
+            </span>
+            <div class="d-flex">
+                <ButtonsNewItem />
+			    <ButtonsFilter class="m-0 p-0"/>
+			    <ButtonsConfigure/>
+            </div>
+        </div>
     <div class="row d-block">
         <TablesTable>
-            <template v-slot:title>Almoxarifado Escolar</template>
-            <template v-slot:search>
-                <input v-model="searchInput" class="table-searchbar form-control" placeholder="Pesquisar"/>
-            </template>
             <template v-slot:items>
-            <tr v-if="filteredItemsSize > 0" v-for="item in filteredItems.slice(num, num1)" :key="item.id">
-               <th scope="row"><p>{{ item.name }}</p></th>
-               <th>
-                    <p v-if="item.sipac">{{ item.sipac }}</p>
+            <tr v-if="1 > 0" v-for="item in filteredItems.slice(num, num1)" :key="item.index">
+               <th class="border" scope="row"><p>{{ item.name }}</p></th>
+               <th class="border">
+                    <p v-if="item.sipacCode">{{ item.sipacCode }}</p>
                     <p v-else>nenhum</p>
                </th>
-                <th>
+                <th class="border">
                     <p>{{ item.type }}</p>
                 </th>
+               <th class="border">
+                <p>{{ item.quantity }}</p>
+                </th>
                <th>
-                <p>{{ item.qtd }}</p>
-            </th>
-               <th><p>{{ item.history[0]}}</p></th>
+                <p>[ ]</p>
+               </th>
                <th class="end">
-                    <button class="table-btn btn btn-primary" @click="showDetails(item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                    <button class="table-btn btn btn-primary" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         Detalhes
                     </button>
-                    <button class="table-btn btn btn-primary" @click="showHistory(item.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                    <button class="table-btn btn btn-primary" @click="showHistory(item.index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
                         Histórico
                     </button>
                 </th>
@@ -35,7 +45,7 @@
              </div>
             </template>
         </TablesTable>
-        <nav v-if="filteredItemsSize > 0" aria-label="Page navigation" class="mt-5 d-flex justify-content-center align-items-center">
+        <nav v-if="filteredItemsSize > 0" aria-label="Page navigation" class="mt-0 d-flex justify-content-center align-items-center" style="position: sticky;">
             <ul class="pagination mt-5 justify-content-center">
                 <li class="page-item">
                     <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': num <= 0 && num1 <= 15}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
@@ -49,27 +59,60 @@
             </ul>
         </nav>
     </div>
+</div>
 </template>
 
 <script setup>
 import { useRoute } from 'vue-router';
 import { useStorageStore } from '../../stores/storage';
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
-
+import { ref, computed, onMounted, inject } from 'vue';
+import axios from 'axios';
+import { getItems } from '~/services/items/itemsGET';
 const store = useStorageStore();
 
-const items = computed(() => store.items.map((item, index) => {
-    item.id = index;
-    return {...item}
+/*REFATORAR CÓDIGO*/ 
+const dados = await getItems();
+const sort = async () => {
+    let temp = null;
+    let stop = true;
+    do{
+        stop = true;
+        for(let i = 0; i < dados.length-1; i++){
+            if(dados[i].id > dados[i+1].id){
+                temp = dados[i+1];
+                dados[i+1] = dados[i];
+                dados[i] = temp;
+                stop = false;
+            }
+        }
+    } while(stop == false);
+};
+sort()
+
+store.items = dados;
+
+const setpageTitle = inject('setpageTitle');
+
+const sendDataToParent = () => {
+    const data = "Almoxarifado Escolar";
+    setpageTitle(data);
+};
+sendDataToParent();
+
+
+const items = computed(() => store.items.map((itemProxy, index) => {
+    const item = {...itemProxy}
+    item.index = index;
+    return item
 }));
 const searchInput = ref("");
 
-onMounted(() => {   
+onMounted(async () => {  
     store.deleteMode = false,
     store.editMode = false
 });
 
-const filteredItems = computed(() => items.value.filter(item => item.storage.includes("almoxarifado-escolar") && item.name.includes(searchInput.value)));
+const filteredItems = computed(() => items.value.filter(item => item.name.includes(searchInput.value)));
 const filteredItemsSize = computed(() => filteredItems.value.length);
 
 const itemIndex = ref(0);
@@ -132,6 +175,9 @@ const showHistory = (index) => {
 </script>
 
 <style scoped>
+.search-glass{
+    padding-left: 0px;
+}
 .container{
     margin-left: 0px; 
     padding: 0px;
@@ -151,10 +197,19 @@ p{
 }
 .action-btn{
     margin-right: 10px;
+    border: none;
+    border-radius: 10px 10px 0px 0px;
+    border-bottom: 1px ridge #1F69B1;
 }
 .table-searchbar{
-    margin-left: 190px;
-    width: 240px;
+    border: none;
+    border-radius: 0px;
+    border-bottom: 1px ridge #1F69B1;
+    top: 70px;
+    width: 200px;
+}
+.searchbar{
+    border: none;
 }
 .btn-outline-primary{
     color: rgb(51,51,51, 0.7);

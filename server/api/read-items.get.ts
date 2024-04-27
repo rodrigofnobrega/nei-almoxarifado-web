@@ -3,7 +3,7 @@ import { defineEventHandler } from 'h3';
 
 export default defineEventHandler(async (event) => {
     try{
-        const data = fs.readFileSync('static/db.json', 'utf8');
+        const data = fs.readFileSync('static/data.json', 'utf8');
         return{
             status: '200',
             body: JSON.parse(data)

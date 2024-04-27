@@ -1,6 +1,6 @@
 <template>
     <div class="dropdown">
-        <button @focusin="colorFocus" @focusout="colorUnfocus" class="action-btn d-flex btn btn-light text-dark-emphasis border-0" data-bs-toggle="dropdown" data-bs-offset="0,2" data-bs-auto-close="outsite" aria-expanded="false">
+        <button @focusin="colorFocus" @focusout="colorUnfocus" class="action-btn d-flex btn btn-outline-ligth text-dark-emphasis mx-1 px-2" data-bs-toggle="dropdown" data-bs-offset="0,2" data-bs-auto-close="outsite" aria-expanded="false">
             Filtro
             <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
         </button>
@@ -23,7 +23,13 @@
 
 
 <style scoped>
-.btn-light:hover{
+.action-btn{
+    margin-right: 10px;
+    border: none;
+    border-radius: 10px 10px 0px 0px;
+    border-bottom: 1px ridge #1F69B1;
+}
+.btn-outline-ligth:hover{
     color: white !important; 
     background-color: #0B3B69 !important; 
 }

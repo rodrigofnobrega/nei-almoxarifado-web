@@ -13,6 +13,6 @@ export const sipacHandeling = (sipac:string) => {
     if(sipac == '' || sipac.includes(' ')){
         return 'nenhum';
     }
-    return sipac;
+    return Number(sipac);
 };
 

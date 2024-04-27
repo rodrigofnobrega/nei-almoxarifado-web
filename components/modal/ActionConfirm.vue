@@ -1,5 +1,3 @@
-<script setup> </script>
-
 <template>
 	<Modal id="actionConfirm">
 		<template v-slot:header>
