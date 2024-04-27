@@ -160,8 +160,9 @@
     "name": "Itens de limpeza e lubrificação",
     "sipac": "1221",
     "type": "unidade",
-    "qtd": 10,
+    "qtd": "110",
     "history": "",
-    "storage": "almoxarifado-escolar"
+    "storage": "almoxarifado-escolar",
+    "id": 16
   }
 ]

@@ -27,7 +27,7 @@
     margin-right: 10px;
     border: none;
     border-radius: 10px 10px 0px 0px;
-    border-bottom: 1px ridge #0B3B69;
+    border-bottom: 1px ridge #1F69B1;
 }
 .btn-outline-ligth:hover{
     color: white !important; 

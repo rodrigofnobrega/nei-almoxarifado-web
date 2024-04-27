@@ -16,20 +16,20 @@
     <div class="row d-block">
         <TablesTable>
             <template v-slot:items>
-            <tr v-if="filteredItemsSize > 0" v-for="item in filteredItems.slice(num, num1)" :key="item.id">
+            <tr v-if="1 > 0" v-for="item in filteredItems.slice(num, num1)" :key="item.id">
                <th class="border" scope="row"><p>{{ item.name }}</p></th>
                <th class="border">
-                    <p v-if="item.sipac">{{ item.sipac }}</p>
+                    <p v-if="item.sipac">{{ item.sipacCode }}</p>
                     <p v-else>nenhum</p>
                </th>
                 <th class="border">
                     <p>{{ item.type }}</p>
                 </th>
                <th class="border">
-                <p>{{ item.qtd }}</p>
+                <p>{{ item.quantity }}</p>
                 </th>
                <th>
-                <p>{{ item.history[0]}}</p>
+                <p>[ ]</p>
                </th>
                <th class="end">
                     <button class="table-btn btn btn-primary" @click="showDetails(item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
@@ -65,31 +65,37 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import { useStorageStore } from '../../stores/storage';
-import { ref, computed, onMounted, inject, defineProps } from 'vue';
-
+import { ref, computed, onMounted, inject } from 'vue';
+import axios from 'axios';
+import { getItems } from '~/services/items/itemsGET';
 const store = useStorageStore();
+
+const dados = await getItems();
+
+store.items = dados;
 
 const setpageTitle = inject('setpageTitle');
 
-
 const sendDataToParent = () => {
-    const data = "Almoxarifado Funcionários";
+    const data = "Almoxarifado Escolar";
     setpageTitle(data);
 };
 sendDataToParent();
 
+/*
 const items = computed(() => store.items.map((item, index) => {
-    item.id = index;
     return {...item}
 }));
+*/
+
 const searchInput = ref("");
 
-onMounted(() => {   
+onMounted(async () => {  
     store.deleteMode = false,
     store.editMode = false
 });
 
-const filteredItems = computed(() => items.value.filter(item => item.storage.includes("almoxarifado-funcionarios") && item.name.includes(searchInput.value)));
+const filteredItems = computed(() => dados.filter(item => item.name.includes(searchInput.value)));
 const filteredItemsSize = computed(() => filteredItems.value.length);
 
 const itemIndex = ref(0);

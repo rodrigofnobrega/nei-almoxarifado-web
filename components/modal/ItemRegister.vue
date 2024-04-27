@@ -61,7 +61,7 @@ export default{
             }
         },
         itemRegister(){
-            this.store.addItem({name: this.itemName, sipac: sipacHandeling(this.itemSipac), type: this.itemType, /*Faltando o handler de qtd*/  qtd: this.itemQtd, history: '', storage: this.$route.path.split('/')[2]})
+            this.store.addItem({name: this.itemName, sipacCode: sipacHandeling(this.itemSipac), type: this.itemType.charAt(0).toUpperCase() + this.itemType.slice(1), /*Faltando o handler de qtd*/  quantity: Number(this.itemQtd), history: '', storage: this.$route.path.split('/')[2]})
             this.popup.throwPopup();
         },
         itemRemove(){
