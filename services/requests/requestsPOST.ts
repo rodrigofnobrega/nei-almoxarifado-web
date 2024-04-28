@@ -1,4 +1,6 @@
-const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJpYXQiOjE3MTQwODY5NjAsImV4cCI6MTcxNDEyMjk2MCwicm9sZSI6IkFETUlOIn0.6HJttOrGPGziR1JypsfMhRcTZpQX7kn35cPxeQ2vOzg";
+import axios from 'axios';
+import { useUser } from '../../stores/user';
+const userStore = useUser()
 //Criar solicitação
 export const postRequest = async () => {
     const item_id = 1;
