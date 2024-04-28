@@ -29,7 +29,7 @@ const userStore = useUser()
 const email = ref('');
 const password = ref('');
 
-console.log("funcionando");
+console.log("funcionando normal");
 
 const submitForm = () => {
 	userStore.setData(password.value, email.value)
