@@ -56,7 +56,6 @@ const submitForm = () => {
 	max-width: 300px;
 	height: 65px;
 	border-radius: 15px;
-	opacity: 0px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;
