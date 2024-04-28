@@ -20,7 +20,7 @@
 
 <script setup lang="ts"> 
 definePageMeta({
-  layout: 'login'
+  layout: 'authentication'
 });
 import { ref } from 'vue';
 import { useUser } from '../stores/user.ts'
@@ -28,6 +28,8 @@ import { useUser } from '../stores/user.ts'
 const userStore = useUser()
 const email = ref('');
 const password = ref('');
+
+console.log("funcionando normal");
 
 const submitForm = () => {
 	userStore.setData(password.value, email.value)
@@ -54,7 +56,6 @@ const submitForm = () => {
 	max-width: 300px;
 	height: 65px;
 	border-radius: 15px;
-	opacity: 0px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;
