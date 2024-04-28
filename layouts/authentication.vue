@@ -8,5 +8,7 @@
 </script>
 
 <style scoped>
-
+.block{
+    background-color: red;
+}
 </style>

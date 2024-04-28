@@ -28,6 +28,7 @@ import { useUser } from '../stores/user.ts'
 const userStore = useUser()
 const email = ref('');
 const password = ref('');
+console.log("TESTE")
 
 const submitForm = () => {
 	userStore.setData(password.value, email.value)
