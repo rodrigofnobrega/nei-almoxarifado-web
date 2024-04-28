@@ -20,9 +20,6 @@
 
 <script setup lang="ts"> 
 
-definePageMeta({
-  layout: 'login'
-})
 
 import { ref } from 'vue';
 	

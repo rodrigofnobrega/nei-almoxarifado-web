@@ -7,7 +7,7 @@
 <script>
 </script>
 
-<style>
+<style scoped>
 .block {
     width: 300px;
     height: 400px;

@@ -1,11 +1,12 @@
 import axios from 'axios'
-const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJpYXQiOjE3MTQyNjAwODEsImV4cCI6MTcxNDI5NjA4MSwicm9sZSI6IkFETUlOIn0.bv3X4uGVbdsK7KJQBOjUogn7TCuK62GKxDKlELkHuVM';
+import { useUser } from '../../stores/user';
+const userStore = useUser()
 
 export const getItems = async () => {
     const { data } = await axios.get('http://localhost:8080/api/v1/itens', {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${userStore.token}`
         }
     });
     return data.content
