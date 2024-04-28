@@ -19,7 +19,9 @@
 </template>
 
 <script setup lang="ts"> 
-
+definePageMeta({
+  layout: 'authentication'
+});
 import { ref } from 'vue';
 import { useUser } from '../stores/user.ts'
 
