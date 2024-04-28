@@ -12,7 +12,6 @@
     width: 300px;
     height: 400px;
     border: 1px 0px 0px 0px;
-    opacity: 0px;
     margin: 100px auto;
     justify-content: center;         
     display: flex;  
