@@ -1,8 +1,6 @@
 import axios from 'axios'
-import { useUser } from '../../stores/user';
-const userStore = useUser()
 
-export const getItems = async () => {
+export const getItems = async (userStore) => {
     const { data } = await axios.get('http://localhost:8080/api/v1/itens', {
         headers: {
             'Content-Type': 'application/json',

@@ -23,16 +23,17 @@
                   Configurações
                   <IconsSettings />
                 </a></li>  
-                <li><a class="exit-options dropdown-item d-flex align-items-center justify-content-between" href="/login">
+                <li><button @click="logout()" class="exit-options dropdown-item d-flex align-items-center justify-content-between">
                   Sair
                   <IconsExit />
-                </a></li>
+                </button></li>
               </ul>
             </div>
         </div>
 </template>
 
 <script>
+import { useUser } from '../../stores/user';
 export default{
     data(){
         return{
@@ -44,8 +45,18 @@ export default{
     methods:{
         rotate(){
             this.isRoted = !this.isRoted;
+        },
+        logout(){
+          this.userStore.logout()
         }
     },
+    setup() {
+      const userStore = useUser();
+      return {
+        userStore
+      }
+      
+    }
 }
 </script>
 

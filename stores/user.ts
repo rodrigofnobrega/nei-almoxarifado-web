@@ -5,23 +5,15 @@ import { navigateTo, useRouter } from "nuxt/app";
 
 export const useUser = defineStore('user', {
     state: () => ({
-        password: '',
-        email: '',
         token: ''
     }),
     actions: {
-        setData(password, email){
-            this.password = password;
-            this.email = email;
-            this.fetchData();
-        },
-        async fetchData(){
+        async fetchData(password, email){
             try{
                 const router = useRouter();
-                const res = await authPost(this.password, this.email);
+                const res = await authPost(password, email);
                 this.token = res.token;
                 localStorage.setItem('session', JSON.stringify(res.token))
-                console.log(localStorage.getItem('session'));
                 navigateTo('/');
             } catch(err) { 
                 console.log(err)
@@ -29,8 +21,14 @@ export const useUser = defineStore('user', {
         },
         logout(){
             this.token = '';
-            localStorage.removeItem('token');
+            localStorage.removeItem('session');
             navigateTo('/login')
         }
+    },
+    persist: {
+        storage: persistedState.cookiesWithOptions({
+          sameSite: 'strict',
+          Secure: true
+        }),
     },
 });

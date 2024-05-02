@@ -1,6 +1,4 @@
 import axios from 'axios'
-import { useUser } from '../../stores/user';
-const userStore = useUser()
 //Atualiza um item
 export const putUpdateItem = async (item_id, item_name, item_sipac) => {
     console.log(item_id, item_name, item_sipac)
