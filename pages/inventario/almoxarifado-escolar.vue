@@ -66,12 +66,14 @@
 import { useRoute } from 'vue-router';
 import { useStorageStore } from '../../stores/storage';
 import { ref, computed, onMounted, inject } from 'vue';
-import axios from 'axios';
-import { getItems } from '~/services/items/itemsGET';
-const store = useStorageStore();
+import { getItems } from '../../services/items/itemsGET';
 
+import { useUser } from '../../stores/user.ts'
+
+const userStore = useUser()
+const store = useStorageStore();
 /*REFATORAR CÓDIGO*/ 
-const dados = await getItems();
+const dados = await getItems(userStore);
 const sort = async () => {
     let temp = null;
     let stop = true;
@@ -106,8 +108,8 @@ const items = computed(() => store.items.map((itemProxy, index) => {
     return item
 }));
 const searchInput = ref("");
-
-onMounted(async () => {  
+    
+onMounted(async () => {     
     store.deleteMode = false,
     store.editMode = false
 });
