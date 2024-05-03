@@ -22,8 +22,9 @@
 definePageMeta({
   layout: 'authentication'
 });
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useUser } from '../stores/user.ts'
+import axios from 'axios';
 
 const userStore = useUser()
 const email = ref('');
@@ -32,6 +33,16 @@ const password = ref('');
 const submitForm = () => {
 	userStore.fetchData(password.value, email.value)
 }
+
+onMounted( async () => {
+	const res = await axios.get("http://18.230.148.248:8080/api/v1/itens", {
+		headers: {
+			'Content-Type': 'application/json',
+			'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbG1veGFyaWZhZG85NTdAZ21haWwuY29tIiwiaWF0IjoxNzE0NzI5NjkzLCJleHAiOjE3MTQ3NjU2OTMsInJvbGUiOiJBRE1JTiJ9.znNr_e63meGq2AnGQxRyQNPVSCgV5sX9b1jiWMnKZWo`
+		}
+	})
+	console.log(res)
+})
 </script>
 
 <style scoped>
