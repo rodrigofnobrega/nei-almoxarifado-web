@@ -5,10 +5,12 @@ import { navigateTo, useRouter } from "nuxt/app";
 
 export const useUser = defineStore('user', {
     state: () => ({
-        token: ''
+        token: '',
+        email: ''
     }),
     actions: {
         async fetchData(password, email){
+            this.email = email
             try{
                 const router = useRouter();
                 const res = await authPost(password, email);

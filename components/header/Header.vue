@@ -6,8 +6,8 @@
       </div> 
       <div class="d-flex justify-content-end align-items-center">
         <SearchBar />
+        <!--<ThemeSwitch />-->
         <ModalSearch />
-        <ThemeSwitch />
         <Profile />
       </div>     
     </div>

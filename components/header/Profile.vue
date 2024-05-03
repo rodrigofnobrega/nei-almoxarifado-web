@@ -32,32 +32,26 @@
         </div>
 </template>
 
-<script>
+<script setup>
 import { useUser } from '../../stores/user';
-export default{
-    data(){
-        return{
-            isRoted: false,
-            user: 
-              {username:"Ferreira", name: "Ferreira Rodrigo de Silva"},
-        }
-    },
-    methods:{
-        rotate(){
-            this.isRoted = !this.isRoted;
-        },
-        logout(){
-          this.userStore.logout()
-        }
-    },
-    setup() {
-      const userStore = useUser();
-      return {
-        userStore
-      }
-      
-    }
+import { getUserByEmail } from '../../services/users/userGET';
+
+const userStore = useUser();
+const isRoted = ref(false);
+const user = ref({username: '', name: ''});
+getUsername()
+function rotate(){
+  isRoted.value = !isRoted.value;
 }
+function logout(){
+  userStore.logout()
+}
+async function getUsername(){
+  const res = await getUserByEmail(userStore, userStore.email);
+  console.log(user.value.username)
+  user.value.username = res.name;
+}
+
 </script>
 
 <style scoped>

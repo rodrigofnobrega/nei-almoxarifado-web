@@ -1,11 +1,11 @@
 <template>
     <Modal id="itemDetailing" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
-            <h5 class="header-title d-flex justify-content-start align-items-center">Detalhes do Item</h5>
-            <button class="btn btn-transparent border-0 text-light" type="button" data-bs-dismiss="modal">
-                <IconsClose class="close mt-1 ms-5 s-5" width="1.7em" height="1.7em"/>
+            <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Cadastro de Item</h6>
+            <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
+                <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
             </button>
-        </template>
+        </template> 
         <template v-slot:body>
             <div v-if="item_details" class="row">
 				<div class="col-6">
@@ -48,10 +48,10 @@
         </template>
         <template v-slot:footer>
             <div class="container-fluid d-flex justify-content-center align-items-center">
-                <button class="btn mode-btn btn-dark-alert mx-2" :class="{'d-none': editionActive, 'd-block': !editionActive}" @click="deleteItem" id="itemDelete" data-bs-dismiss="modal">Excluir</button>
-                <button type="button" class="btn btn-light-alert text-light mx-3" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="revertEdition" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn mode-btn btn-primary mx-2" @click="setEdition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>
-                <button class="btn btn-light-success text-light mx-3" id="fetch-inputs" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="fetchNewData" data-bs-dismiss="modal">Confirmar</button>
+                <button class="btn mode-btn inset-shadow btn-dark-alert mx-1" :class="{'d-none': editionActive, 'd-block': !editionActive}" @click="deleteItem" id="itemDelete" data-bs-dismiss="modal">Excluir</button>
+                <button type="button" class="btn inset-shadow btn-light-alert text-light mx-1" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="revertEdition" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn inset-shadow mode-btn btn-primary mx-1" @click="setEdition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>
+                <button class="btn inset-shadow btn-light-success text-light mx-1" id="fetch-inputs" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="fetchNewData" data-bs-dismiss="modal">Confirmar</button>
             </div>
         </template> 
     </Modal>
@@ -140,6 +140,10 @@ export default {
 </script>
 
 <style scoped>
+.inset-shadow{
+    padding: 6px 10px 6px 10px;
+    box-shadow: inset 1px 1px 15px 1px rgb(0, 0, 0, 0.2);
+}
 .modal-header{
     background-color: red;
 }

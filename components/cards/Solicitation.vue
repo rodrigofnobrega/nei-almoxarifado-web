@@ -1,11 +1,11 @@
 <template>
 	<Card class="mb-5 cards-grid">
 		<template v-slot:header>
-			<div class="d-flex justify-content-between">
-    		    <h5 class="justify-content-start">
+			<div class="d-flex justify-content-between align-items-center">
+    		    <h6 class="justify-content-start mb-3">
     		        Solicitação
-    		    </h5>
-    		    <p class="fs-6 resquest-time">20/05/24 14:00<IconsClock class="mb-1 ms-2"/></p>
+    		    </h6>
+    		    <p class="resquest-time mb-3">20/05/24 14:00<IconsClock class="clock ms-2"/></p>
     		</div>
 		</template>
 		<template v-slot:default> 
@@ -119,14 +119,18 @@ export default {
 <style scoped>
 .cards-grid{
 	width:calc(104%*0.99);
+    border: 1px #c0c0c2 solid !important;
 }
 .cards-row{
 	margin-right: -20px; 
 	margin-left: -20px;
 }
 .resquest-time{
-	margin-top: 3px;
+	font-size: 15px;
 	opacity: 80%;
+}
+.clock{
+	margin-bottom: 2px;
 }
 .form-label{
 	white-space: nowrap;

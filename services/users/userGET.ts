@@ -1,15 +1,14 @@
-const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJpYXQiOjE3MTQwODY5NjAsImV4cCI6MTcxNDEyMjk2MCwicm9sZSI6IkFETUlOIn0.6HJttOrGPGziR1JypsfMhRcTZpQX7kn35cPxeQ2vOzg";
+import axios from "axios";
 //Lista todos os usuários
-export const getUsers = async () => {
-    const { data } = await useFetch('http://localhost:8080/api/v1/users', {
-        method: 'GET',
+export const getUsers = async (userStore, userEmail) => {
+    const { data } = await axios.get(`http://localhost:8080/api/v1/users/query?email=${userEmail}`, {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${userStore.token}`
             }
         }
     )
-    return data._rawValue.content
+    return data
 };
 //Listar pelo ID
 export const getUserId = async () => {
@@ -24,16 +23,15 @@ export const getUserId = async () => {
     return data._rawValue
 };
 //Listar pelo email
-export const getUserEmail = async () => {
-    const email = "admin@email.com"
-    const { data } = await useFetch(`http://localhost:8080/api/v1/users/query?email=${email}`, {
-        method: 'GET',
-        header: {
+export const getUserByEmail = async (userStore, userEmail) => {
+    const { data } = await axios.get(`http://18.230.148.248:8080/api/v1/users/query?email=${userEmail}`, {
+        headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${userStore.token}`
+            }
         }
-    })
-    return data._rawValue
+    )
+    return data
 };
 
 //TO-DO
