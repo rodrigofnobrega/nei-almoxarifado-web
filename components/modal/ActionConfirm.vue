@@ -17,6 +17,11 @@
 	</Modal>
 </template>
 
+<script setup>
+
+
+</script>
+
 <style scoped>
 .close-btn{
 	padding: 0;

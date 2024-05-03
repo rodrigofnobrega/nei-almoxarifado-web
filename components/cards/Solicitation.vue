@@ -17,7 +17,7 @@
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-semibold"> Quantidade Solicitada </label>
-						<input readonly class="form-control" :value="quantity">
+						<input readonly class="form-control" :value="quantityRequested">
 					</div>		
 					<div class="mb-3"> 
 						<label class="form-label fw-semibold"> Quantidade Disponível </label>
@@ -33,7 +33,7 @@
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-semibold"> Código Sipac </label>
-						<input readonly class="form-control" :value="itemTagging"> 
+						<input readonly class="form-control" :value="itemTag"> 
 					</div>	
 					<div class="mb-0"> 
 						<label class="form-label fw-semibold"> Tipo </label>
@@ -62,7 +62,7 @@
 			<textarea class="form-control"> </textarea>
 		 </template>
 		<template v-slot:buttons> 
-			<button class="btn btn-secondary mx-2"> Enviar </button>
+			<button @click="AcceptRequest(requestId)" class="btn btn-secondary mx-2"> Enviar </button>
 		</template>
 	 </ModalActionConfirm>
 	<ModalActionConfirm id="rejectModal">
@@ -72,17 +72,47 @@
 			<textarea class="form-control"> </textarea>
 		 </template>
 		<template v-slot:buttons> 
-			<button class="btn btn-secondary mx-2"> Enviar </button>
+			<button @click="RejectRequest(requestId)" class="btn btn-secondary mx-2"> Enviar </button>
 		</template>
 	 </ModalActionConfirm>
 </template>
 
-<script>
-import Card from './Card.vue'
+<script lang="ts">
+import Card from './Card.vue';
+import { useUser } from '../../stores/user.ts';
+import { requestAccept, requestDecline } from '../../services/requests/requestsPATCH.ts';
+
 export default {
 	components: { Card },
-	props: ['person', 'requestedAt', 'expirationDate', 'message', 'itemName', 'itemTagging', 'quantity', 'itemQuantity', 'itemType', 'itemKey']
-}
+	props: {
+		requestId: { type: Number, required: true, },
+		person: { type: String, required: true },
+		requestedAt: { type: String, required: true }, 
+		message: { type: String, required: true }, 
+		itemName: { type: String, required: true },
+		itemTag: { type: Number },
+		itemQuantity: {type: Number, required: true },
+		quantityRequested: { type: Number, required: true },
+		itemType: { type: String, required: true },
+	},
+	methods:{
+		async AcceptRequest(requestId:Number){
+			const res = await requestAccept(this.userStore, requestId);
+			console.log(res);
+		},
+		async RejectRequest(requestId:Number){
+			const res = await requestDecline(this.userStore, requestId);
+			console.log(res);
+		}
+	},
+	setup(){
+		const userStore = useUser();
+		return {
+			userStore
+		}
+	}
+};
+
 </script>
 
 

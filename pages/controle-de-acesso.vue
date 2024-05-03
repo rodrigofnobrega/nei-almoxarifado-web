@@ -2,25 +2,32 @@
     <div class="container d-flex content">
 		<!-- TODO: transformar em tabela com linhas !-->
 		<div class="row">
-			<div v-for="req in requests" class="col-xl-4 px-xl-3 col-lg-6 px-lg-3 col-md-6 px-md-3 col-sm-12 col-xs-12 mb-3 mb-xl-0"> 
+			<div v-if="solicitations.length > 0" v-for="req in solicitations" class="col-xl-4 px-xl-3 col-lg-6 px-lg-3 col-md-6 px-md-3 col-sm-12 col-xs-12 mb-3 mb-xl-0"> 
 				<CardsSolicitation 
-					:person="req.person"
-					:requestedAt="req.requestedAt"	
-					:message="req.message"
-					:itemName="req.item"	
-					:itemTagging="req.itemTagging"
-					:quantity="req.quantity"
-					:itemQuantity="req.itemQuantity"
-					:itemType="req.itemType"
+					:person="req.user.name"
+					:requestedAt="req.creationDate"	
+					:message="req.description"
+					:itemName="req.item.name"	
+					:itemTag="req.item.sipacCode"
+					:quantityRequested="req.quantityRequested"
+					:itemQuantity="req.item.quantity"
+					:itemType="req.item.type"
+					:requestId="req.id"
 					> 
 				</CardsSolicitation>
 			</div>
+			<div v-else class="warning-text teste d-flex aling-items-center justify-content-center">
+                 <p class="text-dark-emphasis fs-5 opacity-50">Nenhuma solicitação feita.</p>
+             </div>
 		</div>
     </div>
 </template>
 
 <script setup lang="ts"> 
 import { inject } from 'vue';
+import { getRequestByStatus } from '../services/requests/requestsGET';
+import { useUser } from '../stores/user';
+import { onMounted, ref } from 'vue';
 
 const setpageTitle = inject('setpageTitle');
 
@@ -29,72 +36,17 @@ const sendDataToParent = () => {
     setpageTitle(data);
 };
 sendDataToParent();
-	const requests = [
-	{ 
-		requestedAt: new Date(Date.now()).toLocaleDateString(),
-		message: "Solicito o item para a sala A308",
-		quantity: 1,
-		person: 'Gabriel',
-		item: 'Monitor Multilaser',
-		itemTagging: 2029103923,
-		itemQuantity: 2,
-		itemType: 'unidade'
-	 }, 
-	{
-		requestedAt: new Date(Date.now()).toLocaleDateString(),
-		message: "Solicito o item para a sala B204",
-		quantity: 15,
-		person: "Clezio",
-		item: "Copo descartável",
-		itemTagging: 20191029301, 
-		itemQuantity: 200,
-		itemType: 'unidade'
-	},
-	{
-		requestedAt: new Date(Date.now()).toLocaleDateString(),
-		message: "Solicito o item para a sala B204",
-		quantity: 15,
-		person: "Clezio",
-		item: "Copo descartável",
-		itemTagging: 20191029301, 
-		itemQuantity: 200,
-		itemType: 'unidade'
-	},
-	{
-		requestedAt: new Date(Date.now()).toLocaleDateString(),
-		message: "Solicito o item para a sala B204",
-		quantity: 15,
-		person: "Clezio",
-		item: "Copo descartável",
-		itemTagging: 20191029301, 
-		itemQuantity: 200,
-		itemType: 'unidade'
-	},
-	{
-		requestedAt: new Date(Date.now()).toLocaleDateString(),
-		message: "Solicito o item para a sala B204",
-		quantity: 15,
-		person: "Clezio",
-		item: "Copo descartável",
-		itemTagging: 20191029301, 
-		itemQuantity: 200,
-		itemType: 'unidade'
-	},
-	{
-		requestedAt: new Date(Date.now()).toLocaleDateString(),
-		message: "Solicito o item para a sala B204",
-		quantity: 15,
-		person: "Clezio",
-		item: "Copo descartável",
-		itemTagging: 20191029301, 
-		itemQuantity: 200,
-		itemType: 'unidade'
-	},
-	];
+const userStore = useUser()
 
+const solicitations = ref(await getRequestByStatus(userStore, 'pendente'))
 </script>
 
 <style scoped>
+.teste{
+	position: absolute;
+	margin-top: 5%;
+	margin-left: -10%;
+}
 .content {
 	margin-left: 3vh;
 	margin-right: 3vh;

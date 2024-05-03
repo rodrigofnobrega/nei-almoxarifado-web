@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { postCreateItem } from "../services/items/itemsPOST";
 import { putUpdateItem } from "../services/items/itemsPUT";
+import { useUser } from './user.ts';
 
 export const useStorageStore = defineStore('storage', {
     state: () => ({
@@ -18,20 +19,21 @@ export const useStorageStore = defineStore('storage', {
         this.sendItemsToServer(item);
       },
       async sendItemsToServer(item) {
+        const userStore = useUser();
         if(item){
           try{
-            const res = await postCreateItem(item.name, item.sipacCode, item.quantity, item.type);
+            const res = await postCreateItem(userStore, item.name, item.sipacCode, item.quantity, item.type);
           }catch(error){
             console.log(error);
           }
         }
       },
       async updateItems(items, item_id, item_name, item_sipac){
-        console.log(item_id, item_name, item_sipac)
         localStorage.setItem('items', JSON.stringify(items));
         if(item_id){
           try{
-            const res = await putUpdateItem(item_id, item_name, item_sipac);
+            const userStore = useUser();
+            const res = await putUpdateItem(userStore, item_id, item_name, item_sipac);
           }catch(error){
             console.log(error);
           }
