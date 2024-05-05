@@ -29,6 +29,12 @@ const userStore = useUser()
 const email = ref('');
 const password = ref('');
 
+if(process.server){
+	console.log(`Cliente: ${userStore.token}, ${userStore.email}`)
+}
+if(process.client){
+	console.log(`Servidor: ${userStore.token}, ${userStore.email}`)
+}
 const submitForm = () => {
 	userStore.fetchData(password.value, email.value)
 }
