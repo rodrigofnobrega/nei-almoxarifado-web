@@ -12,11 +12,12 @@ export default defineNuxtRouteMiddleware((to, from) => {
         if (to.path === '/login') {
             return;
         }
-    }
-    if (to.path === '/login') {
-        return;
+        return navigateTo('/login');
     }
     if(process.server && userStore.token == ''){
+        if (to.path === '/login') {
+            return;
+        }
         return navigateTo('/login')
     }
 });   
