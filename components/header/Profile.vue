@@ -47,8 +47,7 @@ function logout(){
   userStore.logout()
 }
 async function getUsername(){
-  const res = await getUserByEmail(userStore, userStore.email);
-  console.log(user.value.username)
+  const res = await getUserByEmail(userStore, userStore.email); 
   user.value.username = res.name;
 }
 

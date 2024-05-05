@@ -1,7 +1,7 @@
 import axios from 'axios'
 //Cadastra um item
 export const postCreateItem = async (userStore ,name, sipac, qtd, type) => {
-    const { data } = await axios.post('http://18.230.148.248:8080/api/v1/itens', {
+    const { data } = await axios.post('https://neialmoxarifadoapi.ddns.net:8080/api/v1/itens', {
         'name': name,
         'sipacCode': sipac,
         'quantity': qtd,
