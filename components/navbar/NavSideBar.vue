@@ -1,60 +1,60 @@
 <template>
-    <div class="nav bg-light-emphasis d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-        <div class="offcanvas-body ps-3" >
-                <ul class="list-group-flush container d-block" :class="{ 'collapsed': isCollapsed }">
-                    <a class="text-decoration-none" href="/" aria-current="true">
-                        <div class="item-bg item-top" :class="{'active': $route.path === '/', 'text-dark-emphasis': $route.path !== '/'}">
-                            <IconsHome class="nav-icon"/>
-                            <span class="list-group-item">Início</span>
-                        </div>
-                    </a>
-                    <a class="text-decoration-none" href="/controle-de-acesso" aria-current="true">
-                        <div class="item-bg" :class="{'active': $route.path === '/controle-de-acesso', 'text-dark-emphasis': $route.path !== '/controle-de-acesso' }">
-                            <IconsControl class="nav-icon"/>
-                            <span class="list-group-item">Controle de Acesso</span>
-                        </div>
-                    </a>
-                    <div class="item-bg" :class="{'active': $route.path === '/inventario', 'text-dark-emphasis': $route.path !== '/inventario'}">
-                        <IconsSpreadSheet class="nav-icon"/>
-                        <a class="text-decoration-none text-light" :class="{'text-dark-emphasis': $route.path !== '/inventario'}"  href="/inventario" aria-current="true">
-                            <span class="list-group-item">Catálogo</span>
-                        </a>
-                        <button class="svg-button" @click="rotate">
-                            <IconsDownArrow class="small-rotate-arrow" :style="{ transform: isRotated ? 'rotate(180deg)' : 'rotate(0deg)'}" :class="{'text-dark-emphasis': $route.path !== '/inventario'}" width="24px" height="24px"/>
-                        </button>
+    <div class="nav bg-light-emphasis teste d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-body ps-0" >
+            <ul class="list-group-flush container d-block" :class="{ 'collapsed': isCollapsed }">
+                <a class="text-decoration-none" href="/" aria-current="true">
+                    <div class="item-bg item-top" :class="{'active': $route.path === '/', 'text-dark-emphasis': $route.path !== '/'}">
+                        <IconsHome class="nav-icon"/>
+                        <span class="list-group-item">Início</span>
                     </div>
-                    <div :class="{'hidden': !isRotated}">
-                        <a class="text-decoration-none" v-for="sublink in dropdwonRoutes" :href="sublink.path" aria-current="true">
-                            <div class="item-bg" :class="{'active': $route.path === sublink.path, 'text-dark-emphasis': $route.path !== sublink.path }">
-                                <span class="list-group-item">{{sublink.name}}</span>
-                            </div>
-                        </a>
+                </a>
+                <a class="text-decoration-none" href="/controle-de-acesso" aria-current="true">
+                    <div class="item-bg" :class="{'active': $route.path === '/controle-de-acesso', 'text-dark-emphasis': $route.path !== '/controle-de-acesso' }">
+                        <IconsControl class="nav-icon"/>
+                        <span class="list-group-item">Controle de Acesso</span>
                     </div>
-                    <a class="text-decoration-none" href="/registro" aria-current="true">
-                        <div class="item-bg" :class="{'active': $route.path === '/registro', 'text-dark-emphasis': $route.path !== '/registro'}">
-                            <IconsDirectory class="nav-icon"/>
-                            <span class="list-group-item">Registro</span>
+                </a>
+                <div class="item-bg" :class="{'active': $route.path === '/inventario', 'text-dark-emphasis': $route.path !== '/inventario'}">
+                    <IconsSpreadSheet class="nav-icon"/>
+                    <a class="text-decoration-none text-light" :class="{'text-dark-emphasis': $route.path !== '/inventario'}"  href="/inventario" aria-current="true">
+                        <span class="list-group-item">Catálogo</span>
+                    </a>
+                    <button class="svg-button" @click="rotate">
+                        <IconsDownArrow class="small-rotate-arrow" :style="{ transform: isRotated ? 'rotate(180deg)' : 'rotate(0deg)'}" :class="{'text-dark-emphasis': $route.path !== '/inventario'}" width="24px" height="24px"/>
+                    </button>
+                </div>
+                <div :class="{'hidden': !isRotated}">
+                    <a class="text-decoration-none" v-for="sublink in dropdwonRoutes" :href="sublink.path" aria-current="true">
+                        <div class="item-bg" :class="{'active': $route.path === sublink.path, 'text-dark-emphasis': $route.path !== sublink.path }">
+                            <span class="list-group-item">{{sublink.name}}</span>
                         </div>
                     </a>
-                    <a class="text-decoration-none" href="/configuracoes" aria-current="true">
-                        <div class="item-bg" :class="{'active': $route.path === '/configuracoes', 'text-dark-emphasis': $route.path !== '/configuracoes'}">
-                            <IconsSettings class="nav-icon"/>
-                            <span class="list-group-item">Configurações</span>
-                        </div>
-                    </a>
-                    <a class="text-decoration-none" href="/sobre" aria-current="true">
-                        <div class="item-bg text-start" :class="{'active': $route.path === '/sobre', 'text-dark-emphasis': $route.path !== '/sobre'}">
-                            <IconsInformation class="nav-icon"/>
-                            <span class="d-inline-block list-group-item">Sobre</span>
-                        </div>
-                    </a>
-                </ul>
-            </div>
+                </div>
+                <a class="text-decoration-none" href="/registro" aria-current="true">
+                    <div class="item-bg" :class="{'active': $route.path === '/registro', 'text-dark-emphasis': $route.path !== '/registro'}">
+                        <IconsDirectory class="nav-icon"/>
+                        <span class="list-group-item">Registro</span>
+                    </div>
+                </a>
+                <a class="text-decoration-none" href="/configuracoes" aria-current="true">
+                    <div class="item-bg" :class="{'active': $route.path === '/configuracoes', 'text-dark-emphasis': $route.path !== '/configuracoes'}">
+                        <IconsSettings class="nav-icon"/>
+                        <span class="list-group-item">Configurações</span>
+                    </div>
+                </a>
+                <a class="text-decoration-none" href="/sobre" aria-current="true">
+                    <div class="item-bg text-start" :class="{'active': $route.path === '/sobre', 'text-dark-emphasis': $route.path !== '/sobre'}">
+                        <IconsInformation class="nav-icon"/>
+                        <span class="d-inline-block list-group-item">Sobre</span>
+                    </div>
+                </a>
+            </ul>
             <div class="offcanvas-footer d-block" :class="{ 'collapsed': isCollapsed }">
                 <button class="colapse-btn d-flex align-items-center justify-content-center btn bg-gray-light text-dark" @click="sidebarColapse" type="button" id="sideBareColapse" >
                     <IconsCloseArrow :style="{ transform: isCollapsed ? 'rotate(180deg)' : 'rotate(0)' }" class="rotate-arrow"/>
                 </button>
             </div>
+        </div>
     </div>
 </template>
     
@@ -116,7 +116,11 @@ export default {
     bottom: 0;
     margin-right: 0px;
     padding-right: 0px;
-    margin-bottom: -200px;  
+}
+.offcanvas-footer{
+    position: absolute;
+    z-index: 1000;
+    bottom: 0px;
 }
 .svg-button{
     border: none;
@@ -125,10 +129,17 @@ export default {
     background: none;
 }
 .nav{   
-    margin: 0;
+    margin: 0px;
     position: sticky;
     display: flex;
     transition: width 0.6s ease-in-out;
+}
+.teste{
+    overflow-y: auto;
+}
+.list-group-flush{
+    margin-bottom: 50px;
+    margin-left: -3px;
 }
 .list-group-item{
     display: flex;
@@ -162,10 +173,9 @@ export default {
 }
 .collapsed {
     width: 50px; 
-    
 }
 .colapse-btn{
-    padding: 0;
+
     width: 160px;
     bottom: 0;
     height: 40px;
@@ -192,9 +202,6 @@ export default {
 .small-rotate-arrow{
   transition: transform 0.3s ease-in-out, opacity 0.1s ease-in-out;
   margin-left: 35px;
-}
-.list-group-flush{
-    margin-left: -20px;
 }
 .nav-icon{
     flex-shrink: 0; 
