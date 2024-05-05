@@ -14,10 +14,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
         }
         return navigateTo('/login');
     }
-    if (to.path === '/login') {
-        return;
-    }
     if(process.server && userStore.token == ''){
+        if (to.path === '/login') {
+            return;
+        }
         return navigateTo('/login')
     }
 });   

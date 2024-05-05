@@ -29,6 +29,7 @@ const userStore = useUser()
 const email = ref('');
 const password = ref('');
 
+
 const submitForm = () => {
 	userStore.fetchData(password.value, email.value)
 }
