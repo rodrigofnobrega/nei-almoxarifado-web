@@ -1,29 +1,29 @@
 <template>
     <Modal id="itemDetailing" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
-            <h5 class="header-title d-flex justify-content-start align-items-center">Detalhes do Item</h5>
-            <button class="btn btn-transparent border-0 text-light" type="button" data-bs-dismiss="modal">
-                <IconsClose class="close mt-1 ms-5 s-5" width="1.7em" height="1.7em"/>
+            <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Cadastro de Item</h6>
+            <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
+                <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
             </button>
-        </template>
+        </template> 
         <template v-slot:body>
             <div v-if="item_details" class="row">
 				<div class="col-6">
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Nome </label>
-						<input readonly class="form-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" type="text" :value="item_details.name">
+						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" type="text" :value="item_details.name">
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Código Sipac </label>
-						<input readonly class="form-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.sipac"> 
+						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.sipacCode"> 
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Tipo </label>
-						<input readonly class="form-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.type"> 
+						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.type"> 
 					</div>
                     <div class="mb-3"> 
 						<label class="form-label fw-bold"> Quantidade </label>
-						<input readonly class="form-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.qtd"> 
+						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.quantity"> 
 					</div>	
 				</div>
 				<div class="col-6">
@@ -33,7 +33,7 @@
 					</div>	
 					<div class="mb-4">
                         <label class="form-label fw-bold"> Última atualização </label>
-                        <input readonly id="expansible-form" class="form-control bg-light-emphasis" @mouseover="inputExpand" @mouseleave="inputContract" :value="item_details.history[0]">
+                        <input readonly id="expansible-form" class="form-control bg-light-emphasis" @mouseover="inputExpand" @mouseleave="inputContract" :value="'[]'">
                     </div>
 					<div class="mb-3"> 
 						<label class="form fw-bold"> Data de Registro </label>
@@ -48,10 +48,10 @@
         </template>
         <template v-slot:footer>
             <div class="container-fluid d-flex justify-content-center align-items-center">
-                <button class="btn mode-btn btn-dark-alert mx-2" :class="{'d-none': editionActive, 'd-block': !editionActive}" @click="deleteItem" id="itemDelete" data-bs-dismiss="modal">Excluir</button>
-                <button type="button" class="btn btn-light-alert text-light mx-3" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="revertEdition" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn mode-btn btn-primary mx-2" @click="setEdition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>
-                <button class="btn btn-light-success text-light mx-3" id="fetch-inputs" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="fetchNewData" data-bs-dismiss="modal">Confirmar</button>
+                <button class="btn mode-btn inset-shadow btn-dark-alert mx-1" :class="{'d-none': editionActive, 'd-block': !editionActive}" @click="deleteItem" id="itemDelete" data-bs-dismiss="modal">Excluir</button>
+                <button type="button" class="btn inset-shadow btn-light-alert text-light mx-1" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="revertEdition" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn inset-shadow mode-btn btn-primary mx-1" @click="setEdition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>
+                <button class="btn inset-shadow btn-light-success text-light mx-1" id="fetch-inputs" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="fetchNewData" data-bs-dismiss="modal">Confirmar</button>
             </div>
         </template> 
     </Modal>
@@ -102,20 +102,20 @@ export default {
         },
         setEdition(){       
             this.editionActive = !this.editionActive;
-            this.inputs = document.getElementsByClassName("form-control");
+            this.inputs = document.getElementsByClassName("edit-control");
             for(let i = 0; i < this.inputs.length; i++){
                 this.inputs[i].removeAttribute('readonly');
             }
         },
         revertEdition(){
             this.editionActive = false;
-            this.inputs = document.getElementsByClassName("form-control");
+            this.inputs = document.getElementsByClassName("edit-control");
             for(let i = 0; i < this.inputs.length; i++){
                 this.inputs[i].setAttribute('readonly', '');
             }
         },
         fetchNewData(){
-            this.store.updateItemQtd(this.item_index, this.inputs[4].value, this.item_route);
+            this.store.updateItemQtd(this.item_index, this.inputs[0].value, this.inputs[1].value,this.item_route);
             this.revertEdition();
         }
     },
@@ -140,6 +140,10 @@ export default {
 </script>
 
 <style scoped>
+.inset-shadow{
+    padding: 6px 10px 6px 10px;
+    box-shadow: inset 1px 1px 15px 1px rgb(0, 0, 0, 0.2);
+}
 .modal-header{
     background-color: red;
 }

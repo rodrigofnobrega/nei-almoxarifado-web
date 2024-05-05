@@ -1,9 +1,9 @@
 <template>
     <Modal id="itemRegistration" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
-            <h5 class="header-title d-flex justify-content-start align-items-center">Cadastro de Item</h5>
+            <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Cadastro de Item</h6>
             <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
-                <IconsClose class="close mt-1 ms-5 s-5" width="1.7em" height="1.7em"/>
+                <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
             </button>
         </template> 
         <template v-slot:body> 
@@ -32,9 +32,9 @@
             </div>
         </template>
         <template v-slot:footer>
-            <div class="container-fluid d-flex justify-content-center align-items-center">
-                <button type="button" @click="itemRegister" class="btn btn-light-success text-light mx-3" data-bs-dismiss="modal">Cadastrar</button>
-                <button type="button" class="btn btn-light-alert text-light mx-3" data-bs-dismiss="modal">Cancelar</button>
+            <div class="container-fluid d-flex justify-content-end align-items-center">
+                <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" @click="itemRegister" class="btn btn-light-success inset-shadow text-light mx-1" data-bs-dismiss="modal">Cadastrar</button>
             </div>
         </template>
     </Modal>
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { usePopupStore } from '~/stores/popup';
 import { sipacHandeling } from '../../composables/inputHandler';
 import { useStorageStore } from '../../stores/storage';
 export default{
@@ -60,8 +61,8 @@ export default{
             }
         },
         itemRegister(){
-            this.store.addItem({name: this.itemName, sipac: sipacHandeling(this.itemSipac), type: this.itemType, /*Faltando o handler de qtd*/  qtd: this.itemQtd, history: '', storage: this.$route.path.split('/')[2]})
-            this.store.throwPopup();
+            this.store.addItem({name: this.itemName, sipacCode: sipacHandeling(this.itemSipac), type: this.itemType.charAt(0).toUpperCase() + this.itemType.slice(1), /*Faltando o handler de qtd*/  quantity: Number(this.itemQtd), history: '', storage: this.$route.path.split('/')[2]})
+            this.popup.throwPopup();
         },
         itemRemove(){
             this.store.deleteItem();
@@ -69,28 +70,30 @@ export default{
     },
     setup(){
         const store = useStorageStore();
+        const popup = usePopupStore();
         return{
-            store
+            store, popup
         }
-    },
+    }
 }
 </script>
 
 <style scoped>
-.modal-header{
-    background-color: red;
-}
 .close{
     position: relative;
     left: 20px;
 }
 .header-title{
-    font-weight: semibold;
+    font-weight: 300;
     margin: -1px 0 -1px 0;
     padding: 0;
 }
 .btn{
-    border-radius: 10px;
+    border-radius: 9px;
+}
+.inset-shadow{
+    padding: 5px;
+    box-shadow: inset 1px 1px 15px 1px rgb(0, 0, 0, 0.2);
 }
 .close-btn{
     border: none;

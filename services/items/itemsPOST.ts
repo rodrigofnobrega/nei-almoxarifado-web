@@ -1,0 +1,16 @@
+import axios from 'axios'
+//Cadastra um item
+export const postCreateItem = async (userStore ,name, sipac, qtd, type) => {
+    const { data } = await axios.post('https://neialmoxarifadoapi.ddns.net:8080/api/v1/itens', {
+        'name': name,
+        'sipacCode': sipac,
+        'quantity': qtd,
+        'type': type
+    }, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userStore.token}`
+        },
+    });
+    return data.content
+};

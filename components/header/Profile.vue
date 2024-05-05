@@ -10,7 +10,7 @@
           </div>
             <div class="nav-item dropdown">
               <button class="svg-button  d-flex bg-primary align-items-center" @click="rotate" data-bs-toggle="dropdown" data-bs-offset="10,10" data-bs-auto-close="inside" aria-expanded="false">
-                  <p class="profile-drop user-text text-light px-1 m-0 fw-lighter"> {{ user.username }} </p>
+                  <p class="profile-drop user-text text-light px-1 m-0 fw-light"> {{ user.username }} </p>
                   <IconsDownArrow class="rotate-arrow" :style="{ transform: isRoted ? 'rotate(180deg)' : 'rotate(0deg)'}" width="24px" height="24px"/>
               </button>
               <ul class="dropdown-menu">
@@ -23,30 +23,34 @@
                   Configurações
                   <IconsSettings />
                 </a></li>  
-                <li><a class="exit-options dropdown-item d-flex align-items-center justify-content-between" href="/login">
+                <li><button @click="logout()" class="exit-options dropdown-item d-flex align-items-center justify-content-between">
                   Sair
                   <IconsExit />
-                </a></li>
+                </button></li>
               </ul>
             </div>
         </div>
 </template>
 
-<script>
-export default{
-    data(){
-        return{
-            isRoted: false,
-            user: 
-              {username:"Ferreira", name: "Ferreira Rodrigo de Silva"},
-        }
-    },
-    methods:{
-        rotate(){
-            this.isRoted = !this.isRoted;
-        }
-    },
+<script setup>
+import { useUser } from '../../stores/user';
+import { getUserByEmail } from '../../services/users/userGET';
+
+const userStore = useUser();
+const isRoted = ref(false);
+const user = ref({username: '', name: ''});
+getUsername()
+function rotate(){
+  isRoted.value = !isRoted.value;
 }
+function logout(){
+  userStore.logout()
+}
+async function getUsername(){
+  const res = await getUserByEmail(userStore, userStore.email); 
+  user.value.username = res.name;
+}
+
 </script>
 
 <style scoped>

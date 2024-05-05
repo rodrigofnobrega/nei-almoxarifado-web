@@ -1,11 +1,9 @@
-<script setup> </script>
-
 <template>
 	<Modal id="actionConfirm">
 		<template v-slot:header>
-			<h5 class="modal-title"> Confirmação de ação </h5>
+			<h6 class="modal-title"> Confirmar ação </h6>
 			 <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
-                <IconsClose class="close mt-1 ms-5 s-5" width="1.7em" height="1.7em"/>
+                <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
             </button>
 		</template>
 		<template v-slot:body>
@@ -18,6 +16,11 @@
 		</template>
 	</Modal>
 </template>
+
+<script setup>
+
+
+</script>
 
 <style scoped>
 .close-btn{

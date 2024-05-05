@@ -5,7 +5,7 @@
                     <a class="text-decoration-none" href="/" aria-current="true">
                         <div class="item-bg item-top" :class="{'active': $route.path === '/', 'text-dark-emphasis': $route.path !== '/'}">
                             <IconsHome class="nav-icon"/>
-                            <span class="list-group-item">Home</span>
+                            <span class="list-group-item">Início</span>
                         </div>
                     </a>
                     <a class="text-decoration-none" href="/controle-de-acesso" aria-current="true">
@@ -104,12 +104,13 @@ export default {
 <style scoped>
 .offcanvas{
     border: none;
-    width: 160px;
+    width: 10em;
     height: 100vh;  
     top: 0%;
     padding-top: 20px;
     overflow-x: hidden;
     transition: width 0.6s ease-in-out;
+    border-right: 1px ridge #D9D9D9;
 }
 .offcanvas-body{
     bottom: 0;

@@ -1,11 +1,11 @@
 <template>
 	<Modal id="itemHistory" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
-	 	<template v-slot:header> 
-			<h5 class="modal-title"> Histórico mais recente do item </h5>
-			<button class="btn btn-transparent border-0 text-light close-btn" type="button" data-bs-dismiss="modal">
-                    <IconsClose class="close mt-1 ms-5 s-5" width="1.7em" height="1.7em"/>
+		<template v-slot:header>
+            <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Cadastro de Item</h6>
+            <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
+                <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
             </button>
-		</template>
+        </template> 
 	    <template v-slot:body>
 			<table class="table text-center"> 
 		<thead>
@@ -26,11 +26,6 @@
 			</tr>
 		</tbody>
 	</table>
-		</template>
-		<template v-slot:footer> 
-			<div class="container-fluid d-flex justify-content-center align-items-center">
-				<button type="button" class="btn btn-secondary text-light mx-3" data-bs-dismiss="modal">Fechar</button>
-			</div>
 		</template>
 	</Modal>
 </template>
@@ -72,7 +67,6 @@ export default{
     left: 20px;
 }
 .header-title{
-    font-size: 26px;
     font-weight: semibold;
     margin: -1px 0 -1px 0;
     padding: 0;

@@ -1,11 +1,11 @@
 <template>
-	<div class="container-fluid d-flex  col-1 justify-content-center">
+	<div class="container-fluid login-container d-flex  col-1 justify-content-center">
 		<div class="header">
 			<p class="texto"><strong>Entrar</strong></p>
 		</div>
 		<form class="login-form" @submit.prevent="submitForm">
-			<label for="username">Usuário:</label>
-			<input type="text" id="username" v-model="username" required>
+			<label for="email">Email:</label>
+			<input type="text" id="email" v-model="email" required>
 			<label for="password">Senha:</label>
 			<input type="password" id="password" v-model="password" required>
 			<button type="submit">Entrar</button>
@@ -19,33 +19,25 @@
 </template>
 
 <script setup lang="ts"> 
-	definePageMeta({
-	    layout: "login",
-		// Houve alteração no layout
-})
+definePageMeta({
+  layout: 'authentication'
+});
+import { ref, onMounted } from 'vue';
+import { useUser } from '../stores/user.ts'
 
-
-import { ref } from 'vue';
-
-const username = ref('');
+const userStore = useUser()
+const email = ref('');
 const password = ref('');
 
 const submitForm = () => {
-	console.log('Usuário:', username.value);
-	console.log('Senha:', password.value);
-	// Aqui está uma maneira de confirmar que ao enviar os dados preenchidos, 
-	// eles serão salvos em alguma variável. E assim, está para ser inserida a
-	// lógica por tras dos panos para fazer a pessoa entrar ou não.
-	
-	
-	username.value = '';
-	password.value = '';
+	userStore.fetchData(password.value, email.value)
 }
 
 </script>
 
-<style>
-.container-fluid {
+<style scoped>
+
+.login-container{
 	width: 325px;
 	flex-direction: column;
 }
@@ -63,7 +55,6 @@ const submitForm = () => {
 	max-width: 300px;
 	height: 65px;
 	border-radius: 15px;
-	opacity: 0px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;

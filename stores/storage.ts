@@ -1,49 +1,76 @@
 import { defineStore } from "pinia";
+import { postCreateItem } from "../services/items/itemsPOST";
+import { putUpdateItem } from "../services/items/itemsPUT";
+import { useUser } from './user.ts';
 
 export const useStorageStore = defineStore('storage', {
     state: () => ({
-      items: [
-        {name: "Cartolina Amarela", sipac: 'nenhum', type: "Unidade", qtd: 5, history: ["03/03/2023 13:30:00 - Adicionado", "03/03/2023 14:32:34 - Consumido"], storage: "almoxarifado-escolar"},
-        {name: "Lapiseira", sipac: "2342342354", type: "Caixa", qtd: 7, history: ["03/03/2023 14:32:34 - Consumido"], storage: "almoxarifado-escolar"},
-        {name: "Folha em Branco A4", sipac: "4442342354", type: "Sacola", qtd: 30, history: ["03/03/2023 12:01:23 - Consumido"], storage: "almoxarifado-escolar"},
-        {name: "Sabão em pó", sipac: "5442342354", type: "Unidade", qtd: 12, history: ["03/03/2023 11:23:30 - Excluido"], storage: "almoxarifado-escolar"},
-        {name: "Esponja", sipac: "6442342354", type: "Sacola", qtd: 3, history: ["03/04/2023 16:00:00 - Excluido"], storage: "almoxarifado-escolar"},
-        {name: "Vassoura", sipac: 'nenhum', type: "Unidade", qtd: 5, history: ["03/03/2023 13:30:00 - Adicionado"], storage: "almoxarifado-funcionarios"}
-      ],
+      items: [],
       sidebarSublinks: [],
       isRotated: false,
       deleteMode: false,
       editMode: false,
-      popupActive: false
+      tableSearch: " ",
     }),
     actions: {
-      addItem(item){
-        this.items.push(item);
+      async fetchItems(items: object, item: object){
+        localStorage.setItem('items', JSON.stringify(items));
+        const storedItems = localStorage.getItem('items');
+        this.sendItemsToServer(item);
       },
-      deleteItem(index, almoxarifado){
+      async sendItemsToServer(item) {
+        const userStore = useUser();
+        if(item){
+          try{
+            const res = await postCreateItem(userStore, item.name, item.sipacCode, item.quantity, item.type);
+          }catch(error){
+            console.log(error);
+          }
+        }
+      },
+      async updateItems(items, item_id, item_name, item_sipac){
+        localStorage.setItem('items', JSON.stringify(items));
+        if(item_id){
+          try{
+            const userStore = useUser();
+            const res = await putUpdateItem(userStore, item_id, item_name, item_sipac);
+          }catch(error){
+            console.log(error);
+          }
+        }
+      },
+      addItem(item: object){
+        this.items.push(item);
+        this.fetchItems(this.items, item);
+      },
+      deleteItem(index: number, almoxarifado: string){
         let count = 0;
         for(let i = 0; i < this.items.length; i++){
           if(this.items[i].storage.includes(almoxarifado)){
             if(index == count){
               this.items.splice(i, 1);
+              this.fetchItems(this.items);
               return 0;
             };
-            count++;
           };
+          count++;
         };
+        this.fetchItems(this.items);
       },
-      updateItemQtd(index, newQtd, almoxarifado) {
+      updateItemQtd(index: number, newName: string, newSipac: string, almoxarifado: string) {
         let count = 0;
+        let item_id;
         for(let i = 0; i < this.items.length; i++){
-          if(this.items[i].storage.includes(almoxarifado)){
             if(index == count){
-              this.items[i].qtd = newQtd;
+              item_id = this.items[i].id;
+              this.items[i].name = newName;
+              this.items[i].sipacCode = newSipac;
             }
-            count ++;
-          }
-        }
+          count ++;
+        };
+        this.updateItems(this.items, item_id, newName, newSipac);
       },
-      setSublink(sublinks) {
+      setSublink(sublinks: string[]) {
           this.sidebarSublinks = sublinks;
       },
       setRotated(){
@@ -55,14 +82,10 @@ export const useStorageStore = defineStore('storage', {
       setEditMode(){
         this.editMode = !this.editMode;
       },
-      throwPopup(){
-        this.popupActive = !this.popupActive;
-      }
   },
   getters: {
     getItems() {
         return this.items;
     }
   },
-  persist: true,
 });
