@@ -13,7 +13,7 @@
 		        </template>
           </TitlesTitle>
         </div>
-        <div class="main-content">
+        <div class="main-content d-flex justify-content-center">
           <slot />
         </div>
       </div> 
@@ -46,6 +46,9 @@ export default {
 </script>
 
 <style>
+#content{
+  background-color: #f3f4f7;
+}
 .main{
   width: 100%;
   height: 100%;
@@ -56,12 +59,13 @@ export default {
   margin: 51px 0px 0px 0px;
 }
 .main-content{
-  width: 84vw;
-  margin-left: 0.1%;
+  width: 86vw;
+  margin-left: 10px;
   margin-right: 0px;
   margin-top: 0px;
   margin-bottom: 3vw;
   padding-left: 0px;
+  padding-right: 0px;
 } 
 .fluid-container{
   position: static;

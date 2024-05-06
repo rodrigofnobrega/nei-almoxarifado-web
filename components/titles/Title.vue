@@ -1,5 +1,5 @@
 <template>
-    <div class="page-title bg-light-emphasis row d-block ms-0">
+    <div class="page-title bg-light row d-block ms-0">
 		<div class="catalog-header d-flex align-items-center">
 			<h3 class="mt-2"><slot name="titulo" /></h3>
 		</div>

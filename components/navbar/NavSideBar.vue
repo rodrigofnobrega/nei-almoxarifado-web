@@ -145,6 +145,7 @@ export default {
     display: flex;
     font-size: 12px;
     margin-left: 7px;
+    margin-right: 0px;
     margin-top: 2px;
     text-decoration: none;
     text-align: start;
