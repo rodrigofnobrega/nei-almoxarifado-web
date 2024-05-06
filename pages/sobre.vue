@@ -30,7 +30,6 @@
 import { inject } from 'vue';
 
 const setpageTitle = inject('setpageTitle');
-
 const sendDataToParent = () => {
     const data = "Inventário";
     setpageTitle(data);

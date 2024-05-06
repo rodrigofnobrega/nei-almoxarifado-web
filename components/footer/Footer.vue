@@ -1,7 +1,7 @@
 <script setup> </script>
 
 <template>
-<footer class="custom-footer border-top text-center text-lg-start align-items-center">
+<footer class="custom-footer position-absolute border-top text-center text-lg-start align-items-center">
   <section id="info">
     <div class="container text-center text-md-start mt-5">
        <div class="row"> 
@@ -24,8 +24,9 @@
 </footer>
 </template>
 
-<style> 
+<style scoped> 
 .custom-footer {   
+  z-index: 1000;
   width: 100%;
   background-color: #0b3b69;
   color: white;

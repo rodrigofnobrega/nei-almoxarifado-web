@@ -16,7 +16,7 @@
     <div class="row d-block">
         <TablesTable>
             <template v-slot:items>
-            <tr v-if="1 > 0" v-for="item in filteredItems.slice(num, num1)" :key="item.index">
+            <tr v-if="1 > 0" v-for="item in filteredItems" :key="item.index">
                <th class="border" scope="row"><p>{{ item.name }}</p></th>
                <th class="border">
                     <p v-if="item.sipacCode">{{ item.sipacCode }}</p>
@@ -45,21 +45,21 @@
              </div>
             </template>
         </TablesTable>
-        <nav v-if="filteredItemsSize > 0" aria-label="Page navigation" class="mt-0 d-flex justify-content-center align-items-center" style="position: sticky;">
-            <ul class="pagination mt-5 justify-content-center">
-                <li class="page-item">
-                    <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': num <= 0 && num1 <= 15}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
-                </li>
-                <li class="page-item" v-for="i in paginationSize" :key="i-1">
-                    <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
-                </li>
-                <li class="page-item">
-                    <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': num >= filteredItemsSize-15 && num1 >= filteredItemsSize}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
-                </li>
-            </ul>
-        </nav>
     </div>
 </div>
+<nav v-if="filteredItemsSize > 0" aria-label="Page navigation" class="pagination position-fixed">
+    <ul class="pagination">
+        <li class="page-item">
+            <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
+        </li>
+        <li class="page-item" v-for="i in response.totalPages" :key="i-1">
+            <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
+        </li>
+        <li class="page-item">
+            <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == response.totalPages-1}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
+        </li>
+    </ul>
+</nav>
 </template>
 
 <script setup>
@@ -72,26 +72,27 @@ import { useUser } from '../../stores/user.ts'
 
 const userStore = useUser()
 const store = useStorageStore();
+let pagination = ref(0);
 /*REFATORAR CÓDIGO*/ 
-const dados = await getItems(userStore);
-const sort = async () => {
+let response = await getItems(userStore, pagination.value);
+const sort = async (response) => {
+    let sortedData = response;
     let temp = null;
     let stop = true;
     do{
         stop = true;
-        for(let i = 0; i < dados.length-1; i++){
-            if(dados[i].id > dados[i+1].id){
-                temp = dados[i+1];
-                dados[i+1] = dados[i];
-                dados[i] = temp;
+        for(let i = 0; i < sortedData.content.length-1; i++){
+            if(sortedData.content[i].id > sortedData.content[i+1].id){
+                temp = sortedData.content[i+1];
+                sortedData.content[i+1] = sortedData.content[i];
+                sortedData.content[i] = temp;
                 stop = false;
             }
         }
     } while(stop == false);
+    return sortedData.content
 };
-sort()
-
-store.items = dados;
+store.items = await sort(response)
 
 const setpageTitle = inject('setpageTitle');
 
@@ -108,11 +109,7 @@ const items = computed(() => store.items.map((itemProxy, index) => {
     return item
 }));
 const searchInput = ref("");
-    
-onMounted(async () => {     
-    store.deleteMode = false,
-    store.editMode = false
-});
+
 
 const filteredItems = computed(() => items.value.filter(item => item.name.includes(searchInput.value)));
 const filteredItemsSize = computed(() => filteredItems.value.length);
@@ -122,49 +119,41 @@ const currentItem = computed(() => store.items[itemIndex.value]);
 const currentRoute = useRoute().fullPath.split('/')[2];
 
 /*TODO: refatorar nos composables*/
-const paginationSize = computed( () => (parseInt(filteredItemsSize.value/15.5)+1));
 let pagesFocus = ref([true]);
-for(let i = 0; i < paginationSize.value-1; i++){
+for(let i = 0; i < response.totalPages; i++){
     pagesFocus.value.push(false);
 };
-const num = ref(0);
-const num1 = ref(15);
 let count = 0;
 
-const page = ((index) => {
-    num.value = 15*index;
-    num1.value = (15*index)+15;
+const page = (async (index) => {
+    pagination.value = index;
+    response = await getItems(userStore, pagination.value);
+    store.items = await sort(response)
     pagesFocus.value[count] = false;
-    count = index;
+    count = index;  
     pagesFocus.value[count] = true;
 });
-const fowardPage = (() => {
+const fowardPage = (async () => {
+    pagination.value++;
+    response = await getItems(userStore, pagination.value);
+    store.items = await sort(response)
     pagesFocus.value[count] = false;
     count++;
     pagesFocus.value[count] = true;
-    num.value += 15;
-    num1.value += 15;
     const fowardBtn = document.getElementById("fowardPageBtn");
     document.getElementById("backPageBtn").classList.remove("disabled");
     document.getElementById("backPageBtn").classList.remove("bg-dark-emphasis");
-    if(num1.value >= filteredItemsSize.value){
-        fowardBtn.classList.toggle("disabled");
-        fowardBtn.classList.toggle("bg-dark-emphasis");
-    }
 });
-const backPage = (() => {
+const backPage = (async () => {
+    pagination.value--;
+    response = await getItems(userStore, pagination.value);
+    store.items = await sort(response)
     pagesFocus.value[count] = false;
     count--;
-    pagesFocus.value[count] = true;
-    num.value -= 15;
-    num1.value -= 15;
+    pagesFocus.value[count] = true; 
     const backBtn = document.getElementById("backPageBtn");
     document.getElementById("fowardPageBtn").classList.remove("disabled");
     document.getElementById("fowardPageBtn").classList.remove("bg-dark-emphasis");
-    if(num.value < 0){
-        backBtn.classList.toggle('disabled');
-        backBtn.classList.toggle("bg-dark-emphasis");
-    }
 });
 
 const showDetails = (index) => {
@@ -174,6 +163,11 @@ const showDetails = (index) => {
 const showHistory = (index) => {
     itemIndex.value = index;
 }
+onMounted(async () => {   
+    sort(response) 
+    store.deleteMode = false,
+    store.editMode = false
+});
 </script>
 
 <style scoped>
@@ -183,6 +177,7 @@ const showHistory = (index) => {
 .container{
     margin-left: 0px; 
     padding: 0px;
+    margin-bottom: 100px;
 }
 
 th{
@@ -244,6 +239,13 @@ p{
     position: absolute;
     margin-top: 5%;
     margin-left: 35%;
+}
+.pagination{
+    bottom: 0%; 
+    left: 48%;
+}
+.position-fixed{
+    z-index: 0;
 }
 tr:hover .mode-btn{
     display: block;
