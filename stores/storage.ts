@@ -15,7 +15,6 @@ export const useStorageStore = defineStore('storage', {
     actions: {
       async fetchItems(items: object, item: object){
         localStorage.setItem('items', JSON.stringify(items));
-        const storedItems = localStorage.getItem('items');
         this.sendItemsToServer(item);
       },
       async sendItemsToServer(item) {

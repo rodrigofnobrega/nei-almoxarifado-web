@@ -15,15 +15,15 @@
               </button>
               <ul class="dropdown-menu">
                 <li class="dropdown-item info"> {{ user.name }} </li>
-                <li><a class="dropdown-item d-flex align-items-center justify-content-between" href="/perfil">
+                <li><a class="dropdown-item py-1 ps-2 d-flex align-items-center justify-content-between" href="/perfil">
                   Perfil
                   <IconsProfile />
                 </a></li>
-                <li><a class="dropdown-item d-flex align-items-center justify-content-between" href="/configuracoes">
+                <li><a class="dropdown-item py-1 ps-2 d-flex align-items-center justify-content-between" href="/configuracoes">
                   Configurações
                   <IconsSettings />
                 </a></li>  
-                <li><button @click="logout()" class="exit-options dropdown-item d-flex align-items-center justify-content-between">
+                <li><button @click="logout()" class="exit-options py-1 ps-2 dropdown-item d-flex align-items-center justify-content-between">
                   Sair
                   <IconsExit />
                 </button></li>
@@ -57,6 +57,12 @@ async function getUsername(){
 
 .rotate-arrow{
   transition: transform 0.3s ease-in-out;
+}
+.dropdown-menu{
+  padding: 0;
+}
+.dropdown-item{
+  font-size: 14px;
 }
 .svg-button{
     border: none;

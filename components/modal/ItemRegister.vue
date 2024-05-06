@@ -13,13 +13,13 @@
             </div>
             <div class="sipac-container mb-3" :style="{opacity: itemSipac ? '100%' : '50%'}">
                <label for="item-sipac">Código Sipac <span class="text-light-emphasis ms-3">*opcional*</span></label> 
-               <input class="form-control" v-model="itemSipac" type="text">
+               <input class="form-control" v-model="itemSipac" type="number" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
             </div>
             <div class="mb-3 d-flex">
                 <div class="d-block">
                     <label for="item-qtd">Tipo Unitário</label> 
                     <select v-model="itemType" class="form-select me-5" aria-label="Default select">
-                        <option selected>Selecione o tipo</option>
+                        <option disabled selected>Selecione o tipo</option>
                         <option value="unidade">unidade</option>
                         <option value="sacola">sacola</option>
                         <option value="unidade">caixa</option>
@@ -51,21 +51,42 @@ export default{
             itemName: '',
             itemSipac: '',
             itemType: '',
-            itemQtd: 0
+            itemQtd: ''
         }
     },
     methods: {
-        itemQtdHandler(quantity){
-            if(this.itemQtd == 0){
-                //acionar notificação de aviso
+        itemQtdHandler(){
+            if(parseInt(this.itemQtd) == 0 || this.itemQtd == ''){
+                this.popup.throwPopup("Quantidade inválida", '#B71C1C')
+                return false
             }
+            return true
+        },
+        itemTypeHandler(){
+            if(this.itemType === ''){
+                this.popup.throwPopup('Tipo inválido', '#B71C1C')
+                return false
+            }
+            return true
+        },
+        itemNameHandler(){
+            if(this.itemName === ''){
+                this.popup.throwPopup('Nome inválido', '#B71C1C')
+                return false
+            }
+            return true
         },
         itemRegister(){
-            this.store.addItem({name: this.itemName, sipacCode: sipacHandeling(this.itemSipac), type: this.itemType.charAt(0).toUpperCase() + this.itemType.slice(1), /*Faltando o handler de qtd*/  quantity: Number(this.itemQtd), history: '', storage: this.$route.path.split('/')[2]})
-            this.popup.throwPopup();
-        },
-        itemRemove(){
-            this.store.deleteItem();
+            if(this.itemQtdHandler() === false || this.itemTypeHandler() === false || this.itemNameHandler() === false){
+                return false
+            };
+            try{
+                this.store.addItem({name: this.itemName, sipacCode: sipacHandeling(this.itemSipac), type: this.itemType.charAt(0).toUpperCase() + this.itemType.slice(1), /*Faltando o handler de qtd*/  quantity: this.itemQtd, history: '', storage: this.$route.path.split('/')[2]})
+            } catch(err){
+                this.popup.throwPopup("Erro de servidor(Contate o suporte)", '#B71C1C')
+                return false
+            }
+            this.popup.throwPopup("Item cadastrado", '#0B3B69');
         }
     },
     setup(){

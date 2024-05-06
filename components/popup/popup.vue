@@ -1,5 +1,5 @@
 <template>
-    <div class="card popup bg-primary text-light" :style="{'display': showPopup ? 'block' : 'none'}">
+    <div class="card popup text-light" :style="{'display': showPopup ? 'block' : 'none', 'background-color': popupBg}">
         <div class="progress bg-light-emphasis" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
             <div class="progress-bar bg-warning" style="width: 100%"></div>
         </div>
@@ -8,7 +8,7 @@
                 <IconsInformation class="mb-2 me-2" />
                 <h5 class="card-title">Aviso</h5>
             </div>
-            <p class="card-text mb-1 d-flex justify-content-start">Item Cadastrado</p>
+            <p class="card-text mb-1 d-flex justify-content-start">{{ popupText }}</p>
         </div>
     </div>
 </template>
@@ -26,6 +26,14 @@ export default{
     props: {
         isPopup: {
             type: Boolean,
+            required: true
+        },
+        popupText: {
+            type: String,
+            required: true
+        },
+        popupBg: {
+            type: String,
             required: true
         }
     },
@@ -82,6 +90,7 @@ export default{
     animation-name: example;
     animation-duration: 1.3s;
     z-index: 3000;
+    box-shadow: 0px 0px 10px 4px rgba(254, 213, 30, 0.7);
 }
 .progress-bar{
     animation: example2 6.5s;
