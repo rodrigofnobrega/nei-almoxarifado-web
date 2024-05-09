@@ -1,11 +1,11 @@
 <template>
     <ModalItemDetails v-if="filteredItemsSize > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
     <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
-    <div style="margin-left: 0.7%;">
+<div class="table-container d-block">
         <div class="d-flex justify-content-between aling-items-center">
             <span class="d-flex align-items-center table-searchbar">
-            <IconsSearchGlass class="search-glass"/>
-            <input v-model="searchInput" class="searchbar form-control" placeholder="Pesquisar"/>          
+                <IconsSearchGlass class="search-glass"/>
+                <input v-model="searchInput" class="searchbar form-control bg-light-background" placeholder="Pesquisar"/>          
             </span>
             <div class="d-flex">
                 <ButtonsNewItem />
@@ -171,10 +171,16 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.table-container{
+    width: 100vw;   
+    margin-right: 37px;
+    display: block !important;
+}
 .search-glass{
     padding-left: 0px;
 }
 .container{
+    display: block;
     margin-left: 0px; 
     padding: 0px;
     margin-bottom: 100px;
@@ -245,7 +251,7 @@ p{
     left: 48%;
 }
 .position-fixed{
-    z-index: 0;
+    z-index: 100;
 }
 tr:hover .mode-btn{
     display: block;

@@ -60,7 +60,7 @@ export default {
 }
 .main-content{
   width: 86vw;
-  margin-left: 10px;
+  margin-left: 12px;
   margin-right: 0px;
   margin-top: 0px;
   margin-bottom: 3vw;

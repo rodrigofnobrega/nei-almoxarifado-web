@@ -1,5 +1,5 @@
 <template>
-    <div class="nav bg-light-emphasis teste d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+    <div class="nav bg-light teste d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-body ps-0" >
             <ul class="list-group-flush container d-block" :class="{ 'collapsed': isCollapsed }">
                 <a class="text-decoration-none" href="/" aria-current="true">
@@ -146,7 +146,7 @@ export default {
     font-size: 12px;
     margin-left: 7px;
     margin-right: 0px;
-    margin-top: 2px;
+    margin-top: 1px;
     text-decoration: none;
     text-align: start;
     white-space: nowrap;
