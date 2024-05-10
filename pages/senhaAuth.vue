@@ -165,6 +165,10 @@ const verifyPassword = () => {
 
 }
 
+.auth-form input[type="password"] {
+    width: 100%;
+}
+
 .auth-form label {
 	display: block;
 	margin-bottom: 5px;
