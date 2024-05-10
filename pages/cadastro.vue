@@ -35,7 +35,7 @@
 <script setup lang="ts"> 
 
 
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 definePageMeta({
   layout: 'authentication'
