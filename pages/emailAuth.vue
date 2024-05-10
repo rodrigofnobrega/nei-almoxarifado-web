@@ -3,28 +3,28 @@
 		<div class="header">
 			<p class="texto"><strong>Recuperar Senha</strong></p>
 		</div>
-            <form class="auth-form" @submit.prevent="submitForm">
+        <form class="auth-form" @submit.prevent="submitForm">
+            
+            <div class="auth">
                 
-                <div class="auth">
-                    
-                    <div  v-if="!isEnviado" class="submit">
-                        <label for="email">Email:</label>
-                        <input type="text" id="email" placeholder="Seu email" v-model="email" required>
-                    </div>
-                
-
-                    <div v-else-if="isEnviado" class="token">
-                        <label for="token">Código de verificação:</label>
-                        <input type="text" id="token" placeholder="Seu código" v-model="newToken">
-                    </div>
-                
+                <div  v-if="!isEnviado" class="submit">
+                    <label for="email">Email:</label>
+                    <input type="text" id="email" placeholder="Seu email" v-model="email" required>
                 </div>
-                
-                <button v-if="!isEnviado" type="submit" @click="submitEmail">Enviar</button>
-                
-                <button v-else-if="isEnviado" type="submit" @click="verificaToken">Ir</button>
+            
 
-		    </form>
+                <div v-else-if="isEnviado" class="token">
+                    <label for="token">Código de verificação:</label>
+                    <input type="text" id="token" placeholder="Seu código" v-model="newToken">
+                </div>
+            
+            </div>
+            
+            <button v-if="!isEnviado" type="submit" @click="submitEmail">Enviar</button>
+            
+            <button v-else-if="isEnviado" type="submit" @click="verificaToken">Ir</button>
+
+        </form>
 	</div>
 
     <span v-if="isSubmitOn" class="pop-message">
@@ -46,6 +46,7 @@ definePageMeta({
 });
 
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 // Váriaveis responsivas que armazenam os valores dos campos acima (integrar à API)
 const email = ref('');
@@ -59,7 +60,8 @@ const isEnviado = ref(false);
 const isSubmitOn = ref(false);
 const tokenError = ref(false);
 
-// Váriavel de estilo
+// Router
+const router = useRouter();
 
 // Métodos que vão fazer que a rotina aconteça
     // Envio do email
@@ -82,6 +84,7 @@ const resetOn = () => {
     // Ir para a página de trocar senha
 const goToSenhaAuth = () => {
     // Go to next page
+    router.push('/senhaAuth');
 }
 
     // Reiniciar a rotina
