@@ -16,7 +16,8 @@
 		</form>
 		<div class="info">
 			
-			<p><a href="#">Esqueceu sua senha?</a></p>
+			<NuxtLink to="/emailAuth">Esqueceu sua senha?</NuxtLink>
+			<br>
 			<NuxtLink to="/cadastro">Ainda não tem uma conta? Cadastre-se aqui.</NuxtLink>
 		</div>
 	</div>

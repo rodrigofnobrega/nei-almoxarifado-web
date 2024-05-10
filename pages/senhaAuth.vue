@@ -3,9 +3,11 @@
 </template>
 
 <script>
-export default {
+definePageMeta({
+  layout: 'authentication'
+});
 
-}
+
 </script>
 
 <style>

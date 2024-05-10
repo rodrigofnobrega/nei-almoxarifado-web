@@ -1,12 +1,12 @@
 <template>
-	<div class="container-fluid login-container d-flex  col-1 justify-content-center" :class="{ 'blurred': errorPassword }">
+	<div class="container-fluid singup-container d-flex  col-1 justify-content-center" :class="{ 'blurred': errorPassword }">
 
 		<div class="header">
 
 			<p class="texto"><strong>Cadastre-se</strong></p>
 
 		</div>
-		<form class="login-form" @submit.prevent="submitForm">
+		<form class="singup-form" @submit.prevent="submitForm">
 
 			<label for="username">Usuário:</label>
 			<input type="text" id="username" placeholder="Seu nome" v-model="username" required>
@@ -128,7 +128,7 @@ const resetPassForm = () => {
 	padding: 0px;
 }
 
-.login-container{
+.singup-container{
 	width: 325px;
 	padding-bottom: 25px;
 	flex-direction: column;
@@ -153,20 +153,20 @@ const resetPassForm = () => {
 	margin-bottom: 18px
 }
 
-.login-form {
+.singup-form {
 	margin-top: 0px;
 	margin-left: 10px;
 	margin-right: 10px;
 	margin-bottom: 0px;
 }
 
-.login-form label {
+.singup-form label {
 	display: block;
 	margin-bottom: 5px;
 }
 
-.login-form input[type="text"],
-.login-form input[type="password"] {
+.singup-form input[type="text"],
+.singup-form input[type="password"] {
 	width: 100%;
 	padding: 8px;
 	border: 1px solid #ccc;
@@ -174,7 +174,7 @@ const resetPassForm = () => {
 	margin-bottom: 10px;
 }
 
-.login-form button {
+.singup-form button {
 	width: 100%;
 	padding: 10px;
 	background-color: #71DD67;
@@ -184,7 +184,7 @@ const resetPassForm = () => {
 	cursor: pointer;
 }
 
-.login-form button:hover {
+.singup-form button:hover {
 	background-color: #71DD90;
 }
 
