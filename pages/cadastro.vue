@@ -1,20 +1,19 @@
 <template>
 	<div class="container-fluid login-container d-flex  col-1 justify-content-center">
 		<div class="header">
-			<p class="texto"><strong>Entrar</strong></p>
+			<p class="texto"><strong>Cadastre-se</strong></p>
 		</div>
 		<form class="login-form" @submit.prevent="submitForm">
 			<label for="username">Usuário:</label>
 			<input type="text" id="username" v-model="username" required>
+			<label for="username">Email:</label>
+			<input type="text" id="username" v-model="username" required>
 			<label for="password">Senha:</label>
 			<input type="password" id="password" v-model="password" required>
-			<button type="submit">Entrar</button>
+			<label for="password">Confirme sua Senha:</label>
+			<input type="password" id="password" v-model="password" required>
+			<button type="submit">Cadastrar</button>
 		</form>
-		<div class="info">
-			
-			<p><a href="#">Esqueceu sua senha?</a></p>
-			<NuxtLink to="/cadastro">Ainda não tem uma conta? Cadastre-se aqui.</NuxtLink>
-		</div>
 	</div>
 </template>
 
@@ -45,6 +44,10 @@ const submitForm = () => {
 </script>
 
 <style scoped>
+.container-fluid {
+	padding: 0px;
+}
+
 .login-container{
 	width: 325px;
 	flex-direction: column;
@@ -59,13 +62,14 @@ const submitForm = () => {
 
 .header {
 	width: 100%;
-	max-width: 300px;
+	max-width: 325px;
 	height: 65px;
-	border-radius: 15px;
+	border-radius: 15px 15px 0px 0px;
 	opacity: 0px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;
+	margin-bottom: 18px
 }
 
 .login-form {
@@ -89,27 +93,13 @@ const submitForm = () => {
 }
 
 .login-form button {
-	width: 100%;
-	padding: 10px;
+	width: 200px;
+	padding: 1px;
 	background-color: #71DD67;
-;
 	color: #fff;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
 }
 
-.info {
-	margin-top: 20px;
-	text-align: center;
-}
-
-.info a {
-	color: #007bff;
-	text-decoration: none;
-}
-
-.info a:hover {
-	text-decoration: underline;
-}
 </style>

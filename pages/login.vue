@@ -38,11 +38,15 @@ const submitForm = () => {
 </script>
 
 <style scoped>
+.container-fluid {
+	padding: 0px;
+}
 
 .login-container{
+	border-radius: 15px;
+
 	width: 325px;
 	flex-direction: column;
-	background-color: #f2f2f2;
 }
 
 .texto {
@@ -55,18 +59,20 @@ const submitForm = () => {
 
 .header {
 	width: 100%;
-	max-width: 300px;
+	max-width: 350px;
 	height: 65px;
-	border-radius: 15px;
+	border-radius: 15px 15px 0px 0px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;
+	padding: 0px;
 }
 
 .login-form {
 	margin-top: 20px;
 	margin-left: 10px;
 	margin-right: 10px;
+	padding: 12px;
 }
 
 .login-form label {
@@ -96,6 +102,7 @@ const submitForm = () => {
 
 .info {
 	margin-top: 20px;
+	padding: 12px;
 	text-align: center;
 }
 
