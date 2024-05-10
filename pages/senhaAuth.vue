@@ -82,6 +82,7 @@ const togglePasswordVisibility = (fieldId) => {
     
     if (field.type === 'password') {
         field.type = 'text';
+        console.log(`Sua senha é ${field.value}.`); // Verificação
     } else {
         field.type = 'password';
     }
