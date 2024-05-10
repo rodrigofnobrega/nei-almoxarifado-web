@@ -190,6 +190,7 @@ const verificaToken = () => {
 	height: 400px;
 	width: 325px;
 	flex-direction: column;
+    margin: 10px;
 }
 .auth {
     padding-top: 5px;
@@ -211,7 +212,7 @@ const verificaToken = () => {
 	width: 100%;
 	max-width: 350px;
 	height: 65px;
-	border-radius: 15px 15px 0px 0px;
+	border-radius: 15px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;
@@ -219,10 +220,9 @@ const verificaToken = () => {
 }
 
 .auth-form {
-	margin-top: 10px;
-	margin-left: 10px;
-	margin-right: 10px;
-	padding: 12px;
+	margin-top: 30px;
+    margin-bottom: 5px;
+    padding: 10px;
 
 }
 

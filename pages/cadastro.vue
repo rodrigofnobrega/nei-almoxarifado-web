@@ -145,7 +145,7 @@ const resetPassForm = () => {
 	width: 100%;
 	max-width: 325px;
 	height: 65px;
-	border-radius: 15px 15px 0px 0px;
+	border-radius: 15px;
 	opacity: 0px;
 	background-color: #0B3B69;
 	color: #ffff;

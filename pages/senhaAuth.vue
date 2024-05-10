@@ -112,11 +112,8 @@ const verifyPassword = () => {
   background-color: #ff3333; /* Altera a cor do botão quando hover */
 }
 
-
-
 .container-fluid {
 	padding: 0px;
-
 }
 
 .auth-container{
@@ -124,13 +121,22 @@ const verifyPassword = () => {
 	height: 400px;
 	width: 325px;
 	flex-direction: column;
+    margin: 10px;
 }
 .auth {
-    padding-top: 5px;
+    padding-top: 0px;
     padding-bottom: 50px;
-    justify-content: space-around;
-    margin-top: 70px;
-    margin-bottom: 55px;
+    justify-content: space-between;
+    margin-top: 71px;
+    margin-bottom: 37px;
+}
+
+.novaSenha {
+    margin-bottom: 10px;
+}
+
+.confirmarNova {
+    margin-top: 10px;
 }
 
 .texto {
@@ -145,7 +151,7 @@ const verifyPassword = () => {
 	width: 100%;
 	max-width: 350px;
 	height: 65px;
-	border-radius: 15px 15px 0px 0px;
+	border-radius: 15px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;
@@ -153,10 +159,9 @@ const verifyPassword = () => {
 }
 
 .auth-form {
-	margin-top: 10px;
-	margin-left: 10px;
-	margin-right: 10px;
-	padding: 12px;
+	margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
 
 }
 
