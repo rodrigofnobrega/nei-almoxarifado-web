@@ -1,7 +1,10 @@
 <template>
-	<div class="container-fluid login-container d-flex  col-1 justify-content-center">
+	<div class="container-fluid login-container d-flex  col-1 justify-content-center" :class="{ 'blurred': errorPassword }">
+
 		<div class="header">
+
 			<p class="texto"><strong>Cadastre-se</strong></p>
+
 		</div>
 		<form class="login-form" @submit.prevent="submitForm">
 
@@ -17,12 +20,16 @@
 			<label for="re-password">Confirme sua Senha:</label>
 			<input type="password" id="rePassword" placeholder="Confirme sua senha" v-model="rePassword" required>
 
-			
-
 			<button type="submit">Cadastrar</button>
 
 		</form>
 	</div>
+
+	<span v-if="errorPassword" class="error-message">
+		A senha está incorreta, tente novamente.
+		<button @click="resetPassForm">Ok</button>
+	</span>
+
 </template>
 
 <script setup lang="ts"> 
@@ -33,25 +40,33 @@ import { ref } from 'vue';
 definePageMeta({
   layout: 'authentication'
 });
-	
+
+// Variáveis reativas para armazenar os valores dos campos	
 const username = ref('');
 const email = ref('');
 const password = ref('');
 const rePassword = ref('');
 
+const errorPassword = ref(false);
+
+
+
 
 const submitForm = () => {
+	// Visualização dos valores armazenados
 	console.log('Usuário:', username.value);
 	console.log('Email:', email.value);
 	console.log('Senha:', password.value);
 	console.log('Confirmação de Senha:', rePassword.value);
 
+	// Verificação da senha
 	if (password.value != rePassword.value) {
 		console.log("A confirmação de senha não está correta")
-		window.alert("A senha está incorreta, tente novamente.");
-		resetForm();	
+		errorPassword.value = true;
 	}
 	else {
+		console.log(`Usuário ${username.value} foi cadastrado!`);
+
 		username.value = '';
 		email.value = '';
 		password.value = '';
@@ -64,14 +79,51 @@ const submitForm = () => {
 
 }
 
-const resetForm = () => {
-	password.value = '';
-	rePassword.value = '';
-}
+// Método para cleanar o formulário
+const resetPassForm = () => {
+  password.value = '';
+  rePassword.value = '';
+  errorPassword.value = false;
+};
 
 </script>
 
 <style scoped>
+
+.blurred {
+	filter: blur(1.5px);
+}
+
+.error-message {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 330px;
+	padding: 11px;
+	text-align: center;
+	background-color: #0B3B69;
+	border-radius: 5px;
+	color: #ffffff;
+	font-weight: bold;
+	}
+
+.error-message button {
+	width: 100%;
+	margin-left: 0px;
+	margin-top: 7px;
+	padding: 0px;
+	background-color: rgba(200, 0, 0);
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.error-message button:hover {
+  background-color: #ff3333; /* Altera a cor do botão quando hover */
+}
+
 .container-fluid {
 	padding: 0px;
 }
