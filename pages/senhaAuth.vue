@@ -12,12 +12,13 @@
                 <div class="novaSenha">
                     <label for="newPassword">Nova Senha:</label>
                     <input type="password" id="newPassword" placeholder="Sua nova senha" v-model="newPassword" required>
+                    <button class="showButton" @click="togglePasswordVisibility('newPassword')"></button>
                 </div>
-                
 
                 <div class="confirmarNova">
                     <label for="newRePassword">Confirma a Nova Senha:</label>
                     <input type="password" id="newRePassword" placeholder="Confirme sua nova senha" v-model="newRePassword" required>
+                    <button class="showButton" @click="togglePasswordVisibility('newRePassword')"></button>
                 </div>
 
             </div>
@@ -45,8 +46,10 @@ import { useRouter } from 'vue-router';
 
 // Váriaveis responsivas que armazenam os valores dos campos acima (integrar à API)
 const newPassword = ref('');
-const newRePassword = ref(''); // 
+const newRePassword = ref(''); 
 const isEqual = ref(true);
+
+
 
 // Router para voltar ao login
 const router = useRouter();
@@ -66,17 +69,39 @@ const verifyPassword = () => {
 }
 
     // Reiniciar a rotina
-    const resetPassword = () => {
+const resetPassword = () => {
     newPassword.value = '';
     newRePassword.value = '';
     isEqual.value = true;
 
 }
 
+    //Visualizar a senha;
+const togglePasswordVisibility = (fieldId) => {
+    const field = document.getElementById(fieldId);
+    
+    if (field.type === 'password') {
+        field.type = 'text';
+    } else {
+        field.type = 'password';
+    }
+}
+
+
+
 
 </script>
 
 <style scoped>
+
+.showButton {
+    max-width: 20px;
+    max-height: 20px;
+}
+
+.showButton:hover {
+    background-color: #007bff;
+}
 
 .blurred {
 	filter: blur(1.5px);
@@ -97,7 +122,7 @@ const verifyPassword = () => {
 	}
 
 .pop-error button {
-	width: 100%;
+	width: 75%;
 	margin-left: 0px;
 	margin-top: 7px;
 	padding: 0px;
@@ -127,8 +152,8 @@ const verifyPassword = () => {
     padding-top: 0px;
     padding-bottom: 50px;
     justify-content: space-between;
-    margin-top: 71px;
-    margin-bottom: 37px;
+    margin-top: 32px;
+    margin-bottom: 20px;
 }
 
 .novaSenha {
