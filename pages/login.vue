@@ -22,16 +22,17 @@
 definePageMeta({
   layout: 'authentication'
 });
-import { ref, onMounted } from 'vue';
-import { useUser } from '../stores/user.ts'
 
-const userStore = useUser()
+import { ref, onMounted } from 'vue';
+import { useUser } from '../stores/user.ts';
+
+const userStore = useUser();
 const email = ref('');
 const password = ref('');
 
 
 const submitForm = () => {
-	userStore.fetchData(password.value, email.value)
+	userStore.fetchData(password.value, email.value);
 }
 
 </script>
@@ -41,6 +42,7 @@ const submitForm = () => {
 .login-container{
 	width: 325px;
 	flex-direction: column;
+	background-color: #f2f2f2;
 }
 
 .texto {

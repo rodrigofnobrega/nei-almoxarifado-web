@@ -22,6 +22,10 @@
 
 
 import { ref } from 'vue';
+
+definePageMeta({
+  layout: 'authentication'
+});
 	
 const username = ref('');
 const password = ref('');
