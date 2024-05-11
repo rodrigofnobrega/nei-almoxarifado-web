@@ -4,11 +4,11 @@
             <div class="progress-bar bg-warning" style="width: 100%"></div>
         </div>
         <div class="card-body">
-            <div class="d-flex align-items-center justify-content-start mb-1">
+            <div class="d-flex align-items-center justify-content-start">
                 <IconsInformation class="mb-2 me-2" />
                 <h5 class="card-title">Aviso</h5>
             </div>
-            <p class="card-text mb-1 d-flex justify-content-start">{{ popupText }}</p>
+            <p class="card-text d-flex justify-content-start">{{ popupText }}</p>
         </div>
     </div>
 </template>
@@ -72,28 +72,30 @@ export default{
 </script>
 
 <style scoped>
-@keyframes example {
+@keyframes heightAnimation {
   0% {height: 0;}
-  100% {height: 100px;}
+  95% {height: 115px;}
+  100% {height: auto;}
 }
-@keyframes example2{
+@keyframes widthAnimation{
     0% {width: 0%;}
     100% {width: 100%;}
 }
 .popup{
     transition: opacity 0.5s ease-in-out;
-    height: 100px;
+    height: auto;
     width: 16rem;
     position: fixed;
     bottom: 10px;
     right: 30px;
-    animation-name: example;
+    animation-name: heightAnimation;
     animation-duration: 1.3s;
     z-index: 3000;
     box-shadow: 0px 0px 10px 4px rgba(254, 213, 30, 0.7);
 }
 .progress-bar{
-    animation: example2 6.5s;
+    animation: widthAnimation 6.5s;
     color: red;
 }
+
 </style>

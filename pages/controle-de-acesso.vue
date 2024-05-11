@@ -1,9 +1,9 @@
 <template>
-    <div class="container d-flex content">
+    <div class="container">
 		<!-- TODO: transformar em tabela com linhas !-->
-		<div class="row">
-			<div v-if="solicitations.length > 0" v-for="req in solicitations" class="col-xl-4 px-xl-3 col-lg-6 px-lg-3 col-md-6 px-md-3 col-sm-12 col-xs-12 mb-3 mb-xl-0"> 
-				<CardsSolicitation 
+		<div class="row mt-3 d-flex align-items-center justify-content-center">
+			<div v-if="solicitations.length > 0" v-for="req in solicitations" :key="req.id" :class="{'extra-large': solicitations.length == 1, 'col-xl-6': solicitations.length == 2}" class="p-0 col-xl-4 col-lg-6 col-md-6 col-sm-12  mb-3 mb-xl-0"> 
+				<CardsSolicitation
 					:person="req.user.name"
 					:requestedAt="req.creationDate"	
 					:message="req.description"
@@ -16,7 +16,7 @@
 					> 
 				</CardsSolicitation>
 			</div>
-			<div v-else class="warning-text teste d-flex aling-items-center justify-content-center">
+			<div v-else class="warning-text d-flex aling-items-center justify-content-center">
                  <p class="text-dark-emphasis fs-5 opacity-50">Nenhuma solicitação feita.</p>
              </div>
 		</div>
@@ -27,7 +27,7 @@
 import { inject } from 'vue';
 import { getRequestByStatus } from '../services/requests/requestsGET';
 import { useUser } from '../stores/user';
-import { onMounted, ref } from 'vue';
+import { provide, ref } from 'vue';
 
 const setpageTitle = inject('setpageTitle');
 
@@ -37,18 +37,24 @@ const sendDataToParent = () => {
 };
 sendDataToParent();
 const userStore = useUser()
-
 const solicitations = ref(await getRequestByStatus(userStore, 'pendente'))
+
+provide('setSolicitations', async () => {
+	solicitations.value = await getRequestByStatus(userStore, 'pendente')
+})
 </script>
 
 <style scoped>
-.teste{
+.extra-large{
+	width: 50vw;
+}
+.container{
+	width: 100%;
+	padding-left: 30px;
+}
+.warning-text{
 	position: absolute;
 	margin-top: 5%;
-	margin-left: -10%;
-}
-.content {
-	margin-left: 3vh;
-	margin-right: 3vh;
+	width: 80%;
 }
 </style>

@@ -58,6 +58,7 @@ export default {
   padding: 0;
   margin: 51px 0px 0px 0px;
 }
+/*
 .main-content{
   width: 86vw;
   margin-left: 11px;
@@ -66,7 +67,7 @@ export default {
   margin-bottom: 3vw;
   padding-left: 0px;
   padding-right: 0px;
-} 
+} */
 .fluid-container{
   position: static;
 }
@@ -79,6 +80,7 @@ export default {
 .btn-outline-primary:hover{
     color: white !important;  
 }
+/*
 @media screen and (max-width: 1199px){
   .main-content{  
       width: 82vw;
@@ -109,5 +111,5 @@ export default {
     width: calc(74vw*0.98);
     margin-left: 0.2%;
   }
-}
+}*/
 </style>
