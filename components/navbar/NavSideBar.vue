@@ -14,13 +14,13 @@
                         <span class="list-group-item">Controle de Acesso</span>
                     </div>
                 </a>
-                <div class="item-bg" :class="{'active': $route.path === '/inventario', 'text-dark-emphasis': $route.path !== '/inventario'}">
+                <div class="item-bg" :class="{'active': $route.path === '/catalogo', 'text-dark-emphasis': $route.path !== '/catalogo'}">
                     <IconsSpreadSheet class="nav-icon"/>
-                    <a class="text-decoration-none text-light" :class="{'text-dark-emphasis': $route.path !== '/inventario'}"  href="/inventario" aria-current="true">
+                    <a class="text-decoration-none text-light" :class="{'text-dark-emphasis': $route.path !== '/catalogo'}"  href="/catalogo" aria-current="true">
                         <span class="list-group-item">Catálogo</span>
                     </a>
                     <button class="svg-button" @click="rotate">
-                        <IconsDownArrow class="small-rotate-arrow" :style="{ transform: isRotated ? 'rotate(180deg)' : 'rotate(0deg)'}" :class="{'text-dark-emphasis': $route.path !== '/inventario'}" width="24px" height="24px"/>
+                        <IconsDownArrow class="small-rotate-arrow" :style="{ transform: isRotated ? 'rotate(180deg)' : 'rotate(0deg)'}" :class="{'text-dark-emphasis': $route.path !== '/catalogo'}" width="24px" height="24px"/>
                     </button>
                 </div>
                 <div :class="{'hidden': !isRotated}">
@@ -87,13 +87,8 @@ export default {
         const store = useStorageStore();
         const routes  = useRoutes();
         let tempSublinks = [];
-        for(let i = 0; i < routes.length; i++){
-            if(routes[i].includes('/inventario/')){
-                tempSublinks.push({
-                    path: routes[i],
-                    name: routes[i].split('/')[2]
-                });
-            }
+        for(let i = 0; i < 1; i++){
+            tempSublinks[i] = {path:'/catalogo/almoxarifado', name: 'almoxarifado'}
         }
         store.setSublink(tempSublinks);
         this.dropdwonRoutes = store.sidebarSublinks;

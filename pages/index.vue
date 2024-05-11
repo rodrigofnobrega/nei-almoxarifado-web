@@ -70,7 +70,7 @@ sendDataToParent();
   padding-top: 10px;
   padding-bottom: 40px;
   border: 1px #D9D9D9 solid;
-  box-shadow: 6px 6px 20px 0px rgb(0, 0, 0, 0.2);
+  box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);
 }
 h2{
     font-weight: 300;

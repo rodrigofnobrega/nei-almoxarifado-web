@@ -1,44 +1,42 @@
 import axios from 'axios';
-import { useUser } from '../../stores/user';
-const userStore = useUser()
 
-export const getRecords = async () => {
-    const { data } = await useFetch("http://localhost:8080/api/v1/records", {
+export const getRecords = async (userStore) => {
+    const { data } = await axios("http://localhost:8080/api/v1/records", {
         method: 'GET',
-        header: {
+        headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Authorization": `Bearer ${userStore.token}`
         }
     })
-    return data._rawValue
+    return data
 };
-export const getRecord = async (record_id) => {
-    const { data } = await useFetch(`http://localhost:8080/api/v1/records/${record_id}`, {
+export const getRecord = async (userStore, record_id) => {
+    const { data } = await axios(`http://localhost:8080/api/v1/records/${record_id}`, {
         method: 'GET',
-        header: {
+        headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Authorization": `Bearer ${userStore.token}`
         }
     })
-    return data._rawValue
+    return data
 };
-export const getRecordByRole = async (role) => {
-    const { data } = await useFetch(`http://localhost:8080/api/v1/records/query/users?role=${role}`, {
+export const getRecordByRole = async (userStore, role) => {
+    const { data } = await axios(`http://localhost:8080/api/v1/records/query/users?role=${role}`, {
         method: 'GET',
-        header: {
+        headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Authorization": `Bearer ${userStore.token}`
         }
     })
-    return data._rawValue
+    return data
 };
-export const getRecordByItemName = async (name) => {
-    const { data } = await useFetch(`http://localhost:8080/api/v1/records/query/itens?name=${name}`, {
+export const getRecordByItemName = async (userStore, name) => {
+    const { data } = await axios(`http://localhost:8080/api/v1/records/query/itens?name=${name}`, {
         method: 'GET',
-        header: {
+        headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Authorization": `Bearer ${userStore.token}`
         }
     })
-    return data._rawValue
+    return data
 };

@@ -13,7 +13,7 @@
         <template v-slot:body>
           <template v-if="showResults">
             <ul class="list-group">
-              <a class="text-decoration-none teste" v-for="result in searchResults" :href="`/inventario/almo`" :key="result.name">
+              <a class="text-decoration-none" v-for="result in searchResults" :href="`/catalogo/almoxarifado`" :key="result.id">
                 <li class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
                   {{ result.name }} 
                   <span class="badge bg-primary rounded-pill" v-if="result"> {{ result.quantity }} </span>
@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import { useStorageStore } from '../../stores/storage';
-
+import { getItems } from '../../services/items/itemsGET';
+import { useUser } from '../../stores/user'; 
 export default{
     data() {
         return {
@@ -51,7 +51,6 @@ export default{
             else {
                 this.searchCount++;
             }
-            document.getElementsByClassName("teste")[0].focus();
             searchResult[this.searchCount - 1].focus();
         },
         SearchUp() {
@@ -69,14 +68,25 @@ export default{
           searchResult[this.searchCount - 1].click();
         },
         handleSearch() {
-          this.searchResults = this.store.items.filter(result => result.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+          this.searchResults = this.items.filter(result => result.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
           this.showResults = true; 
+          this.searchCount = 0;
       }
     },
-    setup(){
-      const store = useStorageStore();
+    async setup(){
+      const userStore = useUser();
+      let res = await getItems(userStore)
+      const items = []
+      let count = 0;
+      for(let i = 0; i < res.totalPages; i++){
+        res = await getItems(userStore, i);
+        for(let j = 0; j < res.pageElements; j++){
+          items[count] = res.content[j]
+          count++;
+        }
+      }
       return{
-        store
+        items
       }
     },
 } 

@@ -7,7 +7,7 @@
               <img src="/almo.png" class="card-img-top" alt="...">
             </template>
             <template v-slot:body>
-              <a href="/inventario/almoxarifado-escolar" class="fs-5 stretched-link text-dark-emphasis">Almoxarifado Escolar</a>
+              <a href="/catalogo/almoxarifado" class="fs-5 stretched-link text-dark-emphasis">Almoxarifado Escolar</a>
               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
             </template>
           </CardsImageCard>
@@ -16,7 +16,7 @@
               <img src="/almo2.png" class="card-img-top" alt="...">
             </template>
             <template v-slot:body>
-              <a href="/inventario/almoxarifado-escolar" class="fs-5 stretched-link text-dark-emphasis">Almoxarifado Escolar</a>
+              <a href="/catalogo/almoxarifado-escolar" class="fs-5 stretched-link text-dark-emphasis">Almoxarifado Escolar</a>
               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
             </template>
           </CardsImageCard>
@@ -25,7 +25,7 @@
               <img src="/almo3.png" class="card-img-top" alt="...">
             </template>
             <template v-slot:body>
-              <a href="/inventario/almoxarifado-escolar" class="fs-5 stretched-link text-dark-emphasis">Almoxarifado Escolar</a>
+              <a href="/catalogo/almoxarifado-escolar" class="fs-5 stretched-link text-dark-emphasis">Almoxarifado Escolar</a>
               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
             </template>
           </CardsImageCard>
