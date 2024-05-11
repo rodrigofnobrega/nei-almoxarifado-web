@@ -1,18 +1,25 @@
 <template>
     <ModalItemDetails v-if="filteredItemsSize > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
     <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
-    <div style="margin-left: 0.7%;">
-        <div class="d-flex justify-content-between aling-items-center">
-            <span class="d-flex align-items-center table-searchbar">
+<div class="table-container d-block mt-2">
+    <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
+        <h6 class="ps-2 d-flex align-items-center opacity-75">
+            <IconsInformation class="me-2"/>
+            Descrição da Subpágina
+        </h6>
+        <p class="sub-catalog-text opacity-75">Esta organização de almoxarifado é destinada aos itens relacionados as atividades escolares do NEI, como giz de ceira, lápis e quaisquer material que possua uso no dia a dia dos alunos e professores.</p>
+    </div>   
+    <div class="table-actions d-flex bg-light justify-content-between aling-items-center">
+        <span class="d-flex ms-2 align-items-center table-searchbar">
             <IconsSearchGlass class="search-glass"/>
-            <input v-model="searchInput" class="searchbar form-control" placeholder="Pesquisar"/>          
-            </span>
-            <div class="d-flex">
-                <ButtonsNewItem />
-			    <ButtonsFilter class="m-0 p-0"/>
-			    <ButtonsConfigure/>
-            </div>
+            <input v-model="searchInput" class="searchbar form-control bg-light" placeholder="Pesquisar"/>          
+        </span>
+        <div class="d-flex me-2">
+            <ButtonsNewItem />
+		    <ButtonsFilter class="m-0 p-0"/>
+		    <ButtonsConfigure/>
         </div>
+    </div>
     <div class="row d-block">
         <TablesTable>
             <template v-slot:items>
@@ -29,7 +36,7 @@
                 <p>{{ item.quantity }}</p>
                 </th>
                <th>
-                <p>[ ]</p>
+                <p>{{ itemRecord }}</p>
                </th>
                <th class="end">
                     <button class="table-btn btn btn-primary" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
@@ -52,50 +59,64 @@
         <li class="page-item">
             <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
         </li>
-        <li class="page-item" v-for="i in response.totalPages" :key="i-1">
+        <li class="page-item" v-for="i in res.totalPages" :key="i-1">
             <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
         </li>
         <li class="page-item">
-            <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == response.totalPages-1}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
+            <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == res.totalPages-1}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
         </li>
     </ul>
 </nav>
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router';
-import { useStorageStore } from '../../stores/storage';
+import { useStorageStore } from '../../stores/storage.ts';
 import { ref, computed, onMounted, inject } from 'vue';
-import { getItems } from '../../services/items/itemsGET';
-
+import { getItems } from '../../services/items/itemsGET.ts';
+import { getRecord } from '../../services/record/recordGET.ts';
 import { useUser } from '../../stores/user.ts'
+import { navigateTo } from 'nuxt/app';
+
+const route = useRoute();
+if(route.params.id !== 'almoxarifado'){
+    navigateTo('/catalogo')
+} 
 
 const userStore = useUser()
 const store = useStorageStore();
 let pagination = ref(0);
 /*REFATORAR CÓDIGO*/ 
-let response = await getItems(userStore, pagination.value);
-const sort = async (response) => {
-    let sortedData = response;
-    let temp = null;
-    let stop = true;
-    do{
-        stop = true;
-        for(let i = 0; i < sortedData.content.length-1; i++){
-            if(sortedData.content[i].id > sortedData.content[i+1].id){
-                temp = sortedData.content[i+1];
-                sortedData.content[i+1] = sortedData.content[i];
-                sortedData.content[i] = temp;
-                stop = false;
-            }
-        }
-    } while(stop == false);
-    return sortedData.content
-};
-store.items = await sort(response)
+let res = await getItems(userStore, pagination.value, '');
+let invertedPagination = ref(res.totalPages-1)
+if(res.status === 403){
+    navigateTo("/login")
+}
+let queryParams = ref({
+    sort: '', 
+    isInverted: false
+});
+
+const sortedRes = async (sort, isInverted, paginationInverted) => {
+    if(isInverted){
+        res = await getItems(userStore, paginationInverted, sort)
+        store.items = res.content
+        return 1
+    } 
+    res = await getItems(userStore, pagination.value, sort)
+    store.items = res.content
+    return 1
+}
+
+provide('setItemsFilter', (filter, inverted) => {
+    queryParams.value.sort = filter
+    queryParams.value.isInverted = inverted
+    sortedRes(queryParams.value.sort, inverted, invertedPagination.value)
+})
+
+store.items = res.content
+
 
 const setpageTitle = inject('setpageTitle');
-
 const sendDataToParent = () => {
     const data = "Almoxarifado Escolar";
     setpageTitle(data);
@@ -118,25 +139,41 @@ const itemIndex = ref(0);
 const currentItem = computed(() => store.items[itemIndex.value]);
 const currentRoute = useRoute().fullPath.split('/')[2];
 
+let itemRecord = ref('')
+const getItemRecord = async (itemId) => {
+    const res = await getRecord(userStore, itemId)
+    itemRecord.value = res.creationDate;
+}
+getItemRecord()
+
 /*TODO: refatorar nos composables*/
 let pagesFocus = ref([true]);
-for(let i = 0; i < response.totalPages; i++){
+for(let i = 0; i < res.totalPages; i++){
     pagesFocus.value.push(false);
 };
 let count = 0;
 
 const page = (async (index) => {
     pagination.value = index;
-    response = await getItems(userStore, pagination.value);
-    store.items = await sort(response)
+    if(queryParams.value.isInverted){
+        if(index < invertedPagination.value){
+            invertedPagination.value = (res.totalPages-1)-index;
+        }
+        else if(index > invertedPagination.value){
+            invertedPagination.value = (res.totalPages-1)-index;
+        }
+    }
+    sortedRes(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
     pagesFocus.value[count] = false;
     count = index;  
     pagesFocus.value[count] = true;
 });
 const fowardPage = (async () => {
     pagination.value++;
-    response = await getItems(userStore, pagination.value);
-    store.items = await sort(response)
+    if(queryParams.value.isInverted){
+        invertedPagination.value--;
+    }
+    sortedRes(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
     pagesFocus.value[count] = false;
     count++;
     pagesFocus.value[count] = true;
@@ -146,8 +183,10 @@ const fowardPage = (async () => {
 });
 const backPage = (async () => {
     pagination.value--;
-    response = await getItems(userStore, pagination.value);
-    store.items = await sort(response)
+    if(queryParams.value.isInverted){
+        invertedPagination.value++;
+    }
+    sortedRes(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
     pagesFocus.value[count] = false;
     count--;
     pagesFocus.value[count] = true; 
@@ -163,24 +202,51 @@ const showDetails = (index) => {
 const showHistory = (index) => {
     itemIndex.value = index;
 }
-onMounted(async () => {   
-    sort(response) 
+onMounted(async () => {  
     store.deleteMode = false,
     store.editMode = false
 });
 </script>
 
 <style scoped>
+.table-container{
+    width: 100vw;
+    margin-right: 37px;
+    display: block !important;
+}
 .search-glass{
     padding-left: 0px;
 }
 .container{
+    display: block;
     margin-left: 0px; 
     padding: 0px;
     margin-bottom: 100px;
 }
-
+.sub-catalog{
+    border-radius: 13px;
+    margin-top: -14px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    margin-right: 20%;
+    margin-left: 20%;
+    border: 1px #D9D9D9 solid;
+    box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);
+}
+.sub-catalog-text{
+    padding: 0px 10px 0px 10px;
+    font-size: 15px;
+}
+h6{
+    font-weight: 400;
+    color: rgb(51,51,51, 0.8);
+}
+.table-actions{
+    margin-left: -10px;
+    margin-right: -48px;
+}
 th{
+    background-color: white !important;
     padding: 16px 0 16px 0;
     text-decoration: none;
     text-align: center;
@@ -242,10 +308,10 @@ p{
 }
 .pagination{
     bottom: 0%; 
-    left: 48%;
+    left: 47.8%;
 }
 .position-fixed{
-    z-index: 0;
+    z-index: 100;
 }
 tr:hover .mode-btn{
     display: block;

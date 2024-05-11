@@ -17,5 +17,8 @@
 </template>
 
 <style scoped>
+.modal-body{
+	overflow-y: hidden;
+}
 </style>
 

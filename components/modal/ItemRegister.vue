@@ -57,21 +57,21 @@ export default{
     methods: {
         itemQtdHandler(){
             if(parseInt(this.itemQtd) == 0 || this.itemQtd == ''){
-                this.popup.throwPopup("Quantidade inválida", '#B71C1C')
+                this.popup.throwPopup("Erro: Quantidade inválida", '#B71C1C')
                 return false
             }
             return true
         },
         itemTypeHandler(){
             if(this.itemType === ''){
-                this.popup.throwPopup('Tipo inválido', '#B71C1C')
+                this.popup.throwPopup('Erro: Tipo inválido', '#B71C1C')
                 return false
             }
             return true
         },
         itemNameHandler(){
             if(this.itemName === ''){
-                this.popup.throwPopup('Nome inválido', '#B71C1C')
+                this.popup.throwPopup('Erro: Nome inválido', '#B71C1C')
                 return false
             }
             return true
@@ -83,7 +83,7 @@ export default{
             try{
                 this.store.addItem({name: this.itemName, sipacCode: sipacHandeling(this.itemSipac), type: this.itemType.charAt(0).toUpperCase() + this.itemType.slice(1), /*Faltando o handler de qtd*/  quantity: this.itemQtd, history: '', storage: this.$route.path.split('/')[2]})
             } catch(err){
-                this.popup.throwPopup("Erro de servidor(Contate o suporte)", '#B71C1C')
+                this.popup.throwPopup("Erro: problema interno no servidor(Contate o Suporte)", '#B71C1C')
                 return false
             }
             this.popup.throwPopup("Item cadastrado", '#0B3B69');

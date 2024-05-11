@@ -3,7 +3,7 @@
     <div class="col-12 p-0 m-0 rounded">
         <table class="table table-hover border">
           <thead>
-           <tr class="">
+           <tr>
                <th class="col-title py-2 border" scope="col">Nome</th>
                <th class="col-title py-2 border" scope="col">Código Sipac</th>
                <th class="col-title py-2 border" scope="col">Tipo Unitário</th>
@@ -25,21 +25,6 @@ import { onMounted } from 'vue';
 </script>
 
 <style scoped>
-.page-title{
-	background-color: #F2F2F2;
-	width: 88.5vw;
-	border-bottom: 1px ridge #D9D9D9;
-	margin-bottom: 20px;
-}
-
-h2{
-    font-weight: 300;
-    color: rgb(51,51,51, 0.8);
-}
-.catalog-header{
-    justify-content: space-between;
-}
-
 table{
     width: 103.3%;
 }

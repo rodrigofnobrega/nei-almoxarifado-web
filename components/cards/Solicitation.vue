@@ -5,7 +5,7 @@
     		    <h6 class="justify-content-start mb-3">
     		        Solicitação
     		    </h6>
-    		    <p class="resquest-time mb-3">20/05/24 14:00<IconsClock class="clock ms-2"/></p>
+    		    <p class="resquest-time mb-3">{{requestedAt.slice(0, 19)}}<IconsClock class="clock ms-2"/></p>
     		</div>
 		</template>
 		<template v-slot:default> 
@@ -62,7 +62,7 @@
 			<textarea class="form-control"> </textarea>
 		 </template>
 		<template v-slot:buttons> 
-			<button @click="AcceptRequest(requestId)" class="btn btn-secondary mx-2"> Enviar </button>
+			<button @click="AcceptRequest(requestId)" data-bs-dismiss="modal" class="btn btn-secondary mx-2"> Enviar </button>
 		</template>
 	 </ModalActionConfirm>
 	<ModalActionConfirm id="rejectModal">
@@ -72,7 +72,7 @@
 			<textarea class="form-control"> </textarea>
 		 </template>
 		<template v-slot:buttons> 
-			<button @click="RejectRequest(requestId)" class="btn btn-secondary mx-2"> Enviar </button>
+			<button @click="RejectRequest(requestId)"  data-bs-dismiss="modal" class="btn btn-secondary mx-2"> Enviar </button>
 		</template>
 	 </ModalActionConfirm>
 </template>
@@ -81,6 +81,8 @@
 import Card from './Card.vue';
 import { useUser } from '../../stores/user.ts';
 import { requestAccept, requestDecline } from '../../services/requests/requestsPATCH.ts';
+import { usePopupStore } from '~/stores/popup';
+import { inject } from 'vue';
 
 export default {
 	components: { Card },
@@ -98,17 +100,34 @@ export default {
 	methods:{
 		async AcceptRequest(requestId:Number){
 			const res = await requestAccept(this.userStore, requestId);
-			console.log(res);
+			if(res){
+				this.popupStore.throwPopup('Solicitação aceita', '#0B3B69')
+				this.sendDatatoParent()
+				return true
+			}
+			this.popupStore.throwPopup('Erro: Quantidade solicitada maior que a disponível', '#B71C1C')
 		},
 		async RejectRequest(requestId:Number){
 			const res = await requestDecline(this.userStore, requestId);
-			console.log(res);
+			if(res){
+				this.popupStore.throwPopup('Solicitação rejeitada', '#0B3B69');
+				this.sendDatatoParent()
+				return true
+			}
+			this.popupStore.throwPopup('Erro: Problema interno no servidor(Contate o Suporte)', '#B71C1C')
 		}
 	},
 	setup(){
 		const userStore = useUser();
+		const popupStore = usePopupStore()
+		const setSolicitations = inject('setSolicitations');
+		const sendDatatoParent = () => {
+			setSolicitations()
+		}
 		return {
-			userStore
+			userStore,
+			popupStore,
+			sendDatatoParent
 		}
 	}
 };
@@ -118,7 +137,7 @@ export default {
 
 <style scoped>
 .cards-grid{
-	width:calc(104%*0.99);
+	width: 95%;
     border: 1px #c0c0c2 solid !important;
 }
 .cards-row{
@@ -140,7 +159,7 @@ export default {
 	font-size: 15px;
 }
 .action-btn{
-	width: 24%;
+	width: 90px;
 	font-size: 17px;
 	white-space: nowrap;
 }
@@ -149,6 +168,7 @@ export default {
 		font-size: 13.3px;
 	}
 }
+/*
 
 @media screen and (max-width: 1050px){
 	.cards-grid{
@@ -172,6 +192,6 @@ export default {
 		margin-right: -20px; 
 		margin-left: -20px;
 	}
-}
+}*/
 </style>
 

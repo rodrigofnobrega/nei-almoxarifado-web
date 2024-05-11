@@ -13,7 +13,7 @@
 		        </template>
           </TitlesTitle>
         </div>
-        <div class="main-content">
+        <div class="main-content d-flex justify-content-center">
           <slot />
         </div>
       </div> 
@@ -46,6 +46,9 @@ export default {
 </script>
 
 <style>
+#content{
+  background-color: #f3f4f7;
+}
 .main{
   width: 100%;
   height: 100%;
@@ -55,14 +58,16 @@ export default {
   padding: 0;
   margin: 51px 0px 0px 0px;
 }
+/*
 .main-content{
-  width: 84vw;
-  margin-left: 0.1%;
+  width: 86vw;
+  margin-left: 11px;
   margin-right: 0px;
   margin-top: 0px;
   margin-bottom: 3vw;
   padding-left: 0px;
-} 
+  padding-right: 0px;
+} */
 .fluid-container{
   position: static;
 }
@@ -75,6 +80,7 @@ export default {
 .btn-outline-primary:hover{
     color: white !important;  
 }
+/*
 @media screen and (max-width: 1199px){
   .main-content{  
       width: 82vw;
@@ -105,5 +111,5 @@ export default {
     width: calc(74vw*0.98);
     margin-left: 0.2%;
   }
-}
+}*/
 </style>
