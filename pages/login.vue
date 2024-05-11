@@ -4,15 +4,20 @@
 			<p class="texto"><strong>Entrar</strong></p>
 		</div>
 		<form class="login-form" @submit.prevent="submitForm">
+
 			<label for="email">Email:</label>
-			<input type="text" id="email" v-model="email" required>
+			<input type="text" id="email" placeholder="Seu email" v-model="email" required>
+
 			<label for="password">Senha:</label>
-			<input type="password" id="password" v-model="password" required>
+			<input type="password" id="password" placeholder="Sua senha" v-model="password" required>
+
 			<button type="submit">Entrar</button>
+
 		</form>
 		<div class="info">
 			
-			<p><a href="#">Esqueceu sua senha?</a></p>
+			<NuxtLink to="/emailAuth">Esqueceu sua senha?</NuxtLink>
+			<br>
 			<NuxtLink to="/cadastro">Ainda não tem uma conta? Cadastre-se aqui.</NuxtLink>
 		</div>
 	</div>
@@ -22,23 +27,29 @@
 definePageMeta({
   layout: 'authentication'
 });
-import { ref, onMounted } from 'vue';
-import { useUser } from '../stores/user.ts'
 
-const userStore = useUser()
+import { ref, onMounted } from 'vue';
+import { useUser } from '../stores/user.ts';
+
+const userStore = useUser();
 const email = ref('');
 const password = ref('');
 
 
 const submitForm = () => {
-	userStore.fetchData(password.value, email.value)
+	userStore.fetchData(password.value, email.value);
 }
 
 </script>
 
 <style scoped>
+.container-fluid {
+	padding: 0px;
+}
 
 .login-container{
+	border-radius: 15px;
+	height: 400px;
 	width: 325px;
 	flex-direction: column;
 }
@@ -53,18 +64,21 @@ const submitForm = () => {
 
 .header {
 	width: 100%;
-	max-width: 300px;
+	max-width: 350px;
 	height: 65px;
 	border-radius: 15px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;
+	padding: 0px;
 }
 
 .login-form {
-	margin-top: 20px;
+	margin-top: 10px;
 	margin-left: 10px;
 	margin-right: 10px;
+	padding: 12px;
+
 }
 
 .login-form label {
@@ -83,9 +97,8 @@ const submitForm = () => {
 
 .login-form button {
 	width: 100%;
-	padding: 10px;
+	padding: 11px;
 	background-color: #71DD67;
-;
 	color: #fff;
 	border: none;
 	border-radius: 5px;
@@ -94,6 +107,7 @@ const submitForm = () => {
 
 .info {
 	margin-top: 20px;
+	padding: 12px;
 	text-align: center;
 }
 
@@ -104,5 +118,9 @@ const submitForm = () => {
 
 .info a:hover {
 	text-decoration: underline;
+}
+
+.login-form button:hover {
+	background-color: #71DD90;
 }
 </style>

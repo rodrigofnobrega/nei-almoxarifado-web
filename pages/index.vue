@@ -45,6 +45,7 @@ const sendDataToParent = () => {
 };
 sendDataToParent();
 </script>
+
 <style scoped>
 .page-title{
 	background-color: #F2F2F2;

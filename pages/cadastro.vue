@@ -1,48 +1,136 @@
 <template>
-	<div class="container-fluid login-container d-flex  col-1 justify-content-center">
+	<div class="container-fluid singup-container d-flex  col-1 justify-content-center" :class="{ 'blurred': errorPassword }">
+
 		<div class="header">
-			<p class="texto"><strong>Entrar</strong></p>
+
+			<p class="texto"><strong>Cadastre-se</strong></p>
+
 		</div>
-		<form class="login-form" @submit.prevent="submitForm">
+		<form class="singup-form" @submit.prevent="submitForm">
+
 			<label for="username">Usuário:</label>
-			<input type="text" id="username" v-model="username" required>
+			<input type="text" id="username" placeholder="Seu nome" v-model="username" required>
+
+			<label for="email">Email:</label>
+			<input type="text" id="email" placeholder="Seu email" v-model="email" required>
+
 			<label for="password">Senha:</label>
-			<input type="password" id="password" v-model="password" required>
-			<button type="submit">Entrar</button>
+			<input type="password" id="password" placeholder="Sua senha" v-model="password" required>
+
+			<label for="re-password">Confirme sua Senha:</label>
+			<input type="password" id="rePassword" placeholder="Confirme sua senha" v-model="rePassword" required>
+
+			<button type="submit">Cadastrar</button>
+
 		</form>
-		<div class="info">
-			
-			<p><a href="#">Esqueceu sua senha?</a></p>
-			<NuxtLink to="/cadastro">Ainda não tem uma conta? Cadastre-se aqui.</NuxtLink>
-		</div>
 	</div>
+
+	<span v-if="errorPassword" class="error-message">
+		A senha está incorreta, tente novamente.
+		<button @click="resetPassForm">Ok</button>
+	</span>
+
 </template>
 
 <script setup lang="ts"> 
 
 
-import { ref } from 'vue';
-	
+import { ref, onMounted } from 'vue';
+
+definePageMeta({
+  layout: 'authentication'
+});
+
+// Variáveis reativas para armazenar os valores dos campos	
 const username = ref('');
+const email = ref('');
 const password = ref('');
+const rePassword = ref('');
+
+const errorPassword = ref(false);
+
+
+
 
 const submitForm = () => {
+	// Visualização dos valores armazenados
 	console.log('Usuário:', username.value);
+	console.log('Email:', email.value);
 	console.log('Senha:', password.value);
+	console.log('Confirmação de Senha:', rePassword.value);
+
+	// Verificação da senha
+	if (password.value != rePassword.value) {
+		console.log("A confirmação de senha não está correta")
+		errorPassword.value = true;
+	}
+	else {
+		console.log(`Usuário ${username.value} foi cadastrado!`);
+
+		username.value = '';
+		email.value = '';
+		password.value = '';
+		rePassword.value = '';
+	}
+
 	// Aqui está uma maneira de confirmar que ao enviar os dados preenchidos, 
 	// eles serão salvos em alguma variável. E assim, está para ser inserida a
 	// lógica por tras dos panos para fazer a pessoa entrar ou não.
-	
-	
-	username.value = '';
-	password.value = '';
+
 }
+
+// Método para cleanar o formulário
+const resetPassForm = () => {
+  password.value = '';
+  rePassword.value = '';
+  errorPassword.value = false;
+};
 
 </script>
 
 <style scoped>
-.login-container{
+
+.blurred {
+	filter: blur(1.5px);
+}
+
+.error-message {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 330px;
+	padding: 11px;
+	text-align: center;
+	background-color: #0B3B69;
+	border-radius: 5px;
+	color: #ffffff;
+	font-weight: bold;
+	}
+
+.error-message button {
+	width: 100%;
+	margin-left: 0px;
+	margin-top: 7px;
+	padding: 0px;
+	background-color: rgba(200, 0, 0);
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.error-message button:hover {
+  background-color: #ff3333; /* Altera a cor do botão quando hover */
+}
+
+.container-fluid {
+	padding: 0px;
+}
+
+.singup-container{
 	width: 325px;
+	padding-bottom: 25px;
 	flex-direction: column;
 }
 .texto {
@@ -55,28 +143,30 @@ const submitForm = () => {
 
 .header {
 	width: 100%;
-	max-width: 300px;
+	max-width: 325px;
 	height: 65px;
 	border-radius: 15px;
 	opacity: 0px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;
+	margin-bottom: 18px
 }
 
-.login-form {
-	margin-top: 20px;
+.singup-form {
+	margin-top: 0px;
 	margin-left: 10px;
 	margin-right: 10px;
+	margin-bottom: 0px;
 }
 
-.login-form label {
+.singup-form label {
 	display: block;
 	margin-bottom: 5px;
 }
 
-.login-form input[type="text"],
-.login-form input[type="password"] {
+.singup-form input[type="text"],
+.singup-form input[type="password"] {
 	width: 100%;
 	padding: 8px;
 	border: 1px solid #ccc;
@@ -84,28 +174,18 @@ const submitForm = () => {
 	margin-bottom: 10px;
 }
 
-.login-form button {
+.singup-form button {
 	width: 100%;
 	padding: 10px;
 	background-color: #71DD67;
-;
 	color: #fff;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
 }
 
-.info {
-	margin-top: 20px;
-	text-align: center;
+.singup-form button:hover {
+	background-color: #71DD90;
 }
 
-.info a {
-	color: #007bff;
-	text-decoration: none;
-}
-
-.info a:hover {
-	text-decoration: underline;
-}
 </style>
