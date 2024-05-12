@@ -41,4 +41,11 @@
     color: white !important; 
     background-color: #0B3B69 !important; 
 }
+
+@media screen and (max-width: 820px) {
+    .action-btn{
+        margin-top: 10px;
+        font-size: 12px !important;
+    }
+}
 </style>

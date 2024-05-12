@@ -9,7 +9,7 @@
                <th class="col-title py-2 border" scope="col">Tipo Unitário</th>
                <th class=" col-title py-2 border" scope="col">Quantidade</th>
                <th class="col-title py-2" scope="col">Última atualização</th>
-           </tr>
+            </tr>
           </thead>
           <tbody>
            <slot name="items" />

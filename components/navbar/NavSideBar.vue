@@ -1,6 +1,9 @@
 <template>
-    <div class="nav bg-light teste d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+    <div class="sidebar teste3 pt-0 nav bg-light d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed, 'teste': responsive && !isMobile, 'teste2': responsive && isMobile }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-body ps-0" >
+            <div class="mobile-sidebar-header bg-primary m-0 p-0 text-light" :class="{'show': responsive && isMobile}" :style="{'width': responsive && isMobile ? '165px': '0px'}">
+                <IconsClose @click="hideSidebar()" class="exit-btn me-3" style="width: 25px; height: 25px;"/>
+            </div>
             <ul class="list-group-flush container d-block" :class="{ 'collapsed': isCollapsed }">
                 <a class="text-decoration-none" href="/" aria-current="true">
                     <div class="item-bg item-top" :class="{'active': $route.path === '/', 'text-dark-emphasis': $route.path !== '/'}">
@@ -60,17 +63,26 @@
     
 <script >
 import { useStorageStore } from '../../stores/storage';
-    
+import { ref } from 'vue';
 export default {
     data() {
         return {
             isCollapsed: false,
-            dropdwonRoutes: []
+            dropdwonRoutes: [],
+            responsive: false,
+            teste: ref(this.store.isMobile)
         }
+    },
+    mounted() {
+        window.addEventListener('resize', this.mobileMode)
+        this.mobileMode()
     },
     computed: {
         isRotated() {
             return useStorageStore().isRotated;
+        },
+        isMobile(){
+            return useStorageStore().isMobile
         }
     },
     methods: {
@@ -81,6 +93,12 @@ export default {
         },
         rotate() {
             useStorageStore().setRotated();
+        },
+        mobileMode(){
+            this.responsive = window.innerWidth <= 669;
+        },
+        hideSidebar(){
+            this.store.isMobile = false;
         }
       },
     created(){
@@ -92,11 +110,54 @@ export default {
         }
         store.setSublink(tempSublinks);
         this.dropdwonRoutes = store.sidebarSublinks;
+    },
+    beforeUnmount(){
+        window.removeEventListener('resize', this.mobileMode)
+    },
+    setup(){
+        const store = useStorageStore();
+        return{
+            store
+        }
     }
 }
 </script>
-    
+
 <style scoped>
+.exit-btn{
+    transition: transform 0.3s ease-in-out;
+}
+.exit-btn:hover{
+    transform: scale(1.3);
+}
+.mobile-sidebar-header{
+    transition: width 0.6s ease-in-out;
+    margin-top: -16px !important;
+    height: 50px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: end;
+}
+
+.teste{
+    width: 0px !important;
+}
+.teste2{
+    padding-top: 0px !important;
+}
+.teste3{
+    z-index: 3000;
+}
+
+.sidebar{
+    overflow-y: auto;
+}
+.nav{   
+    margin: 0px;
+    position: sticky;
+    display: flex;
+    transition: width 0.6s ease-in-out;
+}
 .offcanvas{
     border: none;
     width: 10em;
@@ -122,15 +183,6 @@ export default {
     padding: 0;
     margin: 0;
     background: none;
-}
-.nav{   
-    margin: 0px;
-    position: sticky;
-    display: flex;
-    transition: width 0.6s ease-in-out;
-}
-.teste{
-    overflow-y: auto;
 }
 .list-group-flush{
     margin-bottom: 50px;
@@ -218,4 +270,5 @@ export default {
 .list-group-item:hover{
     color: #333333;
 }
+
 </style>

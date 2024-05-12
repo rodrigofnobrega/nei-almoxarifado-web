@@ -16,8 +16,8 @@
         </span>
         <div class="d-flex me-2">
             <ButtonsNewItem />
-		    <ButtonsFilter class="m-0 p-0"/>
-		    <ButtonsConfigure/>
+		    <ButtonsFilter class=" m-0 p-0"/>
+		    <ButtonsConfigure />
         </div>
     </div>
 
@@ -38,20 +38,19 @@
                 </th>
                <th class="">
                 <p>CADASTRO 2024-05-11 09:20:02 Luís Freitas</p>
-               </th>
                 <div class="end position-sticky">
-
-                    <button class="position-absolute table-btn btn btn-primary" style="margin-top: 1vw; right: 104px;" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                    <button class="position-absolute table-btn btn btn-primary" style="margin-top: -23px; right: 84px;" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         Detalhes
                     </button>
-                    <button class="position-absolute table-btn btn btn-primary" style="margin-top: 1vw; right: 30px;" @click="showHistory(item.index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                    <button class="position-absolute table-btn btn btn-primary" style="margin-top: -23px; right: 13px;" @click="showHistory(item.index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
                         Histórico
                     </button>
-                </div>
-             </tr>
-             <div v-else class="warning-text d-flex aling-items-center justify-content-center">
-                 <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
-             </div>
+                 </div>
+               </th>
+            </tr>
+            <div v-else class="warning-text d-flex aling-items-center justify-content-center">
+                <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
+            </div>
             </template>
         </TablesTable>
     </div>
@@ -287,15 +286,6 @@ p{
     margin-right: 10px;
     padding: 5px 5px 5px 5px;
 }
-.mode-btn{
-    margin: 0;
-    z-index: 1000;
-    display: none;
-    position: absolute;
-    margin-top: -28px;
-    margin-left: 210px;
-    opacity: 0%;
-}
 .warning-text{
     position: absolute;
     margin-top: 5%;
@@ -303,21 +293,16 @@ p{
 }
 .pagination{
     bottom: 0%; 
-    left: 49%;
+    left: 45%;
 }
 .position-fixed{
     z-index: 100;
 }
-tr:hover .mode-btn{
-    display: block;
-    opacity: 100%;
-}
-
 tr:hover .table-btn{
     opacity: 100%;
 }
 tr:hover p{
-    opacity: 70%;
+    opacity: 50%;
 }
 
 @media screen and (max-width: 1030px) {
@@ -344,6 +329,14 @@ tr:hover p{
     }
     p{
         font-size: 11px;
+    }
+    .table-searchbar, .searchbar{
+        display: flex !important;
+        padding-top: 6px;
+        font-size: 12px !important; 
+    }
+    .table-searchbar{
+        width: 170px;
     }
 }
 </style>

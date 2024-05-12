@@ -11,4 +11,10 @@
 .btn-outline-primary:hover{
     color: white !important;  
 }
+@media screen and (max-width: 820px){
+    .action-btn{
+        font-size:  12px !important;
+        margin-top: 10px;
+    }
+}
 </style>

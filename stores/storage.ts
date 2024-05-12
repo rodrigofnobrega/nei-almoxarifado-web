@@ -9,8 +9,7 @@ export const useStorageStore = defineStore('storage', {
       items: [],
       sidebarSublinks: [],
       isRotated: false,
-      deleteMode: false,
-      editMode: false,
+      isMobile: false,
       tableSearch: " ",
     }),
     actions: {
@@ -79,13 +78,7 @@ export const useStorageStore = defineStore('storage', {
       },
       setRotated(){
         this.isRotated = !this.isRotated;
-      },
-      setDeleteMode(){
-        this.deleteMode = !this.deleteMode;
-      },
-      setEditMode(){
-        this.editMode = !this.editMode;
-      },
+      }
   },
   getters: {
     getItems() {
