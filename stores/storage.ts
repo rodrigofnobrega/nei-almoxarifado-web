@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { postCreateItem } from "../services/items/itemsPOST";
 import { putUpdateItem } from "../services/items/itemsPUT";
 import { useUser } from './user.ts';
+import { usePopupStore } from '~/stores/popup';
 
 export const useStorageStore = defineStore('storage', {
     state: () => ({
@@ -19,11 +20,15 @@ export const useStorageStore = defineStore('storage', {
       },
       async sendItemsToServer(item) {
         const userStore = useUser();
+        const popupStore = usePopupStore();
         if(item){
           try{
             const res = await postCreateItem(userStore, item.name, item.sipacCode, item.quantity, item.type);
+            if(res === false){
+              popupStore.throwPopup('Erro: Existe um item com mesmo código sipac', '#B71C1C')
+            }
           }catch(error){
-            console.log(error);
+            popupStore.throwPopup('Erro: Existe um item com mesmo código sipac', '#B71C1C')
           }
         }
       },
@@ -39,8 +44,8 @@ export const useStorageStore = defineStore('storage', {
         }
       },
       addItem(item: object){
-        this.items.push(item);
         this.fetchItems(this.items, item);
+        this.items.push(item);
       },
       deleteItem(index: number, almoxarifado: string){
         let count = 0;

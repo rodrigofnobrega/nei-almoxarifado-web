@@ -134,7 +134,7 @@ export default {
 }
 .list-group-flush{
     margin-bottom: 50px;
-    margin-left: -3px;
+    margin-left: -4px;
 }
 .list-group-item{
     display: flex;
@@ -171,8 +171,8 @@ export default {
     width: 50px; 
 }
 .colapse-btn{
-
     width: 160px;
+    border-radius: 0;
     bottom: 0;
     height: 40px;
     transition: width 0.6s ease-in-out;

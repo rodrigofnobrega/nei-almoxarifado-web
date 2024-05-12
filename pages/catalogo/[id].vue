@@ -20,7 +20,8 @@
 		    <ButtonsConfigure/>
         </div>
     </div>
-    <div class="row d-block">
+
+    <div class="table-box row d-block">
         <TablesTable>
             <template v-slot:items>
             <tr v-if="1 > 0" v-for="item in filteredItems" :key="item.index">
@@ -35,17 +36,18 @@
                <th class="border">
                 <p>{{ item.quantity }}</p>
                 </th>
-               <th>
-                <p>{{ itemRecord }}</p>
+               <th class="">
+                <p>CADASTRO 2024-05-11 09:20:02 Luís Freitas</p>
                </th>
-               <th class="end">
-                    <button class="table-btn btn btn-primary" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                <div class="end position-sticky">
+
+                    <button class="position-absolute table-btn btn btn-primary" style="margin-top: 1vw; right: 104px;" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         Detalhes
                     </button>
-                    <button class="table-btn btn btn-primary" @click="showHistory(item.index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                    <button class="position-absolute table-btn btn btn-primary" style="margin-top: 1vw; right: 30px;" @click="showHistory(item.index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
                         Histórico
                     </button>
-                </th>
+                </div>
              </tr>
              <div v-else class="warning-text d-flex aling-items-center justify-content-center">
                  <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
@@ -139,13 +141,6 @@ const itemIndex = ref(0);
 const currentItem = computed(() => store.items[itemIndex.value]);
 const currentRoute = useRoute().fullPath.split('/')[2];
 
-let itemRecord = ref('')
-const getItemRecord = async (itemId) => {
-    const res = await getRecord(userStore, itemId)
-    itemRecord.value = res.creationDate;
-}
-getItemRecord()
-
 /*TODO: refatorar nos composables*/
 let pagesFocus = ref([true]);
 for(let i = 0; i < res.totalPages; i++){
@@ -210,18 +205,22 @@ onMounted(async () => {
 
 <style scoped>
 .table-container{
-    width: 100vw;
-    margin-right: 37px;
+    width: 100%;
     display: block !important;
+}
+.container{
+    width: 100%;
+    display: block;
+    margin-bottom: 100px;
+}
+.table-box{
+    margin: 0;
+}
+.table-actions{
+    width: 100%;
 }
 .search-glass{
     padding-left: 0px;
-}
-.container{
-    display: block;
-    margin-left: 0px; 
-    padding: 0px;
-    margin-bottom: 100px;
 }
 .sub-catalog{
     border-radius: 13px;
@@ -240,10 +239,6 @@ onMounted(async () => {
 h6{
     font-weight: 400;
     color: rgb(51,51,51, 0.8);
-}
-.table-actions{
-    margin-left: -10px;
-    margin-right: -48px;
 }
 th{
     background-color: white !important;
@@ -281,12 +276,12 @@ p{
     color: white !important;  
 }
 .end{
-    position: relative;
     text-align: end;
     padding: 0;
 }
 .table-btn{
-    font-size: 15px;
+    z-index: 3000;
+    font-size: 13px;
     opacity: 0%;
     margin-top: 8px;
     margin-right: 10px;
@@ -308,7 +303,7 @@ p{
 }
 .pagination{
     bottom: 0%; 
-    left: 47.8%;
+    left: 49%;
 }
 .position-fixed{
     z-index: 100;
@@ -324,22 +319,10 @@ tr:hover .table-btn{
 tr:hover p{
     opacity: 70%;
 }
-@media screen and (max-width: 1000px) {
-    table {
-        width: 70vw;
-    }
-    .col-title{
-        font-size: 14px;
-    }
+
+@media screen and (max-width: 1030px) {
     p{
-        font-size: 12px;
-    }
-    .table-btn{
-        font-size: 13px;
-        opacity: 0%;
-        margin-top: 11px;
-        margin-right: 4px;
-        padding: 3px 0px 3px 0px;
+        font-size: 12px !important;
     }
 }
 @media screen and (max-width: 900px){
@@ -351,21 +334,15 @@ tr:hover p{
         justify-content: center;
         align-content: center;
     }
+    p{
+        font-size: 10px !important;
+    }
 }
 @media screen and (max-width: 820px) {
-    .container{
-        margin-left: 0px;
-    }
-    table {
-        width: 50vw;
-    }
     .col-title{
         font-size: 12px;
     }
     p{
-        font-size: 11px;
-    }
-    .table-btn{
         font-size: 11px;
     }
 }

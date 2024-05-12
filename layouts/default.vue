@@ -2,8 +2,8 @@
   <div id="content">
     <Header />
     <div class="d-flex"> 
-      <div class="fluid-container">
-        <NavbarNavSideBar /> 
+      <div class="fluid-container"> 
+        <NavbarNavSideBar />
       </div>
       <div class="main">
         <div class="main-title">

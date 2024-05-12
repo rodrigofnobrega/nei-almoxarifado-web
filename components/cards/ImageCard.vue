@@ -9,7 +9,6 @@
 
 <style scoped>
 .card{
-    width: 34rem;
     transition: transform 0.5s ease-in-out;
     border: 1px #b6b6b6 solid;
     box-shadow:  0px 0px 10px 0px rgb(0, 0, 0, 0.2);

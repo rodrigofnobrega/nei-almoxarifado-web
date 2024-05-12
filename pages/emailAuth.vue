@@ -108,16 +108,15 @@ const verificaToken = () => {
         tokenError.value = true;
     }
 }
-
-
 </script>
 
 <style scoped>
-
 .blurred {
 	filter: blur(1.5px);
 }
+.auth-container{
 
+}
 .pop-message {
 	position: absolute;
 	top: 50%;
