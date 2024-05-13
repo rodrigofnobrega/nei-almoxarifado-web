@@ -52,6 +52,7 @@ sendDataToParent();
   padding: 0;
   margin-right: 0px;
   flex-direction: column;
+  margin-bottom: 100px;
 }
 .background-canvas{
   padding-top: 10px;

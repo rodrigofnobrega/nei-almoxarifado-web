@@ -1,12 +1,13 @@
 <template>
   <Popup :isPopup="isPopup" :popupText="popupText" :popupBg="popupBg"/>
   <div class="header container-fluid d-flex justify-content-between align-items-center bg-primary p-0">  
-    <IconsMenu @click="expandSidebar()" class="d-none teste2 mx-3" :class="{'teste': responsive}"/>
+    <IconsMenu @click="expandSidebar()" class="d-none menu-color mx-3" :class="{'show-menu': responsive}"/>
     <div class="align-items-center" :class="{'d-none': responsive}">
       <Brand class="ms-3"/>
     </div> 
-      <div class="d-flex justify-content-end align-items-center">
-        <SearchBar />
+    <div class="d-flex justify-content-end align-items-center">
+      <SearchBar :class="{'d-none': responsive}"/>
+      <IconsSearchGlass :class="{'d-none': !responsive}" class="text-light mt-1" type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal"/>
         <!--<ThemeSwitch />-->
         <ModalSearch />
         <Profile />
@@ -68,10 +69,10 @@ export default{
 </script>
 
 <style scoped>
-.teste2{
+.menu-color{
   color: white !important;
 }
-.teste{
+.show-menu{
   margin: 11px 0px 11px 0px;
   width: 28px;
   height: 28px;

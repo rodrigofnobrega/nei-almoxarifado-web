@@ -44,7 +44,6 @@
 
 @media screen and (max-width: 820px) {
     .action-btn{
-        margin-top: 10px;
         font-size: 12px !important;
     }
 }

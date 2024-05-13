@@ -311,10 +311,6 @@ tr:hover p{
     }
 }
 @media screen and (max-width: 900px){
-    .catalog-header{
-        display: block !important;
-        text-align: center;
-    }
     .actions-buttons{
         justify-content: center;
         align-content: center;
@@ -324,6 +320,7 @@ tr:hover p{
     }
 }
 @media screen and (max-width: 820px) {
+    
     .col-title{
         font-size: 12px;
     }
@@ -332,7 +329,6 @@ tr:hover p{
     }
     .table-searchbar, .searchbar{
         display: flex !important;
-        padding-top: 6px;
         font-size: 12px !important; 
     }
     .table-searchbar{
