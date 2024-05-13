@@ -6,7 +6,7 @@
       <Brand class="ms-3"/>
     </div> 
       <div class="d-flex justify-content-end align-items-center">
-        <SearchBar :class="{'d-none': responsive}"/>
+        <SearchBar />
         <!--<ThemeSwitch />-->
         <ModalSearch />
         <Profile />
@@ -35,11 +35,13 @@ export default{
     },
     methods: {
       mobileMode(){
-          this.responsive = window.innerWidth <= 669;
+          this.responsive = window.innerWidth <= 710;
+          if(window.innerWidth === 710){
+            this.store.isMobile = false
+          }
       },
       expandSidebar(){
         this.store.isMobile = !this.store.isMobile;
-        console.log(this.store.isMobile)
       }
     },
     setup(){

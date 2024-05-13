@@ -10,7 +10,7 @@ export const useStorageStore = defineStore('storage', {
       sidebarSublinks: [],
       isRotated: false,
       isMobile: false,
-      tableSearch: " ",
+      tableSearch: " "
     }),
     actions: {
       async fetchItems(items: object, item: object){

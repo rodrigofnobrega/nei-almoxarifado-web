@@ -26,7 +26,7 @@
 
 <style scoped> 
 .custom-footer {   
-  z-index: 0;
+  z-index: 4000;
   width: 100%;
   background-color: #0b3b69;
   color: white;

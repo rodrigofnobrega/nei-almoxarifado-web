@@ -61,14 +61,5 @@ h3{
     justify-content: space-between;
 }
 
-@media screen and (max-width: 700px){
-    .catalog-header{
-        display: block !important;
-        text-align: center;
-    }
-    .actions-buttons{
-        justify-content: center;
-        align-content: center;
-    }
-}
+
 </style>
