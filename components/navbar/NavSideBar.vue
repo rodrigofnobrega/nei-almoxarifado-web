@@ -1,5 +1,5 @@
 <template>
-    <div class="teste" :style="{'display': responsive && isMobile ? 'block' : 'none' }"></div>
+    <div class="modal-backdrop" :style="{'display': responsive && isMobile ? 'block' : 'none' }"></div>
     <div class="sidebar pt-0 nav bg-light d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed, 'hide': responsive && !isMobile, 'mobile-spacement': responsive && isMobile, 'mobile-fixed': responsive }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-body ps-0" :class="{'mobile-padding': responsive }">
             <div class="mobile-sidebar-header bg-primary m-0 p-0 text-light" :class="{'show': responsive && isMobile}" :style="{'width': responsive && isMobile ? '165px': '0px'}">
@@ -96,7 +96,7 @@ export default {
             useStorageStore().setRotated();
         },
         mobileMode(){
-            this.responsive = window.innerWidth <= 710;
+            this.responsive = window.innerWidth <= 726;
         },
         hideSidebar(){
             this.store.isMobile = false;
@@ -125,7 +125,7 @@ export default {
 </script>
 
 <style scoped>
-.teste{
+.modal-backdrop{
     z-index: 1000;
     position: fixed;
     background-color: rgb(0, 0, 0, 0.2);

@@ -1,12 +1,12 @@
 <template>
     <div class="dropdown">
-        <button @focusin="colorFocus" @focusout="colorUnfocus" class="action-btn d-flex btn btn-outline-ligth text-dark-emphasis mx-1 px-2" data-bs-toggle="dropdown" data-bs-offset="0,2" data-bs-auto-close="outsite" aria-expanded="false">
+        <button @focusin="colorFocus" @focusout="colorUnfocus" class="action-btn d-flex btn btn-outline-ligth text-dark-emphasis mx-1 px-2" data-bs-toggle="dropdown" data-bs-offset="0,2" data-bs-auto-close="outside" aria-expanded="false">
             Filtro
             <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
         </button>
         <ul class="dropdown-menu large-menu">
             <li>
-                <div class="vue-dropdown" @mouseover="toggleDropdown(0)" @mouseout="toggleDropdown(0)">
+                <div class="vue-dropdown" @click="toggleDropdown(0)" @click.stop @mouseover="toggleDropdown(0)" @mouseout="toggleDropdown(0)">
                     <div class="large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
                         Atualização
                         <IconsSort />
@@ -26,7 +26,7 @@
                 </div>
             </li>
             <li>
-                <div class="vue-dropdown" @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
+                <div class="vue-dropdown" @click="toggleDropdown(1)" @click.stop @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
                     <div  class="large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
                         Criação
                         <IconsClock />
@@ -46,7 +46,7 @@
                 </div>
             </li>
             <li>
-                <div class="vue-dropdown" @mouseover="toggleDropdown(2)" @mouseout="toggleDropdown(2)">
+                <div class="vue-dropdown"  @click="toggleDropdown(2)" @click.stop @mouseover="toggleDropdown(2)" @mouseout="toggleDropdown(2)">
                     <div class="large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
                         Nome
                         <IconsNameSort />
@@ -66,7 +66,7 @@
                 </div>
             </li>
             <li>
-                <div class="vue-dropdown" @mouseover="toggleDropdown(3)" @mouseout="toggleDropdown(3)">
+                <div class="vue-dropdown"  @click="toggleDropdown(3)" @click.stop @mouseover="toggleDropdown(3)" @mouseout="toggleDropdown(3)">
                     <div class="large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
                         Quantidade
                         <IconsQuantitySort />
@@ -96,6 +96,7 @@ import { useUser } from '../../stores/user';
 
 const dropdownStates = ref([false, false, false, false]);
 const toggleDropdown = (dropdown_id) => {
+    dropdownStates.value[dropdown_id-1] = false
     dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
 }
 

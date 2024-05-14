@@ -31,15 +31,15 @@
 						<label class="form-label fw-bold"> Inventário </label>
 						<input readonly class="form-control bg-light-emphasis" :value="item_route"> 
 					</div>	
-					<div class="mb-4">
+					<div class="mb-3">
                         <label class="form-label fw-bold"> Última atualização </label>
-                        <input readonly id="expansible-form" class="form-control bg-light-emphasis" @mouseover="inputExpand" @mouseleave="inputContract" :value="'[]'">
+                        <input readonly class="form-control bg-light-emphasis" id="expansible-form" @mouseover="inputExpand" @mouseleave="inputContract" :value="'[]'">
                     </div>
 					<div class="mb-3"> 
-						<label class="form fw-bold"> Data de Registro </label>
+						<label class="form-label fw-bold"> Data de Registro </label>
 						<input readonly class="form-control bg-light-emphasis" :value="'03/12/2004 00:00'"> 
 					</div>	
-                    <div class="mb-4"> 
+                    <div class="mb-3"> 
 						<label class="form-label fw-bold"> Criador </label>
 						<input readonly class="form-control bg-light-emphasis" :value="'Amauri'"> 
 					</div>	
@@ -97,7 +97,7 @@ export default {
                 this.expansibleContainer.removeChild(this.shadowInput);
                 this.shadowInput = null;
                 this.expansibleInput.style.position = "static";
-                this.expansibleInput.style.width = "230px";
+                this.expansibleInput.style.width = "100%";
             }
         },
         setEdition(){       
@@ -159,5 +159,22 @@ export default {
 .modal-btn{
     border-radius: 10px;
 }
-
+@media screen and (max-width: 424px){
+    .form-label{
+        font-size: 14px !important;
+        font-weight: normal !important;
+    }   
+    .form-control{
+        font-size: 12px !important;
+    }
+}
+@media screen and (max-width: 360px){
+    .form-label{
+        font-size: 12px !important;
+        font-weight: normal !important;
+    }   
+    .form-control{
+        font-size: 12px !important;
+    }
+}
 </style>

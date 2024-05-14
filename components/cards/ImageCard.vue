@@ -1,7 +1,7 @@
 <template>
-<div class="card  mx-2 rounded-4">
+<div class="card mx-2 rounded-4">
     <slot name="image-cap"/>
-    <div class="card-boy p-3 text-dark-emphasis">
+    <div class="card-body p-3 text-dark-emphasis">
         <slot name="body"/>
     </div>
 </div>
@@ -30,5 +30,15 @@
 }
 .card:hover .stretched-link{
     color: white;
+}
+@media screen and (max-width: 962px){
+    .card-body{
+        padding: 10px !important;
+    }
+}
+@media screen and (max-width: 812px){
+    .card-body{
+        padding: 20px !important;
+    }
 }
 </style>

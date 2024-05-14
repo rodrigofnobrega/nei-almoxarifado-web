@@ -2,7 +2,7 @@
     <Modal id="scrollableModal" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true" @keyup.down="SearchDown()" @keyup.up="SearchUp()" @keyup.enter="Navigate()">
         <template v-slot:header>
             <div class="search-bar d-flex mx-1">
-                <form class="d-flex align-items-center" role="search">
+                <form class="ms-0 teste d-flex align-items-center" role="search">
                   <label>
                     <IconsSearchGlass class="search-icon p-1" width="40px" height="41px" style="border: 1px solid rgb(51, 51, 51, 0.2); border-right: 0;"/>
                   </label>
@@ -99,24 +99,22 @@ export default{
   background-color: white;
 }
 .form-control{
-    border: 1;
-    border-left: 0;
-    height: 41px;
-    width: 420px;
-    border-radius: 0px 4px 4px 0px;
+  border: 1;
+  border-left: 0;
+  height: 41px;
+  width: 420px;
+  border-radius: 0px 4px 4px 0px;
 }
 .form-control::placeholder{
   font-size: 19px;
 }
-.form-control{
-    border: 1;
-    border-left: 0;
-    height: 41px;
-    width: 420px;
-    border-radius: 0px 4px 4px 0px;
+@media screen and (max-width: 630px){
+  .form-control{
+    width: 75vw !important;
+    
+  }
+  .teste{
+    width: 75vw;
+  }
 }
-.form-control::placeholder{
-  font-size: 19px;
-}
-
 </style>

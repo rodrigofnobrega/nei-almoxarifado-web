@@ -15,31 +15,31 @@
     </div>  
     <div class="dashboard-section bg-light mb-4 rounded-3 ps-2 pe-2">
       <h2 class="pb-1 pt-0 ps-2">Catálogos</h2>
-       <div class="container-fluid d-flex px-0 justify-content-center aligm-items-center">
-          <CardsImageCard>
+       <div class="dashboard-container container-fluid d-flex px-0 justify-content-center aligm-items-center">
+          <CardsImageCard class="dashboard-viewcard">
             <template v-slot:image-cap>
               <img src="/almo.png" class="card-img-top" alt="...">
             </template>
             <template v-slot:body>
-              <a href="/inventario/almoxarifado-escolar" class="fs-5 stretched-link text-dark-emphasis">Almoxarifado Escolar</a>
+              <a href="/inventario/almoxarifado-escolar" class="fs-5 fw-medium stretched-link text-dark-emphasis">Almoxarifado Escolar</a>
               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
             </template>
           </CardsImageCard>
-          <CardsImageCard>
+          <CardsImageCard class="dashboard-viewcard">
             <template v-slot:image-cap>
               <img src="/almo2.png" class="card-img-top" alt="...">
             </template>
             <template v-slot:body>
-              <a href="/inventario/almoxarifado-escolar" class="fs-5 stretched-link text-dark-emphasis">Almoxarifado Escolar</a>
+              <a href="/inventario/almoxarifado-escolar" class="fs-5 fw-medium stretched-link text-dark-emphasis">Almoxarifado Escolar</a>
               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
             </template>
           </CardsImageCard>
-          <CardsImageCard>
+          <CardsImageCard class="dashboard-viewcard mb-0">
             <template v-slot:image-cap>
               <img src="/almo3.png" class="card-img-top" alt="...">
             </template>
             <template v-slot:body>
-              <a href="/inventario/almoxarifado-escolar" class="fs-5 stretched-link text-dark-emphasis">Almoxarifado Escolar</a>
+              <a href="/inventario/almoxarifado-escolar" class="fs-5 fw-medium stretched-link text-dark-emphasis">Almoxarifado Escolar</a>
               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
             </template>
           </CardsImageCard>
@@ -64,12 +64,11 @@ sendDataToParent();
 <style scoped>
 .container{
   width: 100%;
-  padding: 0;
-  margin-right: 0px;
+	padding-left: 15px;
   flex-direction: column;
 }
 .dashboard-section{
-  width: 95%;
+  width: 99%;
   padding-top: 10px;
   padding-bottom: 40px;
   border: 1px #D9D9D9 solid;
@@ -94,5 +93,21 @@ h2{
 }
 .card:hover .card-img-top{
     opacity: 100%;
+}
+@media screen and (max-width: 962px){
+  .card-text{
+    font-size: 14px !important;
+  }
+  .stretched-link{
+    font-size: 16px !important;
+  }
+}
+@media screen and (max-width: 812px){
+  .dashboard-container{
+    display: block !important;
+  }
+  .dashboard-viewcard{
+    margin-bottom: 30px;
+  }
 }
 </style>

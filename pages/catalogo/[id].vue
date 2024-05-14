@@ -3,25 +3,24 @@
     <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
 <div class="table-container d-block mt-2">
     <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
-        <h6 class="ps-2 d-flex align-items-center opacity-75">
+        <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
             Descrição da Subpágina
         </h6>
         <p class="sub-catalog-text opacity-75">Esta organização de almoxarifado é destinada aos itens relacionados as atividades escolares do NEI, como giz de ceira, lápis e quaisquer material que possua uso no dia a dia dos alunos e professores.</p>
     </div>   
-    <div class="table-actions d-flex bg-light justify-content-between aling-items-center">
-        <span class="d-flex ms-2 align-items-center table-searchbar">
-            <IconsSearchGlass class="search-glass"/>
-            <input v-model="searchInput" class="searchbar form-control bg-light" placeholder="Pesquisar"/>          
-        </span>
-        <div class="d-flex me-2">
-            <ButtonsNewItem />
-		    <ButtonsFilter class=" m-0 p-0"/>
-		    <ButtonsConfigure />
+    <div class="table-box bg-light row d-block">
+        <div class="table-actions d-flex justify-content-between aling-items-center">
+            <span class="d-flex ms-2 align-items-center table-searchbar">
+                <IconsSearchGlass class="search-glass"/>
+                <input v-model="searchInput" class="searchbar form-control bg-light" placeholder="Pesquisar"/>          
+            </span>
+            <div class="d-flex me-2">
+                <ButtonsNewItem />
+                <ButtonsFilter class=" m-0 p-0"/>
+                <ButtonsConfigure />
+            </div>
         </div>
-    </div>
-
-    <div class="table-box row d-block">
         <TablesTable>
             <template v-slot:items>
             <tr v-if="1 > 0" v-for="item in filteredItems" :key="item.index">
@@ -203,23 +202,22 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.table-container{
-    width: 100%;
-    display: block !important;
-}
 .container{
     width: 100%;
     display: block;
     margin-bottom: 100px;
 }
+.table-container{
+    width: 100%;
+    display: block !important;
+}
 .table-box{
+    width: 100%;
     margin: 0;
+    overflow-x: scroll;
 }
 .table-actions{
     width: 100%;
-}
-.search-glass{
-    padding-left: 0px;
 }
 .sub-catalog{
     border-radius: 13px;
@@ -263,7 +261,9 @@ p{
     border-radius: 0px;
     border-bottom: 1px ridge #1F69B1;
     top: 70px;
-    width: 200px;
+}
+.search-glass{
+    padding-left: 0px;
 }
 .searchbar{
     border: none;
@@ -292,11 +292,9 @@ p{
     margin-left: 35%;
 }
 .pagination{
-    bottom: 0%; 
-    left: 45%;
-}
-.position-fixed{
-    z-index: 100;
+    bottom: 1%; 
+    left: 49%;
+    z-index: 5000;
 }
 tr:hover .table-btn{
     opacity: 100%;
@@ -315,24 +313,29 @@ tr:hover p{
         justify-content: center;
         align-content: center;
     }
-    p{
-        font-size: 10px !important;
-    }
 }
 @media screen and (max-width: 820px) {
-    
     .col-title{
         font-size: 12px;
     }
     p{
-        font-size: 11px;
+        font-size: 10px !important;
     }
     .table-searchbar, .searchbar{
         display: flex !important;
         font-size: 12px !important; 
     }
+    .searchbar{
+        width: 140px !important;
+    }
     .table-searchbar{
         width: 170px;
+    }
+    .sub-catalog-title{
+        font-size: 14px !important;
+    }
+    .pagination{
+        left: 37%;
     }
 }
 </style>

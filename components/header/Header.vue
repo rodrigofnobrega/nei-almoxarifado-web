@@ -6,8 +6,8 @@
       <Brand class="ms-3"/>
     </div> 
     <div class="d-flex justify-content-end align-items-center">
-      <SearchBar :class="{'d-none': responsive}"/>
-      <IconsSearchGlass :class="{'d-none': !responsive}" class="text-light mt-1" type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal"/>
+        <SearchBar :class="{'d-none': responsive}"/>
+        <IconsSearchGlass :class="{'d-none': !responsive}" class="mobile-search text-light" type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal"/>
         <!--<ThemeSwitch />-->
         <ModalSearch />
         <Profile />
@@ -36,8 +36,8 @@ export default{
     },
     methods: {
       mobileMode(){
-          this.responsive = window.innerWidth <= 710;
-          if(window.innerWidth === 710){
+          this.responsive = window.innerWidth <= 726;
+          if(window.innerWidth === 726){
             this.store.isMobile = false
           }
       },
@@ -81,5 +81,8 @@ export default{
 .header{
   position: fixed;
   z-index: 1050;
+}
+.mobile-search{
+  margin-top: 2.9px;
 }
 </style>
