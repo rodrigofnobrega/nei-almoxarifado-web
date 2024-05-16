@@ -24,12 +24,17 @@
 </footer>
 </template>
 
+<script setup>
+const store = useStorageStore();
+
+</script>
+
 <style scoped> 
-.custom-footer {   
-  z-index: 4000;
+.custom-footer {
+  z-index: 5000;
   width: 100%;
   background-color: #0b3b69;
   color: white;
-  margin-top: 0vw;
 }
+
 </style>

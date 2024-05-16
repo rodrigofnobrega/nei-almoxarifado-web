@@ -11,11 +11,11 @@
     </div>   
     <div class="table-box bg-light row d-block">
         <div class="table-actions d-flex justify-content-between aling-items-center">
-            <span class="d-flex ms-2 align-items-center table-searchbar">
+            <span class="d-flex ms-1 align-items-center table-searchbar">
                 <IconsSearchGlass class="search-glass"/>
                 <input v-model="searchInput" class="searchbar form-control bg-light" placeholder="Pesquisar"/>          
             </span>
-            <div class="d-flex me-2">
+            <div class="d-flex me-1">
                 <ButtonsNewItem />
                 <ButtonsFilter class=" m-0 p-0"/>
                 <ButtonsConfigure />
@@ -23,25 +23,27 @@
         </div>
         <TablesTable>
             <template v-slot:items>
-            <tr v-if="1 > 0" v-for="item in filteredItems" :key="item.index">
-               <th class="border" scope="row"><p>{{ item.name }}</p></th>
-               <th class="border">
-                    <p v-if="item.sipacCode">{{ item.sipacCode }}</p>
-                    <p v-else>nenhum</p>
+            <tr v-if="true" v-for="item in filteredItems" :key="item.index" :data-index="item.index">
+               <th class="border" scope="row">
+                    <p>{{ item.name }}</p>
                </th>
+               <th class="border">
+                   <p v-if="item.sipacCode">{{ item.sipacCode }}</p>
+                   <p v-else>nenhum</p>
+                </th>
                 <th class="border">
                     <p>{{ item.type }}</p>
                 </th>
                <th class="border">
-                <p>{{ item.quantity }}</p>
+                   <p>{{ item.quantity }}</p>
                 </th>
                <th class="">
-                <p>CADASTRO 2024-05-11 09:20:02 Luís Freitas</p>
+                   <p>CADASTRO 2024-05-11 09:20:02 Luís Freitas</p>
                 <div class="end position-sticky">
-                    <button class="position-absolute table-btn btn btn-primary" style="margin-top: -23px; right: 84px;" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                    <button class="position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 84px;" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         Detalhes
                     </button>
-                    <button class="position-absolute table-btn btn btn-primary" style="margin-top: -23px; right: 13px;" @click="showHistory(item.index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                    <button class="position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 13px;" @click="showHistory(item.index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
                         Histórico
                     </button>
                  </div>
@@ -50,8 +52,11 @@
             <div v-else class="warning-text d-flex aling-items-center justify-content-center">
                 <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
             </div>
-            </template>
-        </TablesTable>
+            <div v-if="filteredItems == ''" class="search-empty position-absolute mt-5">
+                <p class="text-dark-emphasis fs-5 opacity-50">Nenhum Resultado Encontrado.</p>
+            </div>
+        </template>
+    </TablesTable>
     </div>
 </div>
 <nav v-if="filteredItemsSize > 0" aria-label="Page navigation" class="pagination position-fixed">
@@ -71,7 +76,7 @@
 
 <script setup>
 import { useStorageStore } from '../../stores/storage.ts';
-import { ref, computed, onMounted, inject } from 'vue';
+import { ref, computed, onMounted, onUpdated ,inject } from 'vue';
 import { getItems } from '../../services/items/itemsGET.ts';
 import { getRecord } from '../../services/record/recordGET.ts';
 import { useUser } from '../../stores/user.ts'
@@ -196,8 +201,43 @@ const showHistory = (index) => {
     itemIndex.value = index;
 }
 onMounted(async () => {  
-    store.deleteMode = false,
-    store.editMode = false
+    if(store.isMobile){
+        const catalogTextElement = document.querySelector('.sub-catalog p')
+        const textElements = document.querySelectorAll('tr p');
+        const searchBar = document.querySelector('.searchbar');
+        const searchBox = document.querySelector('.table-searchbar');
+        const tableLines = document.querySelectorAll('tr');
+
+        searchBox.style.fontSize = '8px';
+        searchBar.style.width = '100%';
+        searchBar.style.fontSize = '8px';
+        catalogTextElement.style.fontSize = '8px';
+        tableLines.forEach(element => {
+            element.addEventListener('click', (() => {
+                element.children[4].children[1].children[0].click()
+            }))
+        });
+        textElements.forEach(element => element.style.fontSize = '7px');
+    }
+});
+onUpdated(async () => {  
+    if(store.isMobile){
+        const catalogTextElement = document.querySelector('.sub-catalog p')
+        const textElements = document.querySelectorAll('tr p');
+        const searchBar = document.querySelector('.searchbar');
+        const tableLines = document.querySelectorAll('tr');
+
+        tableLines.forEach((element, index) => {
+            element.addEventListener('click', (() => {
+                element.children[4].children[1].children[0].click()
+            }))
+        });
+
+        searchBar.style.width = '100%';
+        searchBar.style.fontSize = '8px';
+        catalogTextElement.style.fontSize = '8px';
+        textElements.forEach(element => element.style.fontSize = '7px');
+    }
 });
 </script>
 
@@ -205,13 +245,15 @@ onMounted(async () => {
 .container{
     width: 100%;
     display: block;
-    margin-bottom: 100px;
 }
 .table-container{
+    margin-bottom: 149px;
     width: 100%;
     display: block !important;
 }
 .table-box{
+    border-top: 1px solid #D9D9D9;
+    border-bottom: 1px solid #D9D9D9;
     width: 100%;
     margin: 0;
     overflow-x: scroll;
@@ -291,10 +333,19 @@ p{
     margin-top: 5%;
     margin-left: 35%;
 }
+.search-empty{
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
+    margin-left: 30%;    
+    margin-right: 30%;
+    white-space: nowrap;
+}
 .pagination{
     bottom: 1%; 
-    left: 49%;
-    z-index: 5000;
+    display: flex !important;
+    justify-content: space-around !important;
+    z-index: 4000;
 }
 tr:hover .table-btn{
     opacity: 100%;
@@ -302,10 +353,13 @@ tr:hover .table-btn{
 tr:hover p{
     opacity: 50%;
 }
-
+tr:active{
+    background-color: red !important;
+}
+/*RESPONSIVIDADE*/
 @media screen and (max-width: 1030px) {
-    p{
-        font-size: 12px !important;
+    th p, .sub-catalog p{
+        font-size: 12px;
     }
 }
 @media screen and (max-width: 900px){
@@ -314,28 +368,25 @@ tr:hover p{
         align-content: center;
     }
 }
-@media screen and (max-width: 820px) {
+@media screen and (max-width: 851px) {
     .col-title{
         font-size: 12px;
     }
-    p{
-        font-size: 10px !important;
+    th p, .sub-catalog p{
+        font-size: 10px;
     }
     .table-searchbar, .searchbar{
-        display: flex !important;
-        font-size: 12px !important; 
+        display: flex;
+        font-size: 12px; 
     }
     .searchbar{
-        width: 140px !important;
+        width: 140px;
     }
     .table-searchbar{
         width: 170px;
     }
-    .sub-catalog-title{
-        font-size: 14px !important;
-    }
-    .pagination{
-        left: 37%;
+    .sub-catalog-title, .search-empty p{
+        font-size: 14px;
     }
 }
 </style>

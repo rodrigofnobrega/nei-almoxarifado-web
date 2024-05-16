@@ -20,6 +20,16 @@
 
 <script setup>
 import { onMounted } from 'vue';
+import { useStorageStore } from '../../stores/storage';
+
+const store = useStorageStore();
+onMounted(() => {
+    if(store.isMobile){
+        const columnTitles = document.querySelectorAll('.col-title');
+        columnTitles.forEach(element => element.style.fontSize = '8px')
+    }
+
+})
 
 </script>
 

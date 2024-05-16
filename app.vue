@@ -8,8 +8,10 @@
 
 <script setup>
 import { onMounted } from 'vue';
+import { useStorageStore } from './stores/storage';
 
-let isMobile = false;
+
+const storage = useStorageStore();
 
 onMounted(() => {
   const itemModals = document.getElementsByClassName("modal-header");
@@ -21,8 +23,7 @@ onMounted(() => {
 function checkIfMobile() {
   const userAgent = navigator.userAgent.toLowerCase();
   const mobileKeywords = ['iphone', 'android', 'blackberry', 'windows phone', 'iemobile'];
-  isMobile = mobileKeywords.some(keyword => userAgent.includes(keyword));
-  console.log(isMobile)
+  storage.isMobile = mobileKeywords.some(keyword => userAgent.includes(keyword));
 }
 
 

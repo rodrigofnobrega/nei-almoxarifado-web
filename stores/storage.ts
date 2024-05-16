@@ -10,6 +10,8 @@ export const useStorageStore = defineStore('storage', {
       sidebarSublinks: [],
       isRotated: false,
       isMobile: false,
+      isMobileMenu: false,
+      isResponsive: false,
       tableSearch: " "
     }),
     actions: {

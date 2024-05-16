@@ -13,7 +13,7 @@
       <h2 class="pb-1 pt-0 ps-2">Gráficos e Relatórios</h2>
       <DashboardBarChart />
     </div>  
-    <div class="dashboard-section bg-light mb-4 rounded-3 ps-2 pe-2">
+    <div class="dashboard-section bg-light mb-4 pb-3 rounded-3 ps-2 pe-2">
       <h2 class="pb-1 pt-0 ps-2">Catálogos</h2>
        <div class="dashboard-container container-fluid d-flex px-0 justify-content-center aligm-items-center">
           <CardsImageCard class="dashboard-viewcard">

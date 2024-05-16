@@ -37,12 +37,13 @@ export default{
     methods: {
       mobileMode(){
           this.responsive = window.innerWidth <= 726;
+          this.store.isResponsive = window.innerWidth <= 726;
           if(window.innerWidth === 726){
-            this.store.isMobile = false
+            this.store.responsive = false
           }
       },
       expandSidebar(){
-        this.store.isMobile = !this.store.isMobile;
+        this.store.isMobileMenu = !this.store.isMobileMenu;
       }
     },
     setup(){

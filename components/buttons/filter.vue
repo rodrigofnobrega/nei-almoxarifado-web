@@ -1,23 +1,23 @@
 <template>
     <div class="dropdown">
-        <button @focusin="colorFocus" @focusout="colorUnfocus" class="action-btn d-flex btn btn-outline-ligth text-dark-emphasis mx-1 px-2" data-bs-toggle="dropdown" data-bs-offset="0,2" data-bs-auto-close="outside" aria-expanded="false">
+        <button @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-ligth text-dark-emphasis mx-1 px-2" data-bs-toggle="dropdown" data-bs-offset="0,2" data-bs-auto-close="outside" aria-expanded="false">
             Filtro
             <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
         </button>
         <ul class="dropdown-menu large-menu">
             <li>
                 <div class="vue-dropdown" @click="toggleDropdown(0)" @click.stop @mouseover="toggleDropdown(0)" @mouseout="toggleDropdown(0)">
-                    <div class="large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
+                    <div class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
                         Atualização
                         <IconsSort />
                     </div>
                     <ul class="vue-dropdown-menu" v-show="dropdownStates[0]">
                         <li class="small-menu">
-                            <div @click="sendDataToParent('', false)" class="d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
+                            <div @click="sendDataToParent('', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                                 asc
                                 <IconsUpArrow />
                             </div>
-                            <div @click="sendDataToParent('', true)" class="d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
+                            <div @click="sendDataToParent('', true)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                                 dec
                                 <IconsBottomArrow />
                             </div>
@@ -27,17 +27,17 @@
             </li>
             <li>
                 <div class="vue-dropdown" @click="toggleDropdown(1)" @click.stop @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
-                    <div  class="large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
+                    <div  class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
                         Criação
                         <IconsClock />
                     </div>
                     <ul class="vue-dropdown-menu" v-show="dropdownStates[1]">
                         <li class="small-menu">
-                            <div @click="sendDataToParent('id,asc', false)" class="d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
+                            <div @click="sendDataToParent('id,asc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                                 asc
                                 <IconsUpArrow />
                             </div>
-                            <div @click="sendDataToParent('id,desc', false)" class="d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
+                            <div @click="sendDataToParent('id,desc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                                 dec
                                 <IconsBottomArrow />
                             </div>
@@ -47,17 +47,17 @@
             </li>
             <li>
                 <div class="vue-dropdown"  @click="toggleDropdown(2)" @click.stop @mouseover="toggleDropdown(2)" @mouseout="toggleDropdown(2)">
-                    <div class="large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
+                    <div class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
                         Nome
                         <IconsNameSort />
                     </div>
                     <ul class="vue-dropdown-menu" v-show="dropdownStates[2]">
                         <li class="small-menu">
-                            <div @click="sendDataToParent('name,asc', false)" class="d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
+                            <div @click="sendDataToParent('name,asc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                                 asc
                                 <IconsUpArrow />
                             </div>
-                            <div @click="sendDataToParent('name,desc', false)" class="d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
+                            <div @click="sendDataToParent('name,desc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                                 dec
                                 <IconsBottomArrow />
                             </div>
@@ -67,17 +67,17 @@
             </li>
             <li>
                 <div class="vue-dropdown"  @click="toggleDropdown(3)" @click.stop @mouseover="toggleDropdown(3)" @mouseout="toggleDropdown(3)">
-                    <div class="large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
+                    <div class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
                         Quantidade
                         <IconsQuantitySort />
                     </div>
                     <ul class="vue-dropdown-menu" v-show="dropdownStates[3]">
                         <li class="small-menu">
-                            <div @click="sendDataToParent('quantity,asc', false)" class="d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
+                            <div @click="sendDataToParent('quantity,asc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                                 asc
                                 <IconsUpArrow />
                             </div>
-                            <div @click="sendDataToParent('quantity,desc', false)" class="d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
+                            <div @click="sendDataToParent('quantity,desc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                                 dec
                                 <IconsBottomArrow />
                             </div>
@@ -90,9 +90,10 @@
 </template>
 
 <script setup>
-import { inject } from 'vue';
+import { inject, onMounted} from 'vue';
 import { getItems } from '../../services/items/itemsGET';
 import { useUser } from '../../stores/user';
+import { useStorageStore } from '../../stores/storage';
 
 const dropdownStates = ref([false, false, false, false]);
 const toggleDropdown = (dropdown_id) => {
@@ -108,6 +109,14 @@ const setItemsFilter = inject('setItemsFilter')
 const sendDataToParent = (filter, isInverted) => {
     setItemsFilter(filter, isInverted)
 }
+
+const store = useStorageStore();
+onMounted(() => {
+    if(store.isMobile){
+        const btnText = document.querySelectorAll('.filter-btn');
+        btnText.forEach(element => element.style.fontSize = '9px');
+    }
+})
 </script>
 
 <style scoped>
@@ -154,7 +163,7 @@ li{
 }
 @media screen and (max-width: 820px){
     .action-btn{
-        font-size: 12px !important;
+        font-size: 12px;
     }
 }
 </style>

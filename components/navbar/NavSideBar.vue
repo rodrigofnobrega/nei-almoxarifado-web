@@ -83,7 +83,7 @@ export default {
             return useStorageStore().isRotated;
         },
         isMobile(){
-            return useStorageStore().isMobile
+            return useStorageStore().isMobileMenu
         }
     },
     methods: {
@@ -99,7 +99,7 @@ export default {
             this.responsive = window.innerWidth <= 726;
         },
         hideSidebar(){
-            this.store.isMobile = false;
+            this.store.isMobileMenu = false;
         }
       },
     created(){
@@ -145,7 +145,6 @@ export default {
     align-items: center;
     justify-content: end;
 }
-
 .hide{
     width: 0px !important;
 }
@@ -160,8 +159,6 @@ export default {
 .mobile-padding{
     margin-top: -50px !important;
 }
-
-
 .sidebar{
     overflow-y: auto;
 }
