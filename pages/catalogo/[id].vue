@@ -342,7 +342,7 @@ p{
     white-space: nowrap;
 }
 .pagination{
-    bottom: 1%; 
+    bottom: -1%; 
     display: flex !important;
     justify-content: space-around !important;
     z-index: 4000;

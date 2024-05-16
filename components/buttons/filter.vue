@@ -9,17 +9,17 @@
                 <div class="vue-dropdown" @click="toggleDropdown(0)" @click.stop @mouseover="toggleDropdown(0)" @mouseout="toggleDropdown(0)">
                     <div class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
                         Atualização
-                        <IconsSort />
+                        <IconsSort class="action-icon"/>    
                     </div>
                     <ul class="vue-dropdown-menu" v-show="dropdownStates[0]">
                         <li class="small-menu">
                             <div @click="sendDataToParent('', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
-                                asc
-                                <IconsUpArrow />
+                                asc 
+                                <IconsUpArrow class="action-icon"/>
                             </div>
                             <div @click="sendDataToParent('', true)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                                 dec
-                                <IconsBottomArrow />
+                                <IconsBottomArrow class="action-icon"/>
                             </div>
                         </li>
                     </ul>
@@ -29,17 +29,17 @@
                 <div class="vue-dropdown" @click="toggleDropdown(1)" @click.stop @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
                     <div  class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
                         Criação
-                        <IconsClock />
+                        <IconsClock class="action-icon"/>
                     </div>
                     <ul class="vue-dropdown-menu" v-show="dropdownStates[1]">
                         <li class="small-menu">
                             <div @click="sendDataToParent('id,asc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                                 asc
-                                <IconsUpArrow />
+                                <IconsUpArrow class="action-icon"/>
                             </div>
                             <div @click="sendDataToParent('id,desc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                                 dec
-                                <IconsBottomArrow />
+                                <IconsBottomArrow class="action-icon"/>
                             </div>
                         </li>
                     </ul>
@@ -49,17 +49,17 @@
                 <div class="vue-dropdown"  @click="toggleDropdown(2)" @click.stop @mouseover="toggleDropdown(2)" @mouseout="toggleDropdown(2)">
                     <div class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
                         Nome
-                        <IconsNameSort />
+                        <IconsNameSort class="action-icon"/>
                     </div>
                     <ul class="vue-dropdown-menu" v-show="dropdownStates[2]">
                         <li class="small-menu">
                             <div @click="sendDataToParent('name,asc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                                 asc
-                                <IconsUpArrow />
+                                <IconsUpArrow class="action-icon"/>
                             </div>
                             <div @click="sendDataToParent('name,desc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                                 dec
-                                <IconsBottomArrow />
+                                <IconsBottomArrow class="action-icon"/>
                             </div>
                         </li>
                     </ul>
@@ -69,17 +69,17 @@
                 <div class="vue-dropdown"  @click="toggleDropdown(3)" @click.stop @mouseover="toggleDropdown(3)" @mouseout="toggleDropdown(3)">
                     <div class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
                         Quantidade
-                        <IconsQuantitySort />
+                        <IconsQuantitySort class="action-icon"/>
                     </div>
                     <ul class="vue-dropdown-menu" v-show="dropdownStates[3]">
                         <li class="small-menu">
                             <div @click="sendDataToParent('quantity,asc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                                 asc
-                                <IconsUpArrow />
+                                <IconsUpArrow class="action-icon"/>
                             </div>
                             <div @click="sendDataToParent('quantity,desc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                                 dec
-                                <IconsBottomArrow />
+                                <IconsBottomArrow class="action-icon"/>
                             </div>
                         </li>
                     </ul>
@@ -99,6 +99,7 @@ const dropdownStates = ref([false, false, false, false]);
 const toggleDropdown = (dropdown_id) => {
     dropdownStates.value[dropdown_id-1] = false
     dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
+    dropdownStates.value[dropdown_id+1] = false
 }
 
 const userStore = useUser();
@@ -138,6 +139,7 @@ li{
     height: 65px;
     min-width: 40px;
 }
+
 .dropdown-item{
     width: 130px;
     padding: 0px;
@@ -164,6 +166,20 @@ li{
 @media screen and (max-width: 820px){
     .action-btn{
         font-size: 12px;
+    }
+    .large-menu{
+        padding: 0;
+        width: 100px !important;
+    }
+    .small-menu{
+        padding: 0;
+        margin-top: -40px;
+        height: 50px;
+        left: 97px;
+    }
+    .action-icon{
+        width: 10px;
+        height: 10px;
     }
 }
 </style>
