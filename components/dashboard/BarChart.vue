@@ -3,6 +3,7 @@
       <Bar :data="chartData" :options="chartOptions" />
     </div>
   </template>
+  
   <script setup>
   import { Bar } from 'vue-chartjs';
   import {

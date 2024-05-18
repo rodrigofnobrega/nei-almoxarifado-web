@@ -91,11 +91,16 @@ const userStore = useUser()
 const store = useStorageStore();
 let pagination = ref(0);
 /*REFATORAR CÓDIGO*/ 
+
 let res = await getItems(userStore, pagination.value, '');
-let invertedPagination = ref(res.totalPages-1)
 if(res.status === 403){
     navigateTo("/login")
 }
+
+let invertedPagination = ref(res.totalPages-1)
+
+
+
 let queryParams = ref({
     sort: '', 
     isInverted: false
@@ -108,6 +113,9 @@ const sortedRes = async (sort, isInverted, paginationInverted) => {
         return 1
     } 
     res = await getItems(userStore, pagination.value, sort)
+    if(res.status == 403){
+        navigateTo("/login")
+    }
     store.items = res.content
     return 1
 }

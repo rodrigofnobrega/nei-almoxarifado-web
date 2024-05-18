@@ -1,7 +1,10 @@
 <template>
     <div class="page-title bg-light row d-block ms-0">
         <div class="catalog-header d-flex align-items-center">
-            <h3 class="mt-2"><slot name="titulo" /></h3>
+            <h3 class="mt-2">
+                <LoadersLoading class="small-loader text-dark-emphasis p-1"/>
+                <slot name="titulo" />
+            </h3>
             <!--
                 <div class="d-flex me-4 mt-2">
                     <div class="toolTip d-flex justify-content-center align-items-center">
@@ -19,7 +22,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 let toolTips = ref([false, false]);
 
 const tooltipTrigger = (id) => {
@@ -29,6 +32,10 @@ const tooltipTrigger = (id) => {
 
 
 <style scoped>
+.small-loader{
+    width: 12px;
+    height: 12px;
+}
 .tooltipText{
     font-size: 13px;
     margin-top: 7.9%;

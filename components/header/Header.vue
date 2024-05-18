@@ -1,5 +1,4 @@
 <template>
-  <Popup :isPopup="isPopup" :popupText="popupText" :popupBg="popupBg"/>
   <div class="header container-fluid d-flex justify-content-between align-items-center bg-primary p-0">  
     <IconsMenu @click="expandSidebar()" class="d-none menu-color mx-3" :class="{'show-menu': responsive}"/>
     <div class="align-items-center" :class="{'d-none': responsive}">
@@ -20,9 +19,7 @@ import SearchBar from "./SearchBar.vue";
 import Brand from "./Brand.vue";
 import ThemeSwitch from "./ThemeSwitch.vue";
 import Profile from "./Profile.vue";
-import { usePopupStore } from "~/stores/popup";
 import { useStorageStore } from "../../stores/storage";
-import { computed, popScopeId } from "vue";
 export default{
     data(){
       return{
@@ -48,20 +45,7 @@ export default{
     },
     setup(){
       const store = useStorageStore();
-      const popup = usePopupStore();
-      const isPopup = computed(() => {
-          return popup.popupActive
-      });
-      const popupText = computed(() => {
-        return popup.message
-      });
-      const popupBg = computed(() => {
-        return popup.bgColor
-      })
       return{
-        isPopup,
-        popupText,
-        popupBg,
         store
       }
     }

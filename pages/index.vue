@@ -50,9 +50,9 @@
 
 <script setup>
 import { inject } from 'vue';
+import { useUser } from '../stores/user';
 
 const setpageTitle = inject('setpageTitle');
-
 
 const sendDataToParent = () => {
     const data = "Painel Geral";

@@ -1,6 +1,7 @@
 <template>
   <div>
     <NuxtLayout>
+      <Popup :isPopup="isPopup" :popupText="popupText" :popupBg="popupBg"/>
       <NuxtPage />
     </NuxtLayout>
   </div>
@@ -9,9 +10,19 @@
 <script setup>
 import { onMounted } from 'vue';
 import { useStorageStore } from './stores/storage';
-
+import { usePopupStore } from './stores/popup';
 
 const storage = useStorageStore();
+const popup = usePopupStore();
+const isPopup = computed(() => {
+          return popup.popupActive
+      });
+const popupText = computed(() => {
+  return popup.message
+});
+const popupBg = computed(() => {
+  return popup.bgColor
+})
 
 onMounted(() => {
   const itemModals = document.getElementsByClassName("modal-header");
