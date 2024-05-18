@@ -5,29 +5,18 @@
                 <LoadersLoading class="small-loader text-dark-emphasis p-1"/>
                 <slot name="titulo" />
             </h3>
-            <!--
-                <div class="d-flex me-4 mt-2">
-                    <div class="toolTip d-flex justify-content-center align-items-center">
-                        <IconsGrid @mouseover="tooltipTrigger(0)" @mouseout="tooltipTrigger(0)" class="mx-2 icons"/>
-                        <p v-show="toolTips[0]" class="tooltipText position-fixed bg-dark-emphasis text-light rounded-3 p-2">Visualizações</p>
-                    </div>
-                    <div class="toolTip d-flex justify-content-center align-items-center">
-                        <IconsSettings @mouseover="tooltipTrigger(1)" @mouseout="tooltipTrigger(1)" class="mx-2 icons"/>
-                        <p v-show="toolTips[1]" class="tooltipText position-fixed bg-dark-emphasis text-light rounded-3 p-2">Configurações</p>
-                    </div>
-                </div>
-            --->
+            <div class="d-block">
+                <p @mouseover="toolTip = true" @mouseout="toolTip = false">Teste</p>
+                <TooltipsRectangular :toolTipState="toolTip" :toolTipText="'Teste'"/>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue';
-let toolTips = ref([false, false]);
+import { ref } from 'vue';
+const toolTip = ref(false);
 
-const tooltipTrigger = (id) => {
-    toolTips.value[id] = !toolTips.value[id];
-};
 </script>
 
 
