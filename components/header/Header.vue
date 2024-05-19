@@ -1,8 +1,9 @@
 <template>
   <div class="header container-fluid d-flex justify-content-between align-items-center bg-primary p-0">  
     <IconsMenu @click="expandSidebar()" class="d-none menu-color mx-3" :class="{'show-menu': responsive}"/>
-    <div class="align-items-center" :class="{'d-none': responsive}">
+    <div @mouseover="toolTip = true" @mouseout="toolTip = false" class="align-items-center" :class="{'d-none': responsive}">
       <Brand class="ms-3"/>
+      <TooltipsRectangular class="ms-5 ps-5 pt-2" :toolTipState="toolTip" :toolTipText="'Página Inicial'"/>
     </div> 
     <div class="d-flex justify-content-end align-items-center">
         <SearchBar :class="{'d-none': responsive}"/>
@@ -44,9 +45,11 @@ export default{
       }
     },
     setup(){
+      const toolTip = ref(false)
       const store = useStorageStore();
       return{
-        store
+        store,
+        toolTip
       }
     }
 }

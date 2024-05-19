@@ -1,11 +1,12 @@
 <template>
 	<Card class="mb-5 cards-grid">
 		<template v-slot:header>
+			<TooltipsRectangular class="tooltipMargin" :toolTipState="toolTip" :toolTipText="'Data e Horário da Solicitação'"/>
 			<div class="d-flex justify-content-between align-items-center">
-    		    <h6 class="justify-content-start mb-3">
-    		        Solicitação
+				<h6 class="justify-content-start mb-3">
+					Solicitação
     		    </h6>
-    		    <p class="resquest-time mb-3">{{requestedAt.slice(0, 19)}}<IconsClock class="clock ms-2"/></p>
+    		    <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{requestedAt.slice(0, 19)}}<IconsClock class="clock ms-2"/></p>
     		</div>
 		</template>
 		<template v-slot:default> 
@@ -118,6 +119,7 @@ export default {
 		}
 	},
 	setup(){
+		const toolTip = ref(false);
 		const userStore = useUser();
 		const popupStore = usePopupStore()
 		const setSolicitations = inject('setSolicitations');
@@ -127,7 +129,8 @@ export default {
 		return {
 			userStore,
 			popupStore,
-			sendDatatoParent
+			sendDatatoParent,
+			toolTip
 		}
 	}
 };
@@ -162,6 +165,10 @@ export default {
 	width: 90px;
 	font-size: 17px;
 	white-space: nowrap;
+}
+.tooltipMargin{
+	margin-top: -50px;
+	margin-left: 10%;
 }
 @media screen and (max-width: 1250px){
 	.form-label{

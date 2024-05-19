@@ -1,6 +1,7 @@
 <template>
+    <TooltipsRectangular class="d-flex justify-content-start align-items-end toolTip-margin" :toolTipState="toolTip" :toolTipText="'Filtros para Organização dos Itens'"/>
     <div class="dropdown">
-        <button @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-ligth text-dark-emphasis mx-1 px-2" data-bs-toggle="dropdown" data-bs-offset="0,2" data-bs-auto-close="outside" aria-expanded="false">
+        <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-ligth text-dark-emphasis mx-1 px-2" data-bs-toggle="dropdown" data-bs-offset="0,2" data-bs-auto-close="outside" aria-expanded="false">
             Filtro
             <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
         </button>
@@ -95,6 +96,7 @@ import { getItems } from '../../services/items/itemsGET';
 import { useUser } from '../../stores/user';
 import { useStorageStore } from '../../stores/storage';
 
+const toolTip = ref(false);
 const dropdownStates = ref([false, false, false, false]);
 const toggleDropdown = (dropdown_id) => {
     dropdownStates.value[dropdown_id-1] = false
@@ -121,6 +123,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.toolTip-margin{
+}
 li{
     list-style-type: none;
 }

@@ -1,6 +1,7 @@
 <template>
+    <TooltipsRectangular class="d-flex justify-content-start align-items-end toolTip-margin" :toolTipState="toolTip" :toolTipText="'Configurações da Página'"/>
     <div class="dropdown">
-        <button @focusin="colorFocus" @focusout="colorUnfocus" class="configure-btn action-btn d-flex btn btn-outline-ligth text-dark-emphasis mx-1 px-2" data-bs-toggle="dropdown" data-bs-offset="0,2" data-bs-auto-close="outsite" aria-expanded="false">
+        <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="configure-btn action-btn d-flex btn btn-outline-ligth text-dark-emphasis mx-1 px-2" data-bs-toggle="dropdown" data-bs-offset="0,2" data-bs-auto-close="outsite" aria-expanded="false">
             Configurações
             <IconsSettings class="mx-1" width="1.5em" height="1.5em"/>
         </button>
@@ -25,6 +26,7 @@
 import { useStorageStore } from '../../stores/storage';
 import { onMounted } from 'vue';
 
+const toolTip = ref(false);
 const store = useStorageStore();
 onMounted(() => {
     if(store.isMobile){
@@ -36,6 +38,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.toolTip-margin{
+}
 .dropdown-menu{
     width: 150px !important;
     min-width: 40px;

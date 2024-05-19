@@ -5,10 +5,6 @@
                 <LoadersLoading class="small-loader text-dark-emphasis p-1"/>
                 <slot name="titulo" />
             </h3>
-            <div class="d-block">
-                <p @mouseover="toolTip = true" @mouseout="toolTip = false">Teste</p>
-                <TooltipsRectangular :toolTipState="toolTip" :toolTipText="'Teste'"/>
-            </div>
         </div>
     </div>
 </template>
@@ -25,22 +21,6 @@ const toolTip = ref(false);
     width: 12px;
     height: 12px;
 }
-.tooltipText{
-    font-size: 13px;
-    margin-top: 7.9%;
-    margin-left: -2.7%;
-    opacity: 75%;
-    border: none;
-}
-.tooltipText::before{
-    bottom: 99%;
-    left: 56%;
-    position: absolute;
-    content: "";
-    border: 12px solid transparent;
-    border-bottom-color: #333333;
-}
-
 .icons{
     width: 25px;
     height: 25px;

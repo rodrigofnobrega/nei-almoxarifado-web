@@ -1,12 +1,13 @@
 <template>
     <div class="d-flex profile align-items-center me-3">
-          <div class="nav-item dropdown">
+          <div @mouseover="toolTip = true" @mouseout="toolTip = false" class="nav-item dropdown">
             <button class="svg-button bg-primary px-2" data-bs-toggle="dropdown" data-bs-offset="20,15" aria-expanded="false">
-                <IconsBell with="16px" height="16px"/>
+              <IconsBell with="16px" height="16px"/>
             </button>
             <ul class="dropdown-menu py-2">
               <li class="dropdown-item text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
             </ul>
+            <TooltipsRectangular class="pt-3" :toolTipState="toolTip" :toolTipText="'Notificações'"/>
           </div>
             <div class="nav-item dropdown">
               <button class="svg-button  d-flex bg-primary align-items-center" @click="rotate" data-bs-toggle="dropdown" data-bs-offset="10,10" data-bs-auto-close="inside" aria-expanded="false">
@@ -36,8 +37,8 @@
 <script setup>
 import { useUser } from '../../stores/user';
 import { getUserByEmail } from '../../services/users/userGET';
-import { onMounted } from 'vue';
-
+import { ref } from 'vue';
+const toolTip = ref(false)
 
 const userStore = useUser();
 const isRoted = ref(false);

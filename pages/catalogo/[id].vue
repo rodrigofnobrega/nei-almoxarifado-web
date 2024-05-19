@@ -5,7 +5,7 @@
     <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
         <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
-            Descrição da Subpágina
+            Descrição da Subpágina 
         </h6>
         <p class="sub-catalog-text opacity-75">Esta organização de almoxarifado é destinada aos itens relacionados as atividades escolares do NEI, como giz de ceira, lápis e quaisquer material que possua uso no dia a dia dos alunos e professores.</p>
     </div>   
@@ -17,7 +17,7 @@
             </span>
             <div class="d-flex me-1">
                 <ButtonsNewItem />
-                <ButtonsFilter class=" m-0 p-0"/>
+                <ButtonsFilter />
                 <ButtonsConfigure />
             </div>
         </div>
@@ -64,11 +64,11 @@
         <li class="page-item">
             <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
         </li>
-        <li class="page-item" v-for="i in res.totalPages" :key="i-1">
+        <li class="page-item" v-for="i in totalPages" :key="i-1">
             <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
         </li>
         <li class="page-item">
-            <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == res.totalPages-1}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
+            <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
         </li>
     </ul>
 </nav>
@@ -78,57 +78,40 @@
 import { useStorageStore } from '../../stores/storage.ts';
 import { ref, computed, onMounted, onUpdated ,inject } from 'vue';
 import { getItems } from '../../services/items/itemsGET.ts';
-import { getRecord } from '../../services/record/recordGET.ts';
 import { useUser } from '../../stores/user.ts'
 import { navigateTo } from 'nuxt/app';
-
-const route = useRoute();
-if(route.params.id !== 'almoxarifado'){
-    navigateTo('/catalogo')
-} 
-
+/*SETANDO STORES*/
 const userStore = useUser()
 const store = useStorageStore();
-let pagination = ref(0);
-/*REFATORAR CÓDIGO*/ 
-
-let res = await getItems(userStore, pagination.value, '');
-if(res.status === 403){
-    navigateTo("/login")
-}
-
-let invertedPagination = ref(res.totalPages-1)
-
-
-
-let queryParams = ref({
+/*VARIÁVEIS ÚTEIS PARA REQUISITAR OS ITENS E FILTRÁ-LOS*/ 
+let pagination = ref(0); //paginação padrão
+let invertedPagination = ref(0); //paginação invertida para filtro
+let queryParams = ref({ 
     sort: '', 
     isInverted: false
 });
-
-const sortedRes = async (sort, isInverted, paginationInverted) => {
+//Aqui faço a requisição em si, também possui parâmetros de filtros, sendo o padrão o de últimos atualizados(como está no banco de dados)
+const sortedResponse = async (sort, isInverted, paginationInverted) => {
     if(isInverted){
-        res = await getItems(userStore, paginationInverted, sort)
+        const res = await getItems(userStore, paginationInverted, sort)
         store.items = res.content
-        return 1
+        return res
     } 
-    res = await getItems(userStore, pagination.value, sort)
-    if(res.status == 403){
-        navigateTo("/login")
-    }
+    const res = await getItems(userStore, pagination.value, sort)
     store.items = res.content
-    return 1
-}
-
+    invertedPagination.value = res.totalPages-1;
+    return res
+}; 
+let response = await sortedResponse();
+let totalPages = response.totalPages
+/*INJEÇÃO DE DEPENDÊNCIAS E DADOS*/ 
+//Passando dados para o componente de filtro
 provide('setItemsFilter', (filter, inverted) => {
     queryParams.value.sort = filter
     queryParams.value.isInverted = inverted
-    sortedRes(queryParams.value.sort, inverted, invertedPagination.value)
+    sortedResponse(queryParams.value.sort, inverted, invertedPagination.value)
 })
-
-store.items = res.content
-
-
+//Passando dado de título e header de página
 const setpageTitle = inject('setpageTitle');
 const sendDataToParent = () => {
     const data = "Almoxarifado Escolar";
@@ -136,25 +119,27 @@ const sendDataToParent = () => {
 };
 sendDataToParent();
 
-
+/*COMPUTAÇÕES PARA ORGANIZAR OS ITENS DA API PARA O FRONT*/
+//Passando um index numerico único para cada item, independente do seu id
 const items = computed(() => store.items.map((itemProxy, index) => {
     const item = {...itemProxy}
     item.index = index;
     return item
 }));
+//Variável de pesquisa usada
 const searchInput = ref("");
-
-
+//Variáveis que o front vai pegar em si
 const filteredItems = computed(() => items.value.filter(item => item.name.includes(searchInput.value)));
 const filteredItemsSize = computed(() => filteredItems.value.length);
-
 const itemIndex = ref(0);
 const currentItem = computed(() => store.items[itemIndex.value]);
 const currentRoute = useRoute().fullPath.split('/')[2];
 
-/*TODO: refatorar nos composables*/
+const toolTip = ref([false, false, false, false])
+
+/*CÓDIGO PARA PAGINAÇÃO EM SI E RENDERIZAÇÃO DOS ITENS*/
 let pagesFocus = ref([true]);
-for(let i = 0; i < res.totalPages; i++){
+for(let i = 0; i < totalPages; i++){
     pagesFocus.value.push(false);
 };
 let count = 0;
@@ -163,13 +148,13 @@ const page = (async (index) => {
     pagination.value = index;
     if(queryParams.value.isInverted){
         if(index < invertedPagination.value){
-            invertedPagination.value = (res.totalPages-1)-index;
+            invertedPagination.value = (totalPages-1)-index;
         }
         else if(index > invertedPagination.value){
-            invertedPagination.value = (res.totalPages-1)-index;
+            invertedPagination.value = (totalPages-1)-index;
         }
     }
-    sortedRes(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
+    sortedResponse(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
     pagesFocus.value[count] = false;
     count = index;  
     pagesFocus.value[count] = true;
@@ -179,7 +164,7 @@ const fowardPage = (async () => {
     if(queryParams.value.isInverted){
         invertedPagination.value--;
     }
-    sortedRes(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
+    sortedResponse(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
     pagesFocus.value[count] = false;
     count++;
     pagesFocus.value[count] = true;
@@ -192,7 +177,7 @@ const backPage = (async () => {
     if(queryParams.value.isInverted){
         invertedPagination.value++;
     }
-    sortedRes(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
+    sortedResponse(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
     pagesFocus.value[count] = false;
     count--;
     pagesFocus.value[count] = true; 
@@ -200,7 +185,7 @@ const backPage = (async () => {
     document.getElementById("fowardPageBtn").classList.remove("disabled");
     document.getElementById("fowardPageBtn").classList.remove("bg-dark-emphasis");
 });
-
+/*FUNÇÕES PARA OS BOTÕES DE DETALHE E HISTÓRICO*/
 const showDetails = (index) => {
     itemIndex.value = index;
 }
@@ -208,6 +193,7 @@ const showDetails = (index) => {
 const showHistory = (index) => {
     itemIndex.value = index;
 }
+/*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {  
     if(store.isMobile){
         const catalogTextElement = document.querySelector('.sub-catalog p')
