@@ -1,29 +1,6 @@
 <template>
-  <div class="container col-1 d-block" style="margin-left: 170px;">
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
-      <p>Sobre</p>
+  <div>
+    
   </div>
 </template>
 <script setup>

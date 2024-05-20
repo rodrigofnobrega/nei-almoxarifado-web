@@ -1,7 +1,8 @@
 <template>
-    <ModalItemDetails v-if="filteredItemsSize > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
-    <ModalItemHistory v-if="filteredItemsSize > 0" :item_history="currentItem"/>
+    <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
+    <ModalItemHistory v-if="itemsCache.length > 0" :item_history="currentItem"/>
 <div class="table-container d-block mt-2">
+    <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
     <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
         <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
@@ -23,7 +24,7 @@
         </div>
         <TablesTable>
             <template v-slot:items>
-            <tr v-if="true" v-for="item in filteredItems" :key="item.index" :data-index="item.index">
+            <tr v-if="true" v-for="item in loadItems" :key="item.index" :data-index="item.index">
                <th class="border" scope="row">
                     <p>{{ item.name }}</p>
                </th>
@@ -40,7 +41,7 @@
                <th class="">
                    <p>CADASTRO 2024-05-11 09:20:02 Luís Freitas</p>
                 <div class="end position-sticky">
-                    <button class="position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 84px;" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                    <button class="details-btn position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 84px;" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         Detalhes
                     </button>
                     <button class="position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 13px;" @click="showHistory(item.index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
@@ -52,23 +53,23 @@
             <div v-else class="warning-text d-flex aling-items-center justify-content-center">
                 <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
             </div>
-            <div v-if="filteredItems == ''" class="search-empty position-absolute mt-5">
+            <div v-if="loadItems.length == 0" class="search-empty position-absolute mt-5">
                 <p class="text-dark-emphasis fs-5 opacity-50">Nenhum Resultado Encontrado.</p>
             </div>
         </template>
     </TablesTable>
     </div>
 </div>
-<nav v-if="filteredItemsSize > 0" aria-label="Page navigation" class="pagination position-fixed">
+<nav v-if="itemsCache.length > 0" aria-label="Page navigation" class="pagination position-fixed">
     <ul class="pagination">
         <li class="page-item">
             <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
         </li>
-        <li class="page-item" v-for="i in totalPages" :key="i-1">
+        <li class="page-item" v-for="i in searchInput === '' ? totalPages : 0" :key="i-1">
             <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
         </li>
         <li class="page-item">
-            <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
+            <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1 || searchInput !== ''}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
         </li>
     </ul>
 </nav>
@@ -76,64 +77,113 @@
 
 <script setup>
 import { useStorageStore } from '../../stores/storage.ts';
-import { ref, computed, onMounted, onUpdated ,inject } from 'vue';
+import { useSearch } from '../../stores/search.ts';
+import { ref, computed, onMounted, onUpdated, inject } from 'vue';
 import { getItems } from '../../services/items/itemsGET.ts';
 import { useUser } from '../../stores/user.ts'
-import { navigateTo } from 'nuxt/app';
 /*SETANDO STORES*/
 const userStore = useUser()
 const store = useStorageStore();
+const searchStore = useSearch();
 /*VARIÁVEIS ÚTEIS PARA REQUISITAR OS ITENS E FILTRÁ-LOS*/ 
 let pagination = ref(0); //paginação padrão
 let invertedPagination = ref(0); //paginação invertida para filtro
 let queryParams = ref({ 
-    sort: '', 
+    sort: 'id,desc', 
     isInverted: false
 });
 //Aqui faço a requisição em si, também possui parâmetros de filtros, sendo o padrão o de últimos atualizados(como está no banco de dados)
-const sortedResponse = async (sort, isInverted, paginationInverted) => {
+const sortedResponse = async (sort, isInverted, pagination, paginationInverted) => {
     if(isInverted){
         const res = await getItems(userStore, paginationInverted, sort)
-        store.items = res.content
         return res
     } 
-    const res = await getItems(userStore, pagination.value, sort)
-    store.items = res.content
-    invertedPagination.value = res.totalPages-1;
+    const res = await getItems(userStore, pagination, sort)
     return res
 }; 
-let response = await sortedResponse();
+let response = await sortedResponse('', false, pagination.value, 0);
 let totalPages = response.totalPages
-/*INJEÇÃO DE DEPENDÊNCIAS E DADOS*/ 
-//Passando dados para o componente de filtro
+invertedPagination.value = totalPages-1;
+
+
+let itemsCache = ref([])
+let indexCount = 0;
+for(let i = 0; i < totalPages; i++){
+    const res = await sortedResponse(queryParams.value.sort, false, pagination.value+i)
+    res.content.map((item) => {
+        item.index = indexCount;
+        indexCount++;
+        itemsCache.value.push(item)
+    });
+}
+store.items = itemsCache.value;
+async function reloadItems(sort, isInverted, invertedPagination){
+    let indexcount = 0;
+    if(isInverted){
+        for(let i = totalPages-1; i >= 0; i--){
+            const res = await sortedResponse(sort, true, 0, i)    
+            res.content.map((item) => {
+                item.index = indexcount;
+                itemsCache.value[indexcount] = item
+                indexcount++;
+            });
+        }
+        store.items = itemsCache.value;
+        return 1
+    }
+    for(let i = 0; i < totalPages; i++){
+        const res = await sortedResponse(sort, isInverted, i, invertedPagination)
+        res.content.map((item) => {
+            item.index = indexcount;
+            itemsCache.value[indexcount] = item
+            indexcount++;
+        });
+    }
+    store.items = itemsCache.value;
+    return 1;
+};
+
+const searchInput = ref("");
+const loadItems = computed(() => {
+    let items = [];
+    let page = 20*pagination.value
+    let aux = page;
+    let index = 0;
+    let find = 0;
+    if(searchInput.value != ''){
+        do{
+            if(store.items[index].name.includes(searchInput.value)){
+               items.push(store.items[index])
+               find++;
+            }
+            index++;
+        } while(index < store.items.length)
+        return items
+    }
+    do{
+        items.push(store.items[aux])
+        aux++;
+    }while(aux < store.items.length && aux < 20*(pagination.value+1));
+    return items
+})
+
 provide('setItemsFilter', (filter, inverted) => {
     queryParams.value.sort = filter
     queryParams.value.isInverted = inverted
-    sortedResponse(queryParams.value.sort, inverted, invertedPagination.value)
-})
-//Passando dado de título e header de página
+    reloadItems(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
+});
+//Variáveis que o front vai pegar em si
+const itemIndex = ref(0);
+const currentItem = computed(() => store.items[itemIndex.value]);
+const currentRoute = useRoute().fullPath.split('/')[2];
+
+
 const setpageTitle = inject('setpageTitle');
 const sendDataToParent = () => {
     const data = "Almoxarifado Escolar";
     setpageTitle(data);
 };
 sendDataToParent();
-
-/*COMPUTAÇÕES PARA ORGANIZAR OS ITENS DA API PARA O FRONT*/
-//Passando um index numerico único para cada item, independente do seu id
-const items = computed(() => store.items.map((itemProxy, index) => {
-    const item = {...itemProxy}
-    item.index = index;
-    return item
-}));
-//Variável de pesquisa usada
-const searchInput = ref("");
-//Variáveis que o front vai pegar em si
-const filteredItems = computed(() => items.value.filter(item => item.name.includes(searchInput.value)));
-const filteredItemsSize = computed(() => filteredItems.value.length);
-const itemIndex = ref(0);
-const currentItem = computed(() => store.items[itemIndex.value]);
-const currentRoute = useRoute().fullPath.split('/')[2];
 
 const toolTip = ref([false, false, false, false])
 
@@ -154,7 +204,6 @@ const page = (async (index) => {
             invertedPagination.value = (totalPages-1)-index;
         }
     }
-    sortedResponse(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
     pagesFocus.value[count] = false;
     count = index;  
     pagesFocus.value[count] = true;
@@ -164,7 +213,6 @@ const fowardPage = (async () => {
     if(queryParams.value.isInverted){
         invertedPagination.value--;
     }
-    sortedResponse(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
     pagesFocus.value[count] = false;
     count++;
     pagesFocus.value[count] = true;
@@ -177,7 +225,6 @@ const backPage = (async () => {
     if(queryParams.value.isInverted){
         invertedPagination.value++;
     }
-    sortedResponse(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
     pagesFocus.value[count] = false;
     count--;
     pagesFocus.value[count] = true; 
@@ -194,7 +241,13 @@ const showHistory = (index) => {
     itemIndex.value = index;
 }
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
-onMounted(async () => {  
+onMounted(async () => {
+    if(searchStore.itemSearch.searching){
+        showDetails(searchStore.itemSearch.itemId);
+        const searching = document.getElementsByClassName('searching-btn'); 
+        searching[0].click()
+        searchStore.itemSearch.searching = false;
+    }
     if(store.isMobile){
         const catalogTextElement = document.querySelector('.sub-catalog p')
         const textElements = document.querySelectorAll('tr p');
@@ -339,7 +392,7 @@ p{
     bottom: -1%; 
     display: flex !important;
     justify-content: space-around !important;
-    z-index: 4000;
+    z-index: 0;
 }
 tr:hover .table-btn{
     opacity: 100%;

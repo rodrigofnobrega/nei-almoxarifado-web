@@ -1,5 +1,5 @@
 <template>
-    <TooltipsRectangular class="d-flex justify-content-center align-items-end toolTip-margin" :toolTipState="toolTip" :toolTipText="'Cadastro de Novos Itens'"/>    
+    <TooltipsRectangular class="d-flex justify-content-center align-items-end ms-4 mt-2" :toolTipState="toolTip" :toolTipText="'Cadastro de Novos Itens'"/>    
     <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="new-btn action-btn btn-outline-ligth text-dark-emphasis justify-content-end d-flex btn mx-1 px-2" data-bs-toggle="modal" data-bs-target="#itemRegistration" aria-expanded="false">
         Novo
         <IconsPlus class="mx-1" width="1.5em" height="1.5em"/>

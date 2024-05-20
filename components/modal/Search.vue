@@ -2,7 +2,7 @@
     <Modal id="scrollableModal" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true" @keyup.down="SearchDown()" @keyup.up="SearchUp()" @keyup.enter="Navigate()">
         <template v-slot:header>
             <div class="search-bar d-flex mx-1">
-                <form class="ms-0 teste d-flex align-items-center" role="search">
+                <form class="ms-0 NavigateToItem d-flex align-items-center" role="search">
                   <label>
                     <IconsSearchGlass class="search-icon p-1" width="40px" height="41px" style="border: 1px solid rgb(51, 51, 51, 0.2); border-right: 0;"/>
                   </label>
@@ -14,7 +14,7 @@
           <template v-if="showResults">
             <ul class="list-group">
               <a class="text-decoration-none" v-for="result in searchResults" :href="`/catalogo/almoxarifado`" :key="result.id">
-                <li class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
+                <li @click="NavigateToItem(result.index)" class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
                   {{ result.name }} 
                   <span class="badge bg-primary rounded-pill" v-if="result"> {{ result.quantity }} </span>
                 </li>
@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import { getItems } from '../../services/items/itemsGET';
-import { useUser } from '../../stores/user'; 
+import { useSearch } from '../../stores/search';
+import { useStorageStore } from '../../stores/storage';
 export default{
     data() {
         return {
@@ -43,6 +43,9 @@ export default{
         };
     },
     methods: {
+        NavigateToItem(id){
+          this.searchStore.itemSearch = {searching: true, itemId: id}
+        },
         SearchDown() {
             let searchResult = document.getElementsByClassName("searchResult");
             if ((this.searchCount) === (searchResult.length)) {
@@ -68,25 +71,21 @@ export default{
           searchResult[this.searchCount - 1].click();
         },
         handleSearch() {
-          this.searchResults = this.items.filter(result => result.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+          let items = this.store.items.map((item, index) => {
+            item.index = index
+            return item
+          })
+          this.searchResults = items.filter(result => result.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
           this.showResults = true; 
           this.searchCount = 0;
       }
     },
     async setup(){
-      const userStore = useUser();
-      let res = await getItems(userStore)
-      const items = []
-      let count = 0;
-      for(let i = 0; i < res.totalPages; i++){
-        res = await getItems(userStore, i);
-        for(let j = 0; j < res.pageElements; j++){
-          items[count] = res.content[j]
-          count++;
-        }
-      }
+      const searchStore = useSearch();
+      const store = useStorageStore();
       return{
-        items
+        store,
+        searchStore
       }
     },
 } 
@@ -113,7 +112,7 @@ export default{
     width: 75vw !important;
     
   }
-  .teste{
+  .NavigateToItem{
     width: 75vw;
   }
 }

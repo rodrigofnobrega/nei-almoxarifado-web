@@ -1,6 +1,12 @@
 <template>
   <div class="container" style="margin-left: 0px;">
     <div class="dashboard-section bg-light mb-4 rounded-3 ps-2 pe-2">
+      
+          <h2 class="pb-1 pt-0 ps-2">Gráficos e Relatórios</h2>
+      
+      <DashboardBarChart />
+    </div>  
+    <div class="dashboard-section bg-light mb-4 rounded-3 ps-2 pe-2">
       <h2 class="pb-1 pt-0 ps-2">Gestão de Usuários</h2>
     </div>
     <div class="dashboard-section bg-light mb-4 rounded-3 ps-2 pe-2">
@@ -9,10 +15,6 @@
     <div class="dashboard-section bg-light mb-4 rounded-3 ps-2 pe-2">
       <h2 class="pb-1 pt-0 ps-2">Sumário</h2>
     </div>    
-    <div class="dashboard-section bg-light mb-4 rounded-3 ps-2 pe-2">
-      <h2 class="pb-1 pt-0 ps-2">Gráficos e Relatórios</h2>
-      <DashboardBarChart />
-    </div>  
     <div class="dashboard-section bg-light mb-4 pb-3 rounded-3 ps-2 pe-2">
       <h2 class="pb-1 pt-0 ps-2">Catálogos</h2>
        <div class="dashboard-container container-fluid d-flex px-0 justify-content-center aligm-items-center">
@@ -50,7 +52,6 @@
 
 <script setup>
 import { inject } from 'vue';
-import { useUser } from '../stores/user';
 
 const setpageTitle = inject('setpageTitle');
 
@@ -70,7 +71,9 @@ sendDataToParent();
 .dashboard-section{
   width: 99%;
   padding-top: 10px;
-  padding-bottom: 40px;
+  padding-bottom: 0px;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
   border: 1px #D9D9D9 solid;
   box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);
 }

@@ -6,12 +6,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     if(to.matched.length === 0){
         return navigateTo('/error/pagina-nao-encontrada')
     }
-    if(to.path == '/login' || '/error/pagina-nao-encontrada'){
+    if(to.path === '/login' || to.path === '/error/pagina-nao-encontrada'){
         return
     }
     const userStore = useUser();
     try{
-        await getItem(userStore, 6);
+        const res = await getItem(userStore, 6);
     } catch(err){
         if(to.path.includes('/error/')){
             return

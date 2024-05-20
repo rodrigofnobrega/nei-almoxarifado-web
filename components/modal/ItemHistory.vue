@@ -18,16 +18,24 @@
 		 </thead>
 		<tbody>
 			<tr v-if="item_history" v-for="history in item_history.history" :key="'Amauri'"> 
-				<td scope="row" class="p-2 mb-3"> {{ history }} </td>
+				<td scope="row" class="p-2 mb-3"> Adicionado </td>
 				<td class="fw-bolder p-2 mb-3" style="--bs-bg-opacity: .99"
-					:class="{'text-light bg-success border-0': isCreate(history), 'text-light bg-danger border-0': isDelete(history), 'text-light bg-warning border-0': isRequest(history)}"> {{ history.split('-')[1] }} </td>
-				<td > {{item_history.qtd}} </td>
-				<td > {{'Amauri'}} </td>
+					:class="{'text-light bg-success border-0': isCreate(history), 'text-light bg-danger border-0': isDelete(history), 'text-light bg-warning border-0': isRequest(history)}"> 12/32 </td>
+				<td> 2 </td>
+				<td> Amauri </td>
 			</tr>
 		</tbody>
 	</table>
 		</template>
+		<template v-slot:footer>
+			<div class="container-fluid d-flex justify-content-center align-items-center my-3">
+            </div>
+			<div data-bs-target="#itemDetailing" data-bs-toggle="modal" type="button" class=" btn btn-primary position-fixed bg-primary rounded-2 p-1 d-flex justify-content-end text-light">
+                <IconsInformation width="23px" height="23px"/>
+            </div>
+		</template>
 	</Modal>
+	<ModalItemDetails v-if="toggleHistory" :item_index="1" :item_route="'/catalogo'" :item_details="item_history" />
 </template>
 
 <script lang="ts">
@@ -35,7 +43,7 @@ export default{
 	props: {
 		item_history: {
 			type: Object
-		}
+		},
 	},
 	methods:{
 	isCreate(data){
