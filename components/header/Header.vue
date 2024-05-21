@@ -1,11 +1,13 @@
 <template>
-    <Popup :isPopup="isPopup" :popupText="popupText" :popupBg="popupBg"/>
-    <div class="header container-fluid d-flex justify-content-between align-items-center bg-primary p-0">  
-      <div class="d-flex align-items-center">
-        <Brand class="ms-3"/>
-      </div> 
-      <div class="d-flex justify-content-end align-items-center">
-        <SearchBar />
+  <div class="header container-fluid d-flex justify-content-between align-items-center bg-primary p-0">  
+    <IconsMenu @click="expandSidebar()" class="d-none menu-color mx-3" :class="{'show-menu': responsive}"/>
+    <div @mouseover="toolTip = true" @mouseout="toolTip = false" class="align-items-center" :class="{'d-none': responsive}">
+      <Brand class="ms-3"/>
+      <TooltipsRectangular class="ms-5 ps-5 pt-2" :toolTipState="toolTip" :toolTipText="'Página Inicial'"/>
+    </div> 
+    <div class="d-flex justify-content-end align-items-center">
+        <SearchBar :class="{'d-none': responsive}"/>
+        <IconsSearchGlass :class="{'d-none': !responsive}" class="mobile-search text-light" type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal"/>
         <!--<ThemeSwitch />-->
         <ModalSearch />
         <Profile />
@@ -18,25 +20,36 @@ import SearchBar from "./SearchBar.vue";
 import Brand from "./Brand.vue";
 import ThemeSwitch from "./ThemeSwitch.vue";
 import Profile from "./Profile.vue";
-import { usePopupStore } from "~/stores/popup";
-import { computed, popScopeId } from "vue";
+import { useStorageStore } from "../../stores/storage";
 export default{
-    components: { SearchBar, Brand, ThemeSwitch, Profile },
-    setup(){
-      const popup = usePopupStore();
-      const isPopup = computed(() => {
-          return popup.popupActive
-      });
-      const popupText = computed(() => {
-        return popup.message
-      });
-      const popupBg = computed(() => {
-        return popup.bgColor
-      })
+    data(){
       return{
-        isPopup,
-        popupText,
-        popupBg
+        responsive: false
+      }
+    },
+    components: { SearchBar, Brand, ThemeSwitch, Profile },
+    mounted(){
+      window.addEventListener('resize', this.mobileMode)
+      this.mobileMode()
+    },
+    methods: {
+      mobileMode(){
+          this.responsive = window.innerWidth <= 726;
+          this.store.isResponsive = window.innerWidth <= 726;
+          if(window.innerWidth === 726){
+            this.store.responsive = false
+          }
+      },
+      expandSidebar(){
+        this.store.isMobileMenu = !this.store.isMobileMenu;
+      }
+    },
+    setup(){
+      const toolTip = ref(false)
+      const store = useStorageStore();
+      return{
+        store,
+        toolTip
       }
     }
 }
@@ -44,8 +57,20 @@ export default{
 </script>
 
 <style scoped>
+.menu-color{
+  color: white !important;
+}
+.show-menu{
+  margin: 11px 0px 11px 0px;
+  width: 28px;
+  height: 28px;
+  display: block !important;
+}
 .header{
   position: fixed;
   z-index: 1050;
+}
+.mobile-search{
+  margin-top: 2.9px;
 }
 </style>

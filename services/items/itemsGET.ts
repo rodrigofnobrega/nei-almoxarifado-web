@@ -1,10 +1,10 @@
-import axios from 'axios'
 import { navigateTo } from 'nuxt/app';
+import { useApi } from '../../composables/axios';
 
 export const getItems = async (userStore, page, sort) => {
     try{
         if(sort){
-            const { data } = await axios.get(`http://localhost:8080/api/v1/itens?page=${page}&sort=${sort}`, {
+            const { data } = await useApi().get(`http://localhost:8080/api/v1/itens?page=${page}&sort=${sort}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${userStore.token}`
@@ -12,27 +12,26 @@ export const getItems = async (userStore, page, sort) => {
             });
             return data
         }
-        const { data } = await axios.get(`http://localhost:8080/api/v1/itens?page=${page}`, {
+        const { data } = await useApi().get(`http://localhost:8080/api/v1/itens?page=${page}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${userStore.token}`
                 }
             });
         return data
-    } catch(error){
-        console.log(error)
-        return error
+    } catch(err){
+        return err
     }
 };
 //Busca item pelo id 
 export const getItem = async (userStore, item_id) => {
-    const { data } = await axios.get(`http://localhost:8080/api/v1/itens/${item_id}`, {
+    const { data } = await useApi().get(`http://localhost:8080/api/v1/itens/${item_id}`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`
         }
     });
-    return data.content
+    return data
 };
 
 

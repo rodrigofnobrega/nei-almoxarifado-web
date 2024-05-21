@@ -12,13 +12,13 @@
                 <div class="novaSenha">
                     <label for="newPassword">Nova Senha:</label>
                     <input type="password" id="newPassword" placeholder="Sua nova senha" v-model="newPassword" required>
-                    <button class="showButton" @click="togglePasswordVisibility('newPassword')"></button>
+                    <button class="showButton" @click="togglePasswordVisibility('newPassword')">Texto</button>
                 </div>
 
                 <div class="confirmarNova">
                     <label for="newRePassword">Confirma a Nova Senha:</label>
                     <input type="password" id="newRePassword" placeholder="Confirme sua nova senha" v-model="newRePassword" required>
-                    <button class="showButton" @click="togglePasswordVisibility('newRePassword')"></button>
+                    <button class="showButton" @click="togglePasswordVisibility('newRePassword')">Texto</button>
                 </div>
 
             </div>
@@ -87,10 +87,6 @@ const togglePasswordVisibility = (fieldId) => {
         field.type = 'password';
     }
 }
-
-
-
-
 </script>
 
 <style scoped>

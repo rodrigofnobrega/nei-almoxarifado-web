@@ -1,16 +1,15 @@
 <template>
     <ModalItemRegister />
-    <div class="col-12 p-0 m-0 rounded">
+    <div class="container col-12 rounded">
         <table class="table table-hover border">
           <thead>
-           <tr>
+           <tr class="">
                <th class="col-title py-2 border" scope="col">Nome</th>
                <th class="col-title py-2 border" scope="col">Código Sipac</th>
                <th class="col-title py-2 border" scope="col">Tipo Unitário</th>
-               <th class="col-title py-2 border" scope="col">Quantidade</th>
+               <th class=" col-title py-2 border" scope="col">Quantidade</th>
                <th class="col-title py-2" scope="col">Última atualização</th>
-               <th class="col-title end"></th>
-           </tr>
+            </tr>
           </thead>
           <tbody>
            <slot name="items" />
@@ -21,12 +20,32 @@
 
 <script setup>
 import { onMounted } from 'vue';
+import { useStorageStore } from '../../stores/storage';
+
+const store = useStorageStore();
+onMounted(() => {
+    if(store.isMobile){
+        const columnTitles = document.querySelectorAll('.col-title');
+        columnTitles.forEach(element => element.style.fontSize = '8px')
+    }
+
+})
 
 </script>
 
 <style scoped>
+.container{
+    margin-left: -1px;
+    width: 100%;
+    padding: 0;
+    margin-right: 0px;
+    margin-bottom: 0px;
+}
 table{
-    width: 103.3%;
+    margin-right: 0;
+    padding-right: 0px;
+    margin-bottom: 0px;
+    width: 100%;
 }
 
 .col-title{
@@ -70,17 +89,10 @@ tr:hover .table-btn{
 tr:hover p{
     opacity: 70%;
 }
-@media screen and (max-width: 1300px) {
-    table {
-        width: 75vw;
-    }
-}
-@media screen and (max-width: 1050px) {
-    table {
-        width: 70vw;
-    }
+
+@media screen and (max-width: 1030px) {
     .col-title{
-        font-size: 14px;
+        font-size: 13px;
     }
     p{
         font-size: 12px;
@@ -88,15 +100,12 @@ tr:hover p{
     .table-btn{
         font-size: 13px;
         opacity: 0%;
-        margin-top: 11px;
-        margin-right: 4px;
-        padding: 3px 0px 3px 0px;
+        margin-top: 8px;
+        margin-right: 10px;
+        padding: 5px 5px 5px 5px;
     }
 }
 @media screen and (max-width: 930px){
-    table {
-        width: 60vw;
-    }
     .catalog-header{
         display: block !important;
         text-align: center;
@@ -106,10 +115,7 @@ tr:hover p{
         align-content: center;
     }
 }
-@media screen and (max-width: 880px) {
-    table {
-        width: 50vw;
-    }
+@media screen and (max-width: 910px) {
     .col-title{
         font-size: 12px;
     }

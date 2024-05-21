@@ -2,33 +2,34 @@ import { defineStore } from "pinia";
 import { postCreateItem } from "../services/items/itemsPOST";
 import { putUpdateItem } from "../services/items/itemsPUT";
 import { useUser } from './user.ts';
+import { usePopupStore } from '~/stores/popup';
 
 export const useStorageStore = defineStore('storage', {
     state: () => ({
       items: [],
       sidebarSublinks: [],
       isRotated: false,
-      deleteMode: false,
-      editMode: false,
-      tableSearch: " ",
+      isMobile: false,
+      isMobileMenu: false,
+      isResponsive: false,
+      tableSearch: " "
     }),
     actions: {
-      async fetchItems(items: object, item: object){
-        localStorage.setItem('items', JSON.stringify(items));
-        this.sendItemsToServer(item);
-      },
-      async sendItemsToServer(item) {
+      async sendItems(item) {
         const userStore = useUser();
+        const popupStore = usePopupStore();
         if(item){
           try{
             const res = await postCreateItem(userStore, item.name, item.sipacCode, item.quantity, item.type);
+            if(res === false){
+              popupStore.throwPopup('Erro: Existe um item com mesmo código sipac', '#B71C1C')
+            }
           }catch(error){
-            console.log(error);
+            popupStore.throwPopup('Erro: Existe um item com mesmo código sipac', '#B71C1C')
           }
         }
       },
       async updateItems(items, item_id, item_name, item_sipac){
-        localStorage.setItem('items', JSON.stringify(items));
         if(item_id){
           try{
             const userStore = useUser();
@@ -39,8 +40,8 @@ export const useStorageStore = defineStore('storage', {
         }
       },
       addItem(item: object){
-        this.items.push(item);
-        this.fetchItems(this.items, item);
+        this.sendItems(item);
+        this.items.unshift(item);
       },
       deleteItem(index: number, almoxarifado: string){
         let count = 0;
@@ -48,13 +49,13 @@ export const useStorageStore = defineStore('storage', {
           if(this.items[i].storage.includes(almoxarifado)){
             if(index == count){
               this.items.splice(i, 1);
-              this.fetchItems(this.items);
+              this.sendItems(this.items);
               return 0;
             };
           };
           count++;
         };
-        this.fetchItems(this.items);
+        this.sendItems(this.items);
       },
       updateItemQtd(index: number, newName: string, newSipac: string, almoxarifado: string) {
         let count = 0;
@@ -74,13 +75,7 @@ export const useStorageStore = defineStore('storage', {
       },
       setRotated(){
         this.isRotated = !this.isRotated;
-      },
-      setDeleteMode(){
-        this.deleteMode = !this.deleteMode;
-      },
-      setEditMode(){
-        this.editMode = !this.editMode;
-      },
+      }
   },
   getters: {
     getItems() {
