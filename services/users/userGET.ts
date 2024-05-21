@@ -1,7 +1,7 @@
-import axios from "axios";
-//Lista todos os usuários
+import { useApi } from "../../composables/axios";
+//Lista todos os usuários 
 export const getUsers = async (userStore, userEmail) => {
-    const { data } = await axios.get(`http://localhost:8080/api/v1/users/query?email=${userEmail}`, {
+    const { data } = await useApi().get(`users/query?email=${userEmail}`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`
@@ -11,20 +11,20 @@ export const getUsers = async (userStore, userEmail) => {
     return data
 };
 //Listar pelo ID
-export const getUserId = async () => {
+export const getUserId = async (userStore) => {
     const user_id = 1
-    const { data } = await useFetch(`http://localhost:8080/api/v1/users/${user_id}`, {
+    const { data } = await useApi().get(`http://localhost:8080/api/v1/users/${user_id}`, {
         method: 'GET',
-        header: {
+        headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${userStore.token}`
         }
     })
-    return data._rawValue
+    return data
 };
 //Listar pelo email
 export const getUserByEmail = async (userStore, userEmail) => {
-    const { data } = await axios.get(`http://localhost:8080/api/v1/users/query?email=${userEmail}`, {
+    const { data } = await useApi().get(`users/query?email=${userEmail}`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`

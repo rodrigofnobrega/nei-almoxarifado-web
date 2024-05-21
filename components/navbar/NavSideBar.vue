@@ -1,6 +1,7 @@
 <template>
-    <div class="sidebar teste3 pt-0 nav bg-light d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed, 'teste': responsive && !isMobile, 'teste2': responsive && isMobile }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-        <div class="offcanvas-body ps-0" >
+    <div class="modal-backdrop" :style="{'display': responsive && isMobile ? 'block' : 'none' }"></div>
+    <div class="sidebar pt-0 nav bg-light d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed, 'hide': responsive && !isMobile, 'mobile-spacement': responsive && isMobile, 'mobile-fixed': responsive }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-body ps-0" :class="{'mobile-padding': responsive }">
             <div class="mobile-sidebar-header bg-primary m-0 p-0 text-light" :class="{'show': responsive && isMobile}" :style="{'width': responsive && isMobile ? '165px': '0px'}">
                 <IconsClose @click="hideSidebar()" class="exit-btn me-3" style="width: 25px; height: 25px;"/>
             </div>
@@ -70,7 +71,7 @@ export default {
             isCollapsed: false,
             dropdwonRoutes: [],
             responsive: false,
-            teste: ref(this.store.isMobile)
+            mobileResponsive: false
         }
     },
     mounted() {
@@ -82,7 +83,7 @@ export default {
             return useStorageStore().isRotated;
         },
         isMobile(){
-            return useStorageStore().isMobile
+            return useStorageStore().isMobileMenu
         }
     },
     methods: {
@@ -95,10 +96,10 @@ export default {
             useStorageStore().setRotated();
         },
         mobileMode(){
-            this.responsive = window.innerWidth <= 669;
+            this.responsive = window.innerWidth <= 726;
         },
         hideSidebar(){
-            this.store.isMobile = false;
+            this.store.isMobileMenu = false;
         }
       },
     created(){
@@ -124,6 +125,13 @@ export default {
 </script>
 
 <style scoped>
+.modal-backdrop{
+    z-index: 1000;
+    position: fixed;
+    background-color: rgb(0, 0, 0, 0.2);
+    width: 100% !important;
+    height: 100% !important;
+}
 .exit-btn{
     transition: transform 0.3s ease-in-out;
 }
@@ -131,24 +139,26 @@ export default {
     transform: scale(1.3);
 }
 .mobile-sidebar-header{
-    transition: width 0.6s ease-in-out;
     margin-top: -16px !important;
     height: 50px !important;
     display: flex !important;
     align-items: center;
     justify-content: end;
 }
-
-.teste{
+.hide{
     width: 0px !important;
 }
-.teste2{
+.mobile-spacement{
     padding-top: 0px !important;
 }
-.teste3{
-    z-index: 3000;
+.mobile-fixed{
+    position: fixed !important;
+    margin-top: 50px !important;
+    z-index: 1000;
 }
-
+.mobile-padding{
+    margin-top: -50px !important;
+}
 .sidebar{
     overflow-y: auto;
 }

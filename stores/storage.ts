@@ -10,14 +10,12 @@ export const useStorageStore = defineStore('storage', {
       sidebarSublinks: [],
       isRotated: false,
       isMobile: false,
-      tableSearch: " ",
+      isMobileMenu: false,
+      isResponsive: false,
+      tableSearch: " "
     }),
     actions: {
-      async fetchItems(items: object, item: object){
-        localStorage.setItem('items', JSON.stringify(items));
-        this.sendItemsToServer(item);
-      },
-      async sendItemsToServer(item) {
+      async sendItems(item) {
         const userStore = useUser();
         const popupStore = usePopupStore();
         if(item){
@@ -32,7 +30,6 @@ export const useStorageStore = defineStore('storage', {
         }
       },
       async updateItems(items, item_id, item_name, item_sipac){
-        localStorage.setItem('items', JSON.stringify(items));
         if(item_id){
           try{
             const userStore = useUser();
@@ -43,8 +40,8 @@ export const useStorageStore = defineStore('storage', {
         }
       },
       addItem(item: object){
-        this.fetchItems(this.items, item);
-        this.items.push(item);
+        this.sendItems(item);
+        this.items.unshift(item);
       },
       deleteItem(index: number, almoxarifado: string){
         let count = 0;
@@ -52,13 +49,13 @@ export const useStorageStore = defineStore('storage', {
           if(this.items[i].storage.includes(almoxarifado)){
             if(index == count){
               this.items.splice(i, 1);
-              this.fetchItems(this.items);
+              this.sendItems(this.items);
               return 0;
             };
           };
           count++;
         };
-        this.fetchItems(this.items);
+        this.sendItems(this.items);
       },
       updateItemQtd(index: number, newName: string, newSipac: string, almoxarifado: string) {
         let count = 0;

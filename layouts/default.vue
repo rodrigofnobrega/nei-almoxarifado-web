@@ -28,10 +28,12 @@
   
 <script >
 import { ref, provide, inject } from 'vue';
+import { useStorageStore } from '../stores/storage';
 
 
 export default {
   setup() {
+    const store = useStorageStore();
     const pageTitle = ref('');
     const pageOptions = ref();
     provide('setpageTitle', (data) => {
@@ -40,6 +42,7 @@ export default {
 
     return {
       pageTitle,
+      store
     };
   },
 };

@@ -1,12 +1,13 @@
 <template>
-  <Popup :isPopup="isPopup" :popupText="popupText" :popupBg="popupBg"/>
   <div class="header container-fluid d-flex justify-content-between align-items-center bg-primary p-0">  
-    <IconsMenu @click="expandSidebar()" class="d-none teste2 mx-3" :class="{'teste': responsive}"/>
-    <div class="align-items-center" :class="{'d-none': responsive}">
+    <IconsMenu @click="expandSidebar()" class="d-none menu-color mx-3" :class="{'show-menu': responsive}"/>
+    <div @mouseover="toolTip = true" @mouseout="toolTip = false" class="align-items-center" :class="{'d-none': responsive}">
       <Brand class="ms-3"/>
+      <TooltipsRectangular class="ms-5 ps-5 pt-2" :toolTipState="toolTip" :toolTipText="'Página Inicial'"/>
     </div> 
-      <div class="d-flex justify-content-end align-items-center">
+    <div class="d-flex justify-content-end align-items-center">
         <SearchBar :class="{'d-none': responsive}"/>
+        <IconsSearchGlass :class="{'d-none': !responsive}" class="mobile-search text-light" type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal"/>
         <!--<ThemeSwitch />-->
         <ModalSearch />
         <Profile />
@@ -19,9 +20,7 @@ import SearchBar from "./SearchBar.vue";
 import Brand from "./Brand.vue";
 import ThemeSwitch from "./ThemeSwitch.vue";
 import Profile from "./Profile.vue";
-import { usePopupStore } from "~/stores/popup";
 import { useStorageStore } from "../../stores/storage";
-import { computed, popScopeId } from "vue";
 export default{
     data(){
       return{
@@ -35,30 +34,22 @@ export default{
     },
     methods: {
       mobileMode(){
-          this.responsive = window.innerWidth <= 669;
+          this.responsive = window.innerWidth <= 726;
+          this.store.isResponsive = window.innerWidth <= 726;
+          if(window.innerWidth === 726){
+            this.store.responsive = false
+          }
       },
       expandSidebar(){
-        this.store.isMobile = !this.store.isMobile;
-        console.log(this.store.isMobile)
+        this.store.isMobileMenu = !this.store.isMobileMenu;
       }
     },
     setup(){
+      const toolTip = ref(false)
       const store = useStorageStore();
-      const popup = usePopupStore();
-      const isPopup = computed(() => {
-          return popup.popupActive
-      });
-      const popupText = computed(() => {
-        return popup.message
-      });
-      const popupBg = computed(() => {
-        return popup.bgColor
-      })
       return{
-        isPopup,
-        popupText,
-        popupBg,
-        store
+        store,
+        toolTip
       }
     }
 }
@@ -66,10 +57,10 @@ export default{
 </script>
 
 <style scoped>
-.teste2{
+.menu-color{
   color: white !important;
 }
-.teste{
+.show-menu{
   margin: 11px 0px 11px 0px;
   width: 28px;
   height: 28px;
@@ -78,5 +69,8 @@ export default{
 .header{
   position: fixed;
   z-index: 1050;
+}
+.mobile-search{
+  margin-top: 2.9px;
 }
 </style>

@@ -9,12 +9,12 @@
         <template v-slot:body>
             <div v-if="item_details" class="row">
 				<div class="col-6">
-					<div class="mb-3"> 
-						<label class="form-label fw-bold"> Nome </label>
+                    <div class="mb-3"> 
+                        <label class="form-label fw-bold"> Nome </label>
 						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" type="text" :value="item_details.name">
 					</div>	
 					<div class="mb-3"> 
-						<label class="form-label fw-bold"> Código Sipac </label>
+                        <label class="form-label fw-bold"> Código Sipac </label>
 						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.sipacCode"> 
 					</div>	
 					<div class="mb-3"> 
@@ -22,24 +22,24 @@
 						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.type"> 
 					</div>
                     <div class="mb-3"> 
-						<label class="form-label fw-bold"> Quantidade </label>
+                        <label class="form-label fw-bold"> Quantidade </label>
 						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.quantity"> 
 					</div>	
 				</div>
 				<div class="col-6">
-					<div class="mb-3"> 
-						<label class="form-label fw-bold"> Inventário </label>
+                    <div class="mb-3"> 
+                        <label class="form-label fw-bold"> Inventário </label>
 						<input readonly class="form-control bg-light-emphasis" :value="item_route"> 
 					</div>	
-					<div class="mb-4">
+					<div class="mb-3">
                         <label class="form-label fw-bold"> Última atualização </label>
-                        <input readonly id="expansible-form" class="form-control bg-light-emphasis" @mouseover="inputExpand" @mouseleave="inputContract" :value="'[]'">
+                        <input readonly class="form-control bg-light-emphasis" id="expansible-form" @mouseover="inputExpand" @mouseleave="inputContract" :value="'[]'">
                     </div>
 					<div class="mb-3"> 
-						<label class="form fw-bold"> Data de Registro </label>
+                        <label class="form-label fw-bold"> Data de Registro </label>
 						<input readonly class="form-control bg-light-emphasis" :value="'03/12/2004 00:00'"> 
 					</div>	
-                    <div class="mb-4"> 
+                    <div class="mb-3"> 
 						<label class="form-label fw-bold"> Criador </label>
 						<input readonly class="form-control bg-light-emphasis" :value="'Amauri'"> 
 					</div>	
@@ -53,12 +53,17 @@
                 <button class="btn inset-shadow mode-btn btn-primary mx-1" @click="setEdition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>
                 <button class="btn inset-shadow btn-light-success text-light mx-1" id="fetch-inputs" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="fetchNewData" data-bs-dismiss="modal">Confirmar</button>
             </div>
+            <div data-bs-target="#itemHistory" data-bs-toggle="modal" type="button" class="btn btn-primary position-fixed bg-primary rounded-2 p-1 d-flex justify-content-end text-light">
+                <IconsHistory width="25px" height="25px"/>
+            </div>
         </template> 
     </Modal>
+    <ModalItemHistory v-if="toggleHistory" :item_history="item_details"/>
 </template>
 
 <script>
 import { useStorageStore } from '../../stores/storage';
+import { inject } from 'vue';
 
 export default {
     data() {
@@ -68,7 +73,8 @@ export default {
             shadowInput: null,
             mouseOverFlag: false,
             inputs: [],
-            editionActive: false
+            editionActive: false,
+            toggleHistory: true
         }
     },
     methods: {
@@ -97,7 +103,7 @@ export default {
                 this.expansibleContainer.removeChild(this.shadowInput);
                 this.shadowInput = null;
                 this.expansibleInput.style.position = "static";
-                this.expansibleInput.style.width = "230px";
+                this.expansibleInput.style.width = "100%";
             }
         },
         setEdition(){       
@@ -159,5 +165,22 @@ export default {
 .modal-btn{
     border-radius: 10px;
 }
-
+@media screen and (max-width: 424px){
+    .form-label{
+        font-size: 14px !important;
+        font-weight: normal !important;
+    }   
+    .form-control{
+        font-size: 12px !important;
+    }
+}
+@media screen and (max-width: 360px){
+    .form-label{
+        font-size: 12px !important;
+        font-weight: normal !important;
+    }   
+    .form-control{
+        font-size: 12px !important;
+    }
+}
 </style>
