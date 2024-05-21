@@ -1,20 +1,20 @@
 <template>
   <div class="d-flex mb-3 justify-content-start align-items-center chart-filter">
     <div class="dropdown mx-2">
-      <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        Dados
-      </button>
-      <ul class="dropdown-menu">
-        <li class="dropdown-item">Quantidade geral de itens solicitados</li>
-        <li class="dropdown-item">Itens mais solicitados</li>
-        <li class="dropdown-item">Maiores solicitadores</li>
-      </ul>
-    </div>
-    <div class="dropdown mx-2">
       <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Período</button>
       <ul class="dropdown-menu">
-        <li @click="changeLabel('month')" type="button" class="dropdown-item">Mês</li>
-        <li @click="changeLabel('week')" type="button" class="dropdown-item">Semanas (mês atual)</li>
+        <li @click="changeLabel(0)" type="button" class="dropdown-item">Janeiro</li>
+        <li @click="changeLabel(1)" type="button" class="dropdown-item">Fevereiro</li>
+        <li @click="changeLabel(2)" type="button" class="dropdown-item">Março</li>
+        <li @click="changeLabel(3)" type="button" class="dropdown-item">Abril</li>
+        <li @click="changeLabel(4)" type="button" class="dropdown-item">Maio</li>
+        <li @click="changeLabel(5)" type="button" class="dropdown-item">Junho</li>
+        <li @click="changeLabel(6)" type="button" class="dropdown-item">Julho</li>
+        <li @click="changeLabel(7)" type="button" class="dropdown-item">Agosto</li>
+        <li @click="changeLabel(8)" type="button" class="dropdown-item">Setembro</li>
+        <li @click="changeLabel(9)" type="button" class="dropdown-item">Outubro</li>
+        <li @click="changeLabel(10)" type="button" class="dropdown-item">Novembro</li>
+        <li @click="changeLabel(11)" type="button" class="dropdown-item">Dezembro</li>
       </ul>
     </div>
   </div>
@@ -54,49 +54,59 @@ ChartJS.register(
   LinearScale,
   Filler 
 );
+const months = [
+  'Janeiro', 
+  'Fevereiro', 
+  'Março', 
+  'Abril', 
+  'Maio', 
+  'Junho', 
+  'Julho', 
+  'Agosto', 
+  'Setembro', 
+  'Outubro', 
+  'Novembro', 
+  'Dezembro'
+];
 
-const labels = {
-  month: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
-  week: ['1ª Semana', '2ª Semana', '3ª Semana', '4ª Semana']
-};
+const labels = [
+              ['Papel A4', 'Esponja', 'Desinfetante', 'Sacolas plásticas', 'Canetas', 'Carga de piloto'], 
+              ['Papel A3', 'Esponja', 'Desinfetante', 'Sacolas plásticas', 'Canetas', 'Carga de piloto'],
+              ['Papel A2', 'Esponja', 'Desinfetante', 'Sacolas plásticas', 'Canetas', 'Carga de piloto'],
+              ['Papel A1', 'Esponja', 'Desinfetante', 'Sacolas plásticas', 'Canetas', 'Carga de piloto'],
+              ['Papel A0', 'Esponja', 'Desinfetante', 'Sacolas plásticas', 'Canetas', 'Carga de piloto'],
+              ['Papel A', 'Esponja', 'Desinfetante', 'Sacolas plásticas', 'Canetas', 'Carga de piloto'],
+              ['Papel A', 'Esponja', 'Desinfetante', 'Sacolas plásticas', 'Canetas', 'Carga de piloto'],
+              ['Papel A', 'Esponja', 'Desinfetante', 'Sacolas plásticas', 'Canetas', 'Carga de piloto'],
+              ['Papel A', 'Esponja', 'Desinfetante', 'Sacolas plásticas', 'Canetas', 'Carga de piloto'],
+              ['Papel A', 'Esponja', 'Desinfetante', 'Sacolas plásticas', 'Canetas', 'Carga de piloto'],
+              ['Papel A', 'Esponja', 'Desinfetante', 'Sacolas plásticas', 'Canetas', 'Carga de piloto'],
+              ['Papel A', 'Esponja', 'Desinfetante', 'Sacolas plásticas', 'Canetas', 'Carga de piloto'],
+            ];
 
-const datasets = {
-  month: [0, 0, 100, 200, 300, 200, 100, 0, 100, 200, 300, 0],
-  week: [0, 10, 20, 30],
-  lineMonth: [50, 150, 250, 200, 300, 250, 150, 100, 200, 300, 400, 100],
-  lineWeek: [5, 15, 25, 35],
-  pieMonth: [300, 50, 100, 150, 200, 250],
-  pieWeek: [75, 25, 50, 100]
-};
+const datasets = [
+  [100, 200, 300, 200, 100, 120],
+  [600, 200, 300, 200, 100, 120],
+  [400, 200, 300, 200, 100, 120],
+  [800, 200, 300, 200, 100, 120],
+  [300, 200, 300, 200, 100, 120],
+  [1200, 200, 300, 200, 100, 120],
+  [100, 200, 300, 200, 100, 120],
+  [100, 200, 300, 200, 100, 120],
+  [100, 200, 300, 200, 100, 120],
+  [100, 200, 300, 200, 100, 120],
+  [100, 200, 300, 200, 100, 120],
+  [100, 200, 300, 200, 100, 120],
+];
 
 const pieDataSets = ref([
   {
-    labels: ['Arapuca', 'Categoria 2', 'Categoria 3', 'Categoria 4', 'Categoria 5', 'Categoria 6'],
+    labels: labels[0],
     datasets: [
       {
-        label: 'Itens mais usados de ',
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF9F40', '#4BC0C0', '#9966FF'],
-        data: datasets.pieMonth
-      }
-    ]
-  },
-  {
-    labels: ['Categoria 1', 'Categoria 2', 'Categoria 3', 'Categoria 4', 'Categoria 5', 'Categoria 6'],
-    datasets: [
-      {
-        label: 'Distribuição de Categorias',
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF9F40', '#4BC0C0', '#9966FF'],
-        data: datasets.pieMonth
-      }
-    ]
-  },
-  {
-    labels: ['Categoria 1', 'Categoria 2', 'Categoria 3', 'Categoria 4', 'Categoria 5', 'Categoria 6'],
-    datasets: [
-      {
-        label: 'Distribuição de Categorias',
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF9F40', '#4BC0C0', '#9966FF'],
-        data: datasets.pieMonth
+        label: 'Itens mais usados de Janeiro',
+        backgroundColor: ['#FED51E', '#0B3B69', '#1F69B1', '#9a0d6f', '#6f3b54', '#3b6f5e'],
+        data: datasets[0]
       }
     ]
   },
@@ -124,31 +134,17 @@ const chartOptions = ref({
   }
 });
 
-const changeLabel = (labelType) => {
-  barLineData.value = {
-    ...barLineData.value,
-    labels: labels[labelType],
+const changeLabel = (index) => {
+  pieDataSets.value = [{
+    labels: labels[index],
     datasets: [
       {
-        ...barLineData.value.datasets[0],
-        data: datasets[labelType]
-      },
-      {
-        ...barLineData.value.datasets[1],
-        data: labelType === 'month' ? datasets.lineMonth : datasets.lineWeek
+        ...pieDataSets.value[0].datasets[0],
+        label: `Itens mais usados de ${months[index]}`,
+        data: datasets[index]
       }
     ]
-  };
-
-  pieDataSets.value = pieDataSets.value.map((data) => ({
-    ...data,
-    datasets: [
-      {
-        ...data.datasets[0],
-        data: labelType === 'month' ? datasets.pieMonth : datasets.pieWeek
-      }
-    ]
-  }));
+  }];
 };
 </script>
 
@@ -166,6 +162,6 @@ const changeLabel = (labelType) => {
 }
 
 .chart-graph {
-  height: 200px;
+  height: 300px;
 }
 </style>
