@@ -1,11 +1,17 @@
 <template>
   <div class="container" style="margin-left: 0px;">
     <div class="dashboard-section bg-light mb-4 rounded-3 ps-2 pe-2">
-      
-          <h2 class="pb-1 pt-0 ps-2">Gráficos e Relatórios</h2>
-      
-      <DashboardBarChart />
+      <h2 class="pb-1 pt-0 ps-2">Gráfico de Solicitações de Itens</h2>
+      <DashboardBarChartItems />
     </div>  
+    <div class="dashboard-section bg-light mb-4 rounded-3 ps-2 pe-2">
+      <h2 class="pb-1 pt-0 ps-2">Relatórios Gerais</h2>
+      <DashboardBarChartUtils />
+    </div> 
+    <div class="dashboard-section bg-light mb-4 rounded-3 ps-2 pe-2">
+      <h2 class="pb-1 pt-0 ps-2">Relatórios Gerais</h2>
+      <DashboardTeste />
+    </div> 
     <div class="dashboard-section bg-light mb-4 rounded-3 ps-2 pe-2">
       <h2 class="pb-1 pt-0 ps-2">Gestão de Usuários</h2>
     </div>

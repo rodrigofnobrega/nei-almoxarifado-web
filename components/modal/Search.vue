@@ -33,6 +33,8 @@
 <script>
 import { useSearch } from '../../stores/search';
 import { useStorageStore } from '../../stores/storage';
+import { getItems } from '../../services/items/itemsGET.ts';
+import { useUser } from '../../stores/user.ts';
 export default{
     data() {
         return {
@@ -81,8 +83,26 @@ export default{
       }
     },
     async setup(){
+      const userStore = useUser();
       const searchStore = useSearch();
       const store = useStorageStore();
+      const sortedResponse = async (sort, isInverted, pagination) => {
+          const res = await getItems(userStore, pagination, sort)
+          return res
+      }; 
+      let response = await sortedResponse('', false, 0, 0);
+      let totalPages = response.totalPages
+      let itemsCache = ref([])
+      let indexCount = 0;
+      for(let i = 0; i < totalPages; i++){
+          const res = await sortedResponse('id,desc', false, i)
+          res.content.map((item) => {
+              item.index = indexCount;
+              indexCount++;
+              itemsCache.value.push(item)
+          });
+      }
+      store.items = itemsCache.value;
       return{
         store,
         searchStore
