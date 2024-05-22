@@ -12,13 +12,13 @@
                 <div class="novaSenha">
                     <label for="newPassword">Nova Senha:</label>
                     <input type="password" id="newPassword" placeholder="Sua nova senha" v-model="newPassword" required>
-                    <button class="showButton" @click="togglePasswordVisibility('newPassword')">Texto</button>
+                    <button class="showButton" @click="togglePasswordVisibility('newPassword')"></button>
                 </div>
 
                 <div class="confirmarNova">
                     <label for="newRePassword">Confirma a Nova Senha:</label>
                     <input type="password" id="newRePassword" placeholder="Confirme sua nova senha" v-model="newRePassword" required>
-                    <button class="showButton" @click="togglePasswordVisibility('newRePassword')">Texto</button>
+                    <button class="showButton" @click="togglePasswordVisibility('newRePassword')"></button>
                 </div>
 
             </div>
@@ -58,7 +58,7 @@ const router = useRouter();
 
     // Verifica se as senhas estão iguais
 const verifyPassword = () => {
-    if (newPassword === newRePassword) {
+    if (newPassword.value === newRePassword.value) {
         console.log("Você será direcionado para o login novamente.");
         router.push('/login');
     }
@@ -70,8 +70,6 @@ const verifyPassword = () => {
 
     // Reiniciar a rotina
 const resetPassword = () => {
-    newPassword.value = '';
-    newRePassword.value = '';
     isEqual.value = true;
 
 }
