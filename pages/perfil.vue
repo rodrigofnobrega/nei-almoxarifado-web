@@ -169,6 +169,8 @@
   .profile-picture img {
     border-radius: 50%;
     margin-bottom: 10px;
+    max-width: 150px;
+    max-height: 150px;
   }
   
   .profile-picture button {
