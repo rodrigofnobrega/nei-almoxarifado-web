@@ -25,13 +25,19 @@ export const getItems = async (userStore, page, sort) => {
 };
 //Busca item pelo id 
 export const getItem = async (userStore, item_id) => {
-    const { data } = await useApi().get(`http://localhost:8080/api/v1/itens/${item_id}`, {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${userStore.token}`
-        }
-    });
-    return data
+    try {
+        const { data } = await useApi().get(`http://localhost:8080/api/v1/itens/${item_id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userStore.token}`
+            }
+        });
+        return data
+    }
+    catch (err) {
+        return err;
+    } 
+    
 };
 
 
