@@ -3,16 +3,10 @@
     <div class="container col-12 rounded">
         <table class="table table-hover border">
           <thead>
-           <tr class="">
-               <th class="col-title py-2 border" scope="col">Nome</th>
-               <th class="col-title py-2 border" scope="col">Código Sipac</th>
-               <th class="col-title py-2 border" scope="col">Tipo Unitário</th>
-               <th class=" col-title py-2 border" scope="col">Quantidade</th>
-               <th class="col-title py-2" scope="col">Última atualização</th>
-            </tr>
+            <slot name="header" />
           </thead>
           <tbody>
-           <slot name="items" />
+           <slot name="content" />
           </tbody>
         </table>
     </div>

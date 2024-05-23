@@ -1,7 +1,7 @@
 import { useApi } from "../../composables/axios";
 //Lista todos os usuários 
-export const getUsers = async (userStore, userEmail) => {
-    const { data } = await useApi().get(`users/query?email=${userEmail}`, {
+export const getUsers = async (userStore) => {
+    const { data } = await useApi().get(`users`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`
@@ -11,9 +11,8 @@ export const getUsers = async (userStore, userEmail) => {
     return data
 };
 //Listar pelo ID
-export const getUserId = async (userStore) => {
-    const user_id = 1
-    const { data } = await useApi().get(`http://localhost:8080/api/v1/users/${user_id}`, {
+export const getUserId = async (userStore, userId) => {
+    const { data } = await useApi().get(`http://localhost:8080/api/v1/users/${userId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

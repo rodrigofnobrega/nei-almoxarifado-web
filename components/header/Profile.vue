@@ -1,11 +1,44 @@
 <template>
     <div class="d-flex profile align-items-center me-3">
-          <div @mouseover="toolTip = true" @mouseout="toolTip = false" class="nav-item dropdown">
-            <button class="svg-button bg-primary px-2" data-bs-toggle="dropdown" data-bs-offset="20,15" aria-expanded="false">
+          <div @mouseover="toolTip = true" @mouseout="toolTip = false" class="me-2 nav-item dropdown">
+            <button class="svg-button bg-primary px-0" data-bs-toggle="dropdown" data-bs-offset="20,15" aria-expanded="false">
               <IconsBell with="16px" height="16px"/>
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                1+
+                <span class="visually-hidden">unread messages</span>
+              </span>
             </button>
             <ul class="dropdown-menu py-2">
-              <li class="dropdown-item text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
+              <li class="dropdown-item">
+                <div class="text-dark-emphasis d-flex align-items-center">
+                  <IconsWarning class="me-2 notification-text"/>
+                  <p class="notification-text m-0 p-0">Ferreira solicitou 20 esponjas bombril.
+                  </p>
+                  <IconsClose type="button" class="notification-text ms-2" width="22px" height="22px"/>
+                </div>
+                <span class="notification-text ms-0 opacity-75 text-dark-emphasis">Há 4h</span>
+              </li>
+
+              <li class="dropdown-item">
+                <div class="text-dark-emphasis d-flex align-items-center">
+                  <IconsWarning class="me-2 notification-text"/>
+                  <p class="notification-text m-0 p-0">Ferreira solicitou 20 esponjas bombril.
+                  </p>
+                  <IconsClose class="notification-text ms-2" width="22px" height="22px"/>
+                </div>
+                <span class="notification-text ms-0 opacity-75 text-dark-emphasis">Há 4h</span>
+              </li>
+
+              <li class="dropdown-item">
+                <div class="text-dark-emphasis d-flex align-items-center">
+                  <IconsWarning class="me-2 notification-text"/>
+                  <p class="notification-text m-0 p-0">Ferreira solicitou 20 esponjas bombril.
+                  </p>
+                  <IconsClose class="notification-text ms-2" width="22px" height="22px"/>
+                </div>
+                <span class="notification-text ms-0 opacity-75 text-dark-emphasis">Há 4h</span>
+              </li>
+              <li v-show="!isNotification" class="dropdown-item text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
             </ul>
             <TooltipsRectangular class="pt-3" :toolTipState="toolTip" :toolTipText="'Notificações'"/>
           </div>
@@ -41,6 +74,8 @@ import { ref } from 'vue';
 const toolTip = ref(false)
 
 const userStore = useUser();
+
+const isNotification = ref(true)
 const isRoted = ref(false);
 const user = ref({username: '', name: ''});
 getUsername()
@@ -58,6 +93,10 @@ async function getUsername(){
 </script>
 
 <style scoped>
+.dropdown-menu{
+  height: 172px;
+  overflow-y: scroll;
+}
 .small-loader{
     width: 12px;
     height: 12px;
@@ -71,6 +110,20 @@ async function getUsername(){
 .dropdown-item{
   font-size: 14px;
 }
+.rounded-pill{
+  align-items: center;
+  justify-content: center;
+  display: flex !important;
+  text-align: center !important;
+  font-size: 11px;
+  width: 17px;
+  height: 17px;
+  z-index: 2000;
+}
+.notification-text{
+  font-weight: bold;
+  font-size: 12px;
+}
 .svg-button{
     border: none;
     padding: 0;
@@ -79,6 +132,10 @@ async function getUsername(){
 }
 .user-text {
     font-size: 20px;
+}
+.dropdown-item:hover .notification-text{
+  color: white !important;
+  font-weight: bold;
 }
 .svg-button:hover img{
   transition: filter 0.3s ease-in-out;

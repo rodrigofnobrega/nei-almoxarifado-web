@@ -8,7 +8,7 @@
         <ul class="dropdown-menu large-menu">
             <li>
                 <div class="vue-dropdown" @click="ClicktoggleDropdown(0)" @mouseover="toggleDropdown(0)" @mouseout="toggleDropdown(0)">
-                    <div class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
+                    <div class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
                         Atualização
                         <IconsSort class="action-icon"/>    
                     </div>
@@ -28,7 +28,7 @@
             </li>
             <li>
                 <div class="vue-dropdown" @click="ClicktoggleDropdown(1)"  @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
-                    <div  class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
+                    <div  class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
                         Criação
                         <IconsClock class="action-icon"/>
                     </div>
@@ -48,7 +48,7 @@
             </li>
             <li>
                 <div class="vue-dropdown"  @click="ClicktoggleDropdown(2)"  @mouseover="toggleDropdown(2)" @mouseout="toggleDropdown(2)">
-                    <div class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
+                    <div class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
                         Nome
                         <IconsNameSort class="action-icon"/>
                     </div>
@@ -68,7 +68,7 @@
             </li>
             <li>
                 <div class="vue-dropdown" @click="ClicktoggleDropdown(3)"  @mouseover="toggleDropdown(3)" @mouseout="toggleDropdown(3)">
-                    <div class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
+                    <div class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
                         Quantidade
                         <IconsQuantitySort class="action-icon"/>
                     </div>
