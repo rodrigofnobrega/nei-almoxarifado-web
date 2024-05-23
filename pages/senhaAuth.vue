@@ -12,13 +12,25 @@
                 <div class="novaSenha">
                     <label for="newPassword">Nova Senha:</label>
                     <input type="password" id="newPassword" placeholder="Sua nova senha" v-model="newPassword" required>
-                    <button class="showButton" @click="togglePasswordVisibility('newPassword')">Texto</button>
+
+                    <button 
+					class="showButton" 
+					:class="{ active: showPassword.newPassword }"
+					@click="togglePasswordVisibility('newPassword')"
+					type="button"
+					></button>
                 </div>
 
                 <div class="confirmarNova">
                     <label for="newRePassword">Confirma a Nova Senha:</label>
                     <input type="password" id="newRePassword" placeholder="Confirme sua nova senha" v-model="newRePassword" required>
-                    <button class="showButton" @click="togglePasswordVisibility('newRePassword')">Texto</button>
+
+                    <button 
+					class="showButton" 
+					:class="{ active: showPassword.newRePassword }"
+					@click="togglePasswordVisibility('newRePassword')"
+					type="button"
+					></button>
                 </div>
 
             </div>
@@ -30,7 +42,7 @@
 	</div>
 
     <span v-if="!isEqual" class="pop-error">
-		As senhas não estão iguais, tente novamente
+		<p>As senhas não estão iguais, tente novamente</p>
 		<button @click="resetPassword">Ok</button>
 	</span>
 
@@ -49,7 +61,10 @@ const newPassword = ref('');
 const newRePassword = ref(''); 
 const isEqual = ref(true);
 
-
+const showPassword = ref({
+  newPassword: false,
+  newRePassword: false
+});
 
 // Router para voltar ao login
 const router = useRouter();
@@ -58,7 +73,7 @@ const router = useRouter();
 
     // Verifica se as senhas estão iguais
 const verifyPassword = () => {
-    if (newPassword === newRePassword) {
+    if (newPassword.value === newRePassword.value) {
         console.log("Você será direcionado para o login novamente.");
         router.push('/login');
     }
@@ -70,14 +85,13 @@ const verifyPassword = () => {
 
     // Reiniciar a rotina
 const resetPassword = () => {
-    newPassword.value = '';
-    newRePassword.value = '';
     isEqual.value = true;
 
 }
 
     //Visualizar a senha;
 const togglePasswordVisibility = (fieldId) => {
+	showPassword.value[fieldId] = !showPassword.value[fieldId];
     const field = document.getElementById(fieldId);
     
     if (field.type === 'password') {
@@ -98,6 +112,9 @@ const togglePasswordVisibility = (fieldId) => {
 
 .showButton:hover {
     background-color: #007bff;
+}
+.showButton.active {
+  background-color: #007bff;
 }
 
 .blurred {

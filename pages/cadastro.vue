@@ -36,6 +36,7 @@
 
 
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 definePageMeta({
   layout: 'authentication'
@@ -49,8 +50,8 @@ const rePassword = ref('');
 
 const errorPassword = ref(false);
 
-
-
+// Router para voltar ao login
+const router = useRouter();
 
 const submitForm = () => {
 	// Visualização dos valores armazenados
@@ -71,6 +72,8 @@ const submitForm = () => {
 		email.value = '';
 		password.value = '';
 		rePassword.value = '';
+
+		router.push('/login');
 	}
 
 	// Aqui está uma maneira de confirmar que ao enviar os dados preenchidos, 
