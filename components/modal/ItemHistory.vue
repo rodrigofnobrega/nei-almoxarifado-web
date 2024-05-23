@@ -40,6 +40,11 @@
 
 <script lang="ts">
 export default{
+	data(){
+		return {
+			toggleHistory: false
+		}
+	},
 	props: {
 		item_history: {
 			type: Object

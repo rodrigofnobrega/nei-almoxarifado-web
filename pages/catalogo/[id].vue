@@ -23,7 +23,16 @@
             </div>
         </div>
         <TablesTable>
-            <template v-slot:items>
+            <template v-slot:header>
+                <tr>
+                    <th class="col-title py-2 border" scope="col">Nome</th>
+                    <th class="col-title py-2 border" scope="col">Código Sipac</th>
+                    <th class="col-title py-2 border" scope="col">Tipo Unitário</th>
+                    <th class="col-title py-2 border" scope="col">Quantidade</th>
+                    <th class="col-title py-2" scope="col">Última atualização</th>
+                </tr>
+            </template>
+            <template v-slot:content>
             <tr v-if="true" v-for="item in loadItems" :key="item.index" :data-index="item.index">
                <th class="border" scope="row">
                     <p>{{ item.name }}</p>
@@ -334,6 +343,12 @@ th{
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+.col-title{
+    font-size: 18px;
+    opacity: 80%;
+    font-weight: 400;
+    margin-top: 0;
 }
 p{
     padding: 0;
