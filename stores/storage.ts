@@ -7,6 +7,7 @@ import { usePopupStore } from '~/stores/popup';
 export const useStorageStore = defineStore('storage', {
     state: () => ({
       items: [],
+      records: [],
       sidebarSublinks: [],
       isRotated: false,
       isMobile: false,

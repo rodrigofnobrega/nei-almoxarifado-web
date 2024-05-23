@@ -1,6 +1,6 @@
 import { defineNuxtRouteMiddleware, navigateTo } from "nuxt/app";
 import { useUser } from "../stores/user";
-import { getItem } from "../services/items/itemsGET";
+import { getItems } from "../services/items/itemsGET";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
     if(to.matched.length === 0){
@@ -10,8 +10,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         return
     }
     const userStore = useUser();
+    let res = undefined;
     try{
-        const res = await getItem(userStore, 6);
+        res = await getItems(userStore, 0, '');
     } catch(err){
         if(to.path.includes('/error/')){
             return
