@@ -37,10 +37,12 @@ const sendDataToParent = () => {
 };
 sendDataToParent();
 const userStore = useUser()
-const solicitations = ref(await getRequestByStatus(userStore, 'pendente'))
+const res = await getRequestByStatus(userStore, 'pendente');
+const solicitations = ref(res.content)
 
 provide('setSolicitations', async () => {
-	solicitations.value = await getRequestByStatus(userStore, 'pendente')
+	const res = await getRequestByStatus(userStore, 'pendente');
+	solicitations.value = res.content
 })
 </script>
 

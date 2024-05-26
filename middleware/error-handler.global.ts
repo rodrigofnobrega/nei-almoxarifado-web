@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     if(to.matched.length === 0){
         return navigateTo('/error/pagina-nao-encontrada')
     }
-    if(to.path === '/login' || to.path === '/error/pagina-nao-encontrada'){
+    if(to.path === '/login' || to.path === '/error/pagina-nao-encontrada' || to.path === '/cadastro' || to.path === '/emailAuth'){
         return
     }
     const userStore = useUser();

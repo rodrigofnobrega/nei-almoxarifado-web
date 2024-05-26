@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { postCreateItem } from "../services/items/itemsPOST";
 import { putUpdateItem } from "../services/items/itemsPUT";
+import { postRecord } from '../services/record/recordPOST.ts'
 import { useUser } from './user.ts';
 import { usePopupStore } from '~/stores/popup';
 
@@ -23,7 +24,7 @@ export const useStorageStore = defineStore('storage', {
           try{
             const res = await postCreateItem(userStore, item.name, item.sipacCode, item.quantity, item.type);
             if(res === false){
-              popupStore.throwPopup('Erro: Existe um item com mesmo código sipac', '#B71C1C')
+              popupStore.throwPopup('Erro: Existe um item com mesmo código sipac', '#B71C1C');
             }
           }catch(error){
             popupStore.throwPopup('Erro: Existe um item com mesmo código sipac', '#B71C1C')

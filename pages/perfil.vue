@@ -17,9 +17,9 @@
         <div class="profile-details">
           <!-- Visualização dos Detalhes -->
           <div v-if="!isEditing">
-            <h3>{{ user.name }}</h3>
-            <p><strong>Email:</strong> {{ user.email }}</p>
-            <p><strong>Cargo:</strong> {{ user.role }}</p>
+            <h3>{{ userData.name }}</h3>
+            <p><strong>Email:</strong> {{ userData.email }}</p>
+            <p><strong>Cargo:</strong> {{ userData.role }}</p>
           </div>
   
           <!-- Edição dos Detalhes -->
@@ -51,9 +51,9 @@
   
       <!-- Histórico de Requisições -->
       <div class="profile-history">
-        <h3>Histórico de Requisições</h3>
+        <h3>Histórico de Solicitações</h3>
         <ul>
-          <li v-for="request in user.requests" :key="request.id">{{ request.description }} - {{ request.date }}</li>
+          <li v-for="request in userRequests.content" :key="request.id">{{ request.description }} - {{ request.creationDate.slice(0,19) }}</li>
         </ul>
       </div>
   
@@ -68,8 +68,17 @@
   </template>
   
   <script setup>
-  import { ref, inject } from 'vue';
-  
+  import { ref, inject, onMounted } from 'vue';
+  import { useRouter } from 'vue-router';
+  import { getUserId } from '../services/users/userGET';
+  import { getRecordByEmail } from '../services/record/recordGET';
+  import { getRequestByUser } from '../services/requests/requestsGET';
+  import { useUser } from '../stores/user';
+
+  const userStore = useUser();
+  const route = useRouter();
+  const userData = await getUserId(userStore, route.currentRoute._rawValue.query.userId)
+  const userRequests = await getRequestByUser(userStore, userData.id)
   // Define o título da página
   const setpageTitle = inject('setpageTitle');
   const sendDataToParent = () => {

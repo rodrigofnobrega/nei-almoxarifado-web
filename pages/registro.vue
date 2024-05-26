@@ -1,4 +1,5 @@
 <template>
+<ModalItemDetails v-if="recordsCache.length > 0" :item_index="recordIndex" :item_route="currentRoute" :item_details="currentItem" :item_qtd="itemQtd"/>
 <div class="table-container d-block mt-2">
   <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
   <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
@@ -44,12 +45,18 @@
               </th>
              <th class="">
                  <p>{{ record.creationDate }}</p>
-              <div class="end position-sticky">
-               </div>
+                 <div class="end position-sticky">
+                    <button class="details-btn position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 64px;" @click="showDetails(record.index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                        Detalhes
+                    </button>
+                    <NuxtLink :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 13px;">
+                        Perfil
+                    </NuxtLink>
+                 </div>
              </th>
           </tr>
           <div v-else class="warning-text d-flex aling-items-center justify-content-center">
-              <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
+              <p class="text-dark-emphasis fs-5 opacity-50">Registro vazio.</p>
           </div>
           <div v-if="loadRecords.length == 0" class="search-empty position-absolute mt-5">
               <p class="text-dark-emphasis fs-5 opacity-50">Nenhum Resultado Encontrado.</p>
@@ -79,6 +86,7 @@ import { useSearch } from '../../stores/search.ts';
 import { ref, computed, onMounted, onUpdated, inject } from 'vue';
 import { getRecords } from '../../services/record/recordGET.ts';
 import { useUser } from '../../stores/user.ts'
+import { getItem } from '../services/items/itemsGET.ts';
 /*SETANDO STORES*/
 const userStore = useUser()
 const store = useStorageStore();
@@ -171,9 +179,9 @@ provide('setItemsFilter', (filter, inverted) => {
 });
 //Variáveis que o front vai pegar em si
 const recordIndex = ref(0);
-const currentItem = computed(() => store.records[recordIndex.value]);
-const currentRoute = useRoute().fullPath.split('/')[2];
-
+const currentItem = computed(() => store.records[recordIndex.value].item);
+const currentRoute = 'almoxarifado';
+const itemQtd = ref(0);
 
 const setpageTitle = inject('setpageTitle');
 const sendDataToParent = () => {
@@ -230,13 +238,16 @@ const backPage = (async () => {
   document.getElementById("fowardPageBtn").classList.remove("bg-dark-emphasis");
 });
 /*FUNÇÕES PARA OS BOTÕES DE DETALHE E HISTÓRICO*/
-const showDetails = (index) => {
+const showDetails = async (index, itemId) => {
+  const res = await getItem(userStore, itemId);
+  itemQtd.value = res.quantity
   recordIndex.value = index;
 }
 
 const showHistory = (index) => {
   recordIndex.value = index;
 }
+
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
   if(searchStore.itemSearch.searching){

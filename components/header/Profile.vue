@@ -4,39 +4,19 @@
             <button class="svg-button bg-primary px-0" data-bs-toggle="dropdown" data-bs-offset="20,15" aria-expanded="false">
               <IconsBell with="16px" height="16px"/>
               <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                1+
+                {{requests.content.length}}+
                 <span class="visually-hidden">unread messages</span>
               </span>
             </button>
-            <ul class="dropdown-menu py-2">
-              <li class="dropdown-item">
+            <ul class="dropdown-menu notification-menu py-2">
+              <li v-for="(request, index) in requests.content" :key="index" class="dropdown-item">
                 <div class="text-dark-emphasis d-flex align-items-center">
                   <IconsWarning class="me-2 notification-text"/>
-                  <p class="notification-text m-0 p-0">Ferreira solicitou 20 esponjas bombril.
+                  <p class="notification-text m-0 p-0">{{request.user.name}} solicitou {{ request.quantityRequested }} {{request.item.name}}.
                   </p>
                   <IconsClose type="button" class="notification-text ms-2" width="22px" height="22px"/>
                 </div>
-                <span class="notification-text ms-0 opacity-75 text-dark-emphasis">Há 4h</span>
-              </li>
-
-              <li class="dropdown-item">
-                <div class="text-dark-emphasis d-flex align-items-center">
-                  <IconsWarning class="me-2 notification-text"/>
-                  <p class="notification-text m-0 p-0">Ferreira solicitou 20 esponjas bombril.
-                  </p>
-                  <IconsClose class="notification-text ms-2" width="22px" height="22px"/>
-                </div>
-                <span class="notification-text ms-0 opacity-75 text-dark-emphasis">Há 4h</span>
-              </li>
-
-              <li class="dropdown-item">
-                <div class="text-dark-emphasis d-flex align-items-center">
-                  <IconsWarning class="me-2 notification-text"/>
-                  <p class="notification-text m-0 p-0">Ferreira solicitou 20 esponjas bombril.
-                  </p>
-                  <IconsClose class="notification-text ms-2" width="22px" height="22px"/>
-                </div>
-                <span class="notification-text ms-0 opacity-75 text-dark-emphasis">Há 4h</span>
+                <span class="notification-text ms-0 opacity-75 text-dark-emphasis">Há {{ passedDate[index].month }} {{ passedDate[index].day }} {{ passedDate[index].hour }} {{ passedDate[index].minute }}</span>
               </li>
               <li v-show="!isNotification" class="dropdown-item text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
             </ul>
@@ -70,10 +50,13 @@
 <script setup>
 import { useUser } from '../../stores/user';
 import { getUserByEmail } from '../../services/users/userGET';
-import { ref } from 'vue';
+import { getRequestByStatus } from '../../services/requests/requestsGET';
+import { onMounted, ref } from 'vue';
 const toolTip = ref(false)
 
+const actualDate = new Date;
 const userStore = useUser();
+const requests = await getRequestByStatus(userStore, 'pendente')
 
 const isNotification = ref(true)
 const isRoted = ref(false);
@@ -89,11 +72,44 @@ async function getUsername(){
   const res = await getUserByEmail(userStore, userStore.email); 
   user.value.username = res.name;
 }
+function toPositive(number) {
+  return Math.abs(number);
+}
+
+let passedDate = [];
+
+for (let i = 0; i < requests.content.length; i++) {
+  passedDate[i] = {};
+
+  const creationDate = new Date(requests.content[i].creationDate);
+
+  // Calculando a diferença em meses
+  let monthDiff = toPositive(actualDate.getMonth() - creationDate.getMonth());
+  passedDate[i].month = monthDiff > 0 ? (monthDiff === 1 ? `${monthDiff} mês` : `${monthDiff} meses`) : '';
+
+  // Calculando a diferença em dias
+  let dayDiff = toPositive(actualDate.getDate() - creationDate.getDate());
+  passedDate[i].day = dayDiff > 0 ? (dayDiff === 1 ? `${dayDiff} dia` : `${dayDiff} dias`) : '';
+
+  // Calculando a diferença em horas
+  let hourDiff = actualDate.getHours() - creationDate.getHours();
+  let minuteDiff = actualDate.getMinutes() - creationDate.getMinutes();
+
+  if (minuteDiff < 0) {
+    minuteDiff += 60;
+    hourDiff--; // Ajuste para horas negativas
+  }
+
+  passedDate[i].hour = hourDiff > 0 ? (hourDiff === 1 ? `${hourDiff} hora` : `${hourDiff} horas`) : '';
+
+  // Calculando a diferença em minutos
+  passedDate[i].minute = minuteDiff > 0 ? (minuteDiff === 1 ? `${minuteDiff} minuto` : `${minuteDiff} minutos`) : '';
+}
 
 </script>
 
 <style scoped>
-.dropdown-menu{
+.notification-menu{
   height: 172px;
   overflow-y: scroll;
 }

@@ -1,21 +1,17 @@
-import axios from 'axios';
-import { useUser } from '../../stores/user';
-const userStore = useUser()
+import { useApi } from '../../composables/axios';
 
-export const postRecord = async (user_id, item_id, qtd, operation) => {
-    const { data } = await useFetch("http://localhost:8080/api/v1/auth", {
+export const postRecord = async (userStore, user_id, qtd, operation) => {
+    const { data } = await useApi().post("http://localhost:8080/api/v1/auth", {
+        "userID": user_id,
+        "quantity": qtd,
+        "operation": operation
+    },{
         method: 'POST',
-        header: {
+        headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Authorization": `Bearer ${userStore.token}`
         },
-        body: {
-            "userID": user_id,
-            "itemID": item_id,
-            "quantity": qtd,
-            "operation": operation
-        }
     })
-    return data._rawValue
+    return data
 };
 

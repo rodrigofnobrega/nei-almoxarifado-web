@@ -6,42 +6,42 @@
           <h5 class="header ps-2">Sumário</h5>
         </div>
         <div class="d-flex align-items-center justify-content-between mb-3">
-          <div class="px-3 ms-3 summary-text">
-            Quantidade de itens disponíveis
-            <h5 class="mt-1">5000
-              <IconsSpreadSheet style="margin-left: 60px !important;"/>
+          <div class="px-3 ms-3  summary-text">
+            Solicitações com status pendente
+            <h5 class="d-flex align-items-center justify-content-between mt-1">{{ requestsByStatus.totalElements }}
+              <IconsRequest class="mb-1" />
             </h5>
           </div>
           <div class="px-3 summary-text">
-            Quantidade de solicitações 
-            <h5 class="mt-1">4000
-              <IconsSpreadSheet style="margin-left: 60px !important;"/>
+            Solicitações do mês aceitas
+            <h5 class="d-flex align-items-center justify-content-between mt-0">{{acceptedRequests}}
+              <IconsRequest />
             </h5>
           </div>
           <div class="px-3 summary-text">
-            Quantidade de usuários cadastrados
-            <h5 class="mt-1">3000
-              <IconsSpreadSheet style="margin-left: 60px !important;"/>
+            Solicitações do mês recusadas 
+            <h5 class="d-flex align-items-center justify-content-between mt-1">{{ rejectedRequests }}
+              <IconsRequest class="mb-1" />
             </h5>
           </div>
         </div>
         <div class="d-flex align-items-center justify-content-between mb-3">
           <div class="px-3 ms-3 summary-text">
-            Itens cadastrados por este perfil
-            <h5 class="mt-1">5000
-              <IconsLowProfile style="margin-left: 60px !important;"/>
+            Quantidade total de itens
+            <h5 class="d-flex align-items-center justify-content-between mt-1">{{ itemsQtd }}
+              <IconsSpreadSheet class="mb-1"/>
             </h5>
           </div>
           <div class="px-3 summary-text">
-            Solicitações aceitas por este perfil
-            <h5 class="mt-1">4000
-              <IconsLowProfile style="margin-left: 60px !important;"/>
+            Quantidade total de itens cadastrados
+            <h5 class="d-flex align-items-center justify-content-between mt-1">{{items.totalElements}}
+              <IconsSpreadSheet class="mb-1 "/>
             </h5>
           </div>
           <div class="px-3 summary-text">
-            Solicitações recusadas por este perfil
-            <h5 class="mt-1">3000
-              <IconsLowProfile style="margin-left: 60px !important;"/>
+            Quantidade total de usuários
+            <h5 class="d-flex align-items-center justify-content-between mt-1">{{users.totalElements}}
+              <IconsLowProfile class="mb-1"/>
             </h5>
           </div>
         </div>
@@ -61,78 +61,32 @@
               </tr>
             </template>
             <template v-slot:content>
-              <tr @mouseover="isProfileBtn = true" @mouseout="isProfileBtn = false">
+              <tr v-for="user in users.content" :key="user.id" @mouseover="isProfileBtn[user.id] = true" @mouseout="isProfileBtn[user.id] = false">
                 <th class="text-start table-cell" scope="row">
                   <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
-                  Ivano Cleudeson
+                  {{ user.name }}
                 </th>
                 <th class="text-start table-cell" scope="row">
-                  ivanocleudson@gmail.com
+                  {{user.email}}
                 </th>
                 <th class="text-start table-cell" scope="row">
-                  Admin
+                  {{user.role}}
                 </th>
-                <button :class="{'d-none': !isProfileBtn}" class="profile-btn position-absolute btn btn-primary">Ver perfil</button>
+                <th class="text-start table-cell" scope="row">
+                  <div class="d-flex align-items-center justify-content-between position-sticky">
+                    <NuxtLink :to="`/perfil?userId=${user.id}`" :route="`/perfil/${user.id}`" :class="{'d-none': !isProfileBtn[user.id]}" class="d-flex align-items-center profile-btn position-absolute btn btn-primary">
+                      <IconsLowProfile class="me-1" width="16px" height="16px"/>
+                      perfil
+                    </NuxtLink>
+                  </div>
+                </th>
               </tr>
-              <tr @mouseover="isProfileBtn = true" @mouseout="isProfileBtn = false">
-                <th class="text-start table-cell" scope="row">
-                  <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
-                  Ivano Cleudeson
-                </th>
-                <th class="text-start table-cell" scope="row">
-                  ivanocleudson@gmail.com
-                </th>
-                <th class="text-start table-cell" scope="row">
-                  Admin
-                </th>
-                <button :class="{'d-none': !isProfileBtn}" class="profile-btn position-absolute btn btn-primary">Ver perfil</button>
-              </tr>
-              <tr @mouseover="isProfileBtn = true" @mouseout="isProfileBtn = false">
-                <th class="text-start table-cell" scope="row">
-                  <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
-                  Ivano Cleudeson
-                </th>
-                <th class="text-start table-cell" scope="row">
-                  ivanocleudson@gmail.com
-                </th>
-                <th class="text-start table-cell" scope="row">
-                  Admin
-                </th>
-                <button :class="{'d-none': !isProfileBtn}" class="profile-btn position-absolute btn btn-primary">Ver perfil</button>
-              </tr>
-              <tr @mouseover="isProfileBtn = true" @mouseout="isProfileBtn = false">
-                <th class="text-start table-cell" scope="row">
-                  <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
-                  Ivano Cleudeson
-                </th>
-                <th class="text-start table-cell" scope="row">
-                  ivanocleudson@gmail.com
-                </th>
-                <th class="text-start table-cell" scope="row">
-                  Admin
-                </th>
-                <button :class="{'d-none': !isProfileBtn}" class="profile-btn position-absolute btn btn-primary">Ver perfil</button>
-              </tr>
-              <tr @mouseover="isProfileBtn = true" @mouseout="isProfileBtn = false">
-                <th class="text-start table-cell" scope="row">
-                  <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
-                  Ivano Cleudeson
-                </th>
-                <th class="text-start table-cell" scope="row">
-                  ivanocleudson@gmail.com
-                </th>
-                <th class="text-start table-cell" scope="row">
-                  Admin
-                </th>
-                <button :class="{'d-none': !isProfileBtn}" class="profile-btn position-absolute btn btn-primary">Ver perfil</button>
-              </tr>
-  
             </template>
           </TablesTable>
         </div>
       </div>
     </div>
-    <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
+    <div class="dashboard-section recent-records bg-light mb-4 pb-0 pt-0 rounded-3">
       <div class="section-title pt-2  bg-light-background-header">
         <h5 class="header ps-2">Movimentações mais recentes</h5>
       </div>
@@ -148,168 +102,46 @@
           </tr>
         </template>
         <template v-slot:content>
-          <tr class="text-center">
+          <tr v-for="record in records.content" :key="record.id" class="text-center" @mouseover="isProfileBtnRecord[record.id] = true" @mouseout="isProfileBtnRecord[record.id] = false"> 
               <th class="table-cell" scope="row">
                 <div class="d-flex align-items-center justify-content-center">
                   <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
-                  Ivano Cleudeson
+                  {{ record.user.name }}
                 </div>
               </th>
               <th class="table-cell" scope="row">
                 <div class="d-flex align-items-end mt-1 justify-content-center">
-                  Consumido
+                  {{ record.operation}}
                 </div>
               </th>
               <th class="table-cell" scope="row">
                 <div class="d-flex align-items-end mt-1 justify-content-center">
-                  Esponja bombril
+                  {{ record.item.name }}
                 </div>
               </th>
               <th class="table-cell" scope="row">
                 <div class="d-flex align-items-end mt-1 justify-content-center">
-                  Unidade
+                  {{ record.item.type }}
                 </div>
               </th>
               <th class="table-cell" scope="row">
                 <div class="d-flex align-items-end mt-1 justify-content-center">
-                  20
+                  {{ record.quantity}}
                 </div>
               </th>
               <th class="table-cell" scope="row">
                 <div class="d-flex align-items-end mt-1 justify-content-center">
-                  20-03-2024 19h:29m
+                  {{record.creationDate}}
                 </div>
-              </th>
-            </tr>
-            <tr class="text-center">
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-center justify-content-center">
-                  <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
-                  Ivano Cleudeson
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  Consumido
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  Esponja bombril
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  Unidade
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  20
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  20-03-2024 19h:29m
-                </div>
-              </th>
-            </tr>
-            <tr class="text-center">
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-center justify-content-center">
-                  <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
-                  Ivano Cleudeson
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  Consumido
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  Esponja bombril
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  Unidade
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  20
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  20-03-2024 19h:29m
-                </div>
-              </th>
-            </tr>
-            <tr class="text-center">
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-center justify-content-center">
-                  <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
-                  Ivano Cleudeson
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  Consumido
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  Esponja bombril
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  Unidade
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  20
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  20-03-2024 19h:29m
-                </div>
-              </th>
-            </tr>
-            <tr class="text-center">
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-center justify-content-center">
-                  <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
-                  Ivano Cleudeson
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  Consumido
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  Esponja bombril
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  Unidade
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  20
-                </div>
-              </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  20-03-2024 19h:29m
+                <div class="d-flex align-items-center justify-content-between position-sticky">
+                  <NuxtLink :to="`/registro?recordId=${record.id}`"  :route="`/registro/${record.id}`" :class="{'d-none': !isProfileBtnRecord[record.id]}" style="margin-right: 80px; margin-top: -25px !important;" class="d-flex align-items-center profile-btn record-btn position-absolute btn btn-primary">
+                    <IconsRequest class="me-1" width="16px" height="16px"/>
+                    registro
+                  </NuxtLink>
+                  <NuxtLink :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" :class="{'d-none': !isProfileBtnRecord[record.id]}" style="margin-top: -25px !important;" class="d-flex align-items-center profile-btn record-btn position-absolute btn btn-primary">
+                      <IconsLowProfile class="me-1" width="16px" height="16px"/>
+                      perfil
+                  </NuxtLink>
                 </div>
               </th>
             </tr>
@@ -366,12 +198,55 @@
 </template>
 
 <script setup>
-import { inject, ref } from 'vue';
+import { inject, ref, onMounted } from 'vue';
+import { getItems } from '../services/items/itemsGET.ts';
+import { getRequests } from '../services/requests/requestsGET.ts';
+import { getUsers } from '../services/users/userGET.ts';
+import { getRecords } from '../services/record/recordGET.ts';
+import { getRequestByStatus } from '../services/requests/requestsGET.ts';
+import { useUser } from '../stores/user';
 
-const isProfileBtn = ref(false)
+const isProfileBtnRecord = ref([])
+const isProfileBtn = ref([])
+const userStore = useUser();
+
+const users = await getUsers(userStore, 0)
+const records = await getRecords(userStore, 0, 'id,desc')
+const requestsByStatus = await getRequestByStatus(userStore, 'pendente');
+
+let data = new Date
+let actualMonth = data.getMonth()+1
+let acceptedRequests = 0;
+let rejectedRequests = 0;
+let requests = await getRequests(userStore, 0)
+for(let i = 1; i < requests.totalPages; i++){
+  for(let j = 0; j < requests.content.length; j++){
+    if(requests.content[j].updatedDate.slice(5, 7) == actualMonth){
+      if(requests.content[j].status == 'ACEITO'){
+        acceptedRequests++
+      }
+      if(requests.content[j].status == 'RECUSADO'){
+        rejectedRequests++
+      }
+    }
+  }
+  requests = await getRequests(userStore, i)
+}
+
+let items = await getItems(userStore, 0)
+let itemsQtd = 0;
+for(let i = 1; i < items.totalPages; i++){
+  for(let j = 0; j < items.content.length; j++){
+    itemsQtd += items.content[j].quantity
+  }
+  items = await getItems(userStore, 0)
+}
 
 
 const setpageTitle = inject('setpageTitle');
+
+onMounted(() => {
+})
 
 const sendDataToParent = () => {
     const data = "Painel Geral";
@@ -393,10 +268,17 @@ sendDataToParent();
   text-wrap: nowrap !important;
   overflow-y: scroll !important;
 }
+.recent-records{
+  height: 317px;
+  overflow-y: scroll;
+}
 .container{
   width: 100%;
 	padding-left: 15px;
   flex-direction: column;
+}
+.record-btn{
+  text-wrap: nowrap;
 }
 .dashboard-section{   
   width: 99%;
@@ -410,7 +292,6 @@ sendDataToParent();
 .section-title{
   border-radius: 8px 8px 0px 0px;
   border-bottom: 1px solid rgb(0, 0, 0, 0.2);
-  
 }
 h5{
     font-weight: 300;
@@ -424,7 +305,9 @@ h5{
   border-left: 3px solid #FED51E;
 }
 .profile-btn{
-  right: 40px !important;
+  top: 0px;
+  font-size: 12px;
+  right: 50px !important;
 }
 .catalog-header{
     justify-content: space-between;

@@ -2,7 +2,10 @@
   <ModalAlmoReport />
   <div class="d-flex mb-3 justify-content-between align-items-center chart-filter">
     <div class="dropdown mx-2">
-      <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Período</button>
+      <button class="d-flex align-items-center graph-btn btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <IconsTimer class="me-2" width="20px" height="20px"/>
+        Período
+      </button>
       <ul class="dropdown-menu">
         <li @click="changeLabel('month')" type="button" class="dropdown-item">Mensal</li>
         <li>
@@ -21,7 +24,7 @@
         </li>
       </ul>
     </div>
-    <button class="btn btn-primary me-3" type="button" data-bs-toggle="modal" data-bs-target="#almoReport" ria-expanded="false">Relatório</button>
+    <button class="graph-btn btn btn-outline-primary me-3" type="button" data-bs-toggle="modal" data-bs-target="#almoReport" ria-expanded="false">Relatório</button>
   </div>
   <div>
     <Bar class="chart-graph" :data="chartData" :options="chartOptions" />
@@ -297,10 +300,12 @@ const changeLabel = (labelType, index) => {
 </script>
 
 <style scoped>
+.graph-btn{
+  font-size: 13px;
+}
 .chart-graph {
   height: 300px;
 }
-
 li{
     list-style-type: none;
 }

@@ -13,7 +13,6 @@ export const authPost = async (password, email) => {
         })
         return data
     } catch(error){
-        console.log(error)
         navigateTo('/login')
     }
 }
