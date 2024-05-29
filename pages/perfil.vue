@@ -7,8 +7,10 @@
   
       <!-- Conteúdo do Perfil e Edição -->
       <div class="profile-content">
-        <div class="profile-picture">
-          <img :src="user.profilePicture" alt="Foto de Perfil">
+        <div class="profile-picture aspect-ratio">
+          <div class="img-container">
+            <img :src="user.profilePicture" class="img-top" alt="Foto de Perfil">
+          </div>
           <input type="file" @change="uploadProfilePicture" ref="fileInput" hidden>
           <button @click="selectProfilePicture">Alterar Foto</button>
         </div>
@@ -166,12 +168,23 @@
     margin-right: 20px;
   }
   
-  .profile-picture img {
+  .img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
     border-radius: 50%;
-    margin-bottom: 10px;
-    max-width: 150px;
-    max-height: 150px;
+    width: 200px;
+    height: 200px; 
+    margin: 0 auto 10px;
+    margin-top: 10px;
   }
+
+  .img-top {
+  width: 250%;
+  height: auto;
+  display: block;
+}
   
   .profile-picture button {
     padding: 5px 10px;
