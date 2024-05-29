@@ -114,9 +114,9 @@ const verificaToken = () => {
 .blurred {
 	filter: blur(1.5px);
 }
-.auth-container{
+/* .auth-container {
 
-}
+} */
 .pop-message {
 	position: absolute;
 	top: 50%;
