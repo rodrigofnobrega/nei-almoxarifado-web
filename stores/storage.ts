@@ -9,12 +9,13 @@ export const useStorageStore = defineStore('storage', {
     state: () => ({
       items: [],
       records: [],
+      requests: [],
       sidebarSublinks: [],
       isRotated: false,
       isMobile: false,
       isMobileMenu: false,
       isResponsive: false,
-      tableSearch: " "
+      tableSearch: " ",
     }),
     actions: {
       async sendItems(item) {

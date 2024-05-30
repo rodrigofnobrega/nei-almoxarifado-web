@@ -49,8 +49,9 @@
                     <button class="details-btn position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 64px;" @click="showDetails(record.index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         Detalhes
                     </button>
-                    <NuxtLink :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 13px;">
-                        Perfil
+                    <NuxtLink :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="d-flex align-items-center profile-btn position-absolute btn btn-primary table-btn" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 13px;">
+                      <IconsLowProfile width="16px" height="16px"/>  
+                      perfil
                     </NuxtLink>
                  </div>
              </th>
@@ -364,6 +365,13 @@ p{
   border-radius: 0px;
   border-bottom: 1px ridge #1F69B1;
   top: 70px;
+}
+.profile-btn{
+  border-radius: 4px;
+  top: 0px;
+  font-size: 12px;
+  padding: 4px 3px 4px 3px;
+  right: 0px !important;
 }
 .search-glass{
   padding-left: 0px;

@@ -1,47 +1,59 @@
 <template>
   <div class="container" style="margin-left: 0px;">
-    <div class="d-flex">
+    <div class="d-flex paralalel-section">
       <div class="dashboard-section me-2 bg-light mb-4 pb-0 pt-0 rounded-3">
         <div class="section-title pt-2 mb-4 bg-light-background-header">
           <h5 class="header ps-2">Sumário</h5>
         </div>
         <div class="d-flex align-items-center justify-content-between mb-3">
-          <div class="px-3 ms-3  summary-text">
-            Solicitações com status pendente
+          <div class="px-3 ms-3 summary-text">
+            <p class="summary-text-re">
+              Solicitações com status pendente
+            </p>
             <h5 class="d-flex align-items-center justify-content-between mt-1">{{ requestsByStatus.totalElements }}
-              <IconsRequest class="mb-1" />
+              <IconsRequest width="20px" height="20px" class="mb-1" />
             </h5>
           </div>
           <div class="px-3 summary-text">
-            Solicitações do mês aceitas
-            <h5 class="d-flex align-items-center justify-content-between mt-0">{{acceptedRequests}}
-              <IconsRequest />
+            <p class="summary-text-re">
+              Solicitações do mês aceitas
+            </p>
+            <h5 class="d-flex align-items-center justify-content-between mt-1">{{acceptedRequests}}
+              <IconsRequest width="20px" height="20px" class="mb-1"/>
             </h5>
           </div>
           <div class="px-3 summary-text">
-            Solicitações do mês recusadas 
+            <p class="summary-text-re">
+              Solicitações do mês recusadas 
+            </p>
             <h5 class="d-flex align-items-center justify-content-between mt-1">{{ rejectedRequests }}
-              <IconsRequest class="mb-1" />
+              <IconsRequest width="20px" height="20px" class="mb-1" />
             </h5>
           </div>
         </div>
         <div class="d-flex align-items-center justify-content-between mb-3">
           <div class="px-3 ms-3 summary-text">
-            Quantidade total de itens
+            <p class="summary-text-re">
+              Quantidade total de itens
+            </p>
             <h5 class="d-flex align-items-center justify-content-between mt-1">{{ itemsQtd }}
-              <IconsSpreadSheet class="mb-1"/>
+              <IconsSpreadSheet width="20px" height="20px" class="mb-1"/>
             </h5>
           </div>
           <div class="px-3 summary-text">
-            Quantidade total de itens cadastrados
+            <p class="summary-text-re">
+              Quantidade total de itens cadastrados
+            </p>
             <h5 class="d-flex align-items-center justify-content-between mt-1">{{items.totalElements}}
-              <IconsSpreadSheet class="mb-1 "/>
+              <IconsSpreadSheet width="20px" height="20px" class="mb-1 "/>
             </h5>
           </div>
           <div class="px-3 summary-text">
-            Quantidade total de usuários
+            <p class="summary-text-re">
+              Quantidade total de usuários
+            </p>
             <h5 class="d-flex align-items-center justify-content-between mt-1">{{users.totalElements}}
-              <IconsLowProfile class="mb-1"/>
+              <IconsLowProfile width="20px" height="20px" class="mb-1"/>
             </h5>
           </div>
         </div>
@@ -51,7 +63,6 @@
           <h5 class="header ps-2">Gestão de Usuários</h5>
         </div>
         <div class="users-management-scroll">
-          
           <TablesTable>
             <template v-slot:header>
               <tr>
@@ -62,20 +73,20 @@
             </template>
             <template v-slot:content>
               <tr v-for="user in users.content" :key="user.id" @mouseover="isProfileBtn[user.id] = true" @mouseout="isProfileBtn[user.id] = false">
-                <th class="text-start table-cell" scope="row">
+                <th class="text-start table-cell d-flex align-items-center" scope="row">
                   <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
                   {{ user.name }}
                 </th>
-                <th class="text-start table-cell" scope="row">
+                <th class="text-start table-cell align-cell" scope="row" style="padding-top: 11px;">
                   {{user.email}}
                 </th>
-                <th class="text-start table-cell" scope="row">
+                <th class="text-start table-cell align-cell" scope="row" style="padding-top: 11px;">
                   {{user.role}}
                 </th>
-                <th class="text-start table-cell" scope="row">
-                  <div class="d-flex align-items-center justify-content-between position-sticky">
+                <th class="text-start table-cell pb-1" scope="row">
+                  <div class="position-sticky">
                     <NuxtLink :to="`/perfil?userId=${user.id}`" :route="`/perfil/${user.id}`" :class="{'d-none': !isProfileBtn[user.id]}" class="d-flex align-items-center profile-btn position-absolute btn btn-primary">
-                      <IconsLowProfile class="me-1" width="16px" height="16px"/>
+                      <IconsLowProfile width="16px" height="16px"/>
                       perfil
                     </NuxtLink>
                   </div>
@@ -90,55 +101,55 @@
       <div class="section-title pt-2  bg-light-background-header">
         <h5 class="header ps-2">Movimentações mais recentes</h5>
       </div>
-      <TablesTable>
+      <TablesTable >
         <template v-slot:header>
           <tr class="bg-light">
-            <th class="col-title text-center py-2" scope="col">Usuário</th>
-            <th class="col-title text-center py-2" scope="col">Tipo de movimentação</th>
-            <th class="col-title text-center py-2" scope="col">Item</th>
-            <th class="col-title text-center py-2" scope="col">Tipo unitário</th>
-            <th class="col-title text-center py-2" scope="col">Quantidade</th>
-            <th class="col-title text-center py-2" scope="col">Data e horário</th>
+            <th class="col-title table-col text-center py-2" scope="col">Usuário</th>
+            <th class="col-title table-col text-center py-2" scope="col">Movimentação</th>
+            <th class="col-title table-col text-center py-2" scope="col">Item</th>
+            <th class="col-title table-col text-center py-2" scope="col">Tipo unitário</th>
+            <th class="col-title table-col text-center py-2" scope="col">Quantidade</th>
+            <th class="col-title table-col text-center py-2" scope="col">Data e horário</th>
           </tr>
         </template>
         <template v-slot:content>
           <tr v-for="record in records.content" :key="record.id" class="text-center" @mouseover="isProfileBtnRecord[record.id] = true" @mouseout="isProfileBtnRecord[record.id] = false"> 
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-center justify-content-center">
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
                   <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
                   {{ record.user.name }}
                 </div>
               </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
                   {{ record.operation}}
                 </div>
               </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text table-text align-items-end mt-1 justify-content-center">
                   {{ record.item.name }}
                 </div>
               </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
                   {{ record.item.type }}
                 </div>
               </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
                   {{ record.quantity}}
                 </div>
               </th>
-              <th class="table-cell" scope="row">
-                <div class="d-flex align-items-end mt-1 justify-content-center">
-                  {{record.creationDate}}
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{record.creationDate.slice(0, 19)}}
                 </div>
                 <div class="d-flex align-items-center justify-content-between position-sticky">
-                  <NuxtLink :to="`/registro?recordId=${record.id}`"  :route="`/registro/${record.id}`" :class="{'d-none': !isProfileBtnRecord[record.id]}" style="margin-right: 80px; margin-top: -25px !important;" class="d-flex align-items-center profile-btn record-btn position-absolute btn btn-primary">
+                  <NuxtLink :to="`/registro?recordId=${record.id}`"  :route="`/registro/${record.id}`" :class="{'d-none': !isProfileBtnRecord[record.id]}" style="margin-right: 63px; margin-top: -25px !important;" class="d-flex align-items-center profile-btn record-btn position-absolute btn btn-primary">
                     <IconsRequest class="me-1" width="16px" height="16px"/>
                     registro
                   </NuxtLink>
-                  <NuxtLink :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" :class="{'d-none': !isProfileBtnRecord[record.id]}" style="margin-top: -25px !important;" class="d-flex align-items-center profile-btn record-btn position-absolute btn btn-primary">
+                  <NuxtLink :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" :class="{'d-none': !isProfileBtnRecord[record.id]}" style="margin-top: -25px !important;" class="d-flex align-items-center profile-btn position-absolute btn btn-primary">
                       <IconsLowProfile class="me-1" width="16px" height="16px"/>
                       perfil
                   </NuxtLink>
@@ -149,17 +160,11 @@
       </TablesTable>
     </div>    
     <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
-      <div class="section-title pt-2 mb-3 bg-light-background-header">
-        <h5 class="pb-1 pt-0 ps-2">Gráfico de Solicitações de Itens</h5>
-      </div>
       <DashboardBarChartItems />
     </div>  
     <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
-      <div class="section-title pt-2 mb-3 bg-light-background-header">
-        <h5 class="header ps-2">Relatórios Gerais</h5>
-      </div>
       <DashboardBarChartUtils />
-    </div> 
+    </div>
     <div class="dashboard-section bg-light mb-4 pb-3 pt-0 rounded-3">
       <div class="section-title pt-2 mb-3 bg-light-background-header">
           <h5 class="header ps-2">Catálogos</h5>
@@ -260,10 +265,10 @@ sendDataToParent();
   position: static !important;
   text-wrap: nowrap !important;
   overflow-y: scroll !important;
-  height: 85% !important;
+  max-height: 227px !important;
 }
 .users-management{
-  max-height: 270px !important;
+  
   position: static !important;
   text-wrap: nowrap !important;
   overflow-y: scroll !important;
@@ -294,30 +299,32 @@ sendDataToParent();
   border-bottom: 1px solid rgb(0, 0, 0, 0.2);
 }
 h5{
-    font-weight: 300;
-    color: rgb(51,51,51, 0.8);
+  font-weight: 300;
+  color: rgb(51,51,51, 0.8);
 }
 .summary-text{
   width: 50%;
-  text-wrap: wrap;
+  text-overflow: ellipsis;
   font-size: 14px;
   color: rgb(51,51,51, 0.8);
   border-left: 3px solid #FED51E;
 }
 .profile-btn{
+  border-radius: 4px;
   top: 0px;
   font-size: 12px;
-  right: 50px !important;
+  padding: 4px 3px 4px 3px;
+  right: 0px !important;
 }
 .catalog-header{
     justify-content: space-between;
-}
+  }
 .col-title{
-    font-size: 14px;
-    color: rgb(51,51,51, 0.9);
-    opacity: 80%;
-    font-weight: 400;
-    margin-top: 0;
+  font-size: 14px;
+  color: rgb(51,51,51, 0.9);
+  opacity: 80%;
+  font-weight: 400;
+  margin-top: 0;
 }
 .table-cell{
   font-size: 14px;
@@ -325,8 +332,11 @@ h5{
   color: rgb(51,51,51, 0.9);
 }
 .card-img-top{
-    transition: opacity 0.5s ease-in-out;
-    opacity: 85%;
+  transition: opacity 0.5s ease-in-out;
+  opacity: 85%;
+}
+.align-cell{
+  padding-top: 12px !important;
 }
 .stretched-link{
   text-decoration: none;
@@ -337,12 +347,58 @@ h5{
 .card:hover .card-img-top{
     opacity: 100%;
 }
+@media screen and (max-width: 1253px) {
+  .summary-text-re{
+    height: 60px;
+  }
+  .summary-text{
+    height: 100px;
+  }
+  .users-management-scroll{
+    max-height: 250px !important;
+  }
+}
+@media screen and (max-width: 982px){
+  .users-management-scroll{
+    max-height: 270px !important;
+  }
+  th{
+    padding: 3px!important;
+  }
+  .table-cell, .summary-text{
+    font-size: 13px;
+  }
+  .align-cell{
+    padding-top: 7px !important;
+  }
+}
 @media screen and (max-width: 962px){
+  .table-cell, .summary-text{
+    font-size: 12px;
+  }
   .card-text{
     font-size: 14px !important;
   }
   .stretched-link{
     font-size: 16px !important;
+  }
+}
+@media screen and (max-width: 854px){
+  .paralalel-section{
+    display: block !important;
+  }
+  .table-cell, .summary-text{
+    font-size: 14px;
+  }
+  .table-text{
+    font-size: 12px;
+  }
+  th{
+    padding: 8px !important;
+  }
+  .table-col{
+    padding: 0px;
+    font-size: 12px;
   }
 }
 @media screen and (max-width: 812px){
@@ -351,6 +407,44 @@ h5{
   }
   .dashboard-viewcard{
     margin-bottom: 30px;
+  }
+  .align-cell{
+    padding-top: 12px !important;
+  }
+}   
+@media screen and (max-width: 558px){
+  .mov-cell, .table-col{
+    padding: 0px !important;
+  }
+  .table-text, .table-col{  
+    padding-top: 5px;
+    font-size: 11px;
+  }
+}
+@media screen and (max-width: 435px){
+  .table-cell, .summary-text{
+    font-size: 12px;
+  }
+  .mov-cell, .table-col{
+    padding: 0px !important;
+  }
+  th{
+    padding: 3px !important;
+  }
+  .table-text, .table-col{  
+    font-size: 9px;
+  }
+  .container{
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+@media screen and (max-width: 372px){
+  .mov-cell, .table-col{
+    padding: 0px !important;
+  }
+  .table-text, .table-col{  
+    font-size: 8px;
   }
 }
 </style>

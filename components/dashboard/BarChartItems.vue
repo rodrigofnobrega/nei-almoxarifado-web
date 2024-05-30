@@ -1,30 +1,36 @@
 <template>
   <ModalAlmoReport />
-  <div class="d-flex mb-3 justify-content-between align-items-center chart-filter">
-    <div class="dropdown mx-2">
-      <button class="d-flex align-items-center graph-btn btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <IconsTimer class="me-2" width="20px" height="20px"/>
-        Período
-      </button>
-      <ul class="dropdown-menu">
-        <li @click="changeLabel('month')" type="button" class="dropdown-item">Mensal</li>
-        <li>
-          <div class="vue-dropdown" @click="ClicktoggleDropdown" @mouseover="toggleDropdown" @mouseout="toggleDropdown">
-              <div class="filter-btn dropdown-item large-menu-btn d-flex btn align-items-center border-0" type="button">
-                  Semanal(Escolha o mês)   
-              </div>
-              <ul class="vue-dropdown-menu" v-show="dropdownState">
-                  <li class="small-menu">
-                    <div v-for="(month, index) in labels.month" :key="index" @click="changeLabel('week', index)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
-                      {{ month.slice(0,3) }}
+  <div class="graph-header d-flex align-items-end justify-content-between section-title pt-2 mb-3 bg-light-background-header">
+        <h5 class="ps-2">Gráfico de Solicitações de Itens</h5>
+          <div class="dropdown mb-1 mx-2 d-flex">
+            <button class="d-flex align-items-center graph-btn btn btn-transparent dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <IconsTimer class="me-1" width="20px" height="20px"/>
+              Período
+            </button>
+            <button class="d-flex align-items-center ms-2 graph-btn btn btn-transparent" type="button" data-bs-toggle="modal" data-bs-target="#almoReport" ria-expanded="false">
+              <IconsRequest class="me-1" width="20px" height="20px"/>
+              Relatório
+            </button>
+            <ul class="dropdown-menu p-0">
+              <li @click="changeLabel('month')" type="button" class="dropdown-item">
+                Mensal
+              </li>
+              <li>
+                <div class="vue-dropdown" @click="ClicktoggleDropdown" @mouseover="toggleDropdown" @mouseout="toggleDropdown">
+                    <div class="filter-btn dropdown-item large-menu-btn d-flex btn align-items-center border-0" type="button">
+                        Semanal   
                     </div>
-                  </li>
-              </ul>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <button class="graph-btn btn btn-outline-primary me-3" type="button" data-bs-toggle="modal" data-bs-target="#almoReport" ria-expanded="false">Relatório</button>
+                    <ul class="vue-dropdown-menu" v-show="dropdownState">
+                        <li class="small-menu">
+                          <div v-for="(month, index) in labels.month" :key="index" @click="changeLabel('week', index)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
+                            {{ month.slice(0,3) }}
+                          </div>
+                        </li>
+                    </ul>
+                </div>
+              </li>
+            </ul>
+      </div>
   </div>
   <div>
     <Bar class="chart-graph" :data="chartData" :options="chartOptions" />
@@ -219,6 +225,16 @@ const chartOptions = ref({
   plugins: {
     legend: {
       position: 'bottom',
+      labels: {
+        font: {
+          size: (context) => {
+            const width = context.chart.width;
+            if (width > 1000) return 14;
+            if (width > 600) return 12;
+            return 10;
+          }
+        }
+      }
     }
   },
 });
@@ -300,7 +316,18 @@ const changeLabel = (labelType, index) => {
 </script>
 
 <style scoped>
+h5{
+    font-weight: 300;
+    color: rgb(51,51,51, 0.8);
+}
+.section-title{
+  border-radius: 8px 8px 0px 0px;
+  border-bottom: 1px solid rgb(0, 0, 0, 0.2);
+}
 .graph-btn{
+  color: rgb(0, 0, 0, 0.7);
+  padding: 5px;
+  border-radius: 20px;
   font-size: 13px;
 }
 .chart-graph {
@@ -319,7 +346,7 @@ li{
     border: 1px #D9D9D9 solid;
     position: absolute;
     margin-top: -200px;
-    left: 200px;
+    left: -55px;
     width: 65px;
     height: 400px;
     min-width: 40px;
@@ -333,33 +360,29 @@ li{
     border-bottom: 1px ridge #1F69B1;
 }
 .btn-transparent:hover{
-    color: white;
-    background-color: #FED51E;
-}
-.btn-outline-ligth:hover{
     color: white !important; 
     background-color: #0B3B69 !important; 
 }
+.btn-outline-ligth:hover {
+  color: white !important; 
+  background-color: #0B3B69 !important; 
+}
 @media screen and (max-width: 820px){
     .action-btn{
-        font-size: 12px;
-    }
-    .filter-btn{
         font-size: 12px;
     }
     .large-menu{
         padding: 0;
         width: 120px !important;
     }
-    .small-menu{
-        padding: 0;
-        margin-top: -40px;
-        height: 55px;
-        left: 115px;
-    }
     .action-icon{
         width: 15px;
         height: 15px;
     }
+}
+@media screen and (max-width: 500px){
+  .graph-header{
+    display: block !important;
+  }
 }
 </style>

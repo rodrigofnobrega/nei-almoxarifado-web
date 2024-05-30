@@ -9,46 +9,46 @@
               </span>
             </button>
             <ul class="dropdown-menu notification-menu py-2">
-              <li v-for="(request, index) in requests.content" :key="index" class="dropdown-item">
+              <li v-for="(request, index) in requests.content" :key="index" class="dropdown-item notification">
                 <div class="text-dark-emphasis d-flex align-items-center">
                   <IconsWarning class="me-2 notification-text"/>
                   <p class="notification-text m-0 p-0">{{request.user.name}} solicitou {{ request.quantityRequested }} {{request.item.name}}.
                   </p>
-                  <IconsClose type="button" class="notification-text ms-2" width="22px" height="22px"/>
-                </div>
+                 </div>
                 <span class="notification-text ms-0 opacity-75 text-dark-emphasis">Há {{ passedDate[index].month }} {{ passedDate[index].day }} {{ passedDate[index].hour }} {{ passedDate[index].minute }}</span>
               </li>
-              <li v-show="!isNotification" class="dropdown-item text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
+              <li v-show="!isNotification || requests.content.length === 0" class="mt-5 dropdown-item fs-6 text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
             </ul>
             <TooltipsRectangular class="pt-3" :toolTipState="toolTip" :toolTipText="'Notificações'"/>
           </div>
-            <div class="nav-item dropdown">
-              <button class="svg-button  d-flex bg-primary align-items-center" @click="rotate" data-bs-toggle="dropdown" data-bs-offset="10,10" data-bs-auto-close="inside" aria-expanded="false">
-                <p class="profile-drop user-text text-light px-1 m-0 fw-light"> {{ user.username }} </p>
-                <LoadersLoading class="small-loader text-light p-1"/>
-                  <IconsDownArrow class="rotate-arrow" :style="{ transform: isRoted ? 'rotate(180deg)' : 'rotate(0deg)'}" width="24px" height="24px"/>
-              </button>
-              <ul class="dropdown-menu">
-                <li class="dropdown-item info"> {{ user.name }} </li>
-                <li><a class="dropdown-item py-1 ps-2 d-flex align-items-center justify-content-between" href="/perfil">
-                  Perfil
-                  <IconsProfile />
-                </a></li>
-                <li><a class="dropdown-item py-1 ps-2 d-flex align-items-center justify-content-between" href="/configuracoes">
-                  Configurações
-                  <IconsSettings />
-                </a></li>  
-                <li><button @click="logout()" class="exit-options py-1 ps-2 dropdown-item d-flex align-items-center justify-content-between">
-                  Sair
-                  <IconsExit />
-                </button></li>
-              </ul>
-            </div>
+          <div class="nav-item dropdown">
+            <button class="svg-button  d-flex bg-primary align-items-center" @click="rotate" data-bs-toggle="dropdown" data-bs-offset="10,10" data-bs-auto-close="inside" aria-expanded="false">
+              <p class="profile-drop user-text text-light px-1 m-0 fw-light"> {{ user.username }} </p>
+              <LoadersLoading class="small-loader text-light p-1"/>
+                <IconsDownArrow class="rotate-arrow" :style="{ transform: isRoted ? 'rotate(180deg)' : 'rotate(0deg)'}" width="24px" height="24px"/>
+            </button>
+            <ul class="dropdown-menu">
+              <li class="dropdown-item info"> {{ user.name }} </li>
+              <li><a class="dropdown-item py-1 ps-2 d-flex align-items-center justify-content-between" href="/perfil">
+                Perfil
+                <IconsProfile />
+              </a></li>
+              <li><a class="dropdown-item py-1 ps-2 d-flex align-items-center justify-content-between" href="/configuracoes">
+                Configurações
+                <IconsSettings />
+              </a></li>  
+              <li><button @click="logout()" class="exit-options py-1 ps-2 dropdown-item d-flex align-items-center justify-content-between">
+                Sair
+                <IconsExit />
+              </button></li>
+            </ul>
+          </div>
         </div>
 </template>
 
 <script setup>
 import { useUser } from '../../stores/user';
+import { useStorageStore } from '../../stores/storage';
 import { getUserByEmail } from '../../services/users/userGET';
 import { getRequestByStatus } from '../../services/requests/requestsGET';
 import { onMounted, ref } from 'vue';
@@ -83,32 +83,31 @@ for (let i = 0; i < requests.content.length; i++) {
 
   const creationDate = new Date(requests.content[i].creationDate);
 
-  // Calculando a diferença em meses
   let monthDiff = toPositive(actualDate.getMonth() - creationDate.getMonth());
   passedDate[i].month = monthDiff > 0 ? (monthDiff === 1 ? `${monthDiff} mês` : `${monthDiff} meses`) : '';
 
-  // Calculando a diferença em dias
   let dayDiff = toPositive(actualDate.getDate() - creationDate.getDate());
   passedDate[i].day = dayDiff > 0 ? (dayDiff === 1 ? `${dayDiff} dia` : `${dayDiff} dias`) : '';
 
-  // Calculando a diferença em horas
   let hourDiff = actualDate.getHours() - creationDate.getHours();
   let minuteDiff = actualDate.getMinutes() - creationDate.getMinutes();
 
   if (minuteDiff < 0) {
     minuteDiff += 60;
-    hourDiff--; // Ajuste para horas negativas
+    hourDiff--; 
   }
 
   passedDate[i].hour = hourDiff > 0 ? (hourDiff === 1 ? `${hourDiff} hora` : `${hourDiff} horas`) : '';
 
-  // Calculando a diferença em minutos
   passedDate[i].minute = minuteDiff > 0 ? (minuteDiff === 1 ? `${minuteDiff} minuto` : `${minuteDiff} minutos`) : '';
 }
 
 </script>
 
 <style scoped>
+.not-close:active{
+  transform: scale(1.30);
+}
 .notification-menu{
   height: 172px;
   overflow-y: scroll;
@@ -150,8 +149,10 @@ for (let i = 0; i < requests.content.length; i++) {
     font-size: 20px;
 }
 .dropdown-item:hover .notification-text{
-  color: white !important;
-  font-weight: bold;
+  font-weight: bold
+}
+.dropdown-item:hover{
+  background-color: rgb(254, 213, 30, 0.4) !important;
 }
 .svg-button:hover img{
   transition: filter 0.3s ease-in-out;
