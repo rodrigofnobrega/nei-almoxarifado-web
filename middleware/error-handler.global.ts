@@ -33,7 +33,4 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
                 return navigateTo('/error/503')
         }
     }
-    if(to.path.includes('/error/')){
-        return navigateTo('/')
-    }
 })

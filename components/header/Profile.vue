@@ -29,10 +29,10 @@
             </button>
             <ul class="dropdown-menu">
               <li class="dropdown-item info"> {{ user.name }} </li>
-              <li><a class="dropdown-item py-1 ps-2 d-flex align-items-center justify-content-between" href="/perfil">
+              <li><NuxtLink class="dropdown-item py-1 ps-2 d-flex align-items-center justify-content-between" :to="`/perfil?userId=${userStore.id}`" :route="`/perfil/${userStore.id}`"">
                 Perfil
                 <IconsProfile />
-              </a></li>
+              </NuxtLink></li>
               <li><a class="dropdown-item py-1 ps-2 d-flex align-items-center justify-content-between" href="/configuracoes">
                 Configurações
                 <IconsSettings />
@@ -152,6 +152,7 @@ for (let i = 0; i < requests.content.length; i++) {
   font-weight: bold
 }
 .dropdown-item:hover{
+  color: rgb(0, 0, 0, 0.8);
   background-color: rgb(254, 213, 30, 0.4) !important;
 }
 .svg-button:hover img{

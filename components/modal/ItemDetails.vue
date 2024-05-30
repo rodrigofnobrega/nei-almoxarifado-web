@@ -19,11 +19,11 @@
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Tipo </label>
-						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.type"> 
+						<input readonly class="form-control bg-light-emphasis" :value="item_details.type"> 
 					</div>
                     <div class="mb-3"> 
                         <label class="form-label fw-bold"> Quantidade </label>
-						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.quantity ? item_details.quantity : item_qtd"> 
+						<input readonly class="form-control bg-light-emphasis" :value="item_details.quantity ? item_details.quantity : item_qtd"> 
 					</div>	
 				</div>
 				<div class="col-6">

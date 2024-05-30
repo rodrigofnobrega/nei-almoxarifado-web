@@ -5,9 +5,9 @@
   <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
       <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
           <IconsInformation class="me-2"/>
-          Descrição da Subpágina 
+          Descrição da página 
       </h6>
-      <p class="sub-catalog-text opacity-75">Esta organização de almoxarifado é destinada aos itens relacionados as atividades escolares do NEI, como giz de ceira, lápis e quaisquer material que possua uso no dia a dia dos alunos e professores.</p>
+      <p class="sub-catalog-text opacity-75">Nesta página há todos os registros do sistema, sendo este de dois tipos de operações: CADASTRO e CONSUMO.</p>
   </div>   
   <div class="table-box bg-light row d-block">
       <div class="table-actions d-flex justify-content-between aling-items-center">
@@ -44,12 +44,13 @@
                  <p>{{ record.quantity }}</p>
               </th>
              <th class="">
-                 <p>{{ record.creationDate }}</p>
-                 <div class="end position-sticky">
-                    <button class="details-btn position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 64px;" @click="showDetails(record.index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
-                        Detalhes
+                 <p>{{ record.creationDate.slice(0, 19) }}</p>
+                 <div class="end position-sticky d-flex align-items-center">
+                    <button class="d-flex align-items-center profile-btn  position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 65px;" @click="showDetails(record.index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                      <IconsSpreadSheet width="16px" height="16px"/>  
+                      item
                     </button>
-                    <NuxtLink :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="d-flex align-items-center profile-btn position-absolute btn btn-primary table-btn" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 13px;">
+                    <NuxtLink :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="d-flex align-items-center profile-btn position-absolute btn btn-primary table-btn" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 0px;">
                       <IconsLowProfile width="16px" height="16px"/>  
                       perfil
                     </NuxtLink>
@@ -371,7 +372,6 @@ p{
   top: 0px;
   font-size: 12px;
   padding: 4px 3px 4px 3px;
-  right: 0px !important;
 }
 .search-glass{
   padding-left: 0px;
@@ -387,7 +387,6 @@ p{
 }
 .end{
   text-align: end;
-  padding: 0;
 }
 .table-btn{
   z-index: 3000;

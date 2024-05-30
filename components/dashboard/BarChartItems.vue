@@ -33,6 +33,9 @@
       </div>
   </div>
   <div>
+    <div class="d-flex justify-content-center z-5">
+      <LoadersLoading class="position-absolute p-5 mt-5"/>
+    </div>
     <Bar class="chart-graph" :data="chartData" :options="chartOptions" />
   </div>
 </template>
@@ -316,6 +319,9 @@ const changeLabel = (labelType, index) => {
 </script>
 
 <style scoped>
+.graph-loader{
+  height: 100px;
+}
 h5{
     font-weight: 300;
     color: rgb(51,51,51, 0.8);

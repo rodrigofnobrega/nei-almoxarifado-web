@@ -50,11 +50,13 @@
                <th class="">
                    <p>CADASTRO 2024-05-11 09:20:02 Luís Freitas</p>
                 <div class="end position-sticky">
-                    <button class="details-btn position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 84px;" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
-                        Detalhes
+                    <button class="details-btn position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 89px;" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                        <IconsSpreadSheet width="16px" height="16px"/>
+                        detalhes
                     </button>
-                    <button class="position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 13px;" @click="showHistory(item.index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
-                        Histórico
+                    <button class="position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 0px;" @click="showHistory(item.index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                        <IconsRequest width="16px" height="16px"/>
+                        histórico
                     </button>
                  </div>
                </th>
@@ -383,12 +385,15 @@ p{
     padding: 0;
 }
 .table-btn{
+    border-radius: 4px;
+    top: 0px;
+    font-size: 12px;
+    padding: 4px 3px 4px 3px;
     z-index: 3000;
     font-size: 13px;
     opacity: 0%;
     margin-top: 8px;
     margin-right: 10px;
-    padding: 5px 5px 5px 5px;
 }
 .warning-text{
     position: absolute;
@@ -414,9 +419,6 @@ tr:hover .table-btn{
 }
 tr:hover p{
     opacity: 50%;
-}
-tr:active{
-    background-color: red !important;
 }
 /*RESPONSIVIDADE*/
 @media screen and (max-width: 1030px) {

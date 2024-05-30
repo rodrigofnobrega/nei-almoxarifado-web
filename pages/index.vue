@@ -85,10 +85,10 @@
                 </th>
                 <th class="text-start table-cell pb-1" scope="row">
                   <div class="position-sticky">
-                    <NuxtLink :to="`/perfil?userId=${user.id}`" :route="`/perfil/${user.id}`" :class="{'d-none': !isProfileBtn[user.id]}" class="d-flex align-items-center profile-btn position-absolute btn btn-primary">
+                    <a :href="`/perfil?userId=${user.id}`" :route="`/perfil/${user.id}`" :class="{'d-none': !isProfileBtn[user.id]}" class="d-flex align-items-center profile-btn position-absolute btn btn-primary">
                       <IconsLowProfile width="16px" height="16px"/>
                       perfil
-                    </NuxtLink>
+                    </a>
                   </div>
                 </th>
               </tr>
@@ -149,10 +149,10 @@
                     <IconsRequest class="me-1" width="16px" height="16px"/>
                     registro
                   </NuxtLink>
-                  <NuxtLink :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" :class="{'d-none': !isProfileBtnRecord[record.id]}" style="margin-top: -25px !important;" class="d-flex align-items-center profile-btn position-absolute btn btn-primary">
+                  <a :href="`/perfil?userId=${record.user.id}`" :class="{'d-none': !isProfileBtnRecord[record.id]}" style="margin-top: -25px !important;" class="d-flex align-items-center profile-btn position-absolute btn btn-primary">
                       <IconsLowProfile class="me-1" width="16px" height="16px"/>
                       perfil
-                  </NuxtLink>
+                  </a>
                 </div>
               </th>
             </tr>

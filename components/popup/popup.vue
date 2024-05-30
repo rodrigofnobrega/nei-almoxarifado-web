@@ -1,5 +1,5 @@
 <template>
-    <div class="card popup text-light" :style="{'display': showPopup ? 'block' : 'none', 'background-color': popupBg}">
+    <div class="card popup text-light" :style="{'opacity': showPopup ? '100%' : '0%', 'display': showPopup ? 'flex' : 'none', 'background-color': popupBg}">
         <div class="progress bg-light-emphasis" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
             <div class="progress-bar bg-warning" style="width: 100%"></div>
         </div>
@@ -72,23 +72,27 @@ export default{
 </script>
 
 <style scoped>
-@keyframes heightAnimation {
-  0% {height: 0;}
-  95% {height: 115px;}
-  100% {height: auto;}
+@keyframes opacityAnimation{
+    0% {opacity: 0;}
+    100% {opacity: 100%}
 }
+
+@keyframes movement{
+    0% {bottom: -100px;}
+    100% {bottom: 10px;}
+}
+
 @keyframes widthAnimation{
-    0% {width: 0%;}
-    100% {width: 100%;}
+  0% {width: 0%;}
+  100% {width: 100%;}
 }
 .popup{
-    transition: opacity 0.5s ease-in-out;
-    height: auto;
+    transition: opacity 1s ease-in-out;
     width: 16rem;
     position: fixed;
     bottom: 10px;
     right: 30px;
-    animation-name: heightAnimation;
+    animation-name: movement;
     animation-duration: 1.3s;
     z-index: 5000;
     box-shadow: 0px 0px 10px 4px rgba(254, 213, 30, 0.7);
