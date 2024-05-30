@@ -76,8 +76,11 @@
         <li class="page-item">
             <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
         </li>
-        <li class="page-item" v-for="i in searchInput === '' ? totalPages : 0" :key="i-1">
+        <li class="page-item" v-for="i in range(1+paginationRet, 3+paginationRet)" :key="i-1">
             <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
+        </li>
+        <li v-show="totalPages > 3 && paginationRet < totalPages-3" class="page-item">
+            <button class="page-link bg-primary text-light">...</button>
         </li>
         <li class="page-item">
             <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1 || searchInput !== ''}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
@@ -97,6 +100,11 @@ const userStore = useUser()
 const store = useStorageStore();
 const searchStore = useSearch();
 /*VARIÁVEIS ÚTEIS PARA REQUISITAR OS ITENS E FILTRÁ-LOS*/ 
+const paginationRet = ref(0)
+function range(start, end) {
+  return Array.from({ length: end - start + 1 }, (_, index) => start + index);
+}
+
 let pagination = ref(0); //paginação padrão
 let invertedPagination = ref(0); //paginação invertida para filtro
 let queryParams = ref({ 
@@ -220,6 +228,7 @@ const page = (async (index) => {
     pagesFocus.value[count] = true;
 });
 const fowardPage = (async () => {
+    paginationRet.value = paginationRet.value < totalPages-3 ? paginationRet.value+1 : paginationRet.value  
     pagination.value++;
     if(queryParams.value.isInverted){
         invertedPagination.value--;
@@ -232,6 +241,7 @@ const fowardPage = (async () => {
     document.getElementById("backPageBtn").classList.remove("bg-dark-emphasis");
 });
 const backPage = (async () => {
+    paginationRet.value = paginationRet.value < 3 ? paginationRet.value-1 : paginationRet.value
     pagination.value--;
     if(queryParams.value.isInverted){
         invertedPagination.value++;
