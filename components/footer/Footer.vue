@@ -24,10 +24,6 @@
 </footer>
 </template>
 
-<script setup>
-
-</script>
-
 <style scoped> 
 .custom-footer {
   z-index: 1000;

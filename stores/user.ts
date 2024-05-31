@@ -8,7 +8,8 @@ export const useUser = defineStore('user', {
     state: () => ({
         token: '',
         email: '',
-        id: null
+        id: null,
+        role: null
     }),
     actions: {
         async fetchData(password, email){
@@ -19,11 +20,15 @@ export const useUser = defineStore('user', {
                 this.token = res.token;
                 
                 const response = await getUserByEmail({token: this.token}, email)
-                this.id = response.content
+                this.id = response.id
+                this.role = response.role
                 localStorage.setItem('session', JSON.stringify(res.token))
-                navigateTo('/');
+                if(this.role === "USER"){
+                    return navigateTo('/error/404')
+                }
+                return navigateTo('/');
             } catch(err) { 
-                console.log(err)
+                return err
             };
         },
         logout(){

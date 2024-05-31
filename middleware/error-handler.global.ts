@@ -1,6 +1,8 @@
 import { defineNuxtRouteMiddleware, navigateTo } from "nuxt/app";
 import { useUser } from "../stores/user";
 import { getItems } from "../services/items/itemsGET";
+import { getRoles } from "../services/roles/rolesGET";
+
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
     if(to.matched.length === 0){
@@ -10,6 +12,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         return
     }
     const userStore = useUser();
+    if(userStore.role === 'USER'){
+        if(to.path.includes('/nei')){
+            return
+        }
+        return navigateTo('/nei/')
+    }
     let res = undefined;
     try{
         res = await getItems(userStore, 0, '');
