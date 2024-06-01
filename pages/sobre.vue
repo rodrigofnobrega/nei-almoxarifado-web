@@ -57,7 +57,7 @@ sendDataToParent();
   const cards = ref([
   {
     image: '/foto_andriel.jpg',
-    title: 'Andriel Vinícius',
+    title: 'Andriel Vinicius',
     description: 'Contribuição no Front-End. Desenvolvedor da API no Back-End.',
     link1: 'http://github.com/leirdan',
     link2: 'https://www.linkedin.com/in/andriel-vinicius-b6a734256/'
@@ -77,11 +77,11 @@ sendDataToParent();
     link2: 'https://www.linkedin.com/in/murilo-antonio-lima-da-costa-687b51273/'
   },
   {
-    image: 'https://via.placeholder.com/150',
-    title: 'Dev Name 4',
-    description: 'Dev Description 4',
-    link1: '#',
-    link2: '#'
+    image: '/foto_rodrigo.jpg',
+    title: 'Rodrigo Ferreira',
+    description: 'Desenvolvedor Back-End.',
+    link1: 'http://www.github.com/rodrigofnobrega',
+    link2: 'https://www.linkedin.com/in/rodrigo-ferreira-da-n%C3%B3brega-509116305/'
   },
   {
     image: 'https://via.placeholder.com/150',
