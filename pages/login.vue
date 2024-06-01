@@ -1,4 +1,5 @@
 <template>
+    <LoadersPageLoading :isLoading="loading" class="loader"/>
 	<div class="container-fluid login-container d-flex  col-1 justify-content-center">
 		<div class="header">
 			<p class="texto"><strong>Entrar</strong></p>
@@ -30,6 +31,7 @@ definePageMeta({
 
 import { ref, onMounted } from 'vue';
 import { useUser } from '../stores/user.ts';
+import { onBeforeRouteLeave } from 'vue-router';
 
 const userStore = useUser();
 const email = ref('');
@@ -38,11 +40,18 @@ const password = ref('');
 
 const submitForm = () => {
 	userStore.fetchData(password.value, email.value);
-}
+};
 
+const loading = ref(false)
+onBeforeRouteLeave(() => {
+	loading.value = true
+})
 </script>
 
 <style scoped>
+.loader{
+	top: 0px;
+}
 .container-fluid {
 	padding: 0px;
 }
