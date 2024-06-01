@@ -7,8 +7,10 @@
   
       <!-- Conteúdo do Perfil e Edição -->
       <div class="profile-content">
-        <div class="profile-picture">
-          <img :src="user.profilePicture" alt="Foto de Perfil">
+        <div class="profile-picture aspect-ratio">
+          <div class="img-container">
+            <img :src="user.profilePicture" class="img-top" alt="Foto de Perfil">
+          </div>
           <input type="file" @change="uploadProfilePicture" ref="fileInput" hidden>
           <button @click="selectProfilePicture">Alterar Foto</button>
         </div>
@@ -66,6 +68,8 @@
       </div>
     </div>
   </template>
+  
+  
   
 <script setup>
 import { ref, inject, onMounted } from 'vue';
@@ -147,109 +151,64 @@ const changePassword = () => {
 
 <style scoped>
 .profile-container {
-  max-width: 600px;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background-color: #f9f9f9;
-  margin-top: 20px;
-}
+    max-width: 600px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    margin-top: 20px;
+  }
+  
+  .profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-content {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-picture {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 20px;
+  }
+  
+  .img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 50%;
+    width: 200px;
+    height: 200px; 
+    margin: 0 auto 10px;
+    margin-top: 10px;
+  }
 
-.profile-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.profile-content {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.profile-picture {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-right: 20px;
-}
-
-.profile-picture img {
-  border-radius: 50%;
-  margin-bottom: 10px;
-  max-width: 150px;
-  max-height: 150px;
-}
-
-.profile-picture button {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-}
-
-.profile-picture button:hover {
-  background-color: #0056b3;
-}
-
-.profile-details h3 {
-  margin: 0;
-}
-
-.profile-details label {
+  .img-top {
+  width: 250%;
+  height: auto;
   display: block;
-  margin-bottom: 10px;
 }
-
-.profile-actions {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.profile-actions button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-}
-
-.profile-actions button:hover {
-  background-color: #0056b3;
-}
-
-.profile-history, .profile-posts {
-  width: 100%;
-  overflow-y: scroll;
-  margin-top: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 5px;
-  background-color: #0B3B69;
-}
-.profile-history{
-  height: 500px;
-}
-
-.profile-history h3, .profile-posts h3 {
-  margin-bottom: 10px;
-  color: #f9f9f9;
-}
-
-.profile-history ul, .profile-posts ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.profile-history li, .profile-posts li {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  background-color: #f9f9f9;
-}
+  
+  .profile-picture button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .profile-picture button:hover {
+    background-color: #0056b3;
+  }
+  
+  .profile-details h3 {
+    margin: 0;
+  }
 </style>
