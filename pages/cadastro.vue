@@ -37,12 +37,18 @@
 
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { postUser } from '../services/users/userPOST';
+import { useUser } from '../stores/user';
+import { navigateTo } from 'nuxt/app';
+import { usePopupStore } from '../stores/popup'
 
 definePageMeta({
   layout: 'authentication'
 });
 
-// Variáveis reativas para armazenar os valores dos campos	
+const userStore = useUser();
+const popUpStore = usePopupStore()
+
 const username = ref('');
 const email = ref('');
 const password = ref('');
@@ -50,39 +56,28 @@ const rePassword = ref('');
 
 const errorPassword = ref(false);
 
-// Router para voltar ao login
 const router = useRouter();
 
-const submitForm = () => {
-	// Visualização dos valores armazenados
-	console.log('Usuário:', username.value);
-	console.log('Email:', email.value);
-	console.log('Senha:', password.value);
-	console.log('Confirmação de Senha:', rePassword.value);
-
-	// Verificação da senha
+const submitForm = async () => {
 	if (password.value != rePassword.value) {
 		console.log("A confirmação de senha não está correta")
 		errorPassword.value = true;
 	}
 	else {
-		console.log(`Usuário ${username.value} foi cadastrado!`);
-
-		username.value = '';
-		email.value = '';
-		password.value = '';
-		rePassword.value = '';
-
-		router.push('/login');
+		try{
+			const res = await postUser(username.value, email.value, password.value)
+		}catch(err){
+			if(err.response.status === 403){
+				popUpStore.throwPopup('Sucesso ao se cadastrar', '#0B3B69')
+				navigateTo('/login')	
+				return 1;
+			}else{
+				popUpStore.throwPopup('Erro ao se cadastrar', '#B71C1C')
+			}
+		}
 	}
 
-	// Aqui está uma maneira de confirmar que ao enviar os dados preenchidos, 
-	// eles serão salvos em alguma variável. E assim, está para ser inserida a
-	// lógica por tras dos panos para fazer a pessoa entrar ou não.
-
 }
-
-// Método para cleanar o formulário
 const resetPassForm = () => {
   password.value = '';
   rePassword.value = '';

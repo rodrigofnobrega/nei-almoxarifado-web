@@ -10,7 +10,7 @@
 			<slot name="text" />
 		</template>
 		<template v-slot:footer>
-			<div class="container-fluid d-flex justify-content-center align-items-center">
+			<div class="container-fluid d-flex justify-content-end align-items-center">
 				<slot name="buttons" />
             </div>
 		</template>

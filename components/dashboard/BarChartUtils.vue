@@ -1,30 +1,40 @@
 <template>
   <ModalAlmoReport />
-  <div class="d-flex mb-3 justify-content-between align-items-center chart-filter">
-    <div class="dropdown mx-2">
-      <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Período</button>
-      <ul class="dropdown-menu">
-        <li @click="changeLabel(-1)" type="button" class="dropdown-item">Todo período</li>
-        <li>
-          <div class="vue-dropdown" @mouseover="toggleDropdown" @mouseout="toggleDropdown">
-              <div class="filter-btn dropdown-item large-menu-btn d-flex btn align-items-center border-0" type="button">
-                  Mês (Escolha o mês)   
+  <div class="graph-header d-flex align-items-end justify-content-between section-title pt-2 mb-3 bg-light-background-header">
+        <h5 class="ps-2">Gráfico de Solicitações de Itens</h5>
+        <div class="dropdown mb-1 mx-2 d-flex">
+            <button class="d-flex align-items-center graph-btn btn btn-transparent " @click="toggleDataType">{{ currentDataTypeLabel }}</button>
+            <button class="d-flex align-items-center graph-btn btn btn-transparent dropdown-toggle mx-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <IconsTimer class="me-1" width="20px" height="20px"/>
+              Período
+            </button>
+            <ul class="dropdown-menu">
+              <li @click="changeLabel(-1)" type="button" class="dropdown-item">Todo período</li>
+              <li>
+                <div class="vue-dropdown" @mouseover="toggleDropdown" @mouseout="toggleDropdown">
+                    <div class="filter-btn dropdown-item large-menu-btn d-flex btn align-items-center border-0" type="button">
+                        Mês  
+                      </div>
+                    <ul class="vue-dropdown-menu" v-show="dropdownState">
+                      <li class="small-menu">
+                        <div v-for="(month, index) in months" :key="index" @click="changeLabel(index + 1)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
+                            {{ month.slice(0, 3) }}
+                          </div>
+                        </li>
+                    </ul>
                 </div>
-              <ul class="vue-dropdown-menu" v-show="dropdownState">
-                <li class="small-menu">
-                  <div v-for="(month, index) in months" :key="index" @click="changeLabel(index + 1)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
-                      {{ month.slice(0, 3) }}
-                    </div>
-                  </li>
-              </ul>
-          </div>
-        </li>
-      </ul>
-      <button class="btn btn-primary mx-2" @click="toggleDataType">{{ currentDataTypeLabel }}</button>
-    </div>
-    <button class="btn btn-primary me-3" type="button" data-bs-toggle="modal" data-bs-target="#almoReport" ria-expanded="false">Relatório</button>
+              </li>
+            </ul>
+            <button class="d-flex align-items-center graph-btn btn btn-transparent me-3" type="button" data-bs-toggle="modal" data-bs-target="#almoReport" ria-expanded="false">
+              <IconsRequest class="me-1" width="20px" height="20px"/>
+              Relatório
+            </button>
+        </div>
   </div>
   <div>
+    <div class="d-flex justify-content-center z-5">
+      <LoadersLoading class="position-absolute p-5 mt-5"/>
+    </div>
     <Bar class="chart-graph" :data="chartData" :options="chartOptions" />
   </div>
 </template>
@@ -157,7 +167,7 @@ datasets.mostRequestersTime[0] = sortedDataUsers.map(user => user.qtdRequested);
 const currentIndex = ref(0);
 const currentLabelName = ref('Itens mais solicitados');
 const currentDataType = ref('mostItems'); 
-const currentDataTypeLabel = ref('Usuários com mais solicitações');
+const currentDataTypeLabel = ref('Usuários');
 
 const chartData = ref({
   labels: labels[currentDataType.value][0],
@@ -232,6 +242,20 @@ onMounted(() => {
 
 
 <style scoped>
+h5{
+    font-weight: 300;
+    color: rgb(51,51,51, 0.8);
+}
+.section-title{
+  border-radius: 8px 8px 0px 0px;
+  border-bottom: 1px solid rgb(0, 0, 0, 0.2);
+}
+.graph-btn{
+  color: rgb(0, 0, 0, 0.7);
+  padding: 5px;
+  border-radius: 20px;
+  font-size: 13px;
+}
 .chart-graph {
   height: 300px;
 }
@@ -251,7 +275,7 @@ li {
   border: 1px #D9D9D9 solid;
   position: absolute;
   margin-top: -200px;
-  left: 175px;
+  left: -55px;
   width: 65px;
   height: 400px;
   min-width: 40px;
@@ -268,8 +292,8 @@ li {
 }
 
 .btn-transparent:hover {
-  color: white;
-  background-color: #FED51E;
+  color: white !important; 
+  background-color: #0B3B69 !important; 
 }
 
 .btn-outline-ligth:hover {
@@ -301,6 +325,11 @@ li {
   .action-icon {
     width: 15px;
     height: 15px;
+  }
+}
+@media screen and (max-width: 500px){
+  .graph-header{
+    display: block !important;
   }
 }
 </style>

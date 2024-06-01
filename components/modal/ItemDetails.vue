@@ -19,11 +19,11 @@
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Tipo </label>
-						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.type"> 
+						<input readonly class="form-control bg-light-emphasis" :value="item_details.type"> 
 					</div>
                     <div class="mb-3"> 
                         <label class="form-label fw-bold"> Quantidade </label>
-						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.quantity"> 
+						<input readonly class="form-control bg-light-emphasis" :value="item_details.quantity ? item_details.quantity : item_qtd"> 
 					</div>	
 				</div>
 				<div class="col-6">
@@ -47,13 +47,16 @@
 			</div>
         </template>
         <template v-slot:footer>
-            <div class="container-fluid d-flex justify-content-center align-items-center">
+            <div v-if="userStore.role === 'ADMIN'" class="container-fluid d-flex justify-content-end align-items-center">
                 <button class="btn mode-btn inset-shadow btn-dark-alert mx-1" :class="{'d-none': editionActive, 'd-block': !editionActive}" @click="deleteItem" id="itemDelete" data-bs-dismiss="modal">Excluir</button>
                 <button type="button" class="btn inset-shadow btn-light-alert text-light mx-1" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="revertEdition" data-bs-dismiss="modal">Cancelar</button>
                 <button class="btn inset-shadow mode-btn btn-primary mx-1" @click="setEdition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>
                 <button class="btn inset-shadow btn-light-success text-light mx-1" id="fetch-inputs" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="fetchNewData" data-bs-dismiss="modal">Confirmar</button>
             </div>
-            <div data-bs-target="#itemHistory" data-bs-toggle="modal" type="button" class="btn btn-primary position-fixed bg-primary rounded-2 p-1 d-flex justify-content-end text-light">
+            <div v-if="userStore.role === 'USER'" class="d-flex align-items-center justify-content-center">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+            </div>
+            <div v-if="userStore.role === 'ADMIN'" data-bs-target="#itemHistory" data-bs-toggle="modal" type="button" class="btn btn-primary position-fixed bg-primary rounded-2 p-1 d-flex justify-content-end text-light">
                 <IconsHistory width="25px" height="25px"/>
             </div>
         </template> 
@@ -64,6 +67,7 @@
 <script>
 import { useStorageStore } from '../../stores/storage';
 import { inject } from 'vue';
+import { useUser } from '../../stores/user';
 
 export default {
     data() {
@@ -134,12 +138,16 @@ export default {
         },
         item_route:{
             type: String
+        },
+        item_qtd: {
+            type: Number
         }
     },
     setup(){
         const store = useStorageStore();
+        const userStore = useUser();
         return {
-            store
+            store, userStore
         }
     },
 }
@@ -149,9 +157,6 @@ export default {
 .inset-shadow{
     padding: 6px 10px 6px 10px;
     box-shadow: inset 1px 1px 15px 1px rgb(0, 0, 0, 0.2);
-}
-.modal-header{
-    background-color: red;
 }
 .close{
     position: relative;

@@ -1,6 +1,5 @@
 <template>
-    <div class="container-fluid profile-container d-flex flex-column align-items-center">
-  
+    <div class="container-fluid profile-container d-flex flex-column align-items-center" style="margin-bottom: 200px;">
       <div class="profile-header">
         <h2>Perfil do Usuário</h2>
       </div>
@@ -40,30 +39,14 @@
         </div>
       </div>
   
-      <!-- Ações de Perfil -->
-      <div class="profile-actions">
-        <!-- Botões alternados com base no estado de edição -->
-        <button v-if="!isEditing" @click="editProfile">Editar Perfil</button>
-        <button v-if="isEditing" @click="saveProfile">Salvar</button>
-        <button v-if="isEditing" @click="cancelEdit">Cancelar</button>
-        <button @click="changePassword">Alterar Senha</button>
-      </div>
-  
-      <!-- Histórico de Requisições -->
+      <!-- Histórico de Requisições 
       <div class="profile-history">
         <h3>Histórico de Solicitações</h3>
         <ul>
           <li v-for="request in userRequests.content" :key="request.id">{{ request.description }} - {{ request.creationDate.slice(0,19) }}</li>
         </ul>
       </div>
-  
-      <!-- Postagens de Itens -->
-      <div class="profile-posts">
-        <h3>Postagens de Itens</h3>
-        <ul>
-          <li v-for="post in user.posts" :key="post.id">{{ post.description }} - {{ post.date }}</li>
-        </ul>
-      </div>
+        -->
     </div>
   </template>
   
@@ -76,13 +59,13 @@ import { getRequestByUser } from '../services/requests/requestsGET';
 import { useUser } from '../stores/user';
 import { layouts } from 'chart.js';
 definePageMeta({
-  layout: 'profile'
+  layout: 'client'
 })
 
 const userStore = useUser();
 const route = useRouter();
 const userData = await getUserId(userStore, route.currentRoute._rawValue.query.userId)
-const userRequests = await getRequestByUser(userStore, userData.id)
+//const userRequests = await getRequestByUser(userStore, userData.id)
 // Define o título da página
 
 // Dados do usuário (mock)

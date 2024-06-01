@@ -32,7 +32,7 @@ export const getRequestByStatus = async (userStore, requests_status) => {
         }
      }
     )
-    return data.content
+    return data
 }
 //Listar Solicitações pelo id do usuário
 export const getRequestByUser = async (userStore, userId) => {

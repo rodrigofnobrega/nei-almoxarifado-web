@@ -1,22 +1,14 @@
-import axios from 'axios';
-import { useUser } from '../../stores/user';
-const userStore = useUser()
+import { useApi } from "../../composables/axios";
 //Criar solicitação
-export const postRequest = async () => {
-    const item_id = 1;
-    const qtd = 10;
-    const message = 'Necessito para a sala A304'
-    const { data } = await useFetch('http://localhost:8080/api/v1/requests', {
-        method: 'POST',
-        header: {
+export const postRequest = async (userStore, item_id, item_qtd, description) => {
+    const { data } = await useApi().post('/requests', {
+        "itemID": item_id,
+        "quantity": item_qtd,
+        "description": description},{
+        headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${userStore.token}`
         },
-        body:{
-            "itemID": item_id,
-            "quantity": qtd,
-            "description": message
-        }
     });
-    return data._rawValue
+    return data
 }

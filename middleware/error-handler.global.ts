@@ -1,15 +1,23 @@
 import { defineNuxtRouteMiddleware, navigateTo } from "nuxt/app";
 import { useUser } from "../stores/user";
 import { getItems } from "../services/items/itemsGET";
+import { getRoles } from "../services/roles/rolesGET";
+
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
     if(to.matched.length === 0){
         return navigateTo('/error/pagina-nao-encontrada')
     }
-    if(to.path === '/login' || to.path === '/error/pagina-nao-encontrada'){
+    if(to.path === '/login' || to.path === '/error/pagina-nao-encontrada' || to.path === '/cadastro' || to.path === '/emailAuth'){
         return
     }
     const userStore = useUser();
+    if(userStore.role === 'USER'){
+        if(to.path.includes('/nei')){
+            return
+        }
+        return navigateTo('/nei/')
+    }
     let res = undefined;
     try{
         res = await getItems(userStore, 0, '');
@@ -32,8 +40,5 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
             case 503:
                 return navigateTo('/error/503')
         }
-    }
-    if(to.path.includes('/error/')){
-        return navigateTo('/')
     }
 })

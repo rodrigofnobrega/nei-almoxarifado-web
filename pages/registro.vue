@@ -1,12 +1,13 @@
 <template>
+<ModalItemDetails v-if="recordsCache.length > 0" :item_index="recordIndex" :item_route="currentRoute" :item_details="currentItem" :item_qtd="itemQtd"/>
 <div class="table-container d-block mt-2">
   <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
   <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
       <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
           <IconsInformation class="me-2"/>
-          Descrição da Subpágina 
+          Descrição da página 
       </h6>
-      <p class="sub-catalog-text opacity-75">Esta organização de almoxarifado é destinada aos itens relacionados as atividades escolares do NEI, como giz de ceira, lápis e quaisquer material que possua uso no dia a dia dos alunos e professores.</p>
+      <p class="sub-catalog-text opacity-75">Nesta página há todos os registros do sistema, sendo este de dois tipos de operações: CADASTRO e CONSUMO.</p>
   </div>   
   <div class="table-box bg-light row d-block">
       <div class="table-actions d-flex justify-content-between aling-items-center">
@@ -43,13 +44,21 @@
                  <p>{{ record.quantity }}</p>
               </th>
              <th class="">
-                 <p>{{ record.creationDate }}</p>
-              <div class="end position-sticky">
-               </div>
+                 <p>{{ record.creationDate.slice(0, 19) }}</p>
+                 <div class="end position-sticky d-flex align-items-center">
+                    <button class="d-flex align-items-center profile-btn  position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 65px;" @click="showDetails(record.index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                      <IconsSpreadSheet width="16px" height="16px"/>  
+                      item
+                    </button>
+                    <NuxtLink :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="d-flex align-items-center profile-btn position-absolute btn btn-primary table-btn" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 0px;">
+                      <IconsLowProfile width="16px" height="16px"/>  
+                      perfil
+                    </NuxtLink>
+                 </div>
              </th>
           </tr>
           <div v-else class="warning-text d-flex aling-items-center justify-content-center">
-              <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
+              <p class="text-dark-emphasis fs-5 opacity-50">Registro vazio.</p>
           </div>
           <div v-if="loadRecords.length == 0" class="search-empty position-absolute mt-5">
               <p class="text-dark-emphasis fs-5 opacity-50">Nenhum Resultado Encontrado.</p>
@@ -79,6 +88,7 @@ import { useSearch } from '../../stores/search.ts';
 import { ref, computed, onMounted, onUpdated, inject } from 'vue';
 import { getRecords } from '../../services/record/recordGET.ts';
 import { useUser } from '../../stores/user.ts'
+import { getItem } from '../services/items/itemsGET.ts';
 /*SETANDO STORES*/
 const userStore = useUser()
 const store = useStorageStore();
@@ -171,9 +181,9 @@ provide('setItemsFilter', (filter, inverted) => {
 });
 //Variáveis que o front vai pegar em si
 const recordIndex = ref(0);
-const currentItem = computed(() => store.records[recordIndex.value]);
-const currentRoute = useRoute().fullPath.split('/')[2];
-
+const currentItem = computed(() => store.records[recordIndex.value].item);
+const currentRoute = 'almoxarifado';
+const itemQtd = ref(0);
 
 const setpageTitle = inject('setpageTitle');
 const sendDataToParent = () => {
@@ -230,13 +240,16 @@ const backPage = (async () => {
   document.getElementById("fowardPageBtn").classList.remove("bg-dark-emphasis");
 });
 /*FUNÇÕES PARA OS BOTÕES DE DETALHE E HISTÓRICO*/
-const showDetails = (index) => {
+const showDetails = async (index, itemId) => {
+  const res = await getItem(userStore, itemId);
+  itemQtd.value = res.quantity
   recordIndex.value = index;
 }
 
 const showHistory = (index) => {
   recordIndex.value = index;
 }
+
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
   if(searchStore.itemSearch.searching){
@@ -354,6 +367,12 @@ p{
   border-bottom: 1px ridge #1F69B1;
   top: 70px;
 }
+.profile-btn{
+  border-radius: 4px;
+  top: 0px;
+  font-size: 12px;
+  padding: 4px 3px 4px 3px;
+}
 .search-glass{
   padding-left: 0px;
 }
@@ -368,7 +387,6 @@ p{
 }
 .end{
   text-align: end;
-  padding: 0;
 }
 .table-btn{
   z-index: 3000;
