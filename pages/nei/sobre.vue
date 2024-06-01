@@ -99,7 +99,7 @@
   <style scoped>
   
   .descricao {
-    margin: 15px;
+    margin: 15px 100px;
   }
   
   .card-hover-effect {

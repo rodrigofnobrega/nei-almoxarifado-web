@@ -96,7 +96,7 @@
 
     const itemCategories = ref(['Categoria 1', 'Categoria 2']);
 
-    // Funções para manipular dados
+    // Funções para manipulação de eventuais dados
     const addAlertEmail = () => {
     alertEmails.value.push('');
     };
@@ -114,7 +114,7 @@
     };
 
     const saveSettings = () => {
-    // Função para salvar configurações, integrar com a API aqui
+    // Função para salvar configurações, *integrar á API*
     console.log('Salvando configurações...', {
         stockItems: stockItems.value,
         alertEmails: alertEmails.value,
