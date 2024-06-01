@@ -34,10 +34,6 @@
               <strong>Email:</strong>
               <input v-model="editData.email" type="email">
             </label>
-            <label>
-              <strong>Cargo:</strong>
-              <input v-model="editData.role" type="text">
-            </label>
           </div>
         </div>
       </div>

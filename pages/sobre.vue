@@ -23,8 +23,8 @@
               <p class="card-text flex-grow-1">{{ card.description }}</p>
 
               <div class="mt-auto links">
-                <a :href="card.link" class="btn btn-primary">Dev Links</a>
-                <a :href="card.link" class="btn btn-primary">Dev Links</a>
+                <a :href="card.link1" class="btn btn-primary">GitHub</a>
+                <a :href="card.link2" class="btn btn-primary">LinkedIn</a>
               </div>
 
             </div>
@@ -52,40 +52,46 @@ sendDataToParent();
 // Lista de objetos com dados dos cards
 const cards = ref([
   {
-    image: 'https://via.placeholder.com/150',
-    title: 'Dev Name 1',
-    description: 'Dev Description 1',
-    link: '#'
+    image: 'nei-almoxarifado-web\assets\img\foto_andriel.jpg',
+    title: 'Andriel Vinícius',
+    description: 'Contribuição no Front-End. Desenvolvedor da API no Back-End.',
+    link1: 'http://github.com/leirdan',
+    link2: 'https://www.linkedin.com/in/andriel-vinicius-b6a734256'
   },
   {
-    image: 'https://via.placeholder.com/150',
-    title: 'Dev Name 2',
-    description: 'Dev Description 2',
-    link: '#'
+    image: 'nei-almoxarifado-web\assets\img\foto_caio.jpg',
+    title: 'Caio Daniel',
+    description: 'Desenvolvedor Front-End.',
+    link1: '#',
+    link2: '#'
   },
   {
-    image: 'https://via.placeholder.com/150',
-    title: 'Dev Name 3',
-    description: 'Dev Description 3',
-    link: '#'
+    image: 'nei-almoxarifado-web\assets\img\foto_murilo.jpg',
+    title: 'Murilo Costa',
+    description: 'Desenvolvedor Front-End.',
+    link1: 'https://github.com/Mulirous',
+    link2: '#'
   },
   {
     image: 'https://via.placeholder.com/150',
     title: 'Dev Name 4',
     description: 'Dev Description 4',
-    link: '#'
+    link1: '#',
+    link2: '#'
   },
   {
     image: 'https://via.placeholder.com/150',
     title: 'Dev Name 5',
     description: 'Dev Description 5',
-    link: '#'
+    link1: '#',
+    link2: '#'
   },
   {
     image: 'https://via.placeholder.com/150',
     title: 'Dev Name 6',
     description: 'Dev Description 6',
-    link: '#'
+    link1: '#',
+    link2: '#'
   }
 ]);
 </script>
