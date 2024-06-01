@@ -1,11 +1,15 @@
 <template>
   <div>
     <div class="descricao">
-      <h3>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officia, qui voluptate eligendi perspiciatis aut cum similique quas quibusdam delectus ea at expedita harum beatae dolor labore est tempore omnis doloremque.</h3>
+      <h1>Sistema de Gerenciamento de Almoxarifado NEI</h1>
 
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae voluptatum quidem quaerat maxime sequi pariatur quod ut enim veritatis, mollitia inventore ex voluptates asperiores atque beatae repudiandae laborum aspernatur veniam!</p>
       <br>
-      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex ut in, aut, aspernatur nesciunt quo alias nam pariatur aperiam fugit, incidunt atque? Possimus officia, provident illum sunt rem tempora corrupti.</p>
+
+      <h4>Sistema destinado a gerência e organização dos itens do almoxarifado da instituição Núcleo de Educação da Infânica - CAp/UFRN e controlar a entreda e saída dos itens.</h4>
+      <h5>Sistema feito por alunos da graduação do Bacharelado em Tecnologia da Informação da Universidade Federal do Rio Grande do Norte.</h5>
+
+      <br>
+
     </div>
 
     <div class="container">
@@ -23,8 +27,8 @@
               <p class="card-text flex-grow-1">{{ card.description }}</p>
 
               <div class="mt-auto links">
-                <a :href="card.link1" class="btn btn-primary">GitHub</a>
-                <a :href="card.link2" class="btn btn-primary">LinkedIn</a>
+                <a :href="card.link1" class="btn btn-primary" target="_blank">GitHub</a>
+                <a :href="card.link2" class="btn btn-primary" target="_blank">LinkedIn</a>
               </div>
 
             </div>
@@ -49,28 +53,28 @@ const sendDataToParent = () => {
 };
 sendDataToParent();
 
-// Lista de objetos com dados dos cards
-const cards = ref([
+  // Lista de objetos com dados dos cards
+  const cards = ref([
   {
-    image: 'nei-almoxarifado-web\assets\img\foto_andriel.jpg',
+    image: '/foto_andriel.jpg',
     title: 'Andriel Vinícius',
     description: 'Contribuição no Front-End. Desenvolvedor da API no Back-End.',
     link1: 'http://github.com/leirdan',
-    link2: 'https://www.linkedin.com/in/andriel-vinicius-b6a734256'
+    link2: 'https://www.linkedin.com/in/andriel-vinicius-b6a734256/'
   },
   {
-    image: 'nei-almoxarifado-web\assets\img\foto_caio.jpg',
+    image: '/foto_caio.jpg',
     title: 'Caio Daniel',
     description: 'Desenvolvedor Front-End.',
-    link1: '#',
-    link2: '#'
+    link1: 'https://github.com/Caio2a7',
+    link2: 'https://www.linkedin.com/in/caio-daniel-1b8951269/'
   },
   {
-    image: 'nei-almoxarifado-web\assets\img\foto_murilo.jpg',
+    image: '/foto_murilo.jpg',
     title: 'Murilo Costa',
     description: 'Desenvolvedor Front-End.',
     link1: 'https://github.com/Mulirous',
-    link2: '#'
+    link2: 'https://www.linkedin.com/in/murilo-antonio-lima-da-costa-687b51273/'
   },
   {
     image: 'https://via.placeholder.com/150',

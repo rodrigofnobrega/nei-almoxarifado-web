@@ -40,7 +40,7 @@
       </div>
   
     </div>
-  </template>
+</template>
   
 <script setup>
   import { inject, ref } from 'vue';
