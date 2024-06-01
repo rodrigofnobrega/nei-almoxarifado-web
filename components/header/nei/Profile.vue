@@ -15,10 +15,12 @@
               </button>
               <ul class="dropdown-menu">
                 <li class="dropdown-item info"> {{ user.name }} </li>
-                <li><a class="dropdown-item py-1 ps-2 d-flex align-items-center justify-content-between" href="/nei/perfil">
+                <li>
+                  <a class="dropdown-item py-1 ps-2 d-flex align-items-center justify-content-between" :href="`/nei/perfil?userId=${userStore.id}`">
                   Perfil
                   <IconsProfile />
-                </a></li>
+                  </a>
+                </li>
                 <li><a class="dropdown-item py-1 ps-2 d-flex align-items-center justify-content-between" href="/nei/configuracoes">
                   Configurações
                   <IconsSettings />

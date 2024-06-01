@@ -1,5 +1,42 @@
 <template>
 <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
+<ModalActionConfirm>
+	<template v-slot:title> Confirmar aceitação </template>
+	<template v-slot:text> 
+        <div class="d-block">
+            <div class="d-flex">
+                <div class="d-block mb-2 pe-2">
+                    <label for="item-name">Nome do Item</label>
+                    <input readonly class="form-control bg-light-emphasis" :value="loadItems[itemIndex].name">
+                </div>
+                <div class="d-block mb-2 ps-2">
+                    <label for="item-name">Quantidade Disponível</label>
+                    <input readonly class="form-control bg-light-emphasis" :value="loadItems[itemIndex].quantity">
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="d-block mb-2 pe-2">
+                    <label for="item-name">Tipo unitário</label>
+                    <input readonly class="form-control bg-light-emphasis" :value="loadItems[itemIndex].type">
+                </div>
+                <div class="d-block mb-2 ps-2">
+                    <label for="item-name">Situação</label>
+                    <input readonly class="form-control bg-light-emphasis" :value="loadItems[itemIndex].available === true ? 'disponível' : 'indisponível'">
+                </div>
+            </div>
+            <h6 class="text-dark"> Mensagem para a solicitação </h6>
+            <textarea v-model="description" class="form-control textarea"> </textarea>
+            <div class="d-block mt-2">
+                <label for="item-qtd">Quantidade a ser solicitada</label> 
+                <input class="form-control" style="width: 225px !important;" v-model="itemQtd" type="number" pattern="[0,9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+            </div>
+        </div>
+    </template>
+	<template v-slot:buttons> 
+		<button data-bs-dismiss="modal" class="btn btn-light-alert text-light mx-2"> Cancelar </button>
+		<button @click="sendRequest()" data-bs-dismiss="modal" class="btn btn-secondary mx-2"> Enviar </button>
+	</template>
+</ModalActionConfirm>
 <div class="table-container d-block mt-2">
     <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
     <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
@@ -52,6 +89,10 @@
                         <IconsSpreadSheet width="16px" height="16px"/>
                         detalhes
                     </button>
+                    <button class="details-btn position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 0px;" @click="showConfirm(item.index)" data-bs-toggle="modal" data-bs-target="#actionConfirm">
+                        <IconsSolicitation width="16px" height="16px"/>
+                        solicitar
+                    </button>
                  </div>
                </th>
             </tr>
@@ -88,13 +129,16 @@ import { useStorageStore } from '../../stores/storage.ts';
 import { useSearch } from '../../stores/search.ts';
 import { ref, computed, onMounted, onUpdated, inject } from 'vue';
 import { getItems } from '../../services/items/itemsGET.ts';
-import { useUser } from '../../stores/user.ts'
+import { useUser } from '../../stores/user.ts';
+import { usePopupStore } from '../../stores/popup.ts';
+import { postRequest } from '../../services/requests/requestsPOST.ts';
 definePageMeta({
     layout: 'client'
 })
 
 
-const userStore = useUser()
+const userStore = useUser();
+const popUpStore = usePopupStore();
 const store = useStorageStore();
 const searchStore = useSearch();
 /*VARIÁVEIS ÚTEIS PARA REQUISITAR OS ITENS E FILTRÁ-LOS*/ 
@@ -249,8 +293,18 @@ const showDetails = (index) => {
     itemIndex.value = index;
 }
 
-const showHistory = (index) => {
+const showConfirm = (index) => {
     itemIndex.value = index;
+}
+const itemQtd = ref(0)
+const description = ref('')
+const sendRequest = async () => {
+    try{
+        const res = await postRequest(userStore, itemIndex.value, itemQtd.value, description.value)
+    }catch(err){
+        return popUpStore.throwPopup('Erro: quantidade solicitada é maior que a disponível', '#B71C1C')
+    }
+    return popUpStore.throwPopup('Sucesso ao fazer a solicitação', '#0B3B69')
 }
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
@@ -356,6 +410,10 @@ th{
 p{
     padding: 0;
     margin: 0;
+}
+.textarea{
+    padding-bottom: 30px;
+    font-size: 14px;
 }
 .action-btn{
     margin-right: 10px;

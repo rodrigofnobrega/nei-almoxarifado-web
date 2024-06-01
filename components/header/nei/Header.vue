@@ -1,12 +1,15 @@
 <template>
     <div class="header container-fluid d-flex justify-content-between align-items-center bg-primary p-0">  
-      <div @mouseover="toolTip = true" @mouseout="toolTip = false" class="align-items-center" :class="{'d-none': responsive}">
+      <div @mouseover="toolTip = true" @mouseout="toolTip = false" class=" align-items-center" :class="{'d-none': responsive}">
         <Brand class="ms-3"/>
         <TooltipsRectangular class="ms-5 ps-5 pt-2" :toolTipState="toolTip" :toolTipText="'Página Inicial'"/>
       </div> 
-      <nav class="navbar navbar-expand-lg">
+      <nav class="navbar navbar-expand" style="width: 400px !important;">
           <div class="container-fluid">
             <ul class="navbar-nav d-flex">
+              <li class="nav-item">
+                    <a class="nav-link text-light" href="/nei/" type="button">Início</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link text-light" href="/nei/catalogo" type="button">Catálogo</a>
                 </li>
@@ -25,7 +28,7 @@
       <div class="d-flex justify-content-end align-items-center">
           <IconsSearchGlass :class="{'d-none': !responsive}" class="mobile-search text-light" type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal"/>
           <Profile />
-        </div>     
+      </div>     
       </div>
   </template>
   

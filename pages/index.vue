@@ -211,9 +211,11 @@ import { getRecords } from '../services/record/recordGET.ts';
 import { getRequestByStatus } from '../services/requests/requestsGET.ts';
 import { useUser } from '../stores/user';
 
+
 const isProfileBtnRecord = ref([])
 const isProfileBtn = ref([])
 const userStore = useUser();
+const route = useRouter();
 
 const users = await getUsers(userStore, 0)
 const records = await getRecords(userStore, 0, 'id,desc')
@@ -250,8 +252,6 @@ for(let i = 1; i < items.totalPages; i++){
 
 const setpageTitle = inject('setpageTitle');
 
-onMounted(() => {
-})
 
 const sendDataToParent = () => {
     const data = "Painel Geral";
