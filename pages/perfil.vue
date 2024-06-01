@@ -160,23 +160,73 @@ const changePassword = () => {
   }
   
   .profile-header {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 20px;
+}
+.profile-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+.profile-actions button:hover {
+  background-color: #0056b3;
+}
+.profile-history, .profile-posts {
+  width: 100%;
+  overflow-y: scroll;
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #0B3B69;
+}
+.profile-history{
+  height: 500px;
+}
+.profile-history h3, .profile-posts h3 {
+  margin-bottom: 10px;
+  color: #f9f9f9;
+}
+.profile-history ul, .profile-posts ul {
+  list-style-type: none;
+  padding: 0;
+}
+.profile-history li, .profile-posts li {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+}
   .profile-content {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
   
-  .profile-picture {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 20px;
-  }
-  
+.profile-picture {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+}
+.profile-picture button:hover {
+  background-color: #0056b3;
+}
+.profile-details label {
+  display: block;
+  margin-bottom: 10px;
+}
   .img-container {
     display: flex;
     justify-content: center;
