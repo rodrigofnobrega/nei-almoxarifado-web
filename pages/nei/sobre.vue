@@ -54,7 +54,7 @@
   {
     image: '/foto_andriel.jpg',
     title: 'Andriel Vinicius',
-    description: 'Contribuição no Front-End. Desenvolvedor da API no Back-End.',
+    description: 'Contribuição no Front-End. Desenvolvedor Back-End.',
     link1: 'http://github.com/leirdan',
     link2: 'https://www.linkedin.com/in/andriel-vinicius-b6a734256/'
   },
@@ -80,18 +80,11 @@
     link2: 'https://www.linkedin.com/in/rodrigo-ferreira-da-n%C3%B3brega-509116305/'
   },
   {
-    image: 'https://via.placeholder.com/150',
-    title: 'Dev Name 5',
-    description: 'Dev Description 5',
-    link1: '#',
-    link2: '#'
-  },
-  {
-    image: 'https://via.placeholder.com/150',
-    title: 'Dev Name 6',
-    description: 'Dev Description 6',
-    link1: '#',
-    link2: '#'
+    image: '/foto_clezio.jpg',
+    title: 'Clézio Rogério',
+    description: 'Team Maneger. Desenvolvedor Back-End.',
+    link1: 'https://github.com/cleziojr',
+    link2: 'http://www.linkedin.com/in/clézio-rogério-550b17288/'
   }
 ]);
   </script>
