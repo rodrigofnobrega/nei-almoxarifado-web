@@ -26,7 +26,8 @@ const popupBg = computed(() => {
 
 onMounted(() => {
   const itemModals = document.getElementsByClassName("modal-header");
-  for (let i = 0; i < itemModals.length; i++) {
+  for (let i = 1; i < itemModals.length; i++) {
+    itemModals[i].classList.add("justify-content-between");
     itemModals[i].classList.add("small");
   }
   checkIfMobile()

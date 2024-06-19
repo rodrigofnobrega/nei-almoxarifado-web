@@ -113,7 +113,7 @@
           </tr>
         </template>
         <template v-slot:content>
-          <tr v-for="record in records.content" :key="record.id" class="text-center" @mouseover="isProfileBtnRecord[record.id] = true" @mouseout="isProfileBtnRecord[record.id] = false"> 
+          <tr v-if="records.content.length > 0" v-for="record in records.content" :key="record.id" class="text-center" @mouseover="isProfileBtnRecord[record.id] = true" @mouseout="isProfileBtnRecord[record.id] = false"> 
               <th class="table-cell mov-cell" scope="row">
                 <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
                   <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
@@ -156,8 +156,11 @@
                 </div>
               </th>
             </tr>
-        </template>
-      </TablesTable>
+            </template>
+            </TablesTable>
+              <div v-if="records.content.length === 0" class="search-empty d-flex justify-content-center">
+                <p class="text-dark-emphasis fs-5 opacity-50">Nenhuma movimentação</p>
+              </div>
     </div>    
     <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
       <DashboardBarChartItems />
@@ -334,6 +337,10 @@ h5{
 .card-img-top{
   transition: opacity 0.5s ease-in-out;
   opacity: 85%;
+}
+.search-empty{
+  margin-top: 7% !important;
+  white-space: nowrap;
 }
 .align-cell{
   padding-top: 12px !important;

@@ -5,7 +5,7 @@ import { onBeforeMount } from "vue";
 export default defineNuxtRouteMiddleware((to, from) => {
     const userStore = useUser();
     if(userStore.token == ''){
-        if (to.path === '/login' || to.path === '/cadastro' || to.path === '/emailAuth') {
+        if (to.path === '/login' || to.path === '/cadastro' || to.path === '/emailAuth' || to.path === '/senhaAuth') {
             return;
         }
         return navigateTo('/login')

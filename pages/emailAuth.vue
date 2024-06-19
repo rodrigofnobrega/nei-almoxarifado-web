@@ -15,14 +15,14 @@
 
                 <div v-else-if="isEnviado" class="token">
                     <label for="token">Código de verificação:</label>
-                    <input type="text" id="token" placeholder="Seu código" v-model="newToken">
+                    <input type="text" id="token" placeholder="Seu código" v-model="token">
                 </div>
             
             </div>
             
-            <button v-if="!isEnviado" type="submit" @click="submitEmail">Enviar</button>
+            <button v-if="!isEnviado" type="submit" @click="forgetPassword">Enviar</button>
             
-            <button v-else-if="isEnviado" type="submit" @click="verificaToken">Ir</button>
+            <button v-else-if="isEnviado" type="submit" @click="validateToken">Ir</button>
 
         </form>
 	</div>
@@ -37,20 +37,44 @@
 		<button @click="resetSubmit">Ok</button>
 	</span>
 
-
 </template>
 
 <script setup lang="ts"> 
-definePageMeta({
-  layout: 'authentication'
-});
 
+definePageMeta({
+	layout: 'authentication'
+	});
+	
+import { forgotPasswordAUTH, recoveryTokenAUTH } from '../services/auth/authPOST';
+import { navigateTo } from 'nuxt/app';
+import { useStorageStore } from '../stores/storage';
+import { useUser } from '../stores/user';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { getUserByEmail } from '../services/users/userGET';
 
+const store = useStorageStore()
+const userStore = useUser()
+const forgetPassword = async () => {
+	console.log(email.value);
+	const res = await forgotPasswordAUTH(email.value);
+	//const res = await forgotPasswordPUT(1, recoveryToken.data, 121212, 121212)
+	console.log(res)
+	if (email.value != '') {
+		console.log(`O token foi enviado para ${email.value}.`);
+		isSubmitOn.value = true;
+		isEnviado.value = true;  
+	}
+}
+const validateToken = async () => {
+	const res = await recoveryTokenAUTH(token.value);
+	store.recoveryToken = token.value;
+	console.log(res.data);
+	navigateTo('/senhaAuth');
+}
 // Váriaveis responsivas que armazenam os valores dos campos acima (integrar à API)
 const email = ref('');
-const token = ref('AJA3'); // 
+const token = ref(''); // 
 const newToken = ref('');
 
 // Variáveis de verificação se foi mandado ou não o código e para verificar o código
@@ -65,14 +89,6 @@ const router = useRouter();
 
 // Métodos que vão fazer que a rotina aconteça
     // Envio do email
-const submitEmail = () => {
-    if (email.value != '') {
-        console.log(`O token foi enviado para ${email.value}.`);
-        isSubmitOn.value = true;
-        isEnviado.value = true;  
-    }
-    
-}
 
     // Tirar pop-up de envio
 const resetOn = () => {
@@ -80,33 +96,10 @@ const resetOn = () => {
     isSubmitOn.value = false;
 }
 
-
-    // Ir para a página de trocar senha
-const goToSenhaAuth = () => {
-    // Go to next page
-    router.push('/senhaAuth');
-}
-
-    // Reiniciar a rotina
 const resetSubmit = () => {
     newToken.value = '';
     tokenError.value = false;
 
-}
-
-    // Verifica Token
-const verificaToken = () => {
-    if (newToken.value === token.value) {
-        console.log("Você será direcionado para a próxima página");
-        goToSenhaAuth();
-        isEnviado.value = false;
-        email.value = '';
-        newToken.value = '';
-    }
-    else {
-        console.log("Você errou o token. Tente novamente.");
-        tokenError.value = true;
-    }
 }
 </script>
 

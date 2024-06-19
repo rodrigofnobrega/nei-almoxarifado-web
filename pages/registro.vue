@@ -30,7 +30,7 @@
               </tr>
           </template>
           <template v-slot:content>
-          <tr v-if="true" v-for="record in loadRecords" :key="record.index" :data-index="record.index">
+          <tr v-if="loadRecords[0] != null" v-for="record in loadRecords" :key="record.index" :data-index="record.index">
              <th class="border" scope="row">
                   <p>{{ record.user.name }}</p>
              </th>

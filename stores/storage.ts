@@ -16,6 +16,7 @@ export const useStorageStore = defineStore('storage', {
       isMobileMenu: false,
       isResponsive: false,
       tableSearch: " ",
+      recoveryToken: "",
     }),
     actions: {
       async sendItems(item) {

@@ -3,7 +3,7 @@
 <ModalActionConfirm>
 	<template v-slot:title> Confirmar aceitação </template>
 	<template v-slot:text> 
-        <div class="d-block">
+        <div v-if="loadItems[0] != null" class="d-block">
             <div class="d-flex">
                 <div class="d-block mb-2 pe-2">
                     <label for="item-name">Nome do Item</label>
@@ -68,7 +68,7 @@
                 </tr>
             </template>
             <template v-slot:content>
-            <tr v-if="true" v-for="item in loadItems" :key="item.index" :data-index="item.index">
+            <tr v-if="loadItems[0] != null" v-for="item in loadItems" :key="item.index" :data-index="item.index">
                <th class="border" scope="row">
                     <p>{{ item.name }}</p>
                </th>
@@ -96,7 +96,7 @@
                  </div>
                </th>
             </tr>
-            <div v-else class="warning-text d-flex aling-items-center justify-content-center">
+            <div v-else class="warning-text d-flex aling-items-center justify-content-end">
                 <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
             </div>
             <div v-if="loadItems.length == 0" class="search-empty position-absolute mt-5">

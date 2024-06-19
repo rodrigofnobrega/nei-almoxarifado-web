@@ -49,13 +49,19 @@
 </template>
 
 <script setup lang="ts"> 
+
 definePageMeta({
   layout: 'authentication'
 });
 
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStorageStore } from '../stores/storage';
+import { useUser } from '../stores/user';
+import { forgotPasswordPUT } from '../services/users/userPUT';
 
+const store = useStorageStore();
+const userStore = useUser()
 // Váriaveis responsivas que armazenam os valores dos campos acima (integrar à API)
 const newPassword = ref('');
 const newRePassword = ref(''); 
@@ -72,9 +78,10 @@ const router = useRouter();
 // Métodos para fazer a rotina funcionar
 
     // Verifica se as senhas estão iguais
-const verifyPassword = () => {
+const verifyPassword = async () => {
     if (newPassword.value === newRePassword.value) {
-        console.log("Você será direcionado para o login novamente.");
+		console.log(userStore.id)
+		const res = await forgotPasswordPUT(userStore.id, store.recoveryToken, newPassword.value, newRePassword.value)
         router.push('/login');
     }
     else {

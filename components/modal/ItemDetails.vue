@@ -47,7 +47,7 @@
 			</div>
         </template>
         <template v-slot:footer>
-            <div v-if="userStore.role === 'ADMIN'" class="container-fluid d-flex justify-content-end align-items-center">
+            <div v-if="userStore.role === 'ADMIN'" class="container-fluid d-flex justify-content-center align-items-center">
                 <button class="btn mode-btn inset-shadow btn-dark-alert mx-1" :class="{'d-none': editionActive, 'd-block': !editionActive}" @click="deleteItem" id="itemDelete" data-bs-dismiss="modal">Excluir</button>
                 <button type="button" class="btn inset-shadow btn-light-alert text-light mx-1" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="revertEdition" data-bs-dismiss="modal">Cancelar</button>
                 <button class="btn inset-shadow mode-btn btn-primary mx-1" @click="setEdition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>

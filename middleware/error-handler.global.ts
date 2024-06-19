@@ -8,7 +8,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     if(to.matched.length === 0){
         return navigateTo('/error/pagina-nao-encontrada')
     }
-    if(to.path === '/login' || to.path === '/error/pagina-nao-encontrada' || to.path === '/cadastro' || to.path === '/emailAuth'){
+    if(to.path === '/login' || to.path === '/error/pagina-nao-encontrada' || to.path === '/cadastro' || to.path === '/emailAuth' || to.path === '/senhaAuth'){
         return
     }
     const userStore = useUser();
@@ -30,7 +30,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         }
         switch(err.response.status){
             case 401:
-                return navigateTo('/error/401')
+                return navigateTo('/login')
             case 403:
                 return navigateTo('/login')
             case 404:
