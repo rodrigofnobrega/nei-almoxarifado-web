@@ -168,6 +168,7 @@
     <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
       <DashboardBarChartUtils />
     </div>
+    <!--
     <div class="dashboard-section bg-light mb-4 pb-3 pt-0 rounded-3">
       <div class="section-title pt-2 mb-3 bg-light-background-header">
           <h5 class="header ps-2">Catálogos</h5>
@@ -202,6 +203,7 @@
           </CardsImageCard>
         </div>
     </div>
+    -->
 </div>
 </template>
 

@@ -1,23 +1,24 @@
 <template>
-<ModalItemDetails v-if="recordsCache.length > 0" :item_index="recordIndex" :item_route="currentRoute" :item_details="currentItem" :item_qtd="itemQtd"/>
+<ModalItemDetails v-if="recordsCache.length > 0" :item_index="recordIndex" :item_route="currentRoute" :item_details="currentItem"/>
 <div class="table-container d-block mt-2">
   <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
   <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
       <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
           <IconsInformation class="me-2"/>
-          Descrição da página 
+          Descrição da página
       </h6>
-      <p class="sub-catalog-text opacity-75">Nesta página há todos os registros do sistema, sendo este de dois tipos de operações: CADASTRO e CONSUMO.</p>
+      <p class="sub-catalog-text opacity-75">Nesta página temos todos os registros das operações feitas no sistema, sendo estas operações de dois tipos: CADASTRO e CONSUMO. 
+        Registrando também o usuário e item da operação.</p>
   </div>   
   <div class="table-box bg-light row d-block">
       <div class="table-actions d-flex justify-content-between aling-items-center">
+        <div class="d-flex me-1">
+            <ButtonsFilter />
+        </div>
           <span class="d-flex ms-1 align-items-center table-searchbar">
-              <IconsSearchGlass class="search-glass"/>
-              <input v-model="searchInput" class="searchbar form-control bg-light" placeholder="Pesquisar"/>          
+            <input v-model="searchInput" class="searchbar form-control bg-light" placeholder="Pesquisar"/>          
+            <IconsSearchGlass class="search-glass"/>
           </span>
-          <div class="d-flex me-1">
-              <ButtonsFilter />
-          </div>
       </div>
       <TablesTable>
           <template v-slot:header>
@@ -66,20 +67,25 @@
       </template>
   </TablesTable>
   </div>
+  <div class="d-flex justify-content-end me-2 mt-2">
+        <nav v-if="recordsCache.length > 0" aria-label="Page navigation" class="pagination">
+            <ul class="pagination">
+                <li class="page-item">
+                    <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
+                </li>
+                <li class="page-item" v-for="i in totalPages >= 3 ? range(1+paginationRet, 3+paginationRet) : range(1,totalPages)" :key="i-1">
+                    <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
+                </li>
+                <li v-show="totalPages > 3 && paginationRet < totalPages-3" class="page-item">
+                    <button class="page-link bg-primary text-light">...</button>
+                </li>
+                <li class="page-item">
+                    <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1 || searchInput !== ''}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
-<nav v-if="recordsCache.length > 0" aria-label="Page navigation" class="pagination position-fixed">
-  <ul class="pagination">
-      <li class="page-item">
-          <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
-      </li>
-      <li class="page-item" v-for="i in searchInput === '' ? totalPages : 0" :key="i-1">
-          <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
-      </li>
-      <li class="page-item">
-          <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1 || searchInput !== ''}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
-      </li>
-  </ul>
-</nav>
 </template>
 
 <script setup>
@@ -89,11 +95,24 @@ import { ref, computed, onMounted, onUpdated, inject } from 'vue';
 import { getRecords } from '../../services/record/recordGET.ts';
 import { useUser } from '../../stores/user.ts'
 import { getItem } from '../services/items/itemsGET.ts';
+import { useRoute } from 'vue-router';
 /*SETANDO STORES*/
 const userStore = useUser()
 const store = useStorageStore();
 const searchStore = useSearch();
-/*VARIÁVEIS ÚTEIS PARA REQUISITAR OS ITENS E FILTRÁ-LOS*/ 
+const setpageTitle = inject('setpageTitle');
+const sendDataToParent = () => {
+    const title = "Registro";
+    const route = `${useRoute().fullPath}`
+    setpageTitle(title, route, 'directory');
+};
+sendDataToParent();
+/*VARIÁVEIS ÚTEIS PARA REQUISITAR OS ITENS E FILTRÁ-LOS*/
+const paginationRet = ref(0)
+function range(start, end) {
+  return Array.from({ length: end - start + 1 }, (_, index) => start + index);
+}
+
 let pagination = ref(0); //paginação padrão
 let invertedPagination = ref(0); //paginação invertida para filtro
 let queryParams = ref({ 
@@ -181,16 +200,42 @@ provide('setItemsFilter', (filter, inverted) => {
 });
 //Variáveis que o front vai pegar em si
 const recordIndex = ref(0);
-const currentItem = computed(() => store.records[recordIndex.value].item);
+const currentItem = ref({
+	"id": 0,
+	"name": "",
+	"sipacCode": 0,
+	"quantity": 0,
+	"type": "",
+	"available": false,
+	"createdAt": "",
+	"createdBy": {
+		"id": 0,
+		"name": "",
+		"email": "",
+		"role": "",
+		"existRecord": false,
+		"active": false
+	},
+	"lastRecord": {
+		"id": 0,
+		"user": {
+			"id": 0,
+			"name": "",
+			"email": "",
+			"role": ""
+		},
+		"item": {
+			"id": 0,
+			"name": "",
+			"sipacCode": 0
+		},
+		"quantity": 0,
+		"operation": "",
+		"data": ""
+	}
+});
 const currentRoute = 'almoxarifado';
 const itemQtd = ref(0);
-
-const setpageTitle = inject('setpageTitle');
-const sendDataToParent = () => {
-  const data = "Registro";
-  setpageTitle(data);
-};
-sendDataToParent();
 
 const toolTip = ref([false, false, false, false])
 
@@ -202,52 +247,56 @@ for(let i = 0; i < totalPages; i++){
 let count = 0;
 
 const page = (async (index) => {
-  pagination.value = index;
-  if(queryParams.value.isInverted){
-      if(index < invertedPagination.value){
-          invertedPagination.value = (totalPages-1)-index;
-      }
-      else if(index > invertedPagination.value){
-          invertedPagination.value = (totalPages-1)-index;
-      }
-  }
-  pagesFocus.value[count] = false;
-  count = index;  
-  pagesFocus.value[count] = true;
+    pagination.value = index;
+    if(queryParams.value.isInverted){
+        if(index < invertedPagination.value){
+            invertedPagination.value = (totalPages-1)-index;
+        }
+        else if(index > invertedPagination.value){
+            invertedPagination.value = (totalPages-1)-index;
+        }
+    }
+    pagesFocus.value[count] = false;
+    count = index;  
+    pagesFocus.value[count] = true;
 });
 const fowardPage = (async () => {
-  pagination.value++;
-  if(queryParams.value.isInverted){
-      invertedPagination.value--;
-  }
-  pagesFocus.value[count] = false;
-  count++;
-  pagesFocus.value[count] = true;
-  const fowardBtn = document.getElementById("fowardPageBtn");
-  document.getElementById("backPageBtn").classList.remove("disabled");
-  document.getElementById("backPageBtn").classList.remove("bg-dark-emphasis");
+    paginationRet.value = paginationRet.value < totalPages-3 ? paginationRet.value+1 : paginationRet.value  
+    pagination.value++;
+    if(queryParams.value.isInverted){
+        invertedPagination.value--;
+    }
+    pagesFocus.value[count] = false;
+    count++;
+    pagesFocus.value[count] = true;
+    const fowardBtn = document.getElementById("fowardPageBtn");
+    document.getElementById("backPageBtn").classList.remove("disabled");
+    document.getElementById("backPageBtn").classList.remove("bg-dark-emphasis");
 });
 const backPage = (async () => {
-  pagination.value--;
-  if(queryParams.value.isInverted){
-      invertedPagination.value++;
-  }
-  pagesFocus.value[count] = false;
-  count--;
-  pagesFocus.value[count] = true; 
-  const backBtn = document.getElementById("backPageBtn");
-  document.getElementById("fowardPageBtn").classList.remove("disabled");
-  document.getElementById("fowardPageBtn").classList.remove("bg-dark-emphasis");
+    paginationRet.value = paginationRet.value < 3 ? paginationRet.value : paginationRet.value-1
+    pagination.value--;
+    if(queryParams.value.isInverted){
+        invertedPagination.value++;
+    }
+    pagesFocus.value[count] = false;
+    count--;
+    pagesFocus.value[count] = true; 
+    const backBtn = document.getElementById("backPageBtn");
+    document.getElementById("fowardPageBtn").classList.remove("disabled");
+    document.getElementById("fowardPageBtn").classList.remove("bg-dark-emphasis");
 });
 /*FUNÇÕES PARA OS BOTÕES DE DETALHE E HISTÓRICO*/
-const showDetails = async (index, itemId) => {
-  const res = await getItem(userStore, itemId);
-  itemQtd.value = res.quantity
-  recordIndex.value = index;
-}
 
-const showHistory = (index) => {
+const showDetails = async (index, itemId) => {
   recordIndex.value = index;
+  const res = await getItem(userStore, itemId);
+  currentItem.value = res;
+}
+const showHistory = async (index) => {
+    itemIndex.value = index;
+    const res = await getRecordByItemId(userStore, index)
+    store.itemRecord = res.content
 }
 
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/

@@ -1,90 +1,14 @@
 <template>
     <TooltipsRectangular class="d-flex justify-content-start align-items-end ms-4 mt-2" :toolTipState="toolTip" :toolTipText="'Configurações de Página'"/>
     <div class="dropdown">
-        <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-ligth text-dark-emphasis mx-1 px-2" data-bs-toggle="dropdown" data-bs-offset="0,2" data-bs-auto-close="inside" aria-expanded="false">
-            Configurações
-            <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
+        <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-ligth text-dark-emphasis mx-1 px-2" data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
+            Mais ações
+            <IconsSettings class="mx-1" width="1.5em" height="1.5em"/>
         </button>
-        <ul class="dropdown-menu large-menu">
-            <li>
-                <div class="vue-dropdown" @click="toggleDropdown(0)" @mouseover="toggleDropdown(0)" @mouseout="toggleDropdown(0)">
-                    <div class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
-                        Atualização
-                        <IconsSort class="action-icon"/>    
-                    </div>
-                    <ul class="vue-dropdown-menu" v-show="dropdownStates[0]">
-                        <li class="small-menu">
-                            <div @click="sendDataToParent('', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
-                                asc 
-                                <IconsUpArrow class="action-icon"/>
-                            </div>
-                            <div @click="sendDataToParent('', true)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
-                                dec
-                                <IconsBottomArrow class="action-icon"/>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li>
-                <div class="vue-dropdown" @click="toggleDropdown(1)"  @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
-                    <div  class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
-                        Criação
-                        <IconsClock class="action-icon"/>
-                    </div>
-                    <ul class="vue-dropdown-menu" v-show="dropdownStates[1]">
-                        <li class="small-menu">
-                            <div @click="sendDataToParent('id,asc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
-                                asc
-                                <IconsUpArrow class="action-icon"/>
-                            </div>
-                            <div @click="sendDataToParent('id,desc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
-                                dec
-                                <IconsBottomArrow class="action-icon"/>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li>
-                <div class="vue-dropdown"  @click="toggleDropdown(2)"  @mouseover="toggleDropdown(2)" @mouseout="toggleDropdown(2)">
-                    <div class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
-                        Nome
-                        <IconsNameSort class="action-icon"/>
-                    </div>
-                    <ul class="vue-dropdown-menu" v-show="dropdownStates[2]">
-                        <li class="small-menu">
-                            <div @click="sendDataToParent('name,asc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
-                                asc
-                                <IconsUpArrow class="action-icon"/>
-                            </div>
-                            <div @click="sendDataToParent('name,desc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
-                                dec
-                                <IconsBottomArrow class="action-icon"/>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li>
-                <div class="vue-dropdown" @click="toggleDropdown(3)"  @mouseover="toggleDropdown(3)" @mouseout="toggleDropdown(3)">
-                    <div class="filter-btn large-menu-btn d-flex justify-content-between btn d-flex align-items-center border-0" type="button">
-                        Quantidade
-                        <IconsQuantitySort class="action-icon"/>
-                    </div>
-                    <ul class="vue-dropdown-menu" v-show="dropdownStates[3]">
-                        <li class="small-menu">
-                            <div @click="sendDataToParent('quantity,asc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
-                                asc
-                                <IconsUpArrow class="action-icon"/>
-                            </div>
-                            <div @click="sendDataToParent('quantity,desc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
-                                dec
-                                <IconsBottomArrow class="action-icon"/>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+        <ul class="dropdown-menu large-menu py-0">
+            <li class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2 pe-0">
+                <label class="form-check-label" for="editCheck">habilitar edição</label>
+                <input v-model="store.isEditionMode" @click="store.isEditionMode = !store.isEditionMode" class="form-check-input me-2" value="" id="editCheck" type="checkbox">
             </li>
         </ul>   
     </div>  
@@ -123,47 +47,47 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.large-menu{
+    height: 40px;
+    width: 140px;
+    min-width: 110px;
+}
 li{
     list-style-type: none;
 }
-.large-menu{
-    width: 136px !important;
-    min-width: 40px;
-}
-.small-menu{
-    background-color: white;
-    border-radius: 12px;
-    border: 1px #D9D9D9 solid;
-    position: absolute;
-    margin-top: -55px;
-    left: 127px;
-    width: 65px;
-    height: 65px;
-    min-width: 40px;
-}
-
 .dropdown-item{
-    width: 130px;
-    padding: 0px;
-}
-.large-menu-btn{
     font-size: 14px;
+}
+.form-check-input{
+    border: 1px solid rgb(0, 0, 0, 0.3);
+}
+.dropdown-menu{
+    border: 1px solid rgb(0, 0, 0, 0.3)
 }
 .btn-transparent{
     font-size: 14px;
 }
 .action-btn{
+    font-weight: 500;
+    font-size: 15px;
     border: none;
     border-radius: 10px 10px 0px 0px;
     border-bottom: 1px ridge #1F69B1;
 }
+
+.btn-outline-ligth{
+    color: white !important; 
+    background-color: #0B3B69 !important; 
+}
+.form-check-input:active{
+    background-color: #1F69B1 !important;
+}
+.form-check-input:checked{
+    background-color: #1F69B1 !important;
+}
 .btn-transparent:hover{
     color: white;
     background-color: #FED51E;
-}
-.btn-outline-ligth:hover{
-    color: white !important; 
-    background-color: #0B3B69 !important; 
 }
 @media screen and (max-width: 820px){
     .action-btn{
@@ -172,19 +96,12 @@ li{
     .filter-btn{
         font-size: 12px;
     }
-    .large-menu{
-        padding: 0;
-        width: 120px !important;
-    }
-    .small-menu{
-        padding: 0;
-        margin-top: -40px;
-        height: 60px;
-        left: 115px;
-    }
     .action-icon{
         width: 15px;
         height: 15px;
+    }
+    .dropdown-item{
+        font-size: 11px;
     }
 }
 </style>

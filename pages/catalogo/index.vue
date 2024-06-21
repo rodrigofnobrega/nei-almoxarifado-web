@@ -1,36 +1,36 @@
 <template>
     <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
-    <ModalItemHistory v-if="itemsCache.length > 0" :item_history="currentItem"/>
+    <ModalItemHistory v-if="itemsCache.length > 0"/>
 <div class="table-container d-block mt-2">
-    <!--
     <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
         <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
-            Descrição do Almoxarifado 
+            Descrição da página
         </h6>
-        <p class="sub-catalog-text opacity-75">Esta organização de almoxarifado é destinada aos itens relacionados as atividades escolares do NEI, como giz de ceira, lápis e quaisquer material que possua uso no dia a dia dos alunos e professores.</p>
+        <p class="sub-catalog-text opacity-75">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
+            Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
+            <span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 1px;"  width="18px" height="18px"/></span></p>
     </div>
-    -->   
-    <div class="table-box bg-light row d-block">
+    <div class="table-box row d-block">
         <div class="table-actions d-flex justify-content-between aling-items-center">
-            <span class="d-flex align-items-center table-searchbar">
-                <IconsSearchGlass class="search-glass"/>
-                <input v-model="searchInput" class="searchbar form-control bg-light" placeholder="Pesquisar"/>          
-            </span>
             <div class="d-flex">
                 <ButtonsNewItem />
                 <ButtonsFilter />
                 <ButtonsConfigure />
             </div>
+            <span class="d-flex align-items-center table-searchbar">
+                <input v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
+                <IconsSearchGlass class="search-glass"/>
+            </span>
         </div>
-        <TablesTable >
+        <TablesTable class="bg-light">
             <template v-slot:header>
                 <tr>
                     <th class="col-title py-2 border" scope="col">Nome</th>
                     <th class="col-title py-2 border" scope="col">Código Sipac</th>
                     <th class="col-title py-2 border" scope="col">Tipo Unitário</th>
                     <th class="col-title py-2 border" scope="col">Quantidade</th>
-                    <th class="col-title py-2" scope="col">Últimas atualizações</th>
+                    <th class="col-title py-2" scope="col">Última atualização</th>
                 </tr>
             </template>
             <template v-slot:content>
@@ -49,7 +49,7 @@
                    <p>{{ item.quantity }}</p>
                 </th>
                <th class="">
-                   <p>CADASTRO 2024-05-11 09:20:02 Luís Freitas</p>
+                   <p>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</p>
                 <div class="end position-sticky">
                     <button class="details-btn position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 89px;" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         <IconsSpreadSheet width="16px" height="16px"/>
@@ -62,11 +62,11 @@
                  </div>
                </th>
             </tr>
-            <div v-else class="warning-text d-flex aling-items-center justify-content-center">
-                <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
-            </div>
             <div v-if="loadItems.length == 0" class="search-empty position-absolute mt-5">
                 <p class="text-dark-emphasis fs-5 opacity-50">Nenhum Resultado Encontrado.</p>
+            </div>
+            <div v-else class="warning-text d-flex aling-items-center justify-content-center">
+                <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
             </div>
         </template>
         </TablesTable>
@@ -98,6 +98,8 @@ import { useSearch } from '../../stores/search.ts';
 import { ref, computed, onMounted, onUpdated, inject } from 'vue';
 import { getItems } from '../../services/items/itemsGET.ts';
 import { useUser } from '../../stores/user.ts'
+import { getRecordByItemId } from '../../services/record/recordGET.ts';
+import { useRoute, useRouter } from 'vue-router';
 /*SETANDO STORES*/
 const userStore = useUser()
 const store = useStorageStore();
@@ -197,13 +199,15 @@ provide('setItemsFilter', (filter, inverted) => {
 //Variáveis que o front vai pegar em si
 const itemIndex = ref(0);
 const currentItem = computed(() => store.items[itemIndex.value]);
+
 const currentRoute = useRoute().fullPath.split('/')[2];
 
 
 const setpageTitle = inject('setpageTitle');
 const sendDataToParent = () => {
-    const data = "Almoxarifado Escolar";
-    setpageTitle(data);
+    const title = "Catálogo";
+    const route = `${useRoute().fullPath}`
+    setpageTitle(title, route, 'spreadsheet');
 };
 sendDataToParent();
 
@@ -261,8 +265,10 @@ const showDetails = (index) => {
     itemIndex.value = index;
 }
 
-const showHistory = (index) => {
+const showHistory = async (index) => {
     itemIndex.value = index;
+    const res = await getRecordByItemId(userStore, index)
+    store.itemRecord = res.content
 }
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
@@ -323,7 +329,6 @@ onUpdated(async () => {
     display: block !important;
 }
 .table-box{
-    border-top: 1px solid #D9D9D9;
     margin: 0;
     overflow-x: scroll;
 }
@@ -357,10 +362,13 @@ th{
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+th p{
+    font-size: 12px;
+}
 .col-title{
-    font-size: 18px;
+    font-size: 13px;
     opacity: 80%;
-    font-weight: 400;
+    font-weight: 600;
     margin-top: 0;
 }
 p{
@@ -383,6 +391,7 @@ p{
     padding-left: 0px;
 }
 .searchbar{
+    font-weight: 500;
     border: none;
 }
 .btn-outline-primary{

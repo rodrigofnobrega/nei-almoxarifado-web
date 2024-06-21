@@ -1,6 +1,6 @@
 <template>
     <div class="position-fixed toolTip d-flex justify-content-start">
-        <p :class="{'tooltipText': true, 'show': toolTipState}" class="tooltipText position-fixed bg-dark-emphasis text-light rounded-1 p-2">{{ toolTipText }}</p>
+        <p :class="{'tooltipText': true, 'show': toolTipState}" class="d-none tooltipText position-fixed bg-dark-emphasis text-light rounded-1 p-2">{{ toolTipText }}</p>
     </div>
 </template>
 
@@ -36,6 +36,7 @@ export default{
 }
 
 .tooltipText.show {
+    display: block !important;
     opacity: 0.85;
     transition: opacity 0.2s ease-in;
     transition-delay: 1.2s;

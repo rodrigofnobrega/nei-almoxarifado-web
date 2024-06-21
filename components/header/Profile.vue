@@ -3,8 +3,8 @@
           <div @mouseover="toolTip = true" @mouseout="toolTip = false" class="me-2 nav-item dropdown">
             <button class="svg-button bg-primary px-0" data-bs-toggle="dropdown" data-bs-offset="20,15" aria-expanded="false">
               <IconsBell with="16px" height="16px"/>
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{requests.content.length}}+
+              <span v-if="requests.content.length > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{requests.content.length}}
                 <span class="visually-hidden">unread messages</span>
               </span>
             </button>

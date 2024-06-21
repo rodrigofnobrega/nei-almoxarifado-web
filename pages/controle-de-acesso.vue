@@ -28,14 +28,16 @@ import { inject } from 'vue';
 import { getRequestByStatus } from '../services/requests/requestsGET';
 import { useUser } from '../stores/user';
 import { provide, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 const setpageTitle = inject('setpageTitle');
-
 const sendDataToParent = () => {
-    const data = "Controle de Acesso";
-    setpageTitle(data);
+    const title = "Controle de Acesso";
+    const route = `${useRoute().fullPath}`
+    setpageTitle(title, route, 'control');
 };
 sendDataToParent();
+
 const userStore = useUser()
 const res = await getRequestByStatus(userStore, 'pendente');
 const solicitations = ref(res.content)

@@ -9,9 +9,11 @@ export const useStorageStore = defineStore('storage', {
     state: () => ({
       items: [],
       records: [],
+      itemRecord: [],
       requests: [],
       sidebarSublinks: [],
       isRotated: false,
+      isEditionMode: false,
       isMobile: false,
       isMobileMenu: false,
       isResponsive: false,
