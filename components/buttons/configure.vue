@@ -1,5 +1,4 @@
 <template>
-    <TooltipsRectangular class="d-flex justify-content-start align-items-end ms-4 mt-2" :toolTipState="toolTip" :toolTipText="'Configurações de Página'"/>
     <div class="dropdown">
         <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-ligth text-dark-emphasis mx-1 px-2" data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
             Mais ações
@@ -67,7 +66,8 @@ li{
 .btn-transparent{
     font-size: 14px;
 }
-.action-btn{
+.action-btn{   
+    height: 38px; 
     font-weight: 500;
     font-size: 15px;
     border: none;
@@ -88,6 +88,9 @@ li{
 .btn-transparent:hover{
     color: white;
     background-color: #FED51E;
+}
+.action-btn:hover{
+    opacity: 90%;
 }
 @media screen and (max-width: 820px){
     .action-btn{

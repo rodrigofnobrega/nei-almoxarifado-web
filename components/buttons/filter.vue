@@ -1,5 +1,4 @@
 <template>
-    <TooltipsRectangular class="d-flex justify-content-start align-items-end ms-4 mt-2" :toolTipState="toolTip" :toolTipText="'Filtros para Organização dos Itens'"/>
     <div class="dropdown">
         <button @click.stop @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="dropdown-principal filter-btn action-btn d-flex btn btn-outline-ligth text-dark-emphasis mx-1 px-2" data-bs-toggle="dropdown" data-bs-close="inside" data-bs-offset="0,2" aria-expanded="false">
             Filtro
@@ -145,7 +144,7 @@ li{
     border: 1px #D9D9D9 solid;
     position: absolute;
     margin-top: -55px;
-    left: -58px;
+    left: 128px;
     width: 65px;
     height: 65px;
     min-width: 40px;
@@ -163,6 +162,7 @@ li{
     font-size: 14px;
 }
 .action-btn{
+    height: 38px;   
     font-weight: 500;
     font-size: 15px;
     border: none;
@@ -177,7 +177,9 @@ li{
     color: white;
     background-color: #FED51E;
 }
-
+.action-btn:hover{
+    opacity: 90%;
+}
 @media screen and (max-width: 820px){
     .action-btn{
         font-size: 12px;
@@ -194,7 +196,7 @@ li{
         margin-top: -40px;
         height: 50px;
         padding: 0;
-        left: -58px;
+        left: 128px;
     }
     .small-menu .filter-btn{
         margin-top: 0px;

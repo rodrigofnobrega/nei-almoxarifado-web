@@ -9,60 +9,61 @@
         </h6>
         <p class="sub-catalog-text opacity-75">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
             Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
-            <span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 1px;"  width="18px" height="18px"/></span></p>
+        <span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
     </div>
     <div class="table-box row d-block">
-        <div class="table-actions d-flex justify-content-between aling-items-center">
+        <div class="table-actions d-flex justify-content-between aling-items-center" style="margin-bottom: -1px !important;">
             <div class="d-flex">
-                <ButtonsNewItem />
+                <ButtonsNewItem/>
                 <ButtonsFilter />
                 <ButtonsConfigure />
             </div>
-            <span class="d-flex align-items-center table-searchbar">
-                <input v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
-                <IconsSearchGlass class="search-glass"/>
+            <span class="d-flex align-items-center bg-primary table-searchbar">
+                <input v-model="searchInput" class="searchbar bg-light form-control" placeholder="Pesquisar"/>          
+                <IconsSearchGlass class="bg-primary text-light search-glass"/>
             </span>
         </div>
-        <TablesTable class="bg-light">
+        <TablesTable>
             <template v-slot:header>
-                <tr>
+                <tr style="border: 1px #D9D9D9 solid;">
                     <th class="col-title py-2 border" scope="col">Nome</th>
                     <th class="col-title py-2 border" scope="col">Código Sipac</th>
                     <th class="col-title py-2 border" scope="col">Tipo Unitário</th>
                     <th class="col-title py-2 border" scope="col">Quantidade</th>
                     <th class="col-title py-2" scope="col">Última atualização</th>
+                    <th class="col-title py-2" scope="col">Ações</th>
                 </tr>
             </template>
             <template v-slot:content>
             <tr v-if="loadItems[0] != null" v-for="item in loadItems" :key="item.index" :data-index="item.index">
                <th class="border" scope="row">
-                    <p>{{ item.name }}</p>
+                    <span>{{ item.name }}</span>
                </th>
                <th class="border">
-                   <p v-if="item.sipacCode">{{ item.sipacCode }}</p>
-                   <p v-else>nenhum</p>
+                   <span v-if="item.sipacCode">{{ item.sipacCode }}</span>
+                   <span v-else>nenhum</span>
                 </th>
                 <th class="border">
-                    <p>{{ item.type }}</p>
+                    <span>{{ item.type }}</span>
                 </th>
                <th class="border">
-                   <p>{{ item.quantity }}</p>
+                   <span>{{ item.quantity }}</span>
                 </th>
-               <th class="">
-                   <p>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</p>
-                <div class="end position-sticky">
-                    <button class="details-btn position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 89px;" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
-                        <IconsSpreadSheet width="16px" height="16px"/>
-                        detalhes
+               <th class="border">
+                   <span>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</span>
+               </th>
+               <th class="border" width="5%">
+                   <TooltipsRectangular class="toolTip" style=" right: 7.4%; margin-top: -50px;" :toolTipState="toolTipState[0][item.index] ? toolTipState[0][item.index] : false" :toolTipText="'Detalhes'"/>
+                   <TooltipsRectangular class="toolTip" style=" right: 6%; margin-top: -50px;" :toolTipState="toolTipState[1][item.index] ? toolTipState[1][item.index] : false" :toolTipText="'Histórico'"/>
+                    <button @mouseover="toolTipState[0][item.index] = true" @mouseout="toolTipState[0][item.index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                        <IconsSearchGlass width="18px" height="19px"/>
                     </button>
-                    <button class="position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 0px;" @click="showHistory(item.index)" data-bs-toggle="modal" data-bs-target="#itemHistory">
-                        <IconsRequest width="16px" height="16px"/>
-                        histórico
+                    <button @mouseover="toolTipState[1][item.index] = true" @mouseout="toolTipState[1][item.index] = false" class="my-0 position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}"  @click="showHistory(item.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                        <IconsRequest width="18px" height="19px"/>
                     </button>
-                 </div>
                </th>
             </tr>
-            <div v-if="loadItems.length == 0" class="search-empty position-absolute mt-5">
+            <div v-else-if="loadItems.length == 0" class="search-empty position-absolute mt-5">
                 <p class="text-dark-emphasis fs-5 opacity-50">Nenhum Resultado Encontrado.</p>
             </div>
             <div v-else class="warning-text d-flex aling-items-center justify-content-center">
@@ -128,7 +129,6 @@ const sortedResponse = async (sort, isInverted, pagination, paginationInverted) 
 let response = await sortedResponse('', false, pagination.value, 0);
 let totalPages = response.totalPages
 invertedPagination.value = totalPages-1;
-
 
 let itemsCache = ref([])
 let indexCount = 0;
@@ -211,8 +211,6 @@ const sendDataToParent = () => {
 };
 sendDataToParent();
 
-const toolTip = ref([false, false, false, false])
-
 /*CÓDIGO PARA PAGINAÇÃO EM SI E RENDERIZAÇÃO DOS ITENS*/
 let pagesFocus = ref([true]);
 for(let i = 0; i < totalPages; i++){
@@ -265,11 +263,11 @@ const showDetails = (index) => {
     itemIndex.value = index;
 }
 
-const showHistory = async (index) => {
-    itemIndex.value = index;
-    const res = await getRecordByItemId(userStore, index)
+const showHistory = async (itemId) => {
+    const res = await getRecordByItemId(userStore, itemId)
     store.itemRecord = res.content
 }
+const toolTipState = ref([[], []]);
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     if(searchStore.itemSearch.searching){
@@ -340,8 +338,8 @@ onUpdated(async () => {
     margin-top: -14px;
     padding-top: 10px;
     padding-bottom: 20px;
-    margin-right: 20%;
-    margin-left: 20%;
+    margin-right: 10%;
+    margin-left: 10%;
     border: 1px #D9D9D9 solid;
     box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);
 }
@@ -354,7 +352,7 @@ h6{
     color: rgb(51,51,51, 0.8);
 }
 th{
-    background-color: white !important;
+    background-color: white;
     padding: 16px 0 16px 0;
     text-decoration: none;
     text-align: center;
@@ -362,7 +360,9 @@ th{
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-th p{
+th span{
+    color: rgb(51, 51, 51, 1);
+    font-weight: lighter;
     font-size: 12px;
 }
 .col-title{
@@ -383,16 +383,15 @@ p{
 }
 .table-searchbar{
     border: none;
-    border-radius: 0px;
-    border-bottom: 1px ridge #1F69B1;
+    border-radius: 10px 10px 0px 0px;
     top: 70px;
+}
+.searchbar{
+    border-radius: 8px 0px 0px 0px;
+    font-weight: 500;
 }
 .search-glass{
     padding-left: 0px;
-}
-.searchbar{
-    font-weight: 500;
-    border: none;
 }
 .btn-outline-primary{
     color: rgb(51,51,51, 0.7);
@@ -409,9 +408,8 @@ p{
     top: 0px;
     font-size: 12px;
     padding: 4px 3px 4px 3px;
-    z-index: 3000;
+    z-index: 00;
     font-size: 13px;
-    opacity: 0%;
     margin-top: 8px;
     margin-right: 10px;
 }

@@ -15,13 +15,16 @@
                   <IconsDirectory v-if="pageIcon === 'directory'" width="30px" height="30px"/>
                   <IconsSettings v-if="pageIcon === 'settings'" width="30px" height="30px"/>
                   <IconsInformation v-if="pageIcon === 'information'" width="30px" height="30px"/>
+                  <IconsHome v-if="pageIcon === 'home'" width="30px" height="30px"/>
                   <span class="ms-2">
                     {{ pageTitle }}
                   </span>
                 </div>
 		        </template>
             <template v-slot:rota>
-              <a class="route-link text-decoration-none" type="button" :href="pageRoute">{{ pageRoute }}</a>
+              <li class="breadcrumb-item active" aria-current="page">
+                <a class="route-link text-decoration-none" type="button" :href="pageRoute">{{ pageRoute.replace('/', '') }}</a>
+              </li>
             </template>
           </TitlesTitle>
         </div>

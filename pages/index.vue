@@ -256,11 +256,10 @@ for(let i = 1; i < items.totalPages; i++){
 
 
 const setpageTitle = inject('setpageTitle');
-
-
 const sendDataToParent = () => {
-    const data = "Painel Geral";
-    setpageTitle(data);
+    const title = "Painel Geral";
+    const route = `${useRoute().fullPath}`
+    setpageTitle(title, route, 'home');
 };
 sendDataToParent();
 </script>

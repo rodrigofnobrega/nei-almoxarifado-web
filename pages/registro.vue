@@ -9,15 +9,15 @@
       </h6>
       <p class="sub-catalog-text opacity-75">Nesta página temos todos os registros das operações feitas no sistema, sendo estas operações de dois tipos: CADASTRO e CONSUMO. 
         Registrando também o usuário e item da operação.</p>
-  </div>   
-  <div class="table-box bg-light row d-block">
-      <div class="table-actions d-flex justify-content-between aling-items-center">
+  </div>
+  <div class="table-box row d-block">
+      <div class="table-actions d-flex justify-content-between aling-items-center" style="margin-bottom: -1px !important;">
         <div class="d-flex me-1">
             <ButtonsFilter />
         </div>
-          <span class="d-flex ms-1 align-items-center table-searchbar">
-            <input v-model="searchInput" class="searchbar form-control bg-light" placeholder="Pesquisar"/>          
-            <IconsSearchGlass class="search-glass"/>
+          <span class="d-flex align-items-center bg-primary table-searchbar">
+                <input v-model="searchInput" class="searchbar bg-light form-control" placeholder="Pesquisar"/>          
+                <IconsSearchGlass class="bg-primary text-light search-glass"/>
           </span>
       </div>
       <TablesTable>
@@ -28,34 +28,35 @@
                   <th class="col-title py-2 border" scope="col">Item</th>
                   <th class="col-title py-2 border" scope="col">Quantidade</th>
                   <th class="col-title py-2" scope="col">Data e horário </th>
+                  <th class="col-title py-2" scope="col">Ações</th>
               </tr>
           </template>
           <template v-slot:content>
           <tr v-if="loadRecords[0] != null" v-for="record in loadRecords" :key="record.index" :data-index="record.index">
              <th class="border" scope="row">
-                  <p>{{ record.user.name }}</p>
+                  <span>{{ record.user.name }}</span>
              </th>
              <th class="border">
-                 <p>{{ record.operation }}</p>
+                 <span>{{ record.operation }}</span>
               </th>
               <th class="border">
-                  <p>{{ record.item.name }}</p>
+                  <span>{{ record.item.name }}</span>
               </th>
              <th class="border">
-                 <p>{{ record.quantity }}</p>
+                 <span>{{ record.quantity }}</span>
               </th>
-             <th class="">
-                 <p>{{ record.creationDate.slice(0, 19) }}</p>
-                 <div class="end position-sticky d-flex align-items-center">
-                    <button class="d-flex align-items-center profile-btn  position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 65px;" @click="showDetails(record.index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
-                      <IconsSpreadSheet width="16px" height="16px"/>  
-                      item
-                    </button>
-                    <NuxtLink :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="d-flex align-items-center profile-btn position-absolute btn btn-primary table-btn" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 0px;">
-                      <IconsLowProfile width="16px" height="16px"/>  
-                      perfil
-                    </NuxtLink>
-                 </div>
+             <th class="border">
+                 <span>{{ record.creationDate.slice(0, 19) }}</span>
+             </th>
+             <th class="border" width="5%">
+                <TooltipsRectangular class="toolTip" style=" right: 7.4%; margin-top: -50px;" :toolTipState="toolTipState[0][record.index] ? toolTipState[0][record.index] : false" :toolTipText="'Detalhes'"/>
+                <TooltipsRectangular class="toolTip" style=" right: 4%; margin-top: -50px;" :toolTipState="toolTipState[1][record.index] ? toolTipState[1][record.index] : false" :toolTipText="'Perfil'"/>
+                <button @mouseover="toolTipState[0][record.index] = true" @mouseout="toolTipState[0][record.index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}" @click="showDetails(record.index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                    <IconsSearchGlass width="18px" height="19px"/>
+                </button>
+                <NuxtLink @mouseover="toolTipState[1][record.index] = true" @mouseout="toolTipState[1][record.index] = false" :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="my-0  details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}">
+                  <IconsLowProfile width="16px" height="16px"/>  
+                </NuxtLink>
              </th>
           </tr>
           <div v-else class="warning-text d-flex aling-items-center justify-content-center">
@@ -299,6 +300,7 @@ const showHistory = async (index) => {
     store.itemRecord = res.content
 }
 
+const toolTipState = ref([[], []]);
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
   if(searchStore.itemSearch.searching){
@@ -349,161 +351,157 @@ onUpdated(async () => {
 
 <style scoped>
 .container{
-  width: 100%;
-  display: block;
+    width: 100%;
+    display: block;
 }
 .table-container{
-  margin-bottom: 149px;
-  width: 100%;
-  display: block !important;
+    margin-bottom: 149px;
+    width: 100%;
+    display: block !important;
 }
 .table-box{
-  border-top: 1px solid #D9D9D9;
-  border-bottom: 1px solid #D9D9D9;
-  width: 100%;
-  margin: 0;
-  overflow-x: scroll;
+    margin: 0;
+    overflow-x: scroll;
 }
 .table-actions{
-  width: 100%;
+    width: 100%;
 }
 .sub-catalog{
-  border-radius: 13px;
-  margin-top: -14px;
-  padding-top: 10px;
-  padding-bottom: 20px;
-  margin-right: 20%;
-  margin-left: 20%;
-  border: 1px #D9D9D9 solid;
-  box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);
+    border-radius: 13px;
+    margin-top: -14px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    margin-right: 10%;
+    margin-left: 10%;
+    border: 1px #D9D9D9 solid;
+    box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);
 }
 .sub-catalog-text{
-  padding: 0px 10px 0px 10px;
-  font-size: 15px;
+    padding: 0px 10px 0px 10px;
+    font-size: 15px;
 }
 h6{
-  font-weight: 400;
-  color: rgb(51,51,51, 0.8);
+    font-weight: 400;
+    color: rgb(51,51,51, 0.8);
 }
 th{
-  background-color: white !important;
-  padding: 16px 0 16px 0;
-  text-decoration: none;
-  text-align: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    background-color: white;
+    padding: 16px 0 16px 0;
+    text-decoration: none;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+th span{
+    color: rgb(51, 51, 51, 1);
+    font-weight: lighter;
+    font-size: 12px;
 }
 .col-title{
-  font-size: 18px;
-  opacity: 80%;
-  font-weight: 400;
-  margin-top: 0;
+    font-size: 13px;
+    opacity: 80%;
+    font-weight: 600;
+    margin-top: 0;
 }
 p{
-  padding: 0;
-  margin: 0;
+    padding: 0;
+    margin: 0;
 }
 .action-btn{
-  margin-right: 10px;
-  border: none;
-  border-radius: 10px 10px 0px 0px;
-  border-bottom: 1px ridge #1F69B1;
+    margin-right: 10px;
+    border: none;
+    border-radius: 10px 10px 0px 0px;
+    border-bottom: 1px ridge #1F69B1;
 }
 .table-searchbar{
-  border: none;
-  border-radius: 0px;
-  border-bottom: 1px ridge #1F69B1;
-  top: 70px;
-}
-.profile-btn{
-  border-radius: 4px;
-  top: 0px;
-  font-size: 12px;
-  padding: 4px 3px 4px 3px;
-}
-.search-glass{
-  padding-left: 0px;
+    border: none;
+    border-radius: 10px 10px 0px 0px;
+    top: 70px;
 }
 .searchbar{
-  border: none;
+    border-radius: 8px 0px 0px 0px;
+    font-weight: 500;
+}
+.search-glass{
+    padding-left: 0px;
 }
 .btn-outline-primary{
-  color: rgb(51,51,51, 0.7);
+    color: rgb(51,51,51, 0.7);
 }
 .btn-outline-primary:hover{
-  color: white !important;  
+    color: white !important;  
 }
 .end{
-  text-align: end;
+    text-align: end;
+    padding: 0;
 }
 .table-btn{
-  z-index: 3000;
-  font-size: 13px;
-  opacity: 0%;
-  margin-top: 8px;
-  margin-right: 10px;
-  padding: 5px 5px 5px 5px;
+    border-radius: 4px;
+    top: 0px;
+    font-size: 12px;
+    padding: 4px 3px 4px 3px;
+    z-index: 0;
+    font-size: 13px;
+    margin-top: 8px;
+    margin-right: 10px;
 }
 .warning-text{
-  position: absolute;
-  margin-top: 5%;
-  margin-left: 35%;
+    position: absolute;
+    margin-top: 5%;
+    margin-left: 35%;
 }
 .search-empty{
-  margin-top: 5%;
-  display: flex;
-  justify-content: center;
-  margin-left: 30%;    
-  margin-right: 30%;
-  white-space: nowrap;
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
+    margin-left: 30%;    
+    margin-right: 30%;
+    white-space: nowrap;
 }
 .pagination{
-  bottom: -1%; 
-  display: flex !important;
-  justify-content: space-around !important;
-  z-index: 0;
+    bottom: -1%; 
+    display: flex !important;
+    justify-content: space-around !important;
+    z-index: 0;
 }
 tr:hover .table-btn{
-  opacity: 100%;
+    opacity: 100%;
 }
 tr:hover p{
-  opacity: 50%;
-}
-tr:active{
-  background-color: red !important;
+    opacity: 50%;
 }
 /*RESPONSIVIDADE*/
 @media screen and (max-width: 1030px) {
-  th p, .sub-catalog p{
-      font-size: 12px;
-  }
+    th p, .sub-catalog p{
+        font-size: 12px;
+    }
 }
 @media screen and (max-width: 900px){
-  .actions-buttons{
-      justify-content: center;
-      align-content: center;
-  }
+    .actions-buttons{
+        justify-content: center;
+        align-content: center;
+    }
 }
 @media screen and (max-width: 851px) {
-  .col-title{
-      font-size: 12px;
-  }
-  th p, .sub-catalog p{
-      font-size: 10px;
-  }
-  .table-searchbar, .searchbar{
-      display: flex;
-      font-size: 12px; 
-  }
-  .searchbar{
-      width: 140px;
-  }
-  .table-searchbar{
-      width: 170px;
-  }
-  .sub-catalog-title, .search-empty p{
-      font-size: 14px;
-  }
+    .col-title{
+        font-size: 12px;
+    }
+    th p, .sub-catalog p{
+        font-size: 10px;
+    }
+    .table-searchbar, .searchbar{
+        display: flex;
+        font-size: 12px; 
+    }
+    .searchbar{
+        width: 120px;
+    }
+    .table-searchbar{
+        width: 170px;
+    }
+    .sub-catalog-title, .search-empty p{
+        font-size: 14px;
+    }
 }
 </style>

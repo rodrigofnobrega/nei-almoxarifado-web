@@ -5,18 +5,26 @@
                 <LoadersLoading class="small-loader text-dark-emphasis p-1"/>
                     <slot name="titulo" />
             </h3>
-            <h5 class="mt-3 me-3 route">
-                <a class="route-link text-decoration-none" href="/">início </a>  
-                <slot name="rota" />
-            </h5>
+            <div class="me-3 mb-2 route">
+                <nav v-show="textLoading" aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">início</a></li>
+                    <slot name="rota" />
+                    </ol>
+                </nav>
+            </div>
+            <LoadersLoading class="small-loader text-dark-emphasis p-1"/>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 const toolTip = ref(false);
-
+const textLoading = ref(false);
+onBeforeMount(() => {
+    textLoading.value = true;
+})
 </script>
 
 
@@ -25,8 +33,9 @@ const toolTip = ref(false);
     width: 12px;
     height: 12px;
 }
-h5{
-    font-weight: 300;
+.route{
+    position: relative;
+    top: 15px !important;
 }
 .route-link{
     color: rgba(51, 51, 51, 1)
