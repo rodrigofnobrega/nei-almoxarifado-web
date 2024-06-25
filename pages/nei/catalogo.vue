@@ -42,86 +42,91 @@
     <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
         <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
-            Descrição da Subpágina 
+            Descrição da página 
         </h6>
-        <p class="sub-catalog-text opacity-75">Esta organização de almoxarifado é destinada aos itens relacionados as atividades escolares do NEI, como giz de ceira, lápis e quaisquer material que possua uso no dia a dia dos alunos e professores.</p>
+        <p class="sub-catalog-text opacity-75">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
+            Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
+        <span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
     </div>   
-    <div class="table-box bg-light row d-block">
-        <div class="table-actions d-flex justify-content-between aling-items-center">
-            <span class="d-flex ms-1 align-items-center table-searchbar">
-                <IconsSearchGlass class="search-glass"/>
-                <input v-model="searchInput" class="searchbar form-control bg-light" placeholder="Pesquisar"/>          
-            </span>
-            <div class="d-flex me-1">
-                <ButtonsFilter />
-                <ButtonsConfigure />
-            </div>
+    <div class="table-box row d-block">
+        <div class="table-actions d-flex justify-content-between aling-items-center" style="margin-bottom: -2px !important;">
+        <div class="d-flex me-1">
+            <ButtonsFilter style="margin-top: 3px;"/>
         </div>
+          <span class="d-flex align-items-center bg-primary table-searchbar">
+                <input v-model="searchInput" class="searchbar bg-light form-control" placeholder="Pesquisar"/>          
+                <IconsSearchGlass class="bg-primary text-light search-glass"/>
+          </span>
+      </div>
         <TablesTable>
             <template v-slot:header>
-                <tr>
+                <tr style="border: 1px #D9D9D9 solid;">
                     <th class="col-title py-2 border" scope="col">Nome</th>
                     <th class="col-title py-2 border" scope="col">Código Sipac</th>
                     <th class="col-title py-2 border" scope="col">Tipo Unitário</th>
                     <th class="col-title py-2 border" scope="col">Quantidade</th>
                     <th class="col-title py-2" scope="col">Última atualização</th>
+                    <th class="col-title py-2" scope="col">Ações</th>
                 </tr>
             </template>
             <template v-slot:content>
             <tr v-if="loadItems[0] != null" v-for="item in loadItems" :key="item.index" :data-index="item.index">
                <th class="border" scope="row">
-                    <p>{{ item.name }}</p>
+                    <span>{{ item.name }}</span>
                </th>
                <th class="border">
-                   <p v-if="item.sipacCode">{{ item.sipacCode }}</p>
-                   <p v-else>nenhum</p>
+                   <span v-if="item.sipacCode">{{ item.sipacCode }}</span>
+                   <span v-else>nenhum</span>
                 </th>
                 <th class="border">
-                    <p>{{ item.type }}</p>
+                    <span>{{ item.type }}</span>
                 </th>
                <th class="border">
-                   <p>{{ item.quantity }}</p>
+                   <span>{{ item.quantity }}</span>
                 </th>
-               <th class="">
-                   <p>CADASTRO 2024-05-11 09:20:02 Luís Freitas</p>
-                <div class="end position-sticky">
-                    <button class="details-btn position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 89px;" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
-                        <IconsSpreadSheet width="16px" height="16px"/>
-                        detalhes
-                    </button>
-                    <button class="details-btn position-absolute table-btn btn btn-primary" :class="{'d-none': store.isMobile}" style="margin-top: -23px; right: 0px;" @click="showConfirm(item.index)" data-bs-toggle="modal" data-bs-target="#actionConfirm">
-                        <IconsSolicitation width="16px" height="16px"/>
-                        solicitar
-                    </button>
-                 </div>
+               <th class="border">
+                   <span>CADASTRO 2024-05-11 09:20:02 Luís Freitas</span>
+               </th>
+               <th class="border" wdith="5%">
+                <TooltipsRectangular class="toolTip" style=" right: 10.3%; margin-top: -50px;" :toolTipState="toolTipState[0][item.index] ? toolTipState[0][item.index] : false" :toolTipText="'Detalhes'"/>
+                <TooltipsRectangular class="toolTip" style=" right: 8.3%; margin-top: -50px;" :toolTipState="toolTipState[1][item.index] ? toolTipState[1][item.index] : false" :toolTipText="'Solicitar'"/>
+                <button @mouseover="toolTipState[0][item.index] = true" @mouseout="toolTipState[0][item.index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}" @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                        <IconsSearchGlass width="16px" height="16px"/>
+                </button>
+                <button @mouseover="toolTipState[1][item.index] = true" @mouseout="toolTipState[1][item.index] = false" class="my-0 details-btn position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}"  @click="showConfirm(item.index)" data-bs-toggle="modal" data-bs-target="#actionConfirm">
+                    <IconsSolicitation width="16px" height="16px"/>
+                </button>
                </th>
             </tr>
-            <div v-else class="warning-text d-flex aling-items-center justify-content-end">
-                <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
-            </div>
-            <div v-if="loadItems.length == 0" class="search-empty position-absolute mt-5">
+            <div v-else-if="loadItems.length == 0" class="search-empty position-absolute mt-5">
                 <p class="text-dark-emphasis fs-5 opacity-50">Nenhum Resultado Encontrado.</p>
+            </div>
+            <div v-else class="warning-text d-flex aling-items-center justify-content-center">
+                <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
             </div>
         </template>
     </TablesTable>
     </div>
+    <div class="d-flex justify-content-between me-2 mt-2">
+        <span class="ms-2 pages-info">Quantidade de itens da página: {{ loadItems.length }}</span> 
+        <nav v-if="itemsCache.length > 0" aria-label="Page navigation" class="pagination">
+            <ul class="pagination">
+                <li class="page-item">
+                    <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
+                </li>
+                <li class="page-item" v-for="i in totalPages >= 3 ? range(1+paginationRet, 3+paginationRet) : range(1,totalPages)" :key="i-1">
+                    <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
+                </li>
+                <li v-show="totalPages > 3 && paginationRet < totalPages-3" class="page-item">
+                    <button class="page-link bg-primary text-light">...</button>
+                </li>
+                <li class="page-item">
+                    <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1 || searchInput !== ''}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
-<nav v-if="itemsCache.length > 0" aria-label="Page navigation" class="pagination position-fixed">
-    <ul class="pagination">
-        <li class="page-item">
-            <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
-        </li>
-        <li class="page-item" v-for="i in range(1+paginationRet, 3+paginationRet)" :key="i-1">
-            <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
-        </li>
-        <li v-show="totalPages > 3 && paginationRet < totalPages-3" class="page-item">
-            <button class="page-link bg-primary text-light">...</button>
-        </li>
-        <li class="page-item">
-            <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1 || searchInput !== ''}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
-        </li>
-    </ul>
-</nav>
 </template>
 
 <script setup>
@@ -249,6 +254,7 @@ for(let i = 0; i < totalPages; i++){
 let count = 0;
 
 const page = (async (index) => {
+    paginationRet.value = index+1 >= totalPages || index <= 0 ? paginationRet.value : index-1;
     pagination.value = index;
     if(queryParams.value.isInverted){
         if(index < invertedPagination.value){
@@ -276,7 +282,7 @@ const fowardPage = (async () => {
     document.getElementById("backPageBtn").classList.remove("bg-dark-emphasis");
 });
 const backPage = (async () => {
-    paginationRet.value = paginationRet.value < 3 ? paginationRet.value-1 : paginationRet.value
+    paginationRet.value = paginationRet.value <= 0 ? paginationRet.value : paginationRet.value-1
     pagination.value--;
     if(queryParams.value.isInverted){
         invertedPagination.value++;
@@ -297,15 +303,17 @@ const showConfirm = (index) => {
     itemIndex.value = index;
 }
 const itemQtd = ref(0)
-const description = ref('')
+const description = ref('Text')
 const sendRequest = async () => {
     try{
-        const res = await postRequest(userStore, itemIndex.value, itemQtd.value, description.value)
+        const res = await postRequest(userStore, loadItems.value[itemIndex.value].id, itemQtd.value, description.value)
     }catch(err){
         return popUpStore.throwPopup('Erro: quantidade solicitada é maior que a disponível', '#B71C1C')
     }
-    return popUpStore.throwPopup('Sucesso ao fazer a solicitação', '#0B3B69')
+    return popUpStore.throwPopup('Solicitação enviada', '#0B3B69')
 }
+
+const toolTipState = ref([[], []]);
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     if(searchStore.itemSearch.searching){
@@ -360,14 +368,11 @@ onUpdated(async () => {
     display: block;
 }
 .table-container{
-    margin-bottom: 149px;
+    margin-bottom: 29px;
     width: 100%;
     display: block !important;
 }
 .table-box{
-    border-top: 1px solid #D9D9D9;
-    border-bottom: 1px solid #D9D9D9;
-    width: 100%;
     margin: 0;
     overflow-x: scroll;
 }
@@ -379,8 +384,8 @@ onUpdated(async () => {
     margin-top: -14px;
     padding-top: 10px;
     padding-bottom: 20px;
-    margin-right: 20%;
-    margin-left: 20%;
+    margin-right: 10%;
+    margin-left: 10%;
     border: 1px #D9D9D9 solid;
     box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);
 }
@@ -393,27 +398,28 @@ h6{
     color: rgb(51,51,51, 0.8);
 }
 th{
-    background-color: white !important;
-    padding: 16px 0 16px 0;
+    background-color: white;
+    padding: 12px 0 12px 0;
     text-decoration: none;
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+th span{
+    color: rgb(51, 51, 51, 1);
+    font-weight: lighter;
+    font-size: 12px;
+}
 .col-title{
-    font-size: 18px;
+    font-size: 13px;
     opacity: 80%;
-    font-weight: 400;
+    font-weight: 600;
     margin-top: 0;
 }
 p{
     padding: 0;
     margin: 0;
-}
-.textarea{
-    padding-bottom: 30px;
-    font-size: 14px;
 }
 .action-btn{
     margin-right: 10px;
@@ -423,15 +429,15 @@ p{
 }
 .table-searchbar{
     border: none;
-    border-radius: 0px;
-    border-bottom: 1px ridge #1F69B1;
+    border-radius: 10px 10px 0px 0px;
     top: 70px;
+}
+.searchbar{
+    border-radius: 8px 0px 0px 0px;
+    font-weight: 500;
 }
 .search-glass{
     padding-left: 0px;
-}
-.searchbar{
-    border: none;
 }
 .btn-outline-primary{
     color: rgb(51,51,51, 0.7);
@@ -443,14 +449,16 @@ p{
     text-align: end;
     padding: 0;
 }
+.pages-info{
+    font-size: 13px;
+}
 .table-btn{
     border-radius: 4px;
     top: 0px;
     font-size: 12px;
     padding: 4px 3px 4px 3px;
-    z-index: 3000;
+    z-index: 00;
     font-size: 13px;
-    opacity: 0%;
     margin-top: 8px;
     margin-right: 10px;
 }
@@ -503,7 +511,7 @@ tr:hover p{
         font-size: 12px; 
     }
     .searchbar{
-        width: 140px;
+        width: 120px;
     }
     .table-searchbar{
         width: 170px;

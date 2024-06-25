@@ -23,9 +23,6 @@ export const useUser = defineStore('user', {
                 this.id = response.id
                 this.role = response.role
                 localStorage.setItem('session', JSON.stringify(res.token))
-                if(this.role === "USER"){
-                    return navigateTo('/error/404')
-                }
                 return navigateTo('/');
             } catch(err) { 
                 return err

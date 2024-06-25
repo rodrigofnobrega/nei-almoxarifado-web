@@ -1,7 +1,7 @@
 <template>
     <Modal v-if="item_details != []" id="itemDetailing" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
-            <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Detalhes</h6>
+            <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Detalhes do item</h6>
             <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
             </button>
@@ -21,7 +21,7 @@
 						<label class="form-label fw-bold"> Tipo </label>
 						<input readonly class="form-control bg-light-emphasis" :value="item_details.type"> 
 					</div>
-                    <div class="mb-3" style="width: 212%">
+                    <div v-if="item_details.lastRecord != undefined" class="mb-3" style="width: 212%">
                         <label class="form-label fw-bold"> Última atualização </label>
                         <input readonly class="form-control bg-light-emphasis" id="expansible-form" @mouseover="inputExpand" @mouseleave="inputContract" :value="`${item_details.lastRecord.operation} ${item_details.lastRecord.creationDate === undefined? item_details.lastRecord.data.slice(0, 16) : item_details.lastRecord.creationDate.slice(0, 16)} ${item_details.lastRecord.user.name}`">
                     </div>	
@@ -37,11 +37,11 @@
                         <label class="form-label fw-bold"> Quantidade </label>
 						<input readonly class="form-control bg-light-emphasis" :value="item_details.quantity"> 
 					</div>	
-					<div class="mb-3"> 
+					<div v-if="item_details.createdAt != undefined" class="mb-3"> 
                         <label class="form-label fw-bold"> Data de Registro </label>
 						<input readonly class="form-control bg-light-emphasis" :value="item_details.createdAt.slice(0,19)"> 
 					</div>	
-                    <div class="mb-3"> 
+                    <div v-if="item_details.createdBy != undefined" class="mb-3"> 
 						<label class="form-label fw-bold"> Criador </label>
 						<input readonly class="form-control bg-light-emphasis" :value="item_details.createdBy.name"> 
 					</div>
@@ -50,29 +50,33 @@
         </template>
         <template v-slot:footer>
             <div class="d-flex">
-
                 <div v-if="userStore.role === 'ADMIN' && store.isEditionMode" class="container-fluid d-flex justify-content-center align-items-center">
                     <!--<button class="btn mode-btn inset-shadow btn-dark-alert mx-1" :class="{'d-none': editionActive, 'd-block': !editionActive}" @click="deleteItem" id="itemDelete" data-bs-dismiss="modal">Excluir</button>-->
                     <button type="button" class="btn inset-shadow btn-light-alert text-light mx-1" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="revertEdition" data-bs-dismiss="modal">Cancelar</button>
                     <button class="btn inset-shadow mode-btn btn-primary mx-1" @click="setEdition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>
                     <button class="btn inset-shadow btn-light-success text-light mx-1" id="fetch-inputs" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="fetchNewData" data-bs-dismiss="modal">Confirmar</button>
                 </div>
-                <div v-if="userStore.role === 'USER'" class="d-flex align-items-center justify-content-center">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+                <div v-if="userStore.role === 'ADMIN'" class="d-flex align-items-center justify-content-center">
+                    <button class="btn inset-shadow mode-btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#itemReposition">Repor</button>
                 </div>
-                <div v-if="userStore.role === 'ADMIN'" data-bs-target="#itemHistory" data-bs-toggle="modal" type="button" class="btn btn-primary  my-1 bg-primary rounded-2 p-1 d-flex justify-content-end text-light">
+                <div v-if="userStore.role === 'USER'" class="d-flex align-items-center justify-content-center">
+                    <button class="btn btn-light-alert text-light" data-bs-dismiss="modal">Fechar</button>
+                </div>
+                <div v-if="userStore.role === 'ADMIN'" @click="getRecord" data-bs-target="#itemHistory" data-bs-toggle="modal" type="button" class="btn btn-primary  my-1 bg-primary rounded-2 p-1 d-flex justify-content-end text-light">
                     <IconsHistory width="25px" height="25px"/>
                 </div>
             </div>
         </template> 
     </Modal>
     <ModalItemHistory v-if="toggleHistory"/>
+    <ModalItemReposition :itemName="item_details.name" :itemSipac="item_details.sipacCode" :itemType="item_details.type" :itemIndex="item_index"/>
 </template>
 
 <script>
 import { useStorageStore } from '../../stores/storage';
 import { inject } from 'vue';
 import { useUser } from '../../stores/user';
+import { getRecordByItemId } from '../../services/record/recordGET';
 
 export default {
     data() {
@@ -132,6 +136,10 @@ export default {
         fetchNewData(){
             this.store.updateItemQtd(this.item_index, this.inputs[0].value, this.inputs[1].value,this.item_route);
             this.revertEdition();
+        },
+        async getRecord(){
+            const res = await getRecordByItemId(this.userStore,this.item_details.id);
+            this.store.itemRecord = res.content;
         }
     },
     props: {

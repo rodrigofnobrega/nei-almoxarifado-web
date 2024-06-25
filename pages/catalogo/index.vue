@@ -2,10 +2,11 @@
     <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
     <ModalItemHistory v-if="itemsCache.length > 0"/>
 <div class="table-container d-block mt-2">
+    <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
     <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
         <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
-            Descrição da página
+            Descrição da página 
         </h6>
         <p class="sub-catalog-text opacity-75">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
             Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
@@ -14,11 +15,11 @@
     <div class="table-box row d-block">
         <div class="table-actions d-flex justify-content-between aling-items-center" style="margin-bottom: -1px !important;">
             <div class="d-flex">
-                <ButtonsNewItem/>
-                <ButtonsFilter />
-                <ButtonsConfigure />
+                <ButtonsNewItem style="margin-top: 3px;" />
+                <ButtonsFilter style="margin-top: 3px;" />
+                <ButtonsConfigure style="margin-top: 3px;" />
             </div>
-            <span class="d-flex align-items-center bg-primary table-searchbar">
+            <span class="position-sticky d-flex align-items-center bg-primary table-searchbar">
                 <input v-model="searchInput" class="searchbar bg-light form-control" placeholder="Pesquisar"/>          
                 <IconsSearchGlass class="bg-primary text-light search-glass"/>
             </span>
@@ -59,7 +60,7 @@
                         <IconsSearchGlass width="18px" height="19px"/>
                     </button>
                     <button @mouseover="toolTipState[1][item.index] = true" @mouseout="toolTipState[1][item.index] = false" class="my-0 position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}"  @click="showHistory(item.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
-                        <IconsRequest width="18px" height="19px"/>
+                        <IconsHistory width="18px" height="19px"/>
                     </button>
                </th>
             </tr>
@@ -72,7 +73,8 @@
         </template>
         </TablesTable>
     </div>
-    <div class="d-flex justify-content-end me-2 mt-2">
+    <div class="d-flex justify-content-between me-2 mt-2">
+        <span class="ms-2 pages-info">Quantidade de itens da página: {{ loadItems.length }}</span> 
         <nav v-if="itemsCache.length > 0" aria-label="Page navigation" class="pagination">
             <ul class="pagination">
                 <li class="page-item">
@@ -96,7 +98,7 @@
 <script setup>
 import { useStorageStore } from '../../stores/storage.ts';
 import { useSearch } from '../../stores/search.ts';
-import { ref, computed, onMounted, onUpdated, inject } from 'vue';
+import { ref, computed, onMounted, onUpdated, inject, watch } from 'vue';
 import { getItems } from '../../services/items/itemsGET.ts';
 import { useUser } from '../../stores/user.ts'
 import { getRecordByItemId } from '../../services/record/recordGET.ts';
@@ -141,7 +143,18 @@ for(let i = 0; i < totalPages; i++){
     });
 }
 store.items = itemsCache.value;
+
+const teste = computed(() => {
+    if(store.isReloadItems === false){
+        return 0
+    } 
+    if(store.isReloadItems === true){
+        reloadItems('id,desc', false);
+        return 1
+    } 
+})
 async function reloadItems(sort, isInverted, invertedPagination){
+    console.log("RELOAD")
     let indexcount = 0;
     if(isInverted){
         for(let i = totalPages-1; i >= 0; i--){
@@ -219,6 +232,7 @@ for(let i = 0; i < totalPages; i++){
 let count = 0;
 
 const page = (async (index) => {
+    paginationRet.value = index+1 >= totalPages || index <= 0 ? paginationRet.value : index-1;
     pagination.value = index;
     if(queryParams.value.isInverted){
         if(index < invertedPagination.value){
@@ -246,7 +260,7 @@ const fowardPage = (async () => {
     document.getElementById("backPageBtn").classList.remove("bg-dark-emphasis");
 });
 const backPage = (async () => {
-    paginationRet.value = paginationRet.value < 3 ? paginationRet.value : paginationRet.value-1
+    paginationRet.value = paginationRet.value <= 0 ? paginationRet.value : paginationRet.value-1
     pagination.value--;
     if(queryParams.value.isInverted){
         invertedPagination.value++;
@@ -353,7 +367,7 @@ h6{
 }
 th{
     background-color: white;
-    padding: 16px 0 16px 0;
+    padding: 12px 0 12px 0;
     text-decoration: none;
     text-align: center;
     overflow: hidden;
@@ -402,6 +416,9 @@ p{
 .end{
     text-align: end;
     padding: 0;
+}
+.pages-info{
+    font-size: 13px;
 }
 .table-btn{
     border-radius: 4px;

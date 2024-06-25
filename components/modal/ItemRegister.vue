@@ -22,7 +22,7 @@
                         <option disabled selected>Selecione o tipo</option>
                         <option value="unidade">unidade</option>
                         <option value="sacola">sacola</option>
-                        <option value="unidade">caixa</option>
+                        <option value="caixa">caixa</option>
                     </select>
                 </div>
                 <div class="d-block ms-5">

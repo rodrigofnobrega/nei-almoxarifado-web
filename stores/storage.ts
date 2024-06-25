@@ -8,6 +8,7 @@ import { usePopupStore } from '~/stores/popup';
 export const useStorageStore = defineStore('storage', {
     state: () => ({
       items: [],
+      isReloadItems: false,
       records: [],
       itemRecord: [],
       requests: [],
@@ -19,6 +20,7 @@ export const useStorageStore = defineStore('storage', {
       isResponsive: false,
       tableSearch: " ",
       recoveryToken: "",
+      reportType: ""
     }),
     actions: {
       async sendItems(item) {
@@ -34,6 +36,7 @@ export const useStorageStore = defineStore('storage', {
             popupStore.throwPopup('Erro: Existe um item com mesmo código sipac', '#B71C1C')
           }
         }
+        this.isReloadItems = true;
       },
       async updateItems(items, item_id, item_name, item_sipac){
         if(item_id){
@@ -47,7 +50,7 @@ export const useStorageStore = defineStore('storage', {
       },
       addItem(item: object){
         this.sendItems(item);
-        this.items.unshift(item);
+        this.isReloadItems = false;
       },
       deleteItem(index: number, almoxarifado: string){
         let count = 0;

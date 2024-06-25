@@ -1,8 +1,8 @@
-import axios from 'axios';
+import { useApi } from "../../composables/axios";
 //Aceitar Solicitação
 export const requestAccept = async (userStore, request_id) => {
     try{
-        const { data } = await axios.patch(`http://localhost:8080/api/v1/requests/accept/${request_id}`, null, {
+        const { data } = await useApi().patch(`http://localhost:8080/api/v1/requests/accept/${request_id}`, null, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`
@@ -17,7 +17,7 @@ export const requestAccept = async (userStore, request_id) => {
 //Rejeitar Solicitação
 export const requestDecline = async (userStore, request_id) => {
     try{
-        const { data } = await axios.patch(`http://localhost:8080/api/v1/requests/decline/${request_id}`, null, {
+        const { data } = await useApi().patch(`/requests/decline/${request_id}`, null, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`
@@ -32,7 +32,7 @@ export const requestDecline = async (userStore, request_id) => {
 //Cancelar Solicitação
 export const requestCancel = async (userStore, request_id) => {
     try{
-        const { data } = await axios.patch(`http://localhost:8080/api/v1/requests/cancel/${request_id}`, null, {
+        const { data } = await useApi().patch(`/requests/cancel/${request_id}`, null, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`

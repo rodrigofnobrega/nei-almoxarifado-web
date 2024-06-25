@@ -13,7 +13,7 @@
         <template v-slot:body>
           <template v-if="showResults && searchQuery !== ''">
             <ul class="list-group">
-              <a class="text-decoration-none" v-for="result in searchResults" :href="`/catalogo/almoxarifado`" :key="result.id">
+              <a class="text-decoration-none" v-for="result in searchResults" :href="`/catalogo`" :key="result.id">
                 <li @click="NavigateToItem(result.index)" class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
                   {{ result.name }} 
                   <span class="badge bg-primary rounded-pill" v-if="result"> {{ result.quantity }} </span>

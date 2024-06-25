@@ -13,7 +13,7 @@
   <div class="table-box row d-block">
       <div class="table-actions d-flex justify-content-between aling-items-center" style="margin-bottom: -1px !important;">
         <div class="d-flex me-1">
-            <ButtonsFilter />
+            <ButtonsFilter style="margin-top: 3px;"/>
         </div>
           <span class="d-flex align-items-center bg-primary table-searchbar">
                 <input v-model="searchInput" class="searchbar bg-light form-control" placeholder="Pesquisar"/>          
@@ -54,7 +54,7 @@
                 <button @mouseover="toolTipState[0][record.index] = true" @mouseout="toolTipState[0][record.index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}" @click="showDetails(record.index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                     <IconsSearchGlass width="18px" height="19px"/>
                 </button>
-                <NuxtLink @mouseover="toolTipState[1][record.index] = true" @mouseout="toolTipState[1][record.index] = false" :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="my-0  details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}">
+                <NuxtLink @mouseover="toolTipState[1][record.index] = true" @mouseout="toolTipState[1][record.index] = false" :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="my-0  details-btn position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}">
                   <IconsLowProfile width="16px" height="16px"/>  
                 </NuxtLink>
              </th>
@@ -68,7 +68,8 @@
       </template>
   </TablesTable>
   </div>
-  <div class="d-flex justify-content-end me-2 mt-2">
+  <div class="d-flex justify-content-between me-2 mt-2">
+        <span class="ms-2 pages-info">Quantidade de registros da página: {{ loadRecords.length }}</span> 
         <nav v-if="recordsCache.length > 0" aria-label="Page navigation" class="pagination">
             <ul class="pagination">
                 <li class="page-item">
@@ -248,6 +249,7 @@ for(let i = 0; i < totalPages; i++){
 let count = 0;
 
 const page = (async (index) => {
+    paginationRet.value = index+1 >= totalPages || index <= 0 ? paginationRet.value : index-1;
     pagination.value = index;
     if(queryParams.value.isInverted){
         if(index < invertedPagination.value){
@@ -275,7 +277,7 @@ const fowardPage = (async () => {
     document.getElementById("backPageBtn").classList.remove("bg-dark-emphasis");
 });
 const backPage = (async () => {
-    paginationRet.value = paginationRet.value < 3 ? paginationRet.value : paginationRet.value-1
+    paginationRet.value = paginationRet.value <= 0 ? paginationRet.value : paginationRet.value-1
     pagination.value--;
     if(queryParams.value.isInverted){
         invertedPagination.value++;
@@ -386,7 +388,7 @@ h6{
 }
 th{
     background-color: white;
-    padding: 16px 0 16px 0;
+    padding: 12px 0 12px 0;
     text-decoration: none;
     text-align: center;
     overflow: hidden;
@@ -436,12 +438,15 @@ p{
     text-align: end;
     padding: 0;
 }
+.pages-info{
+    font-size: 13px;
+}
 .table-btn{
     border-radius: 4px;
     top: 0px;
     font-size: 12px;
     padding: 4px 3px 4px 3px;
-    z-index: 0;
+    z-index: 00;
     font-size: 13px;
     margin-top: 8px;
     margin-right: 10px;

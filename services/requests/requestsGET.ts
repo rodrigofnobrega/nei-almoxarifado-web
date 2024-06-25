@@ -1,7 +1,7 @@
 import { useApi } from '../../composables/axios';
 //Listar Solicitações
-export const getRequests = async (userStore) => {
-    const { data } = await useApi().get("http://localhost:8080/api/v1/requests", {
+export const getRequests = async (userStore, page) => {
+    const { data } = await useApi().get(`/requests?page=${page}`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`

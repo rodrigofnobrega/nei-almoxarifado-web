@@ -11,9 +11,11 @@
 import { onMounted } from 'vue';
 import { useStorageStore } from './stores/storage';
 import { usePopupStore } from './stores/popup';
+import { useUser } from './stores/user';
 
 const storage = useStorageStore();
 const popup = usePopupStore();
+const userStore = useUser();
 const isPopup = computed(() => {
           return popup.popupActive
       });
@@ -26,7 +28,11 @@ const popupBg = computed(() => {
 
 onMounted(() => {
   const itemModals = document.getElementsByClassName("modal-header");
-  for (let i = 1; i < itemModals.length; i++) {
+  let i = 0;
+  if(userStore.role === 'ADMIN'){  
+    i = 1;
+  }
+  for (i; i < itemModals.length; i++) {
     itemModals[i].classList.add("justify-content-between");
     itemModals[i].classList.add("small");
   }

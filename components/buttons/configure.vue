@@ -66,8 +66,7 @@ li{
 .btn-transparent{
     font-size: 14px;
 }
-.action-btn{   
-    height: 38px; 
+.action-btn{    
     font-weight: 500;
     font-size: 15px;
     border: none;
