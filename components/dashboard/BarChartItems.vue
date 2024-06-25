@@ -1,5 +1,5 @@
 <template>
-  <ModalAlmoReport :data="datasets"/>
+  <ModalAlmoReport :id="1" :data="datasets"/>
   <div class="graph-header d-flex align-items-end justify-content-between section-title pt-2 mb-3 bg-light-background-header">
         <h5 class="ps-2">Gráfico da quantidade de itens solicitados</h5>
           <div class="dropdown mb-1 mx-2 d-flex">
@@ -7,7 +7,7 @@
               <IconsTimer class="me-1" width="20px" height="20px"/>
               Período
             </button>
-            <button @click="store.reportType = 'requests'" class="d-flex align-items-center ms-2 graph-btn btn btn-transparent" type="button" data-bs-toggle="modal" data-bs-target="#almoReport" ria-expanded="false">
+            <button class="d-flex align-items-center ms-2 graph-btn btn btn-transparent" type="button" data-bs-toggle="modal" data-bs-target="#almoReport1" ria-expanded="false">
               <IconsRequest class="me-1" width="20px" height="20px"/>
               Relatório
             </button>
@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import { useUser } from '../../stores/user.ts';
 import { useStorageStore } from '../../stores/storage.ts';
 import { getRequests } from '../../services/requests/requestsGET.ts';
@@ -305,9 +305,7 @@ const changeLabel = (labelType, index) => {
     }
   }
 };
-
 onMounted(() => {
-  console.log(data)
   /*
   if(store.isMobile){
       const btnText = document.querySelectorAll('.filter-btn');

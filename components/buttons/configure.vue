@@ -9,6 +9,9 @@
                 <label class="form-check-label" for="editCheck">habilitar edição</label>
                 <input v-model="store.isEditionMode" @click="store.isEditionMode = !store.isEditionMode" class="form-check-input me-2" value="" id="editCheck" type="checkbox">
             </li>
+            <li class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2 pe-0">
+            <input type="file" @change="handleFileUpload" accept=".xlsx, .xls, .csv" />
+            </li>
         </ul>   
     </div>  
 </template>
@@ -17,11 +20,13 @@
 import { inject, onMounted} from 'vue';
 import { useUser } from '../../stores/user';
 import { useStorageStore } from '../../stores/storage';
-
+import { postCreateItem } from '../../services/items/itemsPOST';
+import * as XLSX from 'xlsx';
 
 
 const toolTip = ref(false);
 const store = useStorageStore();
+const userStore = useUser();
 
 const dropdownStates = ref([false, false, false, false]);
 const toggleDropdown = (dropdown_id) => {
@@ -29,6 +34,30 @@ const toggleDropdown = (dropdown_id) => {
     dropdownStates.value[dropdown_id-1] = false
     dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
     dropdownStates.value[dropdown_id+1] = false
+}
+
+const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = async (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        const tableHeaders = jsonData[0];
+        const tableData = jsonData.slice(1);
+        for(let i = 0; i < tableData.length; i++){
+            console.log(tableData[i][1], tableData[i][2], tableData[i][4] < 0 ? 0 : tableData[i][4])
+            try{
+                let res = await postCreateItem(userStore, tableData[i][1], '', tableData[i][4] < 0 ? 0 : tableData[i][4], tableData[i][2]);
+            }catch(err){
+                console.log(err)
+            }
+        }
+    };
+    reader.readAsArrayBuffer(file);
 }
 
 
@@ -47,7 +76,7 @@ onMounted(() => {
 
 <style scoped>
 .large-menu{
-    height: 40px;
+    height: 100px;
     width: 140px;
     min-width: 110px;
 }

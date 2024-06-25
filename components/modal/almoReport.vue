@@ -1,5 +1,5 @@
 <template>
-    <Modal id="almoReport" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
+    <Modal :id="`almoReport${props.id}`" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
             <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Gerar Relatório</h6>
             <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
@@ -7,15 +7,16 @@
             </button>
         </template>
         <template v-slot:body>
+            <p>{{ props.data }}</p>
             <form @submit.prevent="generateReport">
                 <div class="d-block mb-3">
-                    <div v-if="store.reportType === 'requests'">
-                        <label class="report-subtitle" for="item-qtd">Dados {{ props.reportType }}</label>
+                    <div v-if="props.id === 1">
+                        <label class="report-subtitle" for="item-qtd">Dados</label>
                         <div class="d-flex align-items-center justify-content-between my-2">
                             <div class="form-check mb-3">
                                 <input class="form-check-input" type="checkbox" id="allRequests" v-model="reportOptions.dataset[0]">
                                 <label class="form-check-label" for="allRequests">
-                                    Todas as solicitações
+                                    Todas as solicitações 
                                 </label>
                             </div>
                             <div class="form-check mb-3">
@@ -28,6 +29,23 @@
                                 <input class="form-check-input" type="checkbox" id="rejectRequests" v-model="reportOptions.dataset[2]">
                                 <label class="form-check-label" for="rejectRequests">
                                     Solicitações recusadas
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="props.id === 2">
+                        <label class="report-subtitle" for="item-qtd">Dados</label>
+                        <div class="d-flex align-items-center justify-content-start my-2">
+                            <div class="form-check mb-3 me-4">
+                                <input class="form-check-input" type="checkbox" id="itemsMost" v-model="reportOptions.dataset[0]">
+                                <label class="form-check-label" for="itemsMost">
+                                    Itens
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="usersMost" v-model="reportOptions.dataset[1]">
+                                <label class="form-check-label" for="usersMost">
+                                    Usuários
                                 </label>
                             </div>
                         </div>
@@ -68,7 +86,7 @@
                     </div>
                 </div>
 
-                <div v-if="store.reportType === 'itemsusers'" class="d-block mb-3">
+                <div v-if="props.id === 2" class="d-block mb-3">
                     <label for="type">Tipo de Item</label>
                     <select class="form-select me-5" aria-label="Default select" v-model="reportType">
                         <option disabled selected>Selecione o tipo</option>
@@ -79,14 +97,14 @@
                     </select>
                 </div>
 
-                <div v-if="store.reportType === 'itemsusers'" class="form-check mb-3">
+                <div v-if="props.id === 2" class="form-check mb-3">
                     <input class="form-check-input" type="checkbox" id="monthlyAverage" v-model="includeMonthlyAverage">
                     <label class="form-check-label" for="monthlyAverage">
                         Incluir média mensal das solicitações por item
                     </label>
                 </div>
                 
-                <div v-if="store.reportType === 'itemsusers'" class="form-check mb-3">
+                <div v-if="props.id === 2" class="form-check mb-3">
                     <input class="form-check-input" type="checkbox" id="includeUsers" v-model="includeUsers">
                     <label class="form-check-label" for="includeUsers">
                         Incluir usuários
@@ -113,14 +131,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, provide, ref } from 'vue';
 import jsPDF from 'jspdf';
 import { useStorageStore } from '../../stores/storage';
 
 const props = defineProps({
-  data: {
-    type: Object,
-    required: true
+    id:{
+        type: Number,
+        required: true
+    },
+    data: {
+        type: Object,
+        required: true
   }
 });
 
@@ -158,33 +180,67 @@ const generateReport = () => {
   doc.setFontSize(10);
 
   if (reportPeriod.value === 'all') {
-    if (reportOptions.value.dataset[0]) {
-      doc.text(`Total de requisições em todo ano`, 10, 20)
-      doc.text(`${props.data.requests[0]}`, 10, 30);
+    if(props.id === 1){
+        if (reportOptions.value.dataset[0]) {
+          doc.text(`Total de requisições em todo ano`, 10, 20)
+          doc.text(`${props.data.requests[0]}`, 10, 30);
+        }
+        if (reportOptions.value.dataset[1]) {
+          doc.text('Total de aceitações em todo ano: ', 83, 20);
+          doc.text(`${props.data.requestsAccepted[0]}`, 83, 30);
+        }
+        if (reportOptions.value.dataset[2]) {
+          doc.text('Total de rejeições em todo ano:', 150, 20);
+          doc.text(`${props.data.requestsRejected[0]}`, 150, 30);
+        }
     }
-    if (reportOptions.value.dataset[1]) {
-      doc.text('Total de aceitações em todo ano: ', 83, 20);
-      doc.text(`${props.data.requestsAccepted[0]}`, 83, 30);
-    }
-    if (reportOptions.value.dataset[2]) {
-      doc.text('Total de rejeições em todo ano:', 150, 20);
-      doc.text(`${props.data.requestsRejected[0]}`, 150, 30);
+    else if(props.id === 2){
+        if (reportOptions.value.dataset[0]) {
+          doc.text(`Itens mais solicitados`, 10, 20)
+          doc.text(`${props.data.labels.mostItems[0]}`, 10, 30);
+          doc.text(`${props.data.datasets.mostItemsTime[0]}`, 10, 40);
+        }
+        if (reportOptions.value.dataset[1]) {
+          doc.text('Usuários com mais solicitações', 83, 20);
+          doc.text(`${props.data.labels.mostRequesters[0]}`, 83, 30);
+          doc.text(`${props.data.datasets.mostRequestersTime[0]}`, 83, 40);
+        }
     }
   } else if (reportPeriod.value === 'monthly') {
-      doc.setFont('times', 'bold');
-      doc.text(`Total de requisições`, 10, 20);
-      doc.text(`Requisições aceitas`, 83, 20);
-      doc.text(`Requisições recusadas`, 150, 20);
-      doc.setFont('times', 'light');
-      for(let i = 0; i < selectedMonths.value.length; i++){
+    if(props.id === 1){
+        doc.setFont('times', 'bold');
+        doc.text(`Total de requisições`, 10, 20);
+        doc.text(`Requisições aceitas`, 83, 20);
+        doc.text(`Requisições recusadas`, 150, 20);
+        doc.setFont('times', 'light');
+        for(let i = 0; i < selectedMonths.value.length; i++){
           if(reportOptions.value.dataset[0]){
             doc.text(`${months[selectedMonths.value[i]]}: ${props.data.requests[1][selectedMonths.value[i]]}`, 10, 30+(10*i));
-        }
-        if(reportOptions.value.dataset[1]){
-            doc.text(`${months[selectedMonths.value[i]]} : ${props.data.requestsAccepted[1][selectedMonths.value[i]]}`, 83, 30+(10*i));
-        }
-        if(reportOptions.value.dataset[2]){
-            doc.text(`${months[selectedMonths.value[i]]}: ${props.data.requestsRejected[1][selectedMonths.value[i]]}`, 150, 30+(10*i));
+          }
+          if(reportOptions.value.dataset[1]){
+              doc.text(`${months[selectedMonths.value[i]]} : ${props.data.requestsAccepted[1][selectedMonths.value[i]]}`, 83, 30+(10*i));
+          }
+          if(reportOptions.value.dataset[2]){
+              doc.text(`${months[selectedMonths.value[i]]}: ${props.data.requestsRejected[1][selectedMonths.value[i]]}`, 150, 30+(10*i));
+          }
+      }
+    }
+    else if(props.id === 2){
+        doc.text(`Itens mais solicitados`, 10, 20)
+        doc.text('Usuários com mais solicitações', 83, 20);
+        for(let i = 0; i < selectedMonths.value.length; i++){
+            if (reportOptions.value.dataset[0]) {
+                if(props.data.datasets.mostItemsTime[1][selectedMonths.value[i]] != undefined){
+                    doc.text(`${props.data.labels.mostItems[1][selectedMonths.value[i]]}`, 10, 30+(10*i));
+                    doc.text(`${months[selectedMonths.value[i]]}: ${props.data.datasets.mostItemsTime[1][selectedMonths.value[i]]}`, 10, 35+(10*i));
+                }
+            }
+            if (reportOptions.value.dataset[1]) {
+                if(props.data.datasets.mostRequestersTime[1][selectedMonths.value[i]] != undefined){
+                    doc.text(`${props.data.labels.mostRequesters[1][selectedMonths.value[i]]}`, 83, 30+(10*i));
+                    doc.text(`${months[selectedMonths.value[i]]}: ${props.data.datasets.mostRequestersTime[1][selectedMonths.value[i]]}`, 83, 35+(10*i));
+                }
+            }
         }
     }
   }
@@ -192,6 +248,7 @@ const generateReport = () => {
   // Salvar o PDF
   doc.save('relatorio.pdf');
 };
+
 </script>
 
 <style scoped>

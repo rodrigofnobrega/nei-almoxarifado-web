@@ -1,5 +1,5 @@
 <template>
-  <ModalAlmoReport :data="datasets"/>
+  <ModalAlmoReport :id="2" :data="{datasets: datasets, labels: labels}"/>
   <div class="graph-header d-flex align-items-end justify-content-between section-title pt-2 mb-3 bg-light-background-header">
         <h5 class="ps-2">Gráfico dos mais solicitados</h5>
         <div class="dropdown mb-1 mx-2 d-flex">
@@ -25,7 +25,7 @@
                 </div>
               </li>
             </ul>
-            <button @click="store.reportType = 'itemsusers'" class="d-flex align-items-center graph-btn btn btn-transparent me-3" type="button" data-bs-toggle="modal" data-bs-target="#almoReport" ria-expanded="false">
+            <button class="d-flex align-items-center graph-btn btn btn-transparent me-3" type="button" data-bs-toggle="modal" data-bs-target="#almoReport2" ria-expanded="false">
               <IconsRequest class="me-1" width="20px" height="20px"/>
               Relatório
             </button>

@@ -38,7 +38,6 @@ const props = defineProps({
     },
     itemSipac: {
         type: Number,
-        required: true
     },
     itemType: {
         type: String,
@@ -60,7 +59,7 @@ const reposition = () => {
         return 0
     }
     try{
-        store.addItem({name: props.itemName, sipacCode: props.itemSipac, type: props.itemType, quantity: repositionQtd.value, storage: 'teste'})
+        store.addItem({name: props.itemName, sipacCode: props.itemSipac === null? '': props.itemSipac, type: props.itemType, quantity: repositionQtd.value, storage: 'teste'})
         popUpStore.throwPopup(`Reposição de ${repositionQtd.value} ${props.itemName} feita com sucesso`, '#0B3B69')
     } catch(err){
         popUpStore.throwPopup('Erro: Algo de errado ocorreu, contate o suporte', '#B71C1C')

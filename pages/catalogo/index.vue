@@ -2,11 +2,10 @@
     <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
     <ModalItemHistory v-if="itemsCache.length > 0"/>
 <div class="table-container d-block mt-2">
-    <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
     <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
         <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
-            Descrição da página 
+            Descrição da página {{ itemsLoad }} {{ pagination }}
         </h6>
         <p class="sub-catalog-text opacity-75">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
             Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
@@ -36,7 +35,7 @@
                 </tr>
             </template>
             <template v-slot:content>
-            <tr v-if="loadItems[0] != null" v-for="item in loadItems" :key="item.index" :data-index="item.index">
+            <tr v-for="item in itemsCache" :key="item.index" :data-index="item.index">
                <th class="border" scope="row">
                     <span>{{ item.name }}</span>
                </th>
@@ -64,17 +63,21 @@
                     </button>
                </th>
             </tr>
+            <!--
             <div v-else-if="loadItems.length == 0" class="search-empty position-absolute mt-5">
                 <p class="text-dark-emphasis fs-5 opacity-50">Nenhum Resultado Encontrado.</p>
             </div>
             <div v-else class="warning-text d-flex aling-items-center justify-content-center">
                 <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
             </div>
+            -->
         </template>
         </TablesTable>
     </div>
     <div class="d-flex justify-content-between me-2 mt-2">
+        <!--
         <span class="ms-2 pages-info">Quantidade de itens da página: {{ loadItems.length }}</span> 
+        -->
         <nav v-if="itemsCache.length > 0" aria-label="Page navigation" class="pagination">
             <ul class="pagination">
                 <li class="page-item">
@@ -119,23 +122,39 @@ let queryParams = ref({
     sort: 'id,desc', 
     isInverted: false
 });
+
+
+const itemsCache = ref([])
+const totalPages = ref(0);
+let indexCount = 0;
 //Aqui faço a requisição em si, também possui parâmetros de filtros, sendo o padrão o de últimos atualizados(como está no banco de dados)
-const sortedResponse = async (sort, isInverted, pagination, paginationInverted) => {
+const itemsReq = async (sort, isInverted, pagination, paginationInverted) => {
     if(isInverted){
         const res = await getItems(userStore, paginationInverted, sort)
-        return res
+        totalPages.value = res.totalPages
+        invertedPagination.value = totalPages-1;
+        res.content.map((item) => {
+            item.index = indexCount;
+            indexCount++;
+            itemsCache.value.push(item)
+        });
+        return 1
     } 
     const res = await getItems(userStore, pagination, sort)
-    return res
+    totalPages.value = res.totalPages
+    invertedPagination.value = totalPages-1;
+    res.content.map((item) => {
+        item.index = indexCount;
+        indexCount++;
+        itemsCache.value.push(item)
+    });
+    return 1
 }; 
-let response = await sortedResponse('', false, pagination.value, 0);
-let totalPages = response.totalPages
-invertedPagination.value = totalPages-1;
+itemsReq('id,desc', false, pagination.value, 0);
 
-let itemsCache = ref([])
-let indexCount = 0;
+/*
 for(let i = 0; i < totalPages; i++){
-    const res = await sortedResponse(queryParams.value.sort, false, pagination.value+i)
+    const res = await itemsReq(queryParams.value.sort, false, pagination.value+i)
     res.content.map((item) => {
         item.index = indexCount;
         indexCount++;
@@ -143,8 +162,23 @@ for(let i = 0; i < totalPages; i++){
     });
 }
 store.items = itemsCache.value;
+*/
 
-const teste = computed(() => {
+//itemsLoad
+//itemsReq
+//itemsCache
+
+const itemsLoad = computed(() => {
+    itemsReq('id,desc', false, pagination.value, 1);
+    itemsReq('id,desc', false, pagination.value, 2);
+    if(pagination.value === 1){
+        return 'AS'
+    }else{
+        return 'BS  '
+    }
+})
+
+const varReload = computed(() => {
     if(store.isReloadItems === false){
         return 0
     } 
@@ -158,7 +192,7 @@ async function reloadItems(sort, isInverted, invertedPagination){
     let indexcount = 0;
     if(isInverted){
         for(let i = totalPages-1; i >= 0; i--){
-            const res = await sortedResponse(sort, true, 0, i)    
+            const res = await itemsReq(sort, true, 0, i)    
             res.content.map((item) => {
                 item.index = indexcount;
                 itemsCache.value[indexcount] = item
@@ -169,7 +203,7 @@ async function reloadItems(sort, isInverted, invertedPagination){
         return 1
     }
     for(let i = 0; i < totalPages; i++){
-        const res = await sortedResponse(sort, isInverted, i, invertedPagination)
+        const res = await itemsReq(sort, isInverted, i, invertedPagination)
         res.content.map((item) => {
             item.index = indexcount;
             itemsCache.value[indexcount] = item
@@ -209,6 +243,10 @@ provide('setItemsFilter', (filter, inverted) => {
     queryParams.value.isInverted = inverted
     reloadItems(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
 });
+
+
+
+
 //Variáveis que o front vai pegar em si
 const itemIndex = ref(0);
 const currentItem = computed(() => store.items[itemIndex.value]);
@@ -284,6 +322,7 @@ const showHistory = async (itemId) => {
 const toolTipState = ref([[], []]);
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
+    console.log(itemsCache.value)
     if(searchStore.itemSearch.searching){
         showDetails(searchStore.itemSearch.itemId);
         const searching = document.getElementsByClassName('searching-btn'); 
