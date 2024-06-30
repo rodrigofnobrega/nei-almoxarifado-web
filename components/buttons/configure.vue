@@ -10,7 +10,7 @@
                 <input v-model="store.isEditionMode" @click="store.isEditionMode = !store.isEditionMode" class="form-check-input me-2" value="" id="editCheck" type="checkbox">
             </li>
             <li class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2 pe-0">
-            <input type="file" @change="handleFileUpload" accept=".xlsx, .xls, .csv" />
+                <a class="btn btn-transparent p-0" href="/catalogo/importar-tabelas">importar tabelas</a>
             </li>
         </ul>   
     </div>  
@@ -51,13 +51,16 @@ const handleFileUpload = async (event) => {
         for(let i = 0; i < tableData.length; i++){
             console.log(tableData[i][1], tableData[i][2], tableData[i][4] < 0 ? 0 : tableData[i][4])
             try{
-                let res = await postCreateItem(userStore, tableData[i][1], '', tableData[i][4] < 0 ? 0 : tableData[i][4], tableData[i][2]);
+                if(tableData[i][4] > 0){
+                    let res = await postCreateItem(userStore, tableData[i][1], '', tableData[i][4], tableData[i][2]);
+                }
             }catch(err){
                 console.log(err)
             }
         }
     };
     reader.readAsArrayBuffer(file);
+    store.isReloadItems = true;
 }
 
 
@@ -113,10 +116,7 @@ li{
 .form-check-input:checked{
     background-color: #1F69B1 !important;
 }
-.btn-transparent:hover{
-    color: white;
-    background-color: #FED51E;
-}
+
 .action-btn:hover{
     opacity: 90%;
 }

@@ -109,7 +109,7 @@ const data = req.content.map((request) => {
 
 
 
-for(let i = 1; i < 12; i++){
+for(let i = 1; i <= 12; i++){
   let requestsSum = 0;
   let requestsAcceptedSum = 0;
   let requestsRejectedSum = 0;

@@ -7,7 +7,6 @@
             </button>
         </template>
         <template v-slot:body>
-            <p>{{ props.data }}</p>
             <form @submit.prevent="generateReport">
                 <div class="d-block mb-3">
                     <div v-if="props.id === 1">
@@ -167,13 +166,17 @@ const generateReport = () => {
   const doc = new jsPDF();
 
   const pageWidth = doc.internal.pageSize.getWidth();
-
+  const date = new Date();
   const title = 'RELATÓRIO';
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(16);
   const titleWidth = doc.getStringUnitWidth(title) * doc.getFontSize() / doc.internal.scaleFactor;
   const titleX = (pageWidth - titleWidth) / 2;
   doc.text(title, titleX, 10);
+  doc.setFontSize(11);
+  doc.text('Data:', titleX+50, 10);
+  doc.setFont('helvetica', 'light');
+  doc.text(`${date.getDate()}/${date.getMonth()}/${date.getFullYear()} - ${date.getHours()}:${date.getUTCMinutes()}:${date.getSeconds()}`, titleX+62, 10);
   doc.line(10, 13, 200, 13);
 
   doc.setFont('times', 'light');
@@ -182,16 +185,25 @@ const generateReport = () => {
   if (reportPeriod.value === 'all') {
     if(props.id === 1){
         if (reportOptions.value.dataset[0]) {
-          doc.text(`Total de requisições em todo ano`, 10, 20)
-          doc.text(`${props.data.requests[0]}`, 10, 30);
+          for(let i = 0; i < months.length; i++){
+              doc.text(`${months[i].slice(0, 3)}`, titleX-40+(i*10), 20);  
+              doc.text(`${props.data.requests[0][i]}`, titleX-39+(i*10), 30);  
+          }
+          doc.text('Total de requisições: ', 10, 30);
         }
         if (reportOptions.value.dataset[1]) {
-          doc.text('Total de aceitações em todo ano: ', 83, 20);
-          doc.text(`${props.data.requestsAccepted[0]}`, 83, 30);
+          for(let i = 0; i < months.length; i++){
+            doc.text(`${months[i].slice(0, 3)}`, titleX-40+(i*10), 20);  
+            doc.text(`${props.data.requestsAccepted[0][i]}`, titleX-39+(i*10), 40);  
+          }
+          doc.text('Total de aceitações: ', 10, 40);
         }
         if (reportOptions.value.dataset[2]) {
-          doc.text('Total de rejeições em todo ano:', 150, 20);
-          doc.text(`${props.data.requestsRejected[0]}`, 150, 30);
+          for(let i = 0; i < months.length; i++){
+            doc.text(`${months[i].slice(0, 3)}`, titleX-40+(i*10), 20);  
+            doc.text(`${props.data.requestsRejected[0][i]}`, titleX-39+(i*10), 50);  
+          }
+          doc.text('Total de rejeições:', 10, 50);
         }
     }
     else if(props.id === 2){
