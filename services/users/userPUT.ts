@@ -1,6 +1,5 @@
 import { useApi } from "../../composables/axios"
 export const updatePasswordPUT = async (userStore, userId, currentPassword, newPassword, confirmPassword) => {
-    console.log(userStore, userId, currentPassword, newPassword, confirmPassword)
     const { data } = await useApi().put(`/users/updatePassword/${userId}`, {
         "currentPassword": currentPassword,
         "newPassword": newPassword,

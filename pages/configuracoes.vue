@@ -150,18 +150,20 @@
                 <input class="form-control" type="number" v-model="reportSettings.specificTax" />
             </label>
     </section>
-    -->
     <section class="settings-section mb-5">
-        <h4 class="section-title">Personalizar Tipos e Categorias de Itens</h4>
-        <div class="section-content">
-            <div v-for="(category, index) in itemCategories" :key="index">
-                <input type="text" v-model="itemCategories[index]" placeholder="Categoria de Item" />
-                <button class="btn btn-light-alert text-light fw-bold" @click="removeItemCategory(index)">Remover</button>
+        <div class="section-title d-flex align-items-center justify-content-between ms-2">
+            <h4>Personalizar Tipos e Categorias de Itens</h4>
+            <button class="btn btn-primary fw-bold" @click="addItemCategory">Adicionar</button>
+        </div>
+        <div class="section-content d-flex">
+            <div class="d-flex" v-for="(category, index) in itemCategories" :key="index">
+                <input class="form-control" type="text" v-model="itemCategories[index]" placeholder="Categoria de Item" />
+                <button class="btn mx-3 btn-light-alert text-light fw-bold" @click="removeItemCategory(index)">Remover</button>
             </div>
-            <button class="btn btn-primary fw-bold" @click="addItemCategory">Adicionar Categoria</button>
         </div>
     </section>
     <button class="btn btn-primary fw-bold" @click="saveSettings">Salvar Configurações</button>
+    -->
 </div>
 </template>
 

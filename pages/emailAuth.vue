@@ -1,30 +1,32 @@
 <template>
-	<div class="container-fluid auth-container d-flex  col-1 justify-content-center" :class="{ 'blurred': isSubmitOn || tokenError }">
-		<div class="header">
-			<p class="texto"><strong>Recuperar Senha</strong></p>
+	<div class="container-fluid bg-light-emphasis auth-container d-flex  col-1 justify-content-center" :class="{ 'blurred': isSubmitOn || tokenError }">
+		<div class="header d-flex align-items-center justify-content-center">
+			<p class="texto fw-bold">Recuperar Senha</p>
 		</div>
-        <form class="auth-form" @submit.prevent="submitForm">
-            
-            <div class="auth">
-                
-                <div  v-if="!isEnviado" class="submit">
-                    <label for="email">Email:</label>
-                    <input type="text" id="email" placeholder="Seu email" v-model="email" required>
-                </div>
-            
-
-                <div v-else-if="isEnviado" class="token">
-                    <label for="token">Código de verificação:</label>
-                    <input type="text" id="token" placeholder="Seu código" v-model="token">
-                </div>
-            
-            </div>
-            
-            <button v-if="!isEnviado" type="submit" @click="forgetPassword">Enviar</button>
-            
-            <button v-else-if="isEnviado" type="submit" @click="validateToken">Ir</button>
-
-        </form>
+		<div class="mx-3">
+			<p v-if="!isSubmited" class="mt-3 mb-0"><strong>Observação:</strong> Antes de se cadastrar verifique com a administração as credenciais válidas para o cadastro.</p>	
+			<form class="auth-form" @submit.prevent="submitForm">
+				<div class="auth">
+					
+					<div  v-if="!isSubmited" class="submit">
+						<label class="fw-bold" for="email">Email:</label>
+						<input type="text" id="email" placeholder="Email" v-model="email" required>
+					</div>
+				
+	
+					<div v-else-if="isSubmited" class="token">
+						<label class="fw-bold" for="token">Código de verificação:</label>
+						<input type="text" id="token" placeholder="Código" v-model="token">
+					</div>
+				
+				</div>
+				
+				<button v-if="!isSubmited" type="submit" @click="forgetPassword">Enviar</button>
+				
+				<button v-else-if="isSubmited" type="submit" @click="validateToken">Ir</button>
+	
+			</form>
+		</div>
 	</div>
 
     <span v-if="isSubmitOn" class="pop-message">
@@ -55,30 +57,13 @@ import { getUserByEmail } from '../services/users/userGET';
 
 const store = useStorageStore()
 const userStore = useUser()
-const forgetPassword = async () => {
-	console.log(email.value);
-	const res = await forgotPasswordAUTH(email.value);
-	//const res = await forgotPasswordPUT(1, recoveryToken.data, 121212, 121212)
-	console.log(res)
-	if (email.value != '') {
-		console.log(`O token foi enviado para ${email.value}.`);
-		isSubmitOn.value = true;
-		isEnviado.value = true;  
-	}
-}
-const validateToken = async () => {
-	const res = await recoveryTokenAUTH(token.value);
-	store.recoveryToken = token.value;
-	console.log(res.data);
-	navigateTo('/senhaAuth');
-}
 // Váriaveis responsivas que armazenam os valores dos campos acima (integrar à API)
 const email = ref('');
 const token = ref(''); // 
 const newToken = ref('');
 
 // Variáveis de verificação se foi mandado ou não o código e para verificar o código
-const isEnviado = ref(false);
+const isSubmited = ref(false);
 
 // Váriaveis que mostrarão os Pop-Up's no envio do token ou no erro dele
 const isSubmitOn = ref(false);
@@ -101,15 +86,30 @@ const resetSubmit = () => {
     tokenError.value = false;
 
 }
+
+const forgetPassword = async () => {
+	console.log(email.value);
+	const res = await forgotPasswordAUTH(email.value);
+	//const res = await forgotPasswordPUT(1, recoveryToken.data, 121212, 121212)
+	if (email.value != '') {
+		console.log(`O token foi enviado para ${email.value}.`);
+		isSubmitOn.value = true;
+		isSubmited.value = true;  
+	}
+}
+const validateToken = async () => {
+	const res = await recoveryTokenAUTH(token.value);
+	store.recoveryToken = token.value;
+	console.log(res.data);
+	navigateTo('/senhaAuth');
+}
 </script>
 
 <style scoped>
 .blurred {
 	filter: blur(1.5px);
 }
-/* .auth-container {
 
-} */
 .pop-message {
 	position: absolute;
 	top: 50%;
@@ -179,30 +179,23 @@ const resetSubmit = () => {
 
 .auth-container{
 	border-radius: 15px;
-	height: 400px;
-	width: 325px;
+	width: 120%;
 	flex-direction: column;
-    margin: 10px;
+    margin-top: 30px;
 }
 .auth {
-    padding-top: 5px;
-    padding-bottom: 50px;
+    padding-bottom: 10px;
     justify-content: space-around;
-    margin-top: 70px;
-    margin-bottom: 55px;
 }
 
 .texto {
-	display: flex;
-	margin: 20px 10px 10px;
+	margin: 20px 0px 20px !important;
 	font-weight: 500;
-	font-size: 20px;
-	justify-content: space-around;
+	font-size: 23px;
 }
 
 .header {
 	width: 100%;
-	max-width: 350px;
 	height: 65px;
 	border-radius: 15px;
 	background-color: #0B3B69;
@@ -212,10 +205,7 @@ const resetSubmit = () => {
 }
 
 .auth-form {
-	margin-top: 30px;
-    margin-bottom: 5px;
-    padding: 10px;
-
+	margin: 10px 0px 10px 0px;
 }
 
 .auth-form label {

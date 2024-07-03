@@ -6,7 +6,8 @@
     <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
         <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
-            Descrição da página
+            Descrição da página {{ itemsLoad }} Pagination: {{ pagination }} CacheIndex {{ cacheIndex }} PaginatioRet: {{ paginationRet }}
+            ItemsCacheLength: {{ itemsCache.length }}
         </h6>
         <p class="sub-catalog-text opacity-75">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
             Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
@@ -15,7 +16,7 @@
     <div class="table-box row d-block">
         <div class="table-actions d-flex justify-content-between aling-items-center" style="margin-bottom: -1px !important;">
             <div class="d-flex">
-                <ButtonsNewItem v-if="uploadReloader == 1" style="margin-top: 3px;" />
+                <ButtonsNewItem v-if="uploadReloader === 1" style="margin-top: 3px;" />
                 <ButtonsFilter style="margin-top: 3px;" />
                 <ButtonsConfigure style="margin-top: 3px;" />
             </div>
@@ -36,7 +37,7 @@
                 </tr>
             </template>
             <template v-slot:content>
-            <tr v-if="loadItems[0] != null" v-for="item in loadItems" :key="item.index" :data-index="item.index">
+            <tr v-if="itemsCache.length > 0" v-for="(item, index) in itemsCache[cacheIndex]" :key="index" :data-index="index">
                <th class="border" scope="row">
                     <span>{{ item.name }}</span>
                </th>
@@ -54,27 +55,29 @@
                    <span>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</span>
                </th>
                <th class="border" width="5%">
-                   <TooltipsRectangular class="toolTip" style=" right: 7.4%; margin-top: -50px;" :toolTipState="toolTipState[0][item.index] ? toolTipState[0][item.index] : false" :toolTipText="'Detalhes'"/>
-                   <TooltipsRectangular class="toolTip" style=" right: 6%; margin-top: -50px;" :toolTipState="toolTipState[1][item.index] ? toolTipState[1][item.index] : false" :toolTipText="'Histórico'"/>
-                    <button @mouseover="toolTipState[0][item.index] = true" @mouseout="toolTipState[0][item.index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(item.index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                   <TooltipsRectangular class="toolTip" style=" right: 7.4%; margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
+                   <TooltipsRectangular class="toolTip" style=" right: 6%; margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Histórico'"/>
+                    <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         <IconsSearchGlass width="18px" height="19px"/>
                     </button>
-                    <button @mouseover="toolTipState[1][item.index] = true" @mouseout="toolTipState[1][item.index] = false" class="my-0 position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}"  @click="showHistory(item.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                    <button @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false" class="my-0 position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}"  @click="showHistory(item.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
                         <IconsHistory width="18px" height="19px"/>
                     </button>
                </th>
             </tr>
-            <div v-else-if="loadItems.length == 0" class="search-empty position-absolute mt-5">
+            <!---
+            <div v-else-if="itemsCache.length == 0" class="search-empty position-absolute mt-5">
                 <p class="text-dark-emphasis fs-5 opacity-50">Nenhum Resultado Encontrado.</p>
             </div>
             <div v-else class="warning-text d-flex aling-items-center justify-content-center">
                 <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
             </div>
+            -->
         </template>
         </TablesTable>
     </div>
     <div class="d-flex justify-content-between me-2 mt-2">
-        <span class="ms-2 pages-info">Quantidade de itens da página: {{ loadItems.length }}</span> 
+        <!--<span v-if="itemsCache.length > 0" class="ms-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span> -->
         <nav v-if="itemsCache.length > 0" aria-label="Page navigation" class="pagination">
             <ul class="pagination">
                 <li class="page-item">
@@ -128,100 +131,61 @@ let queryParams = ref({
     sort: 'id,desc', 
     isInverted: false
 });
+
 //Aqui faço a requisição em si, também possui parâmetros de filtros, sendo o padrão o de últimos atualizados(como está no banco de dados)
-const sortedResponse = async (sort, isInverted, pagination, paginationInverted) => {
+const itemsCache = ref([]);
+const cacheIndex = ref(0);
+const totalPages = ref(0);
+const itemsFilter = ref('desc,id')
+let indexCount = 0;
+const itemsReq = async (sort, isInverted, pagination, loadRequest, paginationInverted) => {
     if(isInverted){
         const res = await getItems(userStore, paginationInverted, sort)
-        return res
+        totalPages.value = res.totalPages
+        invertedPagination.value = totalPages-1;
+        itemsCache.value.push(res.content);
+        return res.totalPages
     } 
     const res = await getItems(userStore, pagination, sort)
-    return res
+    totalPages.value = res.totalPages
+    invertedPagination.value = totalPages-1;
+    loadRequest ? cacheIndex.value++ : 0;
+    itemsCache.value.push(res.content);
+    return res.totalPages
 }; 
-let response = await sortedResponse('', false, pagination.value, 0);
-let totalPages = response.totalPages
-invertedPagination.value = totalPages-1;
 
-let itemsCache = ref([])
-let indexCount = 0;
-for(let i = 0; i < totalPages; i++){
-    const res = await sortedResponse(queryParams.value.sort, false, pagination.value+i)
-    res.content.map((item) => {
-        item.index = indexCount;
-        indexCount++;
-        itemsCache.value.push(item)
-    });
-}
-store.items = itemsCache.value;
-
-
-const uploadReloader = computed(() => {
-    if(store.isReloadItems === false){
-        return 1
-    } 
-    if(store.isReloadItems === true){
-        reloadItems('id,desc', false);
-        return 1
-    } 
-})
-async function reloadItems(sort, isInverted, invertedPagination){
-    console.log("RELOAD")
-    let indexcount = 0;
-    if(isInverted){
-        for(let i = totalPages-1; i >= 0; i--){
-            const res = await sortedResponse(sort, true, 0, i)    
-            res.content.map((item) => {
-                item.index = indexcount;
-                itemsCache.value[indexcount] = item
-                indexcount++;
-            });
-        }
-        store.items = itemsCache.value;
-        return 1
-    }
-    for(let i = 0; i < totalPages; i++){
-        const res = await sortedResponse(sort, isInverted, i, invertedPagination)
-        res.content.map((item) => {
-            item.index = indexcount;
-            itemsCache.value[indexcount] = item
-            indexcount++;
-        });
-    }
-    store.items = itemsCache.value;
-    return 1;
-};
 
 const searchInput = ref("");
-const loadItems = computed(() => {
-    let items = [];
-    let page = 20*pagination.value
-    let aux = page;
-    let index = 0;
-    let find = 0;
-    if(searchInput.value != ''){
-        do{
-            if(store.items[index].name.includes(searchInput.value)){
-               items.push(store.items[index])
-               find++;
-            }
-            index++;
-        } while(index < store.items.length)
-        return items
+const initialLoading = ref(true);
+let reqsIndexCache = [0]
+const itemsLoad = computed(async() => {
+    if(initialLoading.value === true){
+        await itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
+        return 0;
     }
-    do{
-        items.push(store.items[aux])
-        aux++;
-    }while(aux < store.items.length && aux < 20*(pagination.value+1));
-    return items
+    if(searchInput.value != ''){
+        store.isReloadItems = true;
+    }
+    for(let i = 0; i < reqsIndexCache.length; i++){
+        if(pagination.value === reqsIndexCache[i]){
+            cacheIndex.value = i;        
+            return 0;
+        }
+    }
+    itemsReq(queryParams.value.sort, false, pagination.value, true, queryParams.value.isInverted);
+    reqsIndexCache.push(pagination.value)
 })
 
+
 provide('setItemsFilter', (filter, inverted) => {
-    queryParams.value.sort = filter
-    queryParams.value.isInverted = inverted
-    reloadItems(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
+    queryParams.value.sort = filter;
+    queryParams.value.isInverted = inverted;
+    store.isReloadItems = true;
+    //reloadItems(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
 });
 //Variáveis que o front vai pegar em si
 const itemIndex = ref(0);
-const currentItem = computed(() => store.items[itemIndex.value]);
+const currentItem = computed(() => itemsCache.value[cacheIndex.value][itemIndex.value]);
 
 const currentRoute = useRoute().fullPath.split('/')[2];
 
@@ -241,8 +205,41 @@ for(let i = 0; i < totalPages; i++){
 };
 let count = 0;
 
+
+const uploadReloader = computed(() => {
+    if(store.isReloadItems === true){
+        pagination.value = 0;
+        cacheIndex.value = 0;
+        itemsCache.value = [];
+        reqsIndexCache = [0]
+        if(searchInput.value != ''){
+            itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
+        }
+        itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
+
+        paginationRet.value = 1;
+        initialLoading.value = false
+        store.isReloadItems = false;
+
+        pagesFocus.value[count] = false;
+        count = 0;  
+        pagesFocus.value[0] = true;
+        return 1
+    } 
+    return 1;
+})
 const page = (async (index) => {
-    paginationRet.value = index <= 1 || index > totalPages-3 ? index === 0 ? index+1 : index === totalPages-1? index-3 : paginationRet.value : index-1;
+    if (index <= 1 || index > totalPages.value - 3) {
+        if (index === 0) {
+            paginationRet.value = index + 1;
+        } else if (index === totalPages.value - 1) {
+            paginationRet.value = index - 3;
+        } else {
+            paginationRet.value = paginationRet.value;
+        }
+    } else {
+        paginationRet.value = index - 1;
+    }
     pagination.value = index;
     if(queryParams.value.isInverted){
         if(index < invertedPagination.value){
@@ -257,7 +254,7 @@ const page = (async (index) => {
     pagesFocus.value[count] = true;
 });
 const fowardPage = (async () => {
-    paginationRet.value = pagination.value <= 1 || pagination.value >= totalPages-3 ? paginationRet.value : paginationRet.value+1  
+    paginationRet.value = pagination.value <= 1 || pagination.value >= totalPages.value-3 ? paginationRet.value : paginationRet.value+1  
     pagination.value++;
     if(queryParams.value.isInverted){
         invertedPagination.value--;
@@ -270,7 +267,7 @@ const fowardPage = (async () => {
     document.getElementById("backPageBtn").classList.remove("bg-dark-emphasis");
 });
 const backPage = (async () => {
-    paginationRet.value = pagination.value <= 2 || pagination.value > totalPages-4 ? paginationRet.value : paginationRet.value-1  
+    paginationRet.value = pagination.value <= 2 || pagination.value > totalPages.value-3 ? paginationRet.value : paginationRet.value-1  
     pagination.value--;
     if(queryParams.value.isInverted){
         invertedPagination.value++;
@@ -294,6 +291,7 @@ const showHistory = async (itemId) => {
 const toolTipState = ref([[], []]);
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
+    initialLoading.value = false;
     if(searchStore.itemSearch.searching){
         showDetails(searchStore.itemSearch.itemId);
         const searching = document.getElementsByClassName('searching-btn'); 

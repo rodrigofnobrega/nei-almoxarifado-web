@@ -15,7 +15,7 @@
 					</div>	
 					<div class="mb-3"> 
                         <label class="form-label fw-bold"> Código Sipac </label>
-						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.sipacCode"> 
+						<input readonly class="form-control edit-control" :class="{'bg-light-emphasis': !editionActive, 'bg-light': editionActive}" :value="item_details.sipacCode ? item_details.sipacCode : 'nenhum'"> 
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-bold"> Tipo </label>

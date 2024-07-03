@@ -1,46 +1,23 @@
 <template>
-	<div class="container-fluid auth-container d-flex  col-1 justify-content-center" :class="{ 'blurred': !isEqual }">
-
+	<div class="container-fluid bg-light-emphasis auth-container d-flex  col-1 justify-content-center" :class="{ 'blurred': !isEqual }">
 		<div class="header">
 			<p class="texto"><strong>Recuperar Senha</strong></p>
 		</div>
-
         <form class="auth-form" @submit.prevent="submitForm">
-            
             <div class="auth">
-                
                 <div class="novaSenha">
-                    <label for="newPassword">Nova Senha:</label>
-                    <input type="password" id="newPassword" placeholder="Sua nova senha" v-model="newPassword" required>
-
-                    <button 
-					class="showButton" 
-					:class="{ active: showPassword.newPassword }"
-					@click="togglePasswordVisibility('newPassword')"
-					type="button"
-					></button>
+                    <label class="fw-bold" for="newPassword">Nova senha:</label>
+                    <input class="form-control" type="password" id="newPassword" placeholder="Sua nova senha" v-model="newPassword" required>
                 </div>
 
                 <div class="confirmarNova">
-                    <label for="newRePassword">Confirma a Nova Senha:</label>
-                    <input type="password" id="newRePassword" placeholder="Confirme sua nova senha" v-model="newRePassword" required>
-
-                    <button 
-					class="showButton" 
-					:class="{ active: showPassword.newRePassword }"
-					@click="togglePasswordVisibility('newRePassword')"
-					type="button"
-					></button>
+                    <label class="fw-bold" for="newRePassword">Confirmar a senha:</label>
+                    <input class="form-control" type="password" id="newRePassword" placeholder="Confirme sua nova senha" v-model="newRePassword" required>
                 </div>
-
-            </div>
-            
+            </div>  
             <button type="submit" @click="verifyPassword">Enviar</button>
-
         </form>
-
 	</div>
-
     <span v-if="!isEqual" class="pop-error">
 		<p>As senhas não estão iguais, tente novamente</p>
 		<button @click="resetPassword">Ok</button>
@@ -164,14 +141,12 @@ const togglePasswordVisibility = (fieldId) => {
 
 .auth-container{
 	border-radius: 15px;
-	height: 400px;
-	width: 325px;
+	width: 120%;
 	flex-direction: column;
     margin: 10px;
 }
 .auth {
     padding-top: 0px;
-    padding-bottom: 50px;
     justify-content: space-between;
     margin-top: 32px;
     margin-bottom: 20px;
@@ -195,7 +170,6 @@ const togglePasswordVisibility = (fieldId) => {
 
 .header {
 	width: 100%;
-	max-width: 350px;
 	height: 65px;
 	border-radius: 15px;
 	background-color: #0B3B69;
@@ -205,10 +179,8 @@ const togglePasswordVisibility = (fieldId) => {
 }
 
 .auth-form {
-	margin-top: 5px;
     margin-bottom: 5px;
-    padding: 10px;
-
+    padding: 0 10px 10px 10px;
 }
 
 .auth-form input[type="password"] {

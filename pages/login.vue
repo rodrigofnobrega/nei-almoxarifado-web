@@ -1,18 +1,21 @@
 <template>
     <LoadersPageLoading :isLoading="loading" class="loader"/>
-	<div class="container-fluid login-container d-flex  col-1 justify-content-center">
-		<div class="header">
+	<div class="container-fluid bg-light-emphasis login-container d-flex  col-1 justify-content-center">
+		<div class="header d-flex justify-content-center align-items-center">
 			<p class="texto"><strong>Entrar</strong></p>
 		</div>
 		<form class="login-form" @submit.prevent="submitForm">
 
 			<label for="email">Email:</label>
-			<input type="text" id="email" placeholder="Seu email" v-model="email" required>
-
+			<input :class="email && !isValidEmail(email) ? 'border-dark-alert' : ''" type="text" id="email" placeholder="Seu email" v-model="email" required>
+			<p class="fw-bold text-dark-alert mb-2 mt-0 d-flex align-items-center" v-if="email && !isValidEmail(email)">
+				<IconsInformation class="me-1"/>
+				E-mail inválido
+			</p>
 			<label for="password">Senha:</label>
 			<input type="password" id="password" placeholder="Sua senha" v-model="password" required>
 
-			<button type="submit">Entrar</button>
+			<button :class="!isValidEmail(email) ? 'disabled-button' : ''" :disabled="!isValidEmail(email)" id="submitLogin" class="fw-bold disabled" type="submit">Entrar</button>
 
 		</form>
 		<div class="info">
@@ -42,6 +45,11 @@ const submitForm = () => {
 	userStore.fetchData(password.value, email.value);
 };
 
+const isValidEmail = (email) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+}
+
 const loading = ref(false)
 onBeforeRouteLeave(() => {
 	loading.value = true
@@ -55,25 +63,26 @@ onBeforeRouteLeave(() => {
 .container-fluid {
 	padding: 0px;
 }
-
+.disabled-button {
+  opacity: 75%;
+  cursor: not-allowed !important;
+}
 .login-container{
+	margin-top: 80px;
 	border-radius: 15px;
-	height: 400px;
-	width: 325px;
+	
+	width: 110%;
 	flex-direction: column;
 }
 
 .texto {
-	display: flex;
-	margin: 20px 10px 10px;
+	margin: 20px 0px 20px;
 	font-weight: 500;
-	font-size: 20px;
-	justify-content: space-around;
+	font-size: 23px;
 }
 
 .header {
 	width: 100%;
-	max-width: 350px;
 	height: 65px;
 	border-radius: 15px;
 	background-color: #0B3B69;
