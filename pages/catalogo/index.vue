@@ -6,8 +6,7 @@
     <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
         <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
-            Descrição da página {{ itemsLoad }} Pagination: {{ pagination }} CacheIndex {{ cacheIndex }} PaginatioRet: {{ paginationRet }}
-            ItemsCacheLength: {{ itemsCache.length }}
+            Descrição da página
         </h6>
         <p class="sub-catalog-text opacity-75">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
             Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
@@ -20,8 +19,8 @@
                 <ButtonsFilter style="margin-top: 3px;" />
                 <ButtonsConfigure style="margin-top: 3px;" />
             </div>
-            <span class="position-sticky d-flex align-items-center bg-primary table-searchbar">
-                <input v-model="searchInput" class="searchbar bg-light form-control" placeholder="Pesquisar"/>          
+            <span v-if="itemsLoad" class="position-sticky d-flex align-items-center bg-primary table-searchbar">
+                <input id="tableSearch" v-model="searchInput" class="searchbar bg-light form-control" placeholder="Pesquisar"/>          
                 <IconsSearchGlass class="bg-primary text-light search-glass"/>
             </span>
         </div>
@@ -65,20 +64,16 @@
                     </button>
                </th>
             </tr>
-            <!---
-            <div v-else-if="itemsCache.length == 0" class="search-empty position-absolute mt-5">
-                <p class="text-dark-emphasis fs-5 opacity-50">Nenhum Resultado Encontrado.</p>
+            <div v-else-if="itemsCache.length === 0 && !initialLoading" class="search-empty position-absolute mt-5">
+                <p class="text-dark-emphasis fs-5 opacity-50">Nenhum item Encontrado.</p>
             </div>
-            <div v-else class="warning-text d-flex aling-items-center justify-content-center">
-                <p class="text-dark-emphasis fs-5 opacity-50">Inventário vazio.</p>
-            </div>
-            -->
         </template>
         </TablesTable>
     </div>
     <div class="d-flex justify-content-between me-2 mt-2">
-        <!--<span v-if="itemsCache.length > 0" class="ms-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span> -->
-        <nav v-if="itemsCache.length > 0" aria-label="Page navigation" class="pagination">
+        <span v-if="itemsCache.length > 0" class="ms-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span>
+        
+        <nav v-if="itemsCache.length > 0 && finded.length === 0" aria-label="Page navigation" class="pagination">
             <ul class="pagination">
                 <li class="page-item">
                     <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
@@ -134,11 +129,62 @@ let queryParams = ref({
 
 //Aqui faço a requisição em si, também possui parâmetros de filtros, sendo o padrão o de últimos atualizados(como está no banco de dados)
 const itemsCache = ref([]);
+const searchCache = ref([])
 const cacheIndex = ref(0);
 const totalPages = ref(0);
-const itemsFilter = ref('desc,id')
-let indexCount = 0;
+const isSearching = ref(false);
+let finded = [];
 const itemsReq = async (sort, isInverted, pagination, loadRequest, paginationInverted) => {
+    if(searchInput.value != ''){
+        finded = [];
+        store.isReloadItems = true;
+        if(searchCache.value.length >= totalPages.value){
+            for(let i = 0; i < searchCache.value.length; i++){
+                for(let j = 0; j < searchCache.value[i].length; j++){
+                    if(searchCache.value[i][j].name.includes(searchInput.value)){
+                        finded.push(searchCache.value[i][j]);
+                    }
+                    if(finded.length >= 20){ 
+                        itemsCache.value.push(finded);
+                        return 0
+                    };
+                }
+                if(finded.length >= 20){ 
+                        itemsCache.value.push(finded);
+                        return 0
+                };
+            }
+            if(finded.length === 0){
+                itemsCache.value = [];
+                return 0;
+            }
+            itemsCache.value.push(finded);
+            return 0;
+        }
+        for(let i = 0; i < totalPages.value; i++){
+            const res = await getItems(userStore, i, sort);
+            searchCache.value.push(res.content);
+            for(let j = 0; j < res.content.length; j++){
+                if(res.content[j].name.includes(searchInput.value)){
+                    finded.push(res.content[j]);
+                }
+                if(finded.length >= 20){ 
+                    itemsCache.value.push(finded);
+                    return 0
+                };
+            }
+            if(finded.length >= 20){ 
+                itemsCache.value.push(finded);
+                return 0
+            };
+        }
+        if(finded.length === 0){
+            itemsCache.value = [];
+            return 0;
+        }
+        itemsCache.value.push(finded);
+        return 0;
+    }
     if(isInverted){
         const res = await getItems(userStore, paginationInverted, sort)
         totalPages.value = res.totalPages
@@ -157,14 +203,30 @@ const itemsReq = async (sort, isInverted, pagination, loadRequest, paginationInv
 
 const searchInput = ref("");
 const initialLoading = ref(true);
-let reqsIndexCache = [0]
+let reqsIndexCache = [0];
+let typingTimer; 
+const debounceTime = 1000; 
 const itemsLoad = computed(async() => {
     if(initialLoading.value === true){
         await itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
         return 0;
     }
     if(searchInput.value != ''){
-        store.isReloadItems = true;
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => {
+            itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted)
+        }, debounceTime);
+        isSearching.value = true;
+    }
+    if(searchInput.value === ''){
+        if(isSearching.value === true){
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                store.isReloadItems = true;
+                isSearching.value = false;
+            }, debounceTime-500);
+            finded = [];
+        }
     }
     for(let i = 0; i < reqsIndexCache.length; i++){
         if(pagination.value === reqsIndexCache[i]){
@@ -212,9 +274,7 @@ const uploadReloader = computed(() => {
         cacheIndex.value = 0;
         itemsCache.value = [];
         reqsIndexCache = [0]
-        if(searchInput.value != ''){
-            itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
-        }
+
         itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
 
         paginationRet.value = 1;

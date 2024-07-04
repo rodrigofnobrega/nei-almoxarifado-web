@@ -4,7 +4,6 @@ export const getRecords = async (userStore, page, sort) => {
     try{
         if(sort){
             const { data } = await useApi().get(`http://localhost:8080/api/v1/records?page=${page}&sort=${sort}`, {
-                method: 'GET',
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${userStore.token}`

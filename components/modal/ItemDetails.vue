@@ -136,6 +136,7 @@ export default {
         fetchNewData(){
             this.store.updateItemQtd(this.item_index, this.inputs[0].value, this.inputs[1].value,this.item_route);
             this.revertEdition();
+            this.store.isReloadItems = true;
         },
         async getRecord(){
             const res = await getRecordByItemId(this.userStore,this.item_details.id);

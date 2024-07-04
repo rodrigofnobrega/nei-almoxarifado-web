@@ -5,7 +5,7 @@
   <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
       <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
           <IconsInformation class="me-2"/>
-          Descrição da página
+          Descrição da página{{ recordsLoad }}
       </h6>
       <p class="sub-catalog-text opacity-75">Nesta página temos todos os registros das operações feitas no sistema, sendo estas operações de dois tipos: CADASTRO e CONSUMO. 
         Registrando também o usuário e item da operação.</p>
@@ -32,7 +32,7 @@
               </tr>
           </template>
           <template v-slot:content>
-          <tr v-if="loadRecords[0] != null" v-for="record in loadRecords" :key="record.index" :data-index="record.index">
+          <tr v-if="recordsCache.length > 0" v-for="(record, index) in recordsCache[cacheIndex]" :key="index" :data-index="index">
              <th class="border" scope="row">
                   <span>{{ record.user.name }}</span>
              </th>
@@ -49,37 +49,43 @@
                  <span>{{ record.creationDate.slice(0, 19) }}</span>
              </th>
              <th class="border" width="5%">
-                <TooltipsRectangular class="toolTip" style=" right: 7.4%; margin-top: -50px;" :toolTipState="toolTipState[0][record.index] ? toolTipState[0][record.index] : false" :toolTipText="'Detalhes'"/>
-                <TooltipsRectangular class="toolTip" style=" right: 4%; margin-top: -50px;" :toolTipState="toolTipState[1][record.index] ? toolTipState[1][record.index] : false" :toolTipText="'Perfil'"/>
-                <button @mouseover="toolTipState[0][record.index] = true" @mouseout="toolTipState[0][record.index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}" @click="showDetails(record.index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
-                    <IconsSearchGlass width="18px" height="19px"/>
-                </button>
-                <NuxtLink @mouseover="toolTipState[1][record.index] = true" @mouseout="toolTipState[1][record.index] = false" :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="my-0  details-btn position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}">
-                  <IconsLowProfile width="16px" height="16px"/>  
-                </NuxtLink>
-             </th>
+                   <TooltipsRectangular class="toolTip" style=" right: 7.4%; margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
+                   <TooltipsRectangular class="toolTip" style=" right: 6%; margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Histórico'"/>
+                    <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                        <IconsSearchGlass width="18px" height="19px"/>
+                    </button>
+                    <button @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false" class="my-0 position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}"  @click="showHistory(record.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                        <IconsHistory width="18px" height="19px"/>
+                    </button>
+               </th>
           </tr>
-          <div v-else class="warning-text d-flex aling-items-center justify-content-center">
-              <p class="text-dark-emphasis fs-5 opacity-50">Registro vazio.</p>
-          </div>
-          <div v-if="loadRecords.length == 0" class="search-empty position-absolute mt-5">
-              <p class="text-dark-emphasis fs-5 opacity-50">Nenhum Resultado Encontrado.</p>
+          <div v-else-if="recordsCache.length === 0 && !initialLoading" class="search-empty position-absolute mt-5">
+                <p class="text-dark-emphasis fs-5 opacity-50">Nenhum item Encontrado.</p>
           </div>
       </template>
   </TablesTable>
   </div>
   <div class="d-flex justify-content-between me-2 mt-2">
-        <span class="ms-2 pages-info">Quantidade de registros da página: {{ loadRecords.length }}</span> 
-        <nav v-if="recordsCache.length > 0" aria-label="Page navigation" class="pagination">
+        <span v-if="recordsCache.length > 0" class="ms-2 pages-info">Quantidade de itens da página: {{ recordsCache[cacheIndex].length }}</span>
+        <nav v-if="recordsCache.length > 0 && finded.length === 0" aria-label="Page navigation" class="pagination">
             <ul class="pagination">
                 <li class="page-item">
                     <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
                 </li>
+                <li class="page-item" :key="0">
+                    <button class="page-link text-light" @click="page(0)" :class="{'bg-primary': !pagesFocus[0], 'bg-secondary': pagesFocus[0]}">{{ 1 }}</button>
+                </li>
+                <li v-show="pagination > 1" class="page-item">
+                    <button class="page-link bg-primary text-light">...</button>
+                </li>
                 <li class="page-item" v-for="i in totalPages >= 3 ? range(1+paginationRet, 3+paginationRet) : range(1,totalPages)" :key="i-1">
                     <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
                 </li>
-                <li v-show="totalPages > 3 && paginationRet < totalPages-3" class="page-item">
+                <li v-show="totalPages > 3 && paginationRet < totalPages-4" class="page-item">
                     <button class="page-link bg-primary text-light">...</button>
+                </li>
+                <li class="page-item" :key="totalPages-1">
+                    <button class="page-link text-light" @click="page(totalPages-1)" :class="{'bg-primary': !pagesFocus[totalPages-1], 'bg-secondary': pagesFocus[totalPages-1]}">{{ totalPages }}</button>
                 </li>
                 <li class="page-item">
                     <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1 || searchInput !== ''}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
@@ -118,138 +124,172 @@ function range(start, end) {
 let pagination = ref(0); //paginação padrão
 let invertedPagination = ref(0); //paginação invertida para filtro
 let queryParams = ref({ 
-  sort: 'id,desc', 
-  isInverted: false
+    sort: 'id,desc', 
+    isInverted: false
 });
-//Aqui faço a requisição em si, também possui parâmetros de filtros, sendo o padrão o de últimos atualizados(como está no banco de dados)
-const sortedResponse = async (sort, isInverted, pagination, paginationInverted) => {
-  if(isInverted){
-      const res = await getRecords(userStore, paginationInverted, sort)
-      return res
-  } 
-  const res = await getRecords(userStore, pagination, sort)
-  return res
-}; 
-let response = await sortedResponse('', false, pagination.value, 0);
-let totalPages = response.totalPages
-invertedPagination.value = totalPages-1;
-
-
-let recordsCache = ref([])
-let indexCount = 0;
-for(let i = 0; i < totalPages; i++){
-  const res = await sortedResponse(queryParams.value.sort, false, pagination.value+i)
-  res.content.map((record) => {
-    record.index = indexCount;
-      indexCount++;
-      recordsCache.value.push(record)
-  });
-}
-store.records = recordsCache.value;
-async function reloadRecord(sort, isInverted, invertedPagination){
-  let indexcount = 0;
-  if(isInverted){
-      for(let i = totalPages-1; i >= 0; i--){
-          const res = await sortedResponse(sort, true, 0, i)    
-          res.content.map((record) => {
-            record.index = indexcount;
-              recordsCache.value[indexcount] = record
-              indexcount++;
-          });
-      }
-      store.records = recordsCache.value;
-      return 1
-  }
-  for(let i = 0; i < totalPages; i++){
-      const res = await sortedResponse(sort, isInverted, i, invertedPagination)
-      res.content.map((record) => {
-        record.index = indexcount;
-          recordsCache.value[indexcount] = record
-          indexcount++;
-      });
-  }
-  store.records = recordsCache.value;
-  return 1;
+const recordsCache = ref([]);
+const searchCache = ref([])
+const cacheIndex = ref(0);
+const totalPages = ref(0);
+const isSearching = ref(false);
+let finded = [];
+const recordsReq = async (sort, isInverted, pagination, loadRequest, paginationInverted) => {
+    if(searchInput.value != ''){
+        finded = [];
+        store.isReloadItems = true;
+        if(searchCache.value.length >= totalPages.value){
+            for(let i = 0; i < searchCache.value.length; i++){
+                for(let j = 0; j < searchCache.value[i].length; j++){
+                    if(searchCache.value[i][j].name.includes(searchInput.value)){
+                        finded.push(searchCache.value[i][j]);
+                    }
+                    if(finded.length >= 20){ 
+                        recordsCache.value.push(finded);
+                        return 0
+                    };
+                }
+                if(finded.length >= 20){ 
+                        recordsCache.value.push(finded);
+                        return 0
+                };
+            }
+            if(finded.length === 0){
+                recordsCache.value = [];
+                return 0;
+            }
+            recordsCache.value.push(finded);
+            return 0;
+        }
+        for(let i = 0; i < totalPages.value; i++){
+            const res = await getRecords(userStore, i, sort);
+            searchCache.value.push(res.content);
+            for(let j = 0; j < res.content.length; j++){
+                if(res.content[j].name.includes(searchInput.value)){
+                    finded.push(res.content[j]);
+                }
+                if(finded.length >= 20){ 
+                    recordsCache.value.push(finded);
+                    return 0
+                };
+            }
+            if(finded.length >= 20){ 
+                recordsCache.value.push(finded);
+                return 0
+            };
+        }
+        if(finded.length === 0){
+            recordsCache.value = [];
+            return 0;
+        }
+        recordsCache.value.push(finded);
+        return 0;
+    }
+    if(isInverted){
+        const res = await getRecords(userStore, paginationInverted, sort)
+        totalPages.value = res.totalPages
+        invertedPagination.value = totalPages-1;
+        recordsCache.value.push(res.content);
+        return res.totalPages
+    } 
+    const res = await getRecords(userStore, pagination, sort)
+    totalPages.value = res.totalPages
+    invertedPagination.value = totalPages-1;
+    loadRequest ? cacheIndex.value++ : 0;
+    recordsCache.value.push(res.content);
+    return res.totalPages
 };
 
+
 const searchInput = ref("");
-const loadRecords = computed(() => {
-  let records = [];
-  let page = 20*pagination.value
-  let aux = page;
-  let index = 0;
-  let find = 0;
-  if(searchInput.value != ''){
-      do{
-          if(store.records[index].item.name.includes(searchInput.value)){
-            records.push(store.records[index])
-             find++;
-          }
-          index++;
-      } while(index < store.records.length)
-      return records
-  }
-  do{
-    records.push(store.records[aux])
-      aux++;
-  }while(aux < store.records.length && aux < 20*(pagination.value+1));
-  return records
+const initialLoading = ref(true);
+let reqsIndexCache = [0];
+let typingTimer; 
+const debounceTime = 1000; 
+const recordsLoad = computed(async() => {
+    if(initialLoading.value === true){
+        await recordsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
+        return 0;
+    }
+    if(searchInput.value != ''){
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => {
+            recordsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted)
+        }, debounceTime);
+        isSearching.value = true;
+    }
+    if(searchInput.value === ''){
+        if(isSearching.value === true){
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                store.isReloadItems = true;
+                isSearching.value = false;
+            }, debounceTime-500);
+            finded = [];
+        }
+    }
+    for(let i = 0; i < reqsIndexCache.length; i++){
+        if(pagination.value === reqsIndexCache[i]){
+            cacheIndex.value = i;        
+            return 0;
+        }
+    }
+    recordsReq(queryParams.value.sort, false, pagination.value, true, queryParams.value.isInverted);
+    reqsIndexCache.push(pagination.value)
 })
 provide('setItemsFilter', (filter, inverted) => {
-  queryParams.value.sort = filter
-  queryParams.value.isInverted = inverted
-  reloadRecord(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
+    queryParams.value.sort = filter;
+    queryParams.value.isInverted = inverted;
+    store.isReloadItems = true;
+    //reloadItems(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
 });
 //Variáveis que o front vai pegar em si
 const recordIndex = ref(0);
-const currentItem = ref({
-	"id": 0,
-	"name": "",
-	"sipacCode": 0,
-	"quantity": 0,
-	"type": "",
-	"available": false,
-	"createdAt": "",
-	"createdBy": {
-		"id": 0,
-		"name": "",
-		"email": "",
-		"role": "",
-		"existRecord": false,
-		"active": false
-	},
-	"lastRecord": {
-		"id": 0,
-		"user": {
-			"id": 0,
-			"name": "",
-			"email": "",
-			"role": ""
-		},
-		"item": {
-			"id": 0,
-			"name": "",
-			"sipacCode": 0
-		},
-		"quantity": 0,
-		"operation": "",
-		"data": ""
-	}
-});
-const currentRoute = 'almoxarifado';
-const itemQtd = ref(0);
+const currentItem = computed(() => recordsCache.value[cacheIndex.value][recordIndex.value]);
+
+const currentRoute = useRoute().fullPath.split('/')[2];
+
 
 const toolTip = ref([false, false, false, false])
 
 /*CÓDIGO PARA PAGINAÇÃO EM SI E RENDERIZAÇÃO DOS ITENS*/
 let pagesFocus = ref([true]);
 for(let i = 0; i < totalPages; i++){
-  pagesFocus.value.push(false);
+    pagesFocus.value.push(false);
 };
 let count = 0;
 
+const uploadReloader = computed(() => {
+    if(store.isReloadItems === true){
+        pagination.value = 0;
+        cacheIndex.value = 0;
+        recordsCache.value = [];
+        reqsIndexCache = [0]
+
+        recordsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
+
+        paginationRet.value = 1;
+        initialLoading.value = false
+        store.isReloadItems = false;
+
+        pagesFocus.value[count] = false;
+        count = 0;  
+        pagesFocus.value[0] = true;
+        return 1
+    } 
+    return 1;
+})
 const page = (async (index) => {
-    paginationRet.value = index+1 >= totalPages || index <= 0 ? paginationRet.value : index-1;
+    if (index <= 1 || index > totalPages.value - 3) {
+        if (index === 0) {
+            paginationRet.value = index + 1;
+        } else if (index === totalPages.value - 1) {
+            paginationRet.value = index - 3;
+        } else {
+            paginationRet.value = paginationRet.value;
+        }
+    } else {
+        paginationRet.value = index - 1;
+    }
     pagination.value = index;
     if(queryParams.value.isInverted){
         if(index < invertedPagination.value){
@@ -264,7 +304,7 @@ const page = (async (index) => {
     pagesFocus.value[count] = true;
 });
 const fowardPage = (async () => {
-    paginationRet.value = paginationRet.value < totalPages-3 ? paginationRet.value+1 : paginationRet.value  
+    paginationRet.value = pagination.value <= 1 || pagination.value >= totalPages.value-3 ? paginationRet.value : paginationRet.value+1  
     pagination.value++;
     if(queryParams.value.isInverted){
         invertedPagination.value--;
@@ -277,7 +317,7 @@ const fowardPage = (async () => {
     document.getElementById("backPageBtn").classList.remove("bg-dark-emphasis");
 });
 const backPage = (async () => {
-    paginationRet.value = paginationRet.value <= 0 ? paginationRet.value : paginationRet.value-1
+    paginationRet.value = pagination.value <= 2 || pagination.value > totalPages.value-3 ? paginationRet.value : paginationRet.value-1  
     pagination.value--;
     if(queryParams.value.isInverted){
         invertedPagination.value++;
@@ -305,49 +345,50 @@ const showHistory = async (index) => {
 const toolTipState = ref([[], []]);
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
-  if(searchStore.itemSearch.searching){
-      showDetails(searchStore.itemSearch.itemId);
-      const searching = document.getElementsByClassName('searching-btn'); 
-      searching[0].click()
-      searchStore.itemSearch.searching = false;
-  }
-  if(store.isMobile){
-      const catalogTextElement = document.querySelector('.sub-catalog p')
-      const textElements = document.querySelectorAll('tr p');
-      const searchBar = document.querySelector('.searchbar');
-      const searchBox = document.querySelector('.table-searchbar');
-      const tableLines = document.querySelectorAll('tr');
+    initialLoading.value = false;
+    if(searchStore.itemSearch.searching){
+        showDetails(searchStore.itemSearch.itemId);
+        const searching = document.getElementsByClassName('searching-btn'); 
+        searching[0].click()
+        searchStore.itemSearch.searching = false;
+    }
+    if(store.isMobile){
+        const catalogTextElement = document.querySelector('.sub-catalog p')
+        const textElements = document.querySelectorAll('tr p');
+        const searchBar = document.querySelector('.searchbar');
+        const searchBox = document.querySelector('.table-searchbar');
+        const tableLines = document.querySelectorAll('tr');
 
-      searchBox.style.fontSize = '8px';
-      searchBar.style.width = '100%';
-      searchBar.style.fontSize = '8px';
-      catalogTextElement.style.fontSize = '8px';
-      tableLines.forEach(element => {
-          element.addEventListener('click', (() => {
-              element.children[4].children[1].children[0].click()
-          }))
-      });
-      textElements.forEach(element => element.style.fontSize = '7px');
-  }
+        searchBox.style.fontSize = '8px';
+        searchBar.style.width = '100%';
+        searchBar.style.fontSize = '8px';
+        catalogTextElement.style.fontSize = '8px';
+        tableLines.forEach(element => {
+            element.addEventListener('click', (() => {
+                element.children[4].children[1].children[0].click()
+            }))
+        });
+        textElements.forEach(element => element.style.fontSize = '7px');
+    }
 });
 onUpdated(async () => {  
-  if(store.isMobile){
-      const catalogTextElement = document.querySelector('.sub-catalog p')
-      const textElements = document.querySelectorAll('tr p');
-      const searchBar = document.querySelector('.searchbar');
-      const tableLines = document.querySelectorAll('tr');
+    if(store.isMobile){
+        const catalogTextElement = document.querySelector('.sub-catalog p')
+        const textElements = document.querySelectorAll('tr p');
+        const searchBar = document.querySelector('.searchbar');
+        const tableLines = document.querySelectorAll('tr');
 
-      tableLines.forEach((element, index) => {
-          element.addEventListener('click', (() => {
-              element.children[4].children[1].children[0].click()
-          }))
-      });
+        tableLines.forEach((element, index) => {
+            element.addEventListener('click', (() => {
+                element.children[4].children[1].children[0].click()
+            }))
+        });
 
-      searchBar.style.width = '100%';
-      searchBar.style.fontSize = '8px';
-      catalogTextElement.style.fontSize = '8px';
-      textElements.forEach(element => element.style.fontSize = '7px');
-  }
+        searchBar.style.width = '100%';
+        searchBar.style.fontSize = '8px';
+        catalogTextElement.style.fontSize = '8px';
+        textElements.forEach(element => element.style.fontSize = '7px');
+    }
 });
 </script>
 

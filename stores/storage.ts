@@ -46,6 +46,7 @@ export const useStorageStore = defineStore('storage', {
             console.log(error);
           }
         }
+        this.isReloadItems = true;
       },
       addItem(item: object){
         this.sendItems(item);
