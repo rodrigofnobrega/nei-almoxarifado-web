@@ -5,7 +5,7 @@
   <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
       <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
           <IconsInformation class="me-2"/>
-          Descrição da página{{ recordsLoad }}
+          Descrição da página
       </h6>
       <p class="sub-catalog-text opacity-75">Nesta página temos todos os registros das operações feitas no sistema, sendo estas operações de dois tipos: CADASTRO e CONSUMO. 
         Registrando também o usuário e item da operação.</p>
@@ -13,9 +13,9 @@
   <div class="table-box row d-block">
       <div class="table-actions d-flex justify-content-between aling-items-center" style="margin-bottom: -1px !important;">
         <div class="d-flex me-1">
-            <ButtonsFilter style="margin-top: 3px;"/>
+            <ButtonsFilter v-if="uploadReloader === 1" style="margin-top: 3px;"/>
         </div>
-          <span class="d-flex align-items-center bg-primary table-searchbar">
+          <span v-if="recordsLoad" class="d-flex align-items-center bg-primary table-searchbar">
                 <input v-model="searchInput" class="searchbar bg-light form-control" placeholder="Pesquisar"/>          
                 <IconsSearchGlass class="bg-primary text-light search-glass"/>
           </span>
@@ -50,13 +50,13 @@
              </th>
              <th class="border" width="5%">
                    <TooltipsRectangular class="toolTip" style=" right: 7.4%; margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
-                   <TooltipsRectangular class="toolTip" style=" right: 6%; margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Histórico'"/>
-                    <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                   <TooltipsRectangular class="toolTip" style=" right: 6%; margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Perfil'"/>
+                   <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         <IconsSearchGlass width="18px" height="19px"/>
                     </button>
-                    <button @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false" class="my-0 position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}"  @click="showHistory(record.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
-                        <IconsHistory width="18px" height="19px"/>
-                    </button>
+                    <NuxtLink :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`"  class="my-0 details-btn position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}">
+                      <IconsLowProfile width="16px" height="16px"/>  
+                    </NuxtLink>
                </th>
           </tr>
           <div v-else-if="recordsCache.length === 0 && !initialLoading" class="search-empty position-absolute mt-5">
@@ -116,7 +116,7 @@ const sendDataToParent = () => {
 };
 sendDataToParent();
 /*VARIÁVEIS ÚTEIS PARA REQUISITAR OS ITENS E FILTRÁ-LOS*/
-const paginationRet = ref(0)
+const paginationRet = ref(1)
 function range(start, end) {
   return Array.from({ length: end - start + 1 }, (_, index) => start + index);
 }
@@ -140,7 +140,7 @@ const recordsReq = async (sort, isInverted, pagination, loadRequest, paginationI
         if(searchCache.value.length >= totalPages.value){
             for(let i = 0; i < searchCache.value.length; i++){
                 for(let j = 0; j < searchCache.value[i].length; j++){
-                    if(searchCache.value[i][j].name.includes(searchInput.value)){
+                    if(searchCache.value[i][j].item.name.includes(searchInput.value)){
                         finded.push(searchCache.value[i][j]);
                     }
                     if(finded.length >= 20){ 
@@ -164,7 +164,7 @@ const recordsReq = async (sort, isInverted, pagination, loadRequest, paginationI
             const res = await getRecords(userStore, i, sort);
             searchCache.value.push(res.content);
             for(let j = 0; j < res.content.length; j++){
-                if(res.content[j].name.includes(searchInput.value)){
+                if(res.content[j].item.name.includes(searchInput.value)){
                     finded.push(res.content[j]);
                 }
                 if(finded.length >= 20){ 
@@ -237,19 +237,49 @@ const recordsLoad = computed(async() => {
     reqsIndexCache.push(pagination.value)
 })
 provide('setItemsFilter', (filter, inverted) => {
+    filter = filter.replace('name', 'item.name');
     queryParams.value.sort = filter;
     queryParams.value.isInverted = inverted;
     store.isReloadItems = true;
-    //reloadItems(queryParams.value.sort, queryParams.value.isInverted, invertedPagination.value)
 });
 //Variáveis que o front vai pegar em si
 const recordIndex = ref(0);
-const currentItem = computed(() => recordsCache.value[cacheIndex.value][recordIndex.value]);
+const currentItem = ref({
+	"id": 0,
+	"name": "",
+	"sipacCode": 0,
+	"quantity": 0,
+	"type": "",
+	"available": false,
+	"createdAt": "",
+	"createdBy": {
+		"id": 0,
+		"name": "",
+		"email": "",
+		"role": "",
+		"existRecord": false,
+		"active": false
+	},
+	"lastRecord": {
+		"id": 0,
+		"user": {
+			"id": 0,
+			"name": "",
+			"email": "",
+			"role": ""
+		},
+		"item": {
+			"id": 0,
+			"name": "",
+			"sipacCode": 0
+		},
+		"quantity": 0,
+		"operation": "",
+		"data": ""
+	}
+});
+const currentRoute = 'registro';
 
-const currentRoute = useRoute().fullPath.split('/')[2];
-
-
-const toolTip = ref([false, false, false, false])
 
 /*CÓDIGO PARA PAGINAÇÃO EM SI E RENDERIZAÇÃO DOS ITENS*/
 let pagesFocus = ref([true]);
@@ -264,7 +294,7 @@ const uploadReloader = computed(() => {
         cacheIndex.value = 0;
         recordsCache.value = [];
         reqsIndexCache = [0]
-
+    
         recordsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
 
         paginationRet.value = 1;
@@ -332,14 +362,9 @@ const backPage = (async () => {
 /*FUNÇÕES PARA OS BOTÕES DE DETALHE E HISTÓRICO*/
 
 const showDetails = async (index, itemId) => {
-  recordIndex.value = index;
-  const res = await getItem(userStore, itemId);
-  currentItem.value = res;
-}
-const showHistory = async (index) => {
-    itemIndex.value = index;
-    const res = await getRecordByItemId(userStore, index)
-    store.itemRecord = res.content
+    recordIndex.value = index;
+    const res = await getItem(userStore, itemId);
+    currentItem.value = res;
 }
 
 const toolTipState = ref([[], []]);

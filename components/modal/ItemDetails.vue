@@ -56,7 +56,7 @@
                     <button class="btn inset-shadow mode-btn btn-primary mx-1" @click="setEdition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>
                     <button class="btn inset-shadow btn-light-success text-light mx-1" id="fetch-inputs" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="fetchNewData" data-bs-dismiss="modal">Confirmar</button>
                 </div>
-                <div v-if="userStore.role === 'ADMIN'" class="d-flex align-items-center justify-content-center">
+                <div v-if="userStore.role === 'ADMIN' && item_route !== 'registro'" class="d-flex align-items-center justify-content-center">
                     <button class="btn inset-shadow mode-btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#itemReposition">Repor</button>
                 </div>
                 <div v-if="userStore.role === 'USER'" class="d-flex align-items-center justify-content-center">
