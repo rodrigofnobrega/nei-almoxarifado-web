@@ -2,27 +2,26 @@
 <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
 <ModalActionConfirm>
     <template v-slot:title> Confirmar aceitação </template>
-    <!--
     <template v-slot:text> 
-        <div v-if="loadItems[0] != null" class="d-block">
+        <div v-if="itemsCache.length > 0" class="d-block">
             <div class="d-flex">
                 <div class="d-block mb-2 pe-2">
                     <label for="item-name">Nome do Item</label>
-                    <input readonly class="form-control bg-light-emphasis" :value="loadItems[itemIndex].name">
+                    <input readonly class="form-control bg-light-emphasis" :value="currentItem.name">
                 </div>
                 <div class="d-block mb-2 ps-2">
                     <label for="item-name">Quantidade Disponível</label>
-                    <input readonly class="form-control bg-light-emphasis" :value="loadItems[itemIndex].quantity">
+                    <input readonly class="form-control bg-light-emphasis" :value="currentItem.quantity">
                 </div>
             </div>
             <div class="d-flex">
                 <div class="d-block mb-2 pe-2">
                     <label for="item-name">Tipo unitário</label>
-                    <input readonly class="form-control bg-light-emphasis" :value="loadItems[itemIndex].type">
+                    <input readonly class="form-control bg-light-emphasis" :value="currentItem.type">
                 </div>
                 <div class="d-block mb-2 ps-2">
                     <label for="item-name">Situação</label>
-                    <input readonly class="form-control bg-light-emphasis" :value="loadItems[itemIndex].available === true ? 'disponível' : 'indisponível'">
+                    <input readonly class="form-control bg-light-emphasis" :value="currentItem.available === true ? 'disponível' : 'indisponível'">
                 </div>
             </div>
             <h6 class="text-dark"> Mensagem para a solicitação </h6>
@@ -32,7 +31,7 @@
                 <input class="form-control" style="width: 225px !important;" v-model="itemQtd" type="number" pattern="[0,9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
             </div>
         </div>
-    </template>-->
+    </template>
     <template v-slot:buttons> 
         <button data-bs-dismiss="modal" class="btn btn-light-alert text-light mx-2"> Cancelar </button>
         <button @click="sendRequest()" data-bs-dismiss="modal" class="btn btn-secondary mx-2"> Enviar </button>
@@ -152,6 +151,7 @@ definePageMeta({
 const userStore = useUser()
 const store = useStorageStore();
 const searchStore = useSearch();
+const popUpStore = usePopupStore();
 /*VARIÁVEIS ÚTEIS PARA REQUISITAR OS ITENS E FILTRÁ-LOS*/ 
 const paginationRet = ref(1)
 function range(start, end) {
@@ -165,6 +165,7 @@ let queryParams = ref({
     isInverted: false
 });
 
+const itemQtd = ref(0);
 //Aqui faço a requisição em si, também possui parâmetros de filtros, sendo o padrão o de últimos atualizados(como está no banco de dados)
 const itemsCache = ref([]);
 const searchCache = ref([])
@@ -376,11 +377,12 @@ const showDetails = (index) => {
 const showConfirm = (index) => {
     itemIndex.value = index;
 }
-const description = ref('Text')
+const description = ref('')
 const sendRequest = async () => {
     try{
-        const res = await postRequest(userStore, loadItems.value[itemIndex.value].id, itemQtd.value, description.value)
+        const res = await postRequest(userStore, currentItem.value.id, currentItem.value.quantity, description.value)
     }catch(err){
+        console.log(err)
         return popUpStore.throwPopup('Erro: quantidade solicitada é maior que a disponível', '#B71C1C')
     }
     return popUpStore.throwPopup('Solicitação enviada', '#0B3B69')
@@ -441,7 +443,7 @@ onUpdated(async () => {
     display: block;
 }
 .table-container{
-    margin-bottom: 149px;
+    margin-bottom: 70px;
     width: 100%;
     display: block !important;
 }
@@ -544,7 +546,7 @@ p{
     margin-top: 5%;
     display: flex;
     justify-content: center;
-    margin-left: 30%;    
+    margin-left: 43%;    
     margin-right: 30%;
     white-space: nowrap;
 }

@@ -12,6 +12,7 @@ import { onMounted } from 'vue';
 import { useStorageStore } from './stores/storage';
 import { usePopupStore } from './stores/popup';
 import { useUser } from './stores/user';
+import { navigateTo } from 'nuxt/app';
 
 const storage = useStorageStore();
 const popup = usePopupStore();
@@ -27,16 +28,7 @@ const popupBg = computed(() => {
 })
 
 onMounted(() => {
-  const itemModals = document.getElementsByClassName("modal-header");
-  let i = 0;
-  if(userStore.role === 'ADMIN'){  
-    i = 1;
-  }
-  for (i; i < itemModals.length; i++) {
-    itemModals[i].classList.add("justify-content-between");
-    itemModals[i].classList.add("small");
-  }
-  checkIfMobile()
+  checkIfMobile();
 });
 function checkIfMobile() {
   const userAgent = navigator.userAgent.toLowerCase();

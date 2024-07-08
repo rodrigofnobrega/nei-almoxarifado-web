@@ -135,7 +135,7 @@ for (let i = 0; i < requests.content.length; i++) {
   font-size: 11px;
   width: 17px;
   height: 17px;
-  z-index: 2000;
+  z-index: 1000;
 }
 .notification-text{
   font-weight: bold;

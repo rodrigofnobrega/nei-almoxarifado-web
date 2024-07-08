@@ -36,7 +36,7 @@ export const getRequestByStatus = async (userStore, requests_status) => {
 }
 //Listar Solicitações pelo id do usuário
 export const getRequestByUser = async (userStore, userId) => {
-    const { data } = await useApi().get(`http://localhost:8080/api/v1/requests/user/${userId}`, {
+    const { data } = await useApi().get(`http://localhost:8080/api/v1/requests/user?userId=${userId}`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`

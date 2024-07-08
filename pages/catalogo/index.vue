@@ -1,5 +1,5 @@
 <template>
-    <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
+    <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="searchItem ? searchItem : currentItem" />
     <ModalItemHistory v-if="itemsCache.length > 0"/>
 <div class="table-container d-block mt-2">
     <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
@@ -106,7 +106,7 @@
 import { useStorageStore } from '../../stores/storage.ts';
 import { useSearch } from '../../stores/search.ts';
 import { ref, computed, onMounted, onUpdated, inject, watch } from 'vue';
-import { getItems } from '../../services/items/itemsGET.ts';
+import { getItem, getItems } from '../../services/items/itemsGET.ts';
 import { useUser } from '../../stores/user.ts'
 import { getRecordByItemId } from '../../services/record/recordGET.ts';
 import { useRoute, useRouter } from 'vue-router';
@@ -348,14 +348,19 @@ const showHistory = async (itemId) => {
     const res = await getRecordByItemId(userStore, itemId)
     store.itemRecord = res.content
 }
+const searchItem = ref(undefined)
+const showSearchingDetails = async (itemId) => {
+    const res = await getItem(userStore, itemId);
+    searchItem.value = res;
+    const searching = document.getElementsByClassName('searching-btn'); 
+    searching[0].click()
+}
 const toolTipState = ref([[], []]);
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     initialLoading.value = false;
     if(searchStore.itemSearch.searching){
-        showDetails(searchStore.itemSearch.itemId);
-        const searching = document.getElementsByClassName('searching-btn'); 
-        searching[0].click()
+        showSearchingDetails(searchStore.itemSearch.itemId);
         searchStore.itemSearch.searching = false;
     }
     if(store.isMobile){

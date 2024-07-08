@@ -10,7 +10,7 @@
         </div>
         <div class="d-flex">
           <div class="flex-grow-1">
-            <Footer />
+            <Footer class="teste"/>
           </div>
         </div>
     </div>
@@ -22,13 +22,11 @@
   height: 100%;
 }
 .bg-fade { 
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.01), rgba(255, 255, 255, 1) 75%),
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.01), rgba(255, 255, 255, 1) 85%),
               radial-gradient(ellipse at top left, rgba(11, 59, 105, 0.5), transparent 50%),
               radial-gradient(ellipse at top right, rgba(11, 59, 105, 0.5), transparent 50%),
               radial-gradient(ellipse at center right, rgba(254, 213, 30, 0.8), transparent 50%),
               radial-gradient(ellipse at center left, rgba(254, 213, 30, 0.8), transparent 50%) !important;
 }
-
-
 
 </style>

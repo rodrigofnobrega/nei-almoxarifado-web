@@ -95,7 +95,7 @@
                 </th>
                 <th class="table-cell mov-cell" scope="row">
                   <div class="d-flex table-text table-text align-items-end mt-1 justify-content-center">
-                    {{ request.item.sipacCode ? post.item.sipacCode : 'nenhum' }}
+                    {{ request.item.sipacCode ? request.item.sipacCode : 'nenhum' }}
                   </div>
                 </th>
                 <th class="table-cell mov-cell" scope="row">
@@ -123,7 +123,7 @@
       <p class="ms-2">{{userRequests.length}} de {{requestsTotalElements}}</p>
       </div>
 
-      <div class="profile-posts me-2 bg-light mb-4 pb-0 pt-0 rounded-3">
+      <div v-if="userRecords.length > 0" class="profile-posts me-2 bg-light mb-4 pb-0 pt-0 rounded-3">
         <div class="history-title pt-2 bg-light-background-header">
           <h5 class="ms-3">Itens cadastrados</h5>
         </div>
@@ -207,6 +207,9 @@ const recordTotalPages = ref(0);
 const recordsTotalElements = ref(0);
 
 const fetchRecords = async (page) => {
+  if(userData.role === 'USER'){
+    return 0;
+  }
   const response = await getRecordByEmail(userStore, userData.email, page);
 
   recordTotalPages.value = response.totalPages;
@@ -221,8 +224,10 @@ const fetchRequests = async (page) => {
   userRequests.value = [...userRequests.value, ...response.content]
 }
 
-await fetchRequests(currentPage.value)
-await fetchRecords(currentPage.value);
+await fetchRequests(currentPage.value);
+if(userStore.role === 'ADMIN'){
+  await fetchRecords(currentPage.value);
+}
 
 const currentPassword = ref('');
 const newPassword = ref('');
