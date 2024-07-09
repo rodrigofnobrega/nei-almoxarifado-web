@@ -1,7 +1,7 @@
 import { useApi } from '../../composables/axios';
 //Listar Solicitações
-export const getRequests = async (userStore) => {
-    const { data } = await useApi().get("http://localhost:8080/api/v1/requests", {
+export const getRequests = async (userStore, page) => {
+    const { data } = await useApi().get(`/requests?page=${page}`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`
@@ -35,8 +35,8 @@ export const getRequestByStatus = async (userStore, requests_status) => {
     return data
 }
 //Listar Solicitações pelo id do usuário
-export const getRequestByUser = async (userStore, userId) => {
-    const { data } = await useApi().get(`http://localhost:8080/api/v1/requests/user/${userId}`, {
+export const getRequestByUser = async (userStore, userId, pagination) => {
+    const { data } = await useApi().get(`http://localhost:8080/api/v1/requests/user?page=${pagination}&userId=${userId}`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`

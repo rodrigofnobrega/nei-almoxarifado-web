@@ -1,70 +1,64 @@
 <template>
-	<div class="container-fluid auth-container d-flex  col-1 justify-content-center" :class="{ 'blurred': !isEqual }">
-
+	<div class="container-fluid bg-light-emphasis auth-container d-flex col-1 justify-content-center">
 		<div class="header">
 			<p class="texto"><strong>Recuperar Senha</strong></p>
 		</div>
-
-        <form class="auth-form" @submit.prevent="submitForm">
-            
-            <div class="auth">
-                
-                <div class="novaSenha">
-                    <label for="newPassword">Nova Senha:</label>
-                    <input type="password" id="newPassword" placeholder="Sua nova senha" v-model="newPassword" required>
-
-                    <button 
-					class="showButton" 
-					:class="{ active: showPassword.newPassword }"
-					@click="togglePasswordVisibility('newPassword')"
-					type="button"
-					></button>
-                </div>
-
-                <div class="confirmarNova">
-                    <label for="newRePassword">Confirma a Nova Senha:</label>
-                    <input type="password" id="newRePassword" placeholder="Confirme sua nova senha" v-model="newRePassword" required>
-
-                    <button 
-					class="showButton" 
-					:class="{ active: showPassword.newRePassword }"
-					@click="togglePasswordVisibility('newRePassword')"
-					type="button"
-					></button>
-                </div>
-
-            </div>
-            
-            <button type="submit" @click="verifyPassword">Enviar</button>
-
-        </form>
-
+		<div class="mx-2">
+			<p class="mt-3 mb-0">Para finalizar, digite a nova senha e confirme.</p>	
+			<form class="auth-form" @submit.prevent="submitForm">
+				<div class="auth">
+					<label class="fw-bold" for="password">Senha:</label>
+					<div class="d-flex justify-content-end">
+						<input class="form-control" id="password" placeholder="Nova Senha" :type="showPassword[0] ? 'text' : 'password'" v-model="newPassword" required>
+						<IconsOpenEye v-if="!showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
+						<IconsCloseEye v-if="showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
+					</div>
+					<p class="fw-bold text-dark-alert mb-2 my-1 d-flex align-items-center" v-if="newPassword && newPassword.length < 6">
+						<IconsInformation class="me-1"/>
+						A senha deve possuir 6 ou mais caracteres.
+					</p>	
+					<div class="mt-3">
+						<label class="fw-bold" for="re-password">Confirme sua Senha:</label>
+						<div class="d-flex justify-content-end">
+							<input class="form-control" id="rePassword" placeholder="Confirmar senha" :type="showPassword[1] ? 'text' : 'password'" v-model="newRePassword" required>
+							<IconsOpenEye v-if="!showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
+							<IconsCloseEye v-if="showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
+						</div>
+						<p class="fw-bold text-dark-alert mb-2 my-1 d-flex align-items-center" v-if="newRePassword && newPassword.length >= 6 && newRePassword != newPassword">
+							<IconsInformation class="me-1"/>
+							As senhas não conferem.
+						</p>
+					</div>
+				</div>  
+				<button :class="!newPassword || newPassword.length < 6 || !newRePassword || newPassword != newRePassword ? 'disabled-button' : ''" :disabled="!newPassword || newPassword.length < 6 || !newRePassword || newPassword != newRePassword " class="mb-2" type="submit" @click="verifyPassword">Enviar</button>
+			</form>
+		</div>
 	</div>
-
-    <span v-if="!isEqual" class="pop-error">
-		<p>As senhas não estão iguais, tente novamente</p>
-		<button @click="resetPassword">Ok</button>
-	</span>
 
 </template>
 
 <script setup lang="ts"> 
+
 definePageMeta({
   layout: 'authentication'
 });
 
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStorageStore } from '../stores/storage';
+import { useUser } from '../stores/user';
+import { forgotPasswordPUT } from '../services/users/userPUT';
+import { usePopupStore } from '../stores/popup';
 
+const store = useStorageStore();
+const userStore = useUser()
+const popUpStore = usePopupStore();
 // Váriaveis responsivas que armazenam os valores dos campos acima (integrar à API)
 const newPassword = ref('');
 const newRePassword = ref(''); 
 const isEqual = ref(true);
 
-const showPassword = ref({
-  newPassword: false,
-  newRePassword: false
-});
+const showPassword = ref([false, false, false]);
 
 // Router para voltar ao login
 const router = useRouter();
@@ -72,35 +66,23 @@ const router = useRouter();
 // Métodos para fazer a rotina funcionar
 
     // Verifica se as senhas estão iguais
-const verifyPassword = () => {
+const verifyPassword = async () => {
     if (newPassword.value === newRePassword.value) {
-        console.log("Você será direcionado para o login novamente.");
-        router.push('/login');
-    }
-    else {
-        console.log("As senhas não estão iguais, tente novamente.")
-        isEqual.value = false;
-    }
+		try{
+			const res = await forgotPasswordPUT(userStore.email, store.recoveryToken, newPassword.value, newRePassword.value)
+			router.push('/login');
+		}catch(err){
+			popUpStore.throwPopup('ERRO: Algum erro interno ocorreu, contate o suporte.', 'red')
+			isEqual.value = false;
+		}
+	}
 }
 
     // Reiniciar a rotina
 const resetPassword = () => {
     isEqual.value = true;
-
 }
 
-    //Visualizar a senha;
-const togglePasswordVisibility = (fieldId) => {
-	showPassword.value[fieldId] = !showPassword.value[fieldId];
-    const field = document.getElementById(fieldId);
-    
-    if (field.type === 'password') {
-        field.type = 'text';
-        console.log(`Sua senha é ${field.value}.`); // Verificação
-    } else {
-        field.type = 'password';
-    }
-}
 </script>
 
 <style scoped>
@@ -157,16 +139,14 @@ const togglePasswordVisibility = (fieldId) => {
 
 .auth-container{
 	border-radius: 15px;
-	height: 400px;
-	width: 325px;
+	width: 120%;
 	flex-direction: column;
     margin: 10px;
 }
 .auth {
     padding-top: 0px;
-    padding-bottom: 50px;
     justify-content: space-between;
-    margin-top: 32px;
+    margin-top: 10px;
     margin-bottom: 20px;
 }
 
@@ -188,20 +168,18 @@ const togglePasswordVisibility = (fieldId) => {
 
 .header {
 	width: 100%;
-	max-width: 350px;
 	height: 65px;
-	border-radius: 15px;
+	border-radius: 15px 15px 0px 0px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;
 	padding: 0px;
 }
 
-.auth-form {
-	margin-top: 5px;
-    margin-bottom: 5px;
-    padding: 10px;
 
+.auth-form {
+    margin-bottom: 5px;
+    padding: 0 10px 10px 10px;
 }
 
 .auth-form input[type="password"] {
@@ -220,7 +198,10 @@ const togglePasswordVisibility = (fieldId) => {
 	border-radius: 5px;
 	margin-bottom: 10px;
 }
-
+.disabled-button {
+  opacity: 75%;
+  cursor: not-allowed !important;
+}
 
 .auth-form button {
 	width: 100%;

@@ -1,7 +1,8 @@
+<!-- Exemplo simples para testar se o itemId está sendo recebido corretamente -->
 <template>
 	<Modal id="itemHistory" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
 		<template v-slot:header>
-            <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Histórico do Item</h6>
+            <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Histórico</h6>
             <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
             </button>
@@ -17,12 +18,11 @@
 			</tr>
 		 </thead>
 		<tbody>
-			<tr v-if="item_history" v-for="history in item_history.history" :key="'Amauri'"> 
-				<td scope="row" class="p-2 mb-3"> Adicionado </td>
-				<td class="fw-bolder p-2 mb-3" style="--bs-bg-opacity: .99"
-					:class="{'text-light bg-success border-0': isCreate(history), 'text-light bg-danger border-0': isDelete(history), 'text-light bg-warning border-0': isRequest(history)}"> 12/32 </td>
-				<td> 2 </td>
-				<td> Amauri </td>
+			<tr v-for="history in store.itemRecord" :key="history.id"> 
+				<td scope="row" class="p-2 mb-3"> {{history.creationDate.slice(0, 19)}} </td>
+				<td class="fw-bolder p-2 mb-3" style="--bs-bg-opacity: .99" :class="{'text-light bg-success border-0': isCreate(history.operation), 'text-light bg-danger border-0': isDelete(history.operation), 'text-light bg-warning border-0': isRequest(history.operation)}"> {{ history.operation }} </td>
+				<td> {{ history.quantity }} </td>
+				<td> {{ history.user.name }} </td>
 			</tr>
 		</tbody>
 	</table>
@@ -38,35 +38,32 @@
 	<ModalItemDetails v-if="toggleHistory" :item_index="1" :item_route="'/catalogo'" :item_details="item_history" />
 </template>
 
-<script lang="ts">
-export default{
-	data(){
-		return {
-			toggleHistory: false
-		}
-	},
-	props: {
-		item_history: {
-			type: Object
-		},
-	},
-	methods:{
-	isCreate(data){
-		if(data.includes('Adicionado')){
-			return data; 
-		}
-	},
-	isRequest(data){
-		if(data.includes('Consumido')){
-			return data; 
-		}
-	},
-	isDelete(data){
-		if(data.includes('Excluido')){
-			return data; 
-		}
-	},
-  },
+<script setup lang="ts">
+import { getRecordByItemId } from '../../services/record/recordGET';
+import { useUser } from '../../stores/user';
+import { useStorageStore } from '../../stores/storage';
+import { ref, computed, onUpdated, onMounted, defineProps } from 'vue';
+
+const store = useStorageStore();
+const userStore = useUser();
+const itemHistory = ref(store.itemRecord)
+
+const toggleHistory = ref(false);
+
+function isCreate(operation){
+	if(operation.includes('CADASTRO')){
+		return true; 
+	}
+}
+function isRequest(operation){
+	if(operation.includes('CONSUMIDO')){
+		return true; 
+	}
+}
+function isDelete(operation){
+	if(operation.includes('Excluido')){
+		return true; 
+	}
 }
 
 </script>

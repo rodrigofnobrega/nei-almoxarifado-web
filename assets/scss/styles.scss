@@ -13,6 +13,7 @@ xxl(televisão >= 1400px).*/
 @import 'button.scss';
 @import 'progressbar.scss';
 @import 'breakpoints.scss';
+@import 'files_form.scss';
 
 $dropdown-link-hover-color: white;
 $list-group-hover-bg: map-get($theme-colors, "warning");

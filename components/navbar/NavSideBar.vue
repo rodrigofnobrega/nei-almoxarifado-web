@@ -18,15 +18,22 @@
                         <span class="list-group-item">Controle de Acesso</span>
                     </div>
                 </a>
+                <a class="text-decoration-none" href="/catalogo" aria-current="true">
+                    <div class="item-bg" :class="{'active': $route.path === '/catalogo', 'text-dark-emphasis': $route.path !== '/catalogo' }">
+                        <IconsSpreadSheet class="nav-icon"/>
+                        <span class="list-group-item">Catálogo</span>
+                    </div>
+                </a>
+                <!--
                 <div class="item-bg" :class="{'active': $route.path === '/catalogo', 'text-dark-emphasis': $route.path !== '/catalogo'}">
-                    <IconsSpreadSheet class="nav-icon"/>
                     <a class="text-decoration-none text-light" :class="{'text-dark-emphasis': $route.path !== '/catalogo'}"  href="/catalogo" aria-current="true">
                         <span class="list-group-item">Catálogo</span>
                     </a>
                     <button class="svg-button" @click="rotate">
                         <IconsDownArrow class="small-rotate-arrow" :style="{ transform: isRotated ? 'rotate(180deg)' : 'rotate(0deg)'}" :class="{'text-dark-emphasis': $route.path !== '/catalogo'}" width="24px" height="24px"/>
                     </button>
-                </div>
+                    </div>
+                -->
                 <div :class="{'hidden': !isRotated}">
                     <a class="text-decoration-none" v-for="sublink in dropdwonRoutes" :href="sublink.path" aria-current="true">
                         <div class="item-bg" :class="{'active': $route.path === sublink.path, 'text-dark-emphasis': $route.path !== sublink.path }">

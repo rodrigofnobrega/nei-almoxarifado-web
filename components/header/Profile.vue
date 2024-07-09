@@ -3,8 +3,8 @@
           <div @mouseover="toolTip = true" @mouseout="toolTip = false" class="me-2 nav-item dropdown">
             <button class="svg-button bg-primary px-0" data-bs-toggle="dropdown" data-bs-offset="20,15" aria-expanded="false">
               <IconsBell with="16px" height="16px"/>
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{requests.content.length}}+
+              <span v-if="requests.content.length > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{requests.content.length}}
                 <span class="visually-hidden">unread messages</span>
               </span>
             </button>
@@ -28,7 +28,6 @@
                 <IconsDownArrow class="rotate-arrow" :style="{ transform: isRoted ? 'rotate(180deg)' : 'rotate(0deg)'}" width="24px" height="24px"/>
             </button>
             <ul class="dropdown-menu">
-              <li class="dropdown-item info"> {{ user.name }} </li>
               <li>
                 <a class="dropdown-item py-1 ps-2 d-flex align-items-center justify-content-between" :href="`/perfil?userId=${userStore.id}`">
                 Perfil
@@ -135,7 +134,7 @@ for (let i = 0; i < requests.content.length; i++) {
   font-size: 11px;
   width: 17px;
   height: 17px;
-  z-index: 2000;
+  z-index: 1000;
 }
 .notification-text{
   font-weight: bold;

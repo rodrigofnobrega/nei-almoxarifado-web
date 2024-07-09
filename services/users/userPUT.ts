@@ -1,17 +1,29 @@
-const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJpYXQiOjE3MTQwODY5NjAsImV4cCI6MTcxNDEyMjk2MCwicm9sZSI6IkFETUlOIn0.6HJttOrGPGziR1JypsfMhRcTZpQX7kn35cPxeQ2vOzg";
-
-export const putUser = async (user_id, currentPassword, newPassword, confirmPassword) => {
-    const { data } = await useFetch(`http://localhost:8080/api/v1/users/${user_id}`, {
-        method: "PUT",
-        header: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        },
-        body: {
-            "currentPassword": currentPassword,
-            "newPassword": newPassword,
-            "confirmPassword": confirmPassword
+import { useApi } from "../../composables/axios"
+export const updatePasswordPUT = async (userStore, userId, currentPassword, newPassword, confirmPassword) => {
+    const { data } = await useApi().put(`/users/updatePassword/${userId}`, {
+        "currentPassword": currentPassword,
+        "newPassword": newPassword,
+        "confirmPassword": confirmPassword
+    }, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userStore.token}`
         }
     })
-    return data._rawValue
-};
+    return data;
+}
+
+export const forgotPasswordPUT = async (userEmail, recoveryToken, newPassword, confirmPassword) => {
+    console.log(userEmail, recoveryToken, newPassword, confirmPassword)
+    const { data } = await useApi().put(`/users/updateForgotPassword/${userEmail}`, {
+        "recoveryToken": recoveryToken,
+        "newPassword": newPassword,
+        "confirmPassword": confirmPassword
+    }, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${recoveryToken}`
+        }
+    })
+    return data;
+}

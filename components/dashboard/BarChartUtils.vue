@@ -1,7 +1,7 @@
 <template>
-  <ModalAlmoReport />
+  <ModalAlmoReport :id="2" :data="{datasets: datasets, labels: labels}"/>
   <div class="graph-header d-flex align-items-end justify-content-between section-title pt-2 mb-3 bg-light-background-header">
-        <h5 class="ps-2">Gráfico de Solicitações de Itens</h5>
+        <h5 class="ps-2">Gráfico dos mais solicitados</h5>
         <div class="dropdown mb-1 mx-2 d-flex">
             <button class="d-flex align-items-center graph-btn btn btn-transparent " @click="toggleDataType">{{ currentDataTypeLabel }}</button>
             <button class="d-flex align-items-center graph-btn btn btn-transparent dropdown-toggle mx-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -25,7 +25,7 @@
                 </div>
               </li>
             </ul>
-            <button class="d-flex align-items-center graph-btn btn btn-transparent me-3" type="button" data-bs-toggle="modal" data-bs-target="#almoReport" ria-expanded="false">
+            <button class="d-flex align-items-center graph-btn btn btn-transparent me-3" type="button" data-bs-toggle="modal" data-bs-target="#almoReport2" ria-expanded="false">
               <IconsRequest class="me-1" width="20px" height="20px"/>
               Relatório
             </button>
@@ -44,7 +44,7 @@ import { ref, onMounted } from 'vue';
 import { Bar } from 'vue-chartjs';
 import { useUser } from '../../stores/user.ts';
 import { useStorageStore } from '../../stores/storage.ts';
-import { getRequestByItem, getRequestByUser } from '../../services/requests/requestsGET.ts';
+import { getRequestByItem, getRequestByUser, getRequests } from '../../services/requests/requestsGET.ts';
 import { getItems } from '../../services/items/itemsGET.ts';
 import { getUsers } from '../../services/users/userGET.ts';
 import {
@@ -81,59 +81,6 @@ const toggleDropdown = () => {
 };
 
 const months = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
-
-const totalItems = await getItems(userStore);
-const dataItems = [];
-const dataItemsByMonth = Array.from({ length: 12 }, () => []);
-
-for (let i = 1; i <= totalItems.totalElements; i++) {
-  const req = await getRequestByItem(userStore, i);
-  const reqData = req.content;
-  if (reqData.length > 0) {
-    const qtdRequestSum = reqData.reduce((sum, request) => sum + request.quantityRequested, 0);
-    dataItems.push({
-      itemName: reqData[0].item.name,
-      qtdRequested: qtdRequestSum,
-    });
-    for (let k = 0; k < 12; k++) {
-      const qtdRequestSumWeek = reqData.reduce((sum, request) => {
-        const month = parseInt(request.creationDate.slice(5, 7), 10) - 1;
-        if (month === k) {
-          return sum + request.quantityRequested;
-        }
-        return sum;
-      }, 0);
-      dataItemsByMonth[k].push({ itemName: reqData[0].item.name, qtdRequested: qtdRequestSumWeek });
-    }
-  }
-}
-
-const totalUsers = await getUsers(userStore);
-const dataUsers = [];
-const dataUsersByMonth = Array.from({ length: 12 }, () => []);
-
-for (let i = 1; i <= totalUsers.content.length; i++) {
-  const req = await getRequestByUser(userStore, i);
-  const reqData = req.content;
-  if (reqData.length > 0) {
-    const qtdRequestSum = reqData.reduce((sum, request) => sum + request.quantityRequested, 0);
-    dataUsers.push({
-      userName: reqData[0].user.name,
-      qtdRequested: qtdRequestSum,
-    });
-    for (let k = 0; k < 12; k++) {
-      const qtdRequestSumWeek = reqData.reduce((sum, request) => {
-        const month = parseInt(request.creationDate.slice(5, 7), 10) - 1;
-        if (month === k) {
-          return sum + request.quantityRequested;
-        }
-        return sum;
-      }, 0);
-      dataUsersByMonth[k].push({ userName: reqData[0].user.name, qtdRequested: qtdRequestSumWeek });
-    }
-  }
-}
-
 const labels = {
   mostItems: [[], []],
   mostRequesters: [[], []],
@@ -144,30 +91,101 @@ const datasets = {
   mostRequestersTime: [[], []],
 };
 
-const sortedDataItems = dataItems.filter(item => item.qtdRequested > 0).sort((a, b) => b.qtdRequested - a.qtdRequested);
-const sortedDataUsers = dataUsers.filter(user => user.qtdRequested > 0).sort((a, b) => b.qtdRequested - a.qtdRequested);
 
-for (let i = 0; i < 12; i++) {
-  const sortedDataItemsByMonth = dataItemsByMonth[i].filter(item => item.qtdRequested > 0).sort((a, b) => b.qtdRequested - a.qtdRequested);
-  const sortedDataUsersByMonth = dataUsersByMonth[i].filter(user => user.qtdRequested > 0).sort((a, b) => b.qtdRequested - a.qtdRequested);
+let dataItems = [];
+const dataItemsByMonth = Array.from({ length: 12 }, () => []);
 
-  datasets.mostItemsTime[1][i] = sortedDataItemsByMonth.map(item => item.qtdRequested);
-  labels.mostItems[1][i] = sortedDataItemsByMonth.map(item => item.itemName);
+let count = 0;
+let allRequests = await getRequests(userStore, count);
+const itemsName = [];
+const itemsNameByMonth = [[],[],[],[],[],[],[],[],[],[],[],[]];
+do{
+    for(let i = 0; i < allRequests.content.length; i++){
+      itemsName.push(allRequests.content[i].item.name)
+      const creationMonth = parseInt(allRequests.content[i].creationDate.slice(5, 7), 10) - 1;
+      if (creationMonth >= 0 && creationMonth < 12){
+        itemsNameByMonth[creationMonth].push(allRequests.content[i].item.name)
+      }
+    }
+    const frequencyMap = itemsName.reduce((acc, item) => {
+      acc[item] = (acc[item] || 0) + 1;
+      return acc;
+    }, {});
+    const resultArray = Object.keys(frequencyMap).map(key => ({
+      name: key,
+      qtd: frequencyMap[key]
+    }));
+    dataItems = resultArray.sort((a, b) => b.qtd - a.qtd)
+    for(let j = 0; j < 12; j++){
+      if(itemsNameByMonth[j].length > 0){
+        const frequencyMap = itemsNameByMonth[j].reduce((acc, item) => {
+          acc[item] = (acc[item] || 0) + 1;
+          return acc;
+        }, {});
+        const resultArray = Object.keys(frequencyMap).map(key => ({
+          name: key,
+          qtd: frequencyMap[key]
+        }));
+        dataItemsByMonth[j] = resultArray.sort((a, b) => b.qtd - a.qtd)
+        labels.mostItems[1][j] = dataItemsByMonth[j].map(item => item.name); 
+        datasets.mostItemsTime[1][j] = dataItemsByMonth[j].map(item => item.qtd);
+      }
+    }
+    labels.mostItems[0] = dataItems.map(item => item.name);
+    datasets.mostItemsTime[0] = dataItems.map(item => item.qtd);
+    count++;
+    allRequests = await getRequests(userStore, count);
+}while(count < allRequests.totalPages)
 
-  datasets.mostRequestersTime[1][i] = sortedDataUsersByMonth.map(user => user.qtdRequested);
-  labels.mostRequesters[1][i] = sortedDataUsersByMonth.map(user => user.userName);
-}
+let dataUsers = [];
+const dataUsersByMonth = Array.from({ length: 12 }, () => []);
 
-labels.mostItems[0] = sortedDataItems.map(item => item.itemName);
-datasets.mostItemsTime[0] = sortedDataItems.map(item => item.qtdRequested);
-
-labels.mostRequesters[0] = sortedDataUsers.map(user => user.userName);
-datasets.mostRequestersTime[0] = sortedDataUsers.map(user => user.qtdRequested);
+count = 0;
+allRequests = await getRequests(userStore, count);
+const usersName = [];
+const usersNameByMonth = [[],[],[],[],[],[],[],[],[],[],[],[]];
+do{
+    for(let i = 0; i < allRequests.content.length; i++){
+      usersName.push(allRequests.content[i].user.name);
+      const creationMonth = parseInt(allRequests.content[i].creationDate.slice(5, 7), 10) - 1;
+      if (creationMonth >= 0 && creationMonth < 12){
+        usersNameByMonth[creationMonth].push(allRequests.content[i].user.name)
+      }
+    }
+    const frequencyMap = usersName.reduce((acc, user) => {
+      acc[user] = (acc[user] || 0) + 1;
+      return acc;
+    }, {});
+    const resultArray = Object.keys(frequencyMap).map(key => ({
+      name: key,
+      qtd: frequencyMap[key]
+    }));
+    dataUsers = resultArray.sort((a, b) => b.qtd - a.qtd)
+    for(let j = 0; j < 12; j++){
+      if(usersNameByMonth[j].length > 0){
+        const frequencyMap = usersNameByMonth[j].reduce((acc, item) => {
+          acc[item] = (acc[item] || 0) + 1;
+          return acc;
+        }, {});
+        const resultArray = Object.keys(frequencyMap).map(key => ({
+          name: key,
+          qtd: frequencyMap[key]
+        }));
+        usersNameByMonth[j] = resultArray.sort((a, b) => b.qtd - a.qtd)
+        labels.mostRequesters[1][j] = usersNameByMonth[j].map(item => item.name); 
+        datasets.mostRequestersTime[1][j] = usersNameByMonth[j].map(item => item.qtd);
+      }
+    }
+    labels.mostRequesters[0] = dataUsers.map(item => item.name);
+    datasets.mostRequestersTime[0] = dataUsers.map(item => item.qtd);
+    count++;
+    allRequests = await getRequests(userStore, count);
+}while(count < allRequests.totalPages)
 
 const currentIndex = ref(0);
 const currentLabelName = ref('Itens mais solicitados');
 const currentDataType = ref('mostItems'); 
-const currentDataTypeLabel = ref('Usuários');
+const currentDataTypeLabel = ref('Usuários com mais solicitações');
 
 const chartData = ref({
   labels: labels[currentDataType.value][0],
@@ -220,17 +238,17 @@ const changeLabel = (monthIndex) => {
 
 const toggleDataType = () => {
   currentDataType.value = currentDataType.value === 'mostItems' ? 'mostRequesters' : 'mostItems';
-  currentLabelName.value = currentDataType.value === 'mostItems' ? 'Itens mais solicitados' : 'Usuários mais solicitados';
-  currentDataTypeLabel.value = currentDataType.value === 'mostItems' ? 'Usuários mais solicitados' : 'Itens mais solicitados';
+  currentLabelName.value = currentDataType.value === 'mostItems' ? 'Itens mais solicitados' : 'Usuários com mais solicitações';
+  currentDataTypeLabel.value = currentDataType.value === 'mostItems' ? 'Usuários com mais solicitações' : 'Itens mais solicitados';
   changeLabel(currentIndex.value ? currentIndex.value : -1);
 };
 
-onMounted(() => {
+onMounted(async () => {
   /*
   if (store.isMobile) {
     const btnText = document.querySelectorAll('.filter-btn');
     const dropdownToggle = document.querySelector('.dropdown-principal');
-    dropdownToggle.removeAttribute('data-bs-auto-close');
+    dropdownToggle. removeAttribute('data-bs-auto-close');
     dropdownToggle.setAttribute('data-bs-auto-close', 'outside');
     btnText.forEach(element => element.style.fontSize = '9px');
   }

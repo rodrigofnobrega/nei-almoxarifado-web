@@ -1,8 +1,17 @@
 <template>
     <div class="container">
 		<!-- TODO: transformar em tabela com linhas !-->
+		<div class="sub-catalog bg-light mb-4 mt-1 ps-2 pe-2">
+        	<h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
+        	    <IconsInformation class="me-2"/>
+        	    Descrição da página 
+        	</h6>
+        	<p class="sub-catalog-text opacity-75 mb-0">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
+        	    Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
+        	<span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
+    	</div>
 		<div class="row mt-3 d-flex align-items-center justify-content-center">
-			<div v-if="solicitations.length > 0" v-for="req in solicitations" :key="req.id" :class="{'extra-large': solicitations.length == 1, 'col-xl-6': solicitations.length == 2}" class="p-0 col-xl-4 col-lg-6 col-md-6 col-sm-12  mb-3 mb-xl-0"> 
+			<div v-if="solicitations.length > 0" v-for="req in solicitations" :key="req.id" :class="{'extra-large': solicitations.length == 1, 'col-xl-6': solicitations.length == 2}" class="p-0 col-xl-4 col-lg-6 col-md-6 col-sm-12 mb-3 mb-xl-0"> 
 				<CardsSolicitation
 					:person="req.user.name"
 					:requestedAt="req.creationDate"	
@@ -28,14 +37,16 @@ import { inject } from 'vue';
 import { getRequestByStatus } from '../services/requests/requestsGET';
 import { useUser } from '../stores/user';
 import { provide, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 const setpageTitle = inject('setpageTitle');
-
 const sendDataToParent = () => {
-    const data = "Controle de Acesso";
-    setpageTitle(data);
+    const title = "Controle de Acesso";
+    const route = `${useRoute().fullPath}`
+    setpageTitle(title, route, 'control');
 };
 sendDataToParent();
+
 const userStore = useUser()
 const res = await getRequestByStatus(userStore, 'pendente');
 const solicitations = ref(res.content)
@@ -58,5 +69,23 @@ provide('setSolicitations', async () => {
 	position: absolute;
 	margin-top: 5%;
 	width: 80%;
+}
+.sub-catalog{
+    border-radius: 13px;
+    margin-top: -14px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    margin-right: 10%;
+    margin-left: 10%;
+    border: 1px #D9D9D9 solid;
+    box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);
+}
+.sub-catalog-text{
+    padding: 0px 10px 0px 10px;
+    font-size: 15px;
+}
+h6{
+    font-weight: 400;
+    color: rgb(51,51,51, 0.8);
 }
 </style>

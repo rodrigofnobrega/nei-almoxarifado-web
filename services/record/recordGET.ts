@@ -4,7 +4,6 @@ export const getRecords = async (userStore, page, sort) => {
     try{
         if(sort){
             const { data } = await useApi().get(`http://localhost:8080/api/v1/records?page=${page}&sort=${sort}`, {
-                method: 'GET',
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${userStore.token}`
@@ -34,8 +33,8 @@ export const getRecord = async (userStore, record_id) => {
     })
     return data
 };
-export const getRecordByEmail = async (userStore, email) => {
-    const { data } = await axios(`http://localhost:8080/api/v1/records/query/users?email=${email}`, {
+export const getRecordByEmail = async (userStore, email, page) => {
+    const { data } = await axios(`http://localhost:8080/api/v1/records/query/users?email=${email}&page=${page}`, {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
@@ -44,8 +43,8 @@ export const getRecordByEmail = async (userStore, email) => {
     })
     return data
 };
-export const getRecordByItemName = async (userStore, name) => {
-    const { data } = await axios(`http://localhost:8080/api/v1/records/query/itens?name=${name}`, {
+export const getRecordByItemId = async (userStore, id) => {
+    const { data } = await axios(`http://localhost:8080/api/v1/records/query/itens?id=${id}`, {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",

@@ -11,9 +11,12 @@
 import { onMounted } from 'vue';
 import { useStorageStore } from './stores/storage';
 import { usePopupStore } from './stores/popup';
+import { useUser } from './stores/user';
+import { navigateTo } from 'nuxt/app';
 
 const storage = useStorageStore();
 const popup = usePopupStore();
+const userStore = useUser();
 const isPopup = computed(() => {
           return popup.popupActive
       });
@@ -25,11 +28,7 @@ const popupBg = computed(() => {
 })
 
 onMounted(() => {
-  const itemModals = document.getElementsByClassName("modal-header");
-  for (let i = 0; i < itemModals.length; i++) {
-    itemModals[i].classList.add("small");
-  }
-  checkIfMobile()
+  checkIfMobile();
 });
 function checkIfMobile() {
   const userAgent = navigator.userAgent.toLowerCase();

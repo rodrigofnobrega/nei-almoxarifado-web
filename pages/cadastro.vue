@@ -1,35 +1,47 @@
 <template>
-	<div class="container-fluid singup-container d-flex  col-1 justify-content-center" :class="{ 'blurred': errorPassword }">
-
-		<div class="header">
-
-			<p class="texto"><strong>Cadastre-se</strong></p>
-
+	<div class="bg-light-emphasis container-fluid singup-container d-flex col-1 justify-content-center" :class="{ 'blurred': errorPassword }">
+		<div class="header d-flex align-items-center justify-content-center">
+			<p class="texto fw-bold">Cadastro</p>
 		</div>
-		<form class="singup-form" @submit.prevent="submitForm">
-
-			<label for="username">Usuário:</label>
-			<input type="text" id="username" placeholder="Seu nome" v-model="username" required>
-
-			<label for="email">Email:</label>
-			<input type="text" id="email" placeholder="Seu email" v-model="email" required>
-
-			<label for="password">Senha:</label>
-			<input type="password" id="password" placeholder="Sua senha" v-model="password" required>
-
-			<label for="re-password">Confirme sua Senha:</label>
-			<input type="password" id="rePassword" placeholder="Confirme sua senha" v-model="rePassword" required>
-
-			<button type="submit">Cadastrar</button>
-
-		</form>
+		<div class="mx-3">
+			<p><strong>Observação:</strong> Antes de se cadastrar verifique com a administração as credenciais válidas para o cadastro.</p>
+			<form class="singup-form" @submit.prevent="submitForm">
+	
+				<label for="username">Usuário:</label>
+				<input type="text" id="username" placeholder="Nome" v-model="username" required>
+	
+				<label for="email">Email:</label>
+				<input type="text" id="email" placeholder="Email" v-model="email" required>
+				<p class="fw-bold text-dark-alert mb-2 mt-0 d-flex align-items-center" v-if="email && !isValidEmail(email)">
+					<IconsInformation class="me-1"/>
+					E-mail inválido
+				</p>
+				<label for="password">Senha:</label>
+				<div class="d-flex justify-content-end">
+					<input id="password" placeholder="Senha" :type="showPassword[0] ? 'text' : 'password'" v-model="password" required>
+					<IconsOpenEye v-if="!showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
+					<IconsCloseEye v-if="showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
+				</div>
+				<p class="fw-bold text-dark-alert mb-2 mt-0 d-flex align-items-center" v-if="password && password.length < 6">
+					<IconsInformation class="me-1"/>
+					A senha deve possuir 6 ou mais caracteres.
+				</p>
+				<div v-if="password && password.length >= 6">
+					<label for="re-password">Confirme sua Senha:</label>
+					<div class="d-flex justify-content-end">
+						<input id="rePassword" placeholder="Confirmar senha" :type="showPassword[1] ? 'text' : 'password'" v-model="rePassword" required>
+						<IconsOpenEye v-if="!showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
+						<IconsCloseEye v-if="showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
+					</div>
+					<p class="fw-bold text-dark-alert mb-2 mt-0 d-flex align-items-center" v-if="rePassword && rePassword != password">
+						<IconsInformation class="me-1"/>
+						As senhas não conferem.
+					</p>
+				</div>
+				<button v-if="isValidEmail(email) && rePassword === password && password.length >= 6" type="submit">Cadastrar</button>
+			</form>
+		</div>
 	</div>
-
-	<span v-if="errorPassword" class="error-message">
-		A senha está incorreta, tente novamente.
-		<button @click="resetPassForm">Ok</button>
-	</span>
-
 </template>
 
 <script setup lang="ts"> 
@@ -54,34 +66,45 @@ const email = ref('');
 const password = ref('');
 const rePassword = ref('');
 
-const errorPassword = ref(false);
 
-const router = useRouter();
+
+
+const showPassword = ref([false, false, false]);
+
+
+
+const isValidEmail = (email) => {
+      const emailRegex = /^[^\s@]+@ufrn\.edu\.br$/;
+      return emailRegex.test(email);
+}
 
 const submitForm = async () => {
-	if (password.value != rePassword.value) {
-		console.log("A confirmação de senha não está correta")
-		errorPassword.value = true;
-	}
-	else {
-		try{
-			const res = await postUser(username.value, email.value, password.value)
-		}catch(err){
-			if(err.response.status === 403){
-				popUpStore.throwPopup('Sucesso ao se cadastrar', '#0B3B69')
-				navigateTo('/login')	
-				return 1;
-			}else{
-				popUpStore.throwPopup('Erro ao se cadastrar', '#B71C1C')
-			}
+	try{
+		const res = await postUser(username.value, email.value, password.value)
+		popUpStore.throwPopup('Sucesso ao se cadastrar', '#0B3B69')
+		navigateTo('/login');
+		return 1;
+	}catch(err){
+		if(!err.response){
+			popUpStore.throwPopup("Erro: Servidor fora do ar contate o suporte", "#B71C1C")
+		}
+		switch(err.response.status){
+			case 400:
+				popUpStore.throwPopup('Erro: O email escolhido já está em uso', '#B71C1C')
+				break;
+			case 422:
+				popUpStore.throwPopup('Erro: A senha deve possuir de 6 a mais caracteres', '#B71C1C')
+				break;
+			default:
+				popUpStore.throwPopup('Erro: Algum problema ocorreu, contate o suporte', '#B71C1C')	
 		}
 	}
-
 }
+
+
 const resetPassForm = () => {
   password.value = '';
   rePassword.value = '';
-  errorPassword.value = false;
 };
 
 </script>
@@ -127,29 +150,28 @@ const resetPassForm = () => {
 }
 
 .singup-container{
-	width: 325px;
-	padding-bottom: 25px;
+	border-radius: 20px;
+	width: 150%;
+	margin-bottom: 100px;
+	padding-bottom: 45px;
 	flex-direction: column;
 }
 .texto {
-	display: flex;
-	margin: 20px 10px 10px;
+	margin: 20px 0px 20px;
 	font-weight: 500;
-	font-size: 20px;
-	justify-content: space-around;
+	font-size: 23px;
 }
 
 .header {
 	width: 100%;
-	max-width: 325px;
 	height: 65px;
-	border-radius: 15px;
-	opacity: 0px;
+	border-radius: 15px 15px 0px 0px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;
-	margin-bottom: 18px
+	padding: 0px;
 }
+
 
 .singup-form {
 	margin-top: 0px;
@@ -186,4 +208,14 @@ const resetPassForm = () => {
 	background-color: #71DD90;
 }
 
+@media screen and (max-width: 600px){
+	.singup-container{
+		width: 120%;
+	}
+}
+@media screen and (max-width: 400px){
+	.singup-container{
+		width: 100%;
+	}
+}
 </style>

@@ -1,13 +1,13 @@
 <template>
-  <ModalAlmoReport />
+  <ModalAlmoReport :id="1" :data="datasets"/>
   <div class="graph-header d-flex align-items-end justify-content-between section-title pt-2 mb-3 bg-light-background-header">
-        <h5 class="ps-2">Gráfico de Solicitações de Itens</h5>
+        <h5 class="ps-2">Gráfico da quantidade de itens solicitados</h5>
           <div class="dropdown mb-1 mx-2 d-flex">
             <button class="d-flex align-items-center graph-btn btn btn-transparent dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <IconsTimer class="me-1" width="20px" height="20px"/>
               Período
             </button>
-            <button class="d-flex align-items-center ms-2 graph-btn btn btn-transparent" type="button" data-bs-toggle="modal" data-bs-target="#almoReport" ria-expanded="false">
+            <button class="d-flex align-items-center ms-2 graph-btn btn btn-transparent" type="button" data-bs-toggle="modal" data-bs-target="#almoReport1" ria-expanded="false">
               <IconsRequest class="me-1" width="20px" height="20px"/>
               Relatório
             </button>
@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import { useUser } from '../../stores/user.ts';
 import { useStorageStore } from '../../stores/storage.ts';
 import { getRequests } from '../../services/requests/requestsGET.ts';
@@ -82,24 +82,6 @@ const ClicktoggleDropdown = (dropdown_id) => {
     dropdownState.value = !dropdownState.value
 }
 
-onMounted(() => {
-  /*
-  if(store.isMobile){
-      const btnText = document.querySelectorAll('.filter-btn');
-      const dropdownToggle = document.querySelector('.dropdown-principal');
-      dropdownToggle.removeAttribute('data-bs-auto-close')
-      dropdownToggle.setAttribute('data-bs-auto-close', 'outside')
-      btnText.forEach(element => element.style.fontSize = '9px');
-  }
-  */
-})
-
-const req = await getRequests(userStore);
-
-const data = req.content.map((request) => {
-  return {date:request.creationDate.slice(0,10),  qtd: request.quantityRequested, status: request.status}
-})
-
 const qtdRequestedByMonths = [];
 const qtdRequestsAcceptByMonths = [];
 const qtdRequestsRejectByMonths = [];
@@ -119,6 +101,14 @@ const qtdRequestsRejectByWeeks = [
                               [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], 
                               [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], 
                               [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+const req = await getRequests(userStore);
+
+const data = req.content.map((request) => {
+  return {date:request.creationDate.slice(0,10),  qtd: request.quantityRequested, status: request.status}
+})
+
+
+
 for(let i = 1; i <= 12; i++){
   let requestsSum = 0;
   let requestsAcceptedSum = 0;
@@ -194,7 +184,7 @@ const chartData = ref({
   datasets: [
     {
       type: 'bar',
-      label: 'Solicitações',
+      label: 'Itens solicitados',
       backgroundColor: '#0B3B69',
       data: datasets.requests[currentIndex.value]
     },
@@ -254,7 +244,7 @@ const changeLabel = (labelType, index) => {
         {
           ...chartData.value.datasets[0], 
           type: 'bar',
-          label: 'Solicitações',
+          label: 'Itens solicitados',
           backgroundColor: '#0B3B69',
           data: datasets.requests[currentIndex.value]
         },
@@ -293,7 +283,7 @@ const changeLabel = (labelType, index) => {
         {
           ...chartData.value.datasets[0], 
           type: 'bar',
-          label: 'Solicitações',
+          label: 'Itens solicitados',
           backgroundColor: '#0B3B69',
           data: datasets.requests[currentIndex.value][index]
         },
@@ -315,7 +305,17 @@ const changeLabel = (labelType, index) => {
     }
   }
 };
-
+onMounted(() => {
+  /*
+  if(store.isMobile){
+      const btnText = document.querySelectorAll('.filter-btn');
+      const dropdownToggle = document.querySelector('.dropdown-principal');
+      dropdownToggle.removeAttribute('data-bs-auto-close')
+      dropdownToggle.setAttribute('data-bs-auto-close', 'outside')
+      btnText.forEach(element => element.style.fontSize = '9px');
+  }
+  */
+})
 </script>
 
 <style scoped>

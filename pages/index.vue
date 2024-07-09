@@ -7,7 +7,7 @@
         </div>
         <div class="d-flex align-items-center justify-content-between mb-3">
           <div class="px-3 ms-3 summary-text">
-            <p class="summary-text-re">
+            <p class="summary-text-re teste">
               Solicitações com status pendente
             </p>
             <h5 class="d-flex align-items-center justify-content-between mt-1">{{ requestsByStatus.totalElements }}
@@ -113,7 +113,7 @@
           </tr>
         </template>
         <template v-slot:content>
-          <tr v-for="record in records.content" :key="record.id" class="text-center" @mouseover="isProfileBtnRecord[record.id] = true" @mouseout="isProfileBtnRecord[record.id] = false"> 
+          <tr v-if="records.content.length > 0" v-for="record in records.content" :key="record.id" class="text-center" @mouseover="isProfileBtnRecord[record.id] = true" @mouseout="isProfileBtnRecord[record.id] = false"> 
               <th class="table-cell mov-cell" scope="row">
                 <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
                   <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
@@ -156,8 +156,11 @@
                 </div>
               </th>
             </tr>
-        </template>
-      </TablesTable>
+            </template>
+            </TablesTable>
+              <div v-if="records.content.length === 0" class="search-empty d-flex justify-content-center">
+                <p class="text-dark-emphasis fs-5 opacity-50">Nenhuma movimentação</p>
+              </div>
     </div>    
     <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
       <DashboardBarChartItems />
@@ -165,6 +168,7 @@
     <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
       <DashboardBarChartUtils />
     </div>
+    <!--
     <div class="dashboard-section bg-light mb-4 pb-3 pt-0 rounded-3">
       <div class="section-title pt-2 mb-3 bg-light-background-header">
           <h5 class="header ps-2">Catálogos</h5>
@@ -199,6 +203,7 @@
           </CardsImageCard>
         </div>
     </div>
+    -->
 </div>
 </template>
 
@@ -251,16 +256,19 @@ for(let i = 1; i < items.totalPages; i++){
 
 
 const setpageTitle = inject('setpageTitle');
-
-
 const sendDataToParent = () => {
-    const data = "Painel Geral";
-    setpageTitle(data);
+    const title = "Painel Geral";
+    const route = `${useRoute().fullPath}`
+    setpageTitle(title, route, 'home');
 };
 sendDataToParent();
 </script>
 
 <style scoped>
+.teste{
+  filter: drop-shadow()
+}
+
 .users-management-scroll{
   position: static !important;
   text-wrap: nowrap !important;
@@ -334,6 +342,10 @@ h5{
 .card-img-top{
   transition: opacity 0.5s ease-in-out;
   opacity: 85%;
+}
+.search-empty{
+  margin-top: 7% !important;
+  white-space: nowrap;
 }
 .align-cell{
   padding-top: 12px !important;

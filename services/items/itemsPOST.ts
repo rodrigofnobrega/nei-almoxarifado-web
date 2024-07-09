@@ -1,8 +1,8 @@
-import axios from 'axios'
+import { useApi } from "../../composables/axios";
 //Cadastra um item
 export const postCreateItem = async (userStore ,name, sipac, qtd, type) => {
     try{
-        const { data } = await axios.post('http://localhost:8080/api/v1/operacoes/cadastro', {
+        const { data } = await useApi().post('/operacoes/cadastro', {
             'name': name,
             'sipacCode': sipac,
             'quantity': qtd,

@@ -3,6 +3,7 @@ import { authPost } from "../services/auth/authPOST";
 import axios from 'axios';
 import { navigateTo, useRouter } from "nuxt/app";
 import { getUserByEmail } from "../services/users/userGET";
+import { usePopupStore } from "./popup";
 
 export const useUser = defineStore('user', {
     state: () => ({
@@ -13,6 +14,7 @@ export const useUser = defineStore('user', {
     }),
     actions: {
         async fetchData(password, email){
+            const popUpStore = usePopupStore();
             this.email = email
             try{
                 const router = useRouter();
@@ -23,11 +25,9 @@ export const useUser = defineStore('user', {
                 this.id = response.id
                 this.role = response.role
                 localStorage.setItem('session', JSON.stringify(res.token))
-                if(this.role === "USER"){
-                    return navigateTo('/error/404')
-                }
                 return navigateTo('/');
             } catch(err) { 
+                popUpStore.throwPopup("ERRO: credenciais inválidas", "#B71C1C")
                 return err
             };
         },

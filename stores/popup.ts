@@ -9,7 +9,16 @@ export const usePopupStore = defineStore('popup', {
     actions: {
         throwPopup(warningText, background){
             this.message = warningText;
-            this.bgColor = background;
+            switch(background){
+                case 'red':
+                    this.bgColor = '#B71C1C';
+                    break;
+                case 'blue':
+                    this.bgColor = '#0B3B69';
+                    break;
+                default:
+                    this.bgColor = background;
+            }
             this.popupActive = !this.popupActive;
         },
     },

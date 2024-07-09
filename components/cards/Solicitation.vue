@@ -42,38 +42,38 @@
 					</div>	
 				</div>
 				<div class="mb-0"> 
-						<label class="form-label fw-semibold"> Mensagem </label>
-						<div class="d-flex">
-							<textarea readonly class="form-control"> {{ message }} </textarea>
-						</div>
+					<label class="form-label fw-semibold"> Mensagem </label>
+					<div class="d-flex">
+						<textarea readonly class="form-control"> {{ message }} </textarea>
+					</div>
 				</div>	
 			</div>
 			</template>
 		<template v-slot:footer>
 			<div class="row justify-content-evenly"> 
-				<button class="action-btn btn btn-danger col-2 mx-2" data-bs-toggle="modal" data-bs-target="#rejectModal"> Rejeitar </button>
-				<button class="action-btn btn btn-outline-success col-2 mx-2" data-bs-toggle="modal" data-bs-target="#acceptModal"> Aceitar </button>
+				<button class="action-btn btn btn-danger col-2 mx-2" data-bs-toggle="modal" :data-bs-target="`#rejectModal${requestId}`"> Rejeitar </button>
+				<button class="action-btn btn btn-outline-success col-2 mx-2" data-bs-toggle="modal" :data-bs-target="`#acceptModal${requestId}`"> Aceitar </button>
 			</div>
 		</template>
 	</Card>
-	<ModalActionConfirm id="acceptModal">
-		<template v-slot:title> Confirmar aceitação </template>
+	<ModalActionConfirm :id="`acceptModal${requestId}`">
+		<template v-slot:title> Confirmar aceitação</template>
 		<template v-slot:text> 
 			<h6> Mensagem para a notificação </h6>
 			<textarea class="form-control"> </textarea>
 		 </template>
 		<template v-slot:buttons> 
-			<button @click="AcceptRequest(requestId)" data-bs-dismiss="modal" class="btn btn-secondary mx-2"> Enviar </button>
+			<button @click="AcceptRequest()" data-bs-dismiss="modal" class="btn btn-secondary mx-2"> Enviar </button>
 		</template>
 	 </ModalActionConfirm>
-	<ModalActionConfirm id="rejectModal">
+	<ModalActionConfirm :id="`rejectModal${requestId}`">
 		<template v-slot:title> Confirmar rejeição </template>
 		<template v-slot:text> 
 			<h6> Mensagem para a notificação </h6>
 			<textarea class="form-control"> </textarea>
 		 </template>
 		<template v-slot:buttons> 
-			<button @click="RejectRequest(requestId)"  data-bs-dismiss="modal" class="btn btn-secondary mx-2"> Enviar </button>
+			<button @click="RejectRequest()"  data-bs-dismiss="modal" class="btn btn-secondary mx-2"> Enviar </button>
 		</template>
 	 </ModalActionConfirm>
 </template>
@@ -83,7 +83,7 @@ import Card from './Card.vue';
 import { useUser } from '../../stores/user.ts';
 import { requestAccept, requestDecline } from '../../services/requests/requestsPATCH.ts';
 import { usePopupStore } from '~/stores/popup';
-import { inject } from 'vue';
+import { inject, ref } from 'vue';
 
 export default {
 	components: { Card },
@@ -99,8 +99,9 @@ export default {
 		itemType: { type: String, required: true },
 	},
 	methods:{
-		async AcceptRequest(requestId:Number){
-			const res = await requestAccept(this.userStore, requestId);
+		async AcceptRequest(){
+			console.log(this.requestId)
+			const res = await requestAccept(this.userStore, this.requestId);
 			if(res){
 				this.popupStore.throwPopup('Solicitação aceita', '#0B3B69')
 				this.sendDatatoParent()
@@ -108,8 +109,8 @@ export default {
 			}
 			this.popupStore.throwPopup('Erro: Quantidade solicitada maior que a disponível', '#B71C1C')
 		},
-		async RejectRequest(requestId:Number){
-			const res = await requestDecline(this.userStore, requestId);
+		async RejectRequest(){
+			const res = await requestDecline(this.userStore, this.requestId);
 			if(res){
 				this.popupStore.throwPopup('Solicitação rejeitada', '#0B3B69');
 				this.sendDatatoParent()
