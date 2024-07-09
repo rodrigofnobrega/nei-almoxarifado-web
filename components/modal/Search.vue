@@ -13,7 +13,7 @@
             </div>	
 				</div>
 				<div class="modal-body">
-            <ul v-if="showResults && searchQuery !== ''" class="list-group">
+            <ul v-if="showResults && searchQuery !== '' && searchResults.length != 0" class="list-group">
                 <a class="text-decoration-none" v-for="result in searchResults" :href="`/catalogo`" :key="result.id">
                   <li @click="NavigateToItem(result.id)" class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
                     {{ result.name }} 
@@ -41,7 +41,6 @@ import { useUser } from '../../stores/user.ts';
 export default {
   data() {
     return {
-      items: [],
       searchQuery: "",
       searchCount: 0,
       searchResults: [],
@@ -82,7 +81,10 @@ export default {
       this.showResults = false;
       this.searchResults = [];
       this.pagination = 0;
-      await this.fetchSearchResults();
+      clearTimeout(this.typingTimeout);
+      this.typingTimeout = setTimeout(() => {
+         this.fetchSearchResults();
+      }, 1000);
       this.showResults = true;
     },
     async fetchSearchResults() {
@@ -106,19 +108,10 @@ export default {
         this.pagination++;
       }
     },
-    debouncedSearch() {
-      clearTimeout(this.typingTimeout);
-      this.typingTimeout = setTimeout(() => {
-        this.handleSearch();
-      }, 1000);
-    },
     async itemsReq() {
       const res = await getItems(this.userStore, this.pagination, 'id,desc');
       this.totalPages = res.totalPages;
       this.store.items.push(res.content);
-      res.content.map((item) => {
-        this.items.push(item);
-      });
       this.pagination++;
     },
   },

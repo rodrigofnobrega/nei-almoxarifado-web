@@ -1,12 +1,10 @@
 <template>
     <div class="text-center">
         <div class="search-bar d-flex mx-1">
-              <form class="ms-0 d-flex align-items-center" role="search">
-                <label>
-                  <IconsSearchGlass class="search-icon p-1" width="40px" height="41px" style="border: 1px solid rgb(51, 51, 51, 0.2); border-right: 0;"/>
-                </label>
-                <input class="form-control outline-warning  p-0" v-model="searchQuery" @input="handleSearch" type="search" placeholder="Pesquisar" autofocus>
-              </form>
+          <button class="d-flex btn btn-search align-items-center ps-0" type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal">
+              <IconsSearchGlass />
+              <span class="ms-1">Pesquisar</span>
+            </button>
           </div>
         <div class="search-result" v-if="showResults && searchQuery !== ''">
           <ul class="list-group">
@@ -83,7 +81,7 @@ export default{
 </script>
 
 <style scoped>
-.form-control::placeholder, .form-control{
+.btn-search{
     font-weight: 600;
     color: #494b50 !important;
     opacity: 100% !important;
@@ -113,15 +111,23 @@ export default{
   opacity: 100% !important;
   background-color: white;
 }
-.form-control{
+.btn-search{
   border: 1;
   border-left: 0;
   height: 41px;
   width: 620px;
   border-radius: 0px 4px 4px 0px;
 }
-.form-control::placeholder{
+.btn-search{
   font-size: 19px;
+}
+.btn-search:active{
+    background-color: white !important;
+    color: #494b50 !important;
+}
+.btn-search:focus{
+    background-color: white !important;
+    color: #494b50 !important;
 }
 @media screen and (max-width: 630px){
   .form-control{

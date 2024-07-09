@@ -22,8 +22,8 @@
                 </div>
 		        </template>
             <template v-slot:rota>
-              <li class="breadcrumb-item active" aria-current="page">
-                <a class="route-link text-decoration-none" type="button" :href="pageRoute">{{ pageRoute.replace('/', '') }}</a>
+              <li v-for="(route, index) in pageRoute" :key="index" class="breadcrumb-item active" aria-current="page">
+                <a type="button" :href="route"> {{ route }} </a>
               </li>
             </template>
           </TitlesTitle>
@@ -55,7 +55,7 @@ export default {
     const pageOptions = ref();
     provide('setpageTitle', (title, route, icon) => {
       pageTitle.value = title;
-      pageRoute.value = route;
+      pageRoute.value = route.split('/');
       pageIcon.value = icon;
     });
 

@@ -11,7 +11,7 @@
         	<span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
     	</div>
 		<div class="row mt-3 d-flex align-items-center justify-content-center">
-			<div v-if="solicitations.length > 0" v-for="req in solicitations" :key="req.id" :class="{'extra-large': solicitations.length == 1, 'col-xl-6': solicitations.length == 2}" class="p-0 col-xl-4 col-lg-6 col-md-6 col-sm-12  mb-3 mb-xl-0"> 
+			<div v-if="solicitations.length > 0" v-for="req in solicitations" :key="req.id" :class="{'extra-large': solicitations.length == 1, 'col-xl-6': solicitations.length == 2}" class="p-0 col-xl-4 col-lg-6 col-md-6 col-sm-12 mb-3 mb-xl-0"> 
 				<CardsSolicitation
 					:person="req.user.name"
 					:requestedAt="req.creationDate"	

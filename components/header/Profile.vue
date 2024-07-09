@@ -28,7 +28,6 @@
                 <IconsDownArrow class="rotate-arrow" :style="{ transform: isRoted ? 'rotate(180deg)' : 'rotate(0deg)'}" width="24px" height="24px"/>
             </button>
             <ul class="dropdown-menu">
-              <li class="dropdown-item info"> {{ user.name }} </li>
               <li>
                 <a class="dropdown-item py-1 ps-2 d-flex align-items-center justify-content-between" :href="`/perfil?userId=${userStore.id}`">
                 Perfil

@@ -4,7 +4,7 @@
               <IconsSearchGlass />
               <span class="ms-1">Pesquisar</span>
             </button>
-        </div>
+      </div>
 </template>
 
 

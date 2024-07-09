@@ -42,10 +42,10 @@
 					</div>	
 				</div>
 				<div class="mb-0"> 
-						<label class="form-label fw-semibold"> Mensagem </label>
-						<div class="d-flex">
-							<textarea readonly class="form-control"> {{ message }} </textarea>
-						</div>
+					<label class="form-label fw-semibold"> Mensagem </label>
+					<div class="d-flex">
+						<textarea readonly class="form-control"> {{ message }} </textarea>
+					</div>
 				</div>	
 			</div>
 			</template>

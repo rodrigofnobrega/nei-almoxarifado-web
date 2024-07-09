@@ -27,7 +27,7 @@ export const useUser = defineStore('user', {
                 localStorage.setItem('session', JSON.stringify(res.token))
                 return navigateTo('/');
             } catch(err) { 
-                popUpStore.throwPopup("Erro: credenciais inválidas", "#B71C1C")
+                popUpStore.throwPopup("ERRO: credenciais inválidas", "#B71C1C")
                 return err
             };
         },

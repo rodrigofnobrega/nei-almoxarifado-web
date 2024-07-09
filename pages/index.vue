@@ -7,7 +7,7 @@
         </div>
         <div class="d-flex align-items-center justify-content-between mb-3">
           <div class="px-3 ms-3 summary-text">
-            <p class="summary-text-re">
+            <p class="summary-text-re teste">
               Solicitações com status pendente
             </p>
             <h5 class="d-flex align-items-center justify-content-between mt-1">{{ requestsByStatus.totalElements }}
@@ -265,6 +265,10 @@ sendDataToParent();
 </script>
 
 <style scoped>
+.teste{
+  filter: drop-shadow()
+}
+
 .users-management-scroll{
   position: static !important;
   text-wrap: nowrap !important;

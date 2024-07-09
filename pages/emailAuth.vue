@@ -4,16 +4,18 @@
 			<p class="texto fw-bold">Recuperar Senha</p>
 		</div>
 		<div class="mx-3">
-			<p v-if="!isSubmited" class="mt-3 mb-0"><strong>Observação:</strong> Antes de se cadastrar verifique com a administração as credenciais válidas para o cadastro.</p>	
+			<p v-if="!isSubmited" class="mt-3 mb-0">Para recuperar sua senha digite seu email para que enviemos um código de verificação.</p>	
+			<p v-if="isSubmited" class="mt-3 mb-0">Coloque o exato código que foi enviado.</p>	
 			<form class="auth-form" @submit.prevent="submitForm">
 				<div class="auth">
-					
 					<div  v-if="!isSubmited" class="submit">
 						<label class="fw-bold" for="email">Email:</label>
 						<input type="text" id="email" placeholder="Email" v-model="email" required>
 					</div>
-				
-	
+					<p class="fw-bold text-dark-alert mb-2 mt-0 d-flex align-items-center" v-if="email && !isValidEmail(email)">
+						<IconsInformation class="me-1"/>
+						E-mail inválido
+					</p>
 					<div v-else-if="isSubmited" class="token">
 						<label class="fw-bold" for="token">Código de verificação:</label>
 						<input type="text" id="token" placeholder="Código" v-model="token">
@@ -21,7 +23,7 @@
 				
 				</div>
 				
-				<button v-if="!isSubmited" type="submit" @click="forgetPassword">Enviar</button>
+				<button :class="!isValidEmail(email) ? 'disabled-button' : ''" :disabled="!isValidEmail(email)" class="mb-2" v-if="!isSubmited" type="submit" @click="forgetPassword">Enviar</button>
 				
 				<button v-else-if="isSubmited" type="submit" @click="validateToken">Ir</button>
 	
@@ -62,6 +64,10 @@ const email = ref('');
 const token = ref(''); // 
 const newToken = ref('');
 
+const isValidEmail = (email) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+}
 // Variáveis de verificação se foi mandado ou não o código e para verificar o código
 const isSubmited = ref(false);
 
@@ -77,7 +83,6 @@ const router = useRouter();
 
     // Tirar pop-up de envio
 const resetOn = () => {
-    console.log(`Insira o token enviado para ${email.value}.`);
     isSubmitOn.value = false;
 }
 
@@ -88,7 +93,6 @@ const resetSubmit = () => {
 }
 
 const forgetPassword = async () => {
-	console.log(email.value);
 	const res = await forgotPasswordAUTH(email.value);
 	//const res = await forgotPasswordPUT(1, recoveryToken.data, 121212, 121212)
 	if (email.value != '') {
@@ -101,6 +105,7 @@ const validateToken = async () => {
 	const res = await recoveryTokenAUTH(token.value);
 	store.recoveryToken = token.value;
 	console.log(res.data);
+	userStore.email = email.value
 	navigateTo('/senhaAuth');
 }
 </script>
@@ -169,9 +174,10 @@ const validateToken = async () => {
 .pop-error button:hover {
   background-color: #ff3333; /* Altera a cor do botão quando hover */
 }
-
-
-
+.disabled-button {
+  opacity: 75%;
+  cursor: not-allowed !important;
+}
 .container-fluid {
 	padding: 0px;
 
@@ -197,12 +203,13 @@ const validateToken = async () => {
 .header {
 	width: 100%;
 	height: 65px;
-	border-radius: 15px;
+	border-radius: 15px 15px 0px 0px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;
 	padding: 0px;
 }
+
 
 .auth-form {
 	margin: 10px 0px 10px 0px;

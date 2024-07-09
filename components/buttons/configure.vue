@@ -9,8 +9,8 @@
                 <label class="form-check-label" for="editCheck">habilitar edição</label>
                 <input v-model="store.isEditionMode" @click="store.isEditionMode = !store.isEditionMode" class="form-check-input me-2" value="" id="editCheck" type="checkbox">
             </li>
-            <li class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2 pe-0">
-                <a class="btn btn-transparent p-0" href="/catalogo/importar-tabelas">importar tabelas</a>
+            <li class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2 pe-0 mb-0" style="padding-bottom: 4px;">
+                <a type="button" class="text-decoration-none import-text" href="/catalogo/importar-tabelas">importar tabelas</a>
             </li>
         </ul>   
     </div>  
@@ -79,7 +79,6 @@ onMounted(() => {
 
 <style scoped>
 .large-menu{
-    height: 100px;
     width: 140px;
     min-width: 110px;
 }
@@ -116,7 +115,12 @@ li{
 .form-check-input:checked{
     background-color: #1F69B1 !important;
 }
-
+.import-text{
+    color: rgb(0, 0, 0, 0.9);
+}
+.dropdown-item:hover .import-text{
+    color: white !important;
+}
 .action-btn:hover{
     opacity: 90%;
 }

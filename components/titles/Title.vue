@@ -8,7 +8,7 @@
             <div class="me-3 mb-2 route">
                 <nav v-show="textLoading" aria-label="breadcrumb">
                   <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/">início</a></li>
+                    <li><a href="/">início</a></li>
                     <slot name="rota" />
                     </ol>
                 </nav>

@@ -237,7 +237,7 @@ const itemsReq = async (sort, isInverted, pagination, loadRequest, paginationInv
     loadRequest ? cacheIndex.value++ : 0;
     itemsCache.value.push(res.content);
     return res.totalPages
-}; 
+};
 
 
 const searchInput = ref("");
@@ -443,7 +443,7 @@ onUpdated(async () => {
     display: block;
 }
 .table-container{
-    margin-bottom: 70px;
+    padding: 100px 0 100px 0;
     width: 100%;
     display: block !important;
 }

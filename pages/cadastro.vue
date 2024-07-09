@@ -24,7 +24,7 @@
 				</div>
 				<p class="fw-bold text-dark-alert mb-2 mt-0 d-flex align-items-center" v-if="password && password.length < 6">
 					<IconsInformation class="me-1"/>
-					A senha deve possuir 6 caracteres ou mais.
+					A senha deve possuir 6 ou mais caracteres.
 				</p>
 				<div v-if="password && password.length >= 6">
 					<label for="re-password">Confirme sua Senha:</label>
@@ -164,15 +164,14 @@ const resetPassForm = () => {
 
 .header {
 	width: 100%;
-	max-width: 500px;
 	height: 65px;
-	border-radius: 15px;
-	opacity: 0px;
+	border-radius: 15px 15px 0px 0px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;
-	margin-bottom: 18px;
+	padding: 0px;
 }
+
 
 .singup-form {
 	margin-top: 0px;

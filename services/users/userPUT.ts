@@ -13,9 +13,9 @@ export const updatePasswordPUT = async (userStore, userId, currentPassword, newP
     return data;
 }
 
-export const forgotPasswordPUT = async (userId, recoveryToken, newPassword, confirmPassword) => {
-    console.log(userId, recoveryToken, newPassword, confirmPassword)
-    const { data } = await useApi().put(`/users/updateForgotPassword/${userId}`, {
+export const forgotPasswordPUT = async (userEmail, recoveryToken, newPassword, confirmPassword) => {
+    console.log(userEmail, recoveryToken, newPassword, confirmPassword)
+    const { data } = await useApi().put(`/users/updateForgotPassword/${userEmail}`, {
         "recoveryToken": recoveryToken,
         "newPassword": newPassword,
         "confirmPassword": confirmPassword
