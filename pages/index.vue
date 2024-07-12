@@ -3,7 +3,7 @@
     <div class="d-flex paralalel-section">
       <div class="dashboard-section me-2 bg-light mb-4 pb-0 pt-0 rounded-3">
         <div class="section-title pt-2 mb-4 bg-light-background-header">
-          <h5 class="header ps-2">Sumário</h5>
+          <h5 class="header ps-2 fw-bold">Sumário</h5>
         </div>
         <div class="d-flex align-items-center justify-content-between mb-3">
           <div class="px-3 ms-3 summary-text">
@@ -60,15 +60,15 @@
       </div>    
       <div class="dashboard-section users-management me-3 bg-light mb-4 pb-0 pt-0 rounded-3">
         <div class="section-title pt-2  bg-light-background-header">
-          <h5 class="header ps-2">Gestão de Usuários</h5>
+          <h5 class="header ps-2 fw-bold">Gestão de Usuários</h5>
         </div>
         <div class="users-management-scroll">
           <TablesTable>
             <template v-slot:header>
               <tr>
-                <th class="col-title py-2" scope="col">Usuário</th>
-                <th class="col-title py-2" scope="col">Email</th>
-                <th class="col-title py-2" scope="col">Encargo</th>
+                <th class="col-title py-2 fw-bold" scope="col">Usuário</th>
+                <th class="col-title py-2 fw-bold" scope="col">Email</th>
+                <th class="col-title py-2 fw-bold" scope="col">Encargo</th>
               </tr>
             </template>
             <template v-slot:content>
@@ -99,17 +99,17 @@
     </div>
     <div class="dashboard-section recent-records bg-light mb-4 pb-0 pt-0 rounded-3">
       <div class="section-title pt-2  bg-light-background-header">
-        <h5 class="header ps-2">Movimentações mais recentes</h5>
+        <h5 class="header ps-2 fw-bold">Movimentações mais recentes</h5>
       </div>
       <TablesTable >
         <template v-slot:header>
           <tr class="bg-light">
-            <th class="col-title table-col text-center py-2" scope="col">Usuário</th>
-            <th class="col-title table-col text-center py-2" scope="col">Movimentação</th>
-            <th class="col-title table-col text-center py-2" scope="col">Item</th>
-            <th class="col-title table-col text-center py-2" scope="col">Tipo unitário</th>
-            <th class="col-title table-col text-center py-2" scope="col">Quantidade</th>
-            <th class="col-title table-col text-center py-2" scope="col">Data e horário</th>
+            <th class="col-title table-col text-center py-2 fw-bold" scope="col">Usuário</th>
+            <th class="col-title table-col text-center py-2 fw-bold" scope="col">Movimentação</th>
+            <th class="col-title table-col text-center py-2 fw-bold" scope="col">Item</th>
+            <th class="col-title table-col text-center py-2 fw-bold" scope="col">Tipo unitário</th>
+            <th class="col-title table-col text-center py-2 fw-bold" scope="col">Quantidade</th>
+            <th class="col-title table-col text-center py-2 fw-bold" scope="col">Data e horário</th>
           </tr>
         </template>
         <template v-slot:content>
@@ -276,7 +276,6 @@ sendDataToParent();
   max-height: 227px !important;
 }
 .users-management{
-  
   position: static !important;
   text-wrap: nowrap !important;
   overflow-y: scroll !important;
