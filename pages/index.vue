@@ -65,16 +65,16 @@
         <div class="users-management-scroll">
           <TablesTable>
             <template v-slot:header>
-              <tr>
-                <th class="col-title py-2 fw-bold" scope="col">Usuário</th>
-                <th class="col-title py-2 fw-bold" scope="col">Email</th>
-                <th class="col-title py-2 fw-bold" scope="col">Encargo</th>
+              <tr class="col-line">
+                <th class="col-title text-center py-2" scope="col">Usuário</th>
+                <th class="col-title py-2" scope="col">Email</th>
+                <th class="col-title py-2" scope="col">Encargo</th>
               </tr>
             </template>
             <template v-slot:content>
               <tr v-for="user in users.content" :key="user.id" @mouseover="isProfileBtn[user.id] = true" @mouseout="isProfileBtn[user.id] = false">
-                <th class="text-start table-cell d-flex align-items-center" scope="row">
-                  <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
+                <th class="text-start table-cell d-flex align-items-center justify-content-center" scope="row">
+                  <IconsPerfil class="me-3 opacity-70" width="30px" height="30px" />
                   {{ user.name }}
                 </th>
                 <th class="text-start table-cell align-cell" scope="row" style="padding-top: 11px;">
@@ -103,20 +103,20 @@
       </div>
       <TablesTable >
         <template v-slot:header>
-          <tr class="bg-light">
-            <th class="col-title table-col text-center py-2 fw-bold" scope="col">Usuário</th>
-            <th class="col-title table-col text-center py-2 fw-bold" scope="col">Movimentação</th>
-            <th class="col-title table-col text-center py-2 fw-bold" scope="col">Item</th>
-            <th class="col-title table-col text-center py-2 fw-bold" scope="col">Tipo unitário</th>
-            <th class="col-title table-col text-center py-2 fw-bold" scope="col">Quantidade</th>
-            <th class="col-title table-col text-center py-2 fw-bold" scope="col">Data e horário</th>
+          <tr class="col-line">
+            <th class="col-title table-col text-center py-2" scope="col">Usuário</th>
+            <th class="col-title table-col text-center py-2" scope="col">Movimentação</th>
+            <th class="col-title table-col text-center py-2" scope="col">Item</th>
+            <th class="col-title table-col text-center py-2" scope="col">Tipo unitário</th>
+            <th class="col-title table-col text-center py-2" scope="col">Quantidade</th>
+            <th class="col-title table-col text-center py-2" scope="col">Data e horário</th>
           </tr>
         </template>
         <template v-slot:content>
           <tr v-if="records.content.length > 0" v-for="record in records.content" :key="record.id" class="text-center" @mouseover="isProfileBtnRecord[record.id] = true" @mouseout="isProfileBtnRecord[record.id] = false"> 
               <th class="table-cell mov-cell" scope="row">
                 <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
-                  <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
+                  <IconsPerfil class="me-3 mb-0 opacity-70" width="30px" height="30px" />
                   {{ record.user.name }}
                 </div>
               </th>
@@ -329,9 +329,12 @@ h5{
 .col-title{
   font-size: 14px;
   color: rgb(51,51,51, 0.9);
-  opacity: 80%;
-  font-weight: 400;
+  opacity: 99%;
+  font-weight: bold;
   margin-top: 0;
+}
+.col-line {
+  border-bottom: 1px solid rgba(80, 76, 76, 0.174);
 }
 .table-cell{
   font-size: 14px;
