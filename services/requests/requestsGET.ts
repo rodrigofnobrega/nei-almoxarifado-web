@@ -24,8 +24,8 @@ export const getRequest = async (userStore) => {
     return data
 }
 //Listar Solicitações pelo status da solicitação
-export const getRequestByStatus = async (userStore, requests_status) => {
-    const { data } = await useApi().get(`http://localhost:8080/api/v1/requests/status/${requests_status}`, {
+export const getRequestByStatus = async (userStore, requestStatus, page) => {
+    const { data } = await useApi().get(`http://localhost:8080/api/v1/requests/status/${requestStatus}?page=${page}`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`
@@ -36,7 +36,7 @@ export const getRequestByStatus = async (userStore, requests_status) => {
 }
 //Listar Solicitações pelo id do usuário
 export const getRequestByUser = async (userStore, userId, pagination) => {
-    const { data } = await useApi().get(`http://localhost:8080/api/v1/requests/user?page=${pagination}&userId=${userId}`, {
+    const { data } = await useApi().get(`http://localhost:8080/api/v1/requests/user?page=${pagination}&userId=${userId}&sort=id,asc`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`

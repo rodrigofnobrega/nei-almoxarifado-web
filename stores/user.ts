@@ -10,7 +10,7 @@ export const useUser = defineStore('user', {
         token: '',
         email: '',
         id: null,
-        role: null
+        role: null,
     }),
     actions: {
         async fetchData(password, email){

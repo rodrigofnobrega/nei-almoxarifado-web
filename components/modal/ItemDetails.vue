@@ -60,7 +60,8 @@
                     <button class="btn inset-shadow mode-btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#itemReposition">Repor</button>
                 </div>
                 <div v-if="userStore.role === 'USER'" class="d-flex align-items-center justify-content-center">
-                    <button class="btn btn-light-alert text-light" data-bs-dismiss="modal">Fechar</button>
+                    <button class="btn btn-light-alert text-light mx-1" data-bs-dismiss="modal">Fechar</button>
+                    <button class="btn btn-secondary text-light mx-1" data-bs-toggle="modal" data-bs-target="#actionConfirm">Solicitar</button>
                 </div>
                 <div v-if="userStore.role === 'ADMIN'" @click="getRecord" data-bs-target="#itemHistory" data-bs-toggle="modal" type="button" class="btn btn-primary  my-1 bg-primary rounded-2 p-1 d-flex justify-content-end text-light">
                     <IconsHistory width="25px" height="25px"/>

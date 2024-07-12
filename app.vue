@@ -38,3 +38,14 @@ function checkIfMobile() {
 
 
 </script>
+
+<style>
+.bg-fade {
+  background: radial-gradient(ellipse at bottom left, rgba(11, 59, 105, 0.5), transparent 50%),
+              radial-gradient(ellipse at bottom right, rgba(11, 59, 105, 0.5), transparent 50%),
+              radial-gradient(ellipse at top left, rgba(11, 59, 105, 0.5), transparent 50%),
+              radial-gradient(ellipse at top right, rgba(11, 59, 105, 0.5), transparent 50%),
+              radial-gradient(ellipse at center left, rgba(255, 255, 255, 1), transparent 50%),
+              radial-gradient(ellipse at center left, rgba(255, 255, 255, 1), transparent 50%);
+}
+</style>

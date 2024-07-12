@@ -1,7 +1,7 @@
 <template>
   <div id="content">
     <Header />
-    <div class="d-flex"> 
+    <div class="d-flex bg-fade"> 
       <div class="fluid-container"> 
         <NavbarNavSideBar />
       </div>
