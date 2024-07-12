@@ -150,7 +150,7 @@ const resetPassForm = () => {
 }
 
 .singup-container{
-	border-radius: 20px;
+	border-radius: 8px;
 	width: 150%;
 	margin-bottom: 100px;
 	padding-bottom: 45px;
@@ -163,15 +163,15 @@ const resetPassForm = () => {
 }
 
 .header {
+	border: solid 1px #D9D9D9;
 	width: 100%;
 	height: 65px;
-	border-radius: 15px 15px 0px 0px;
+	border-radius: 8px 8px 0px 0px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;
 	padding: 0px;
 }
-
 
 .singup-form {
 	margin-top: 0px;

@@ -85,7 +85,7 @@
                 <li class="page-item">
                     <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
                 </li>
-                <li class="page-item" :key="0">
+                <li v-if="totalPages > 1" class="page-item" :key="0">
                     <button class="page-link text-light" @click="page(0)" :class="{'bg-primary': !pagesFocus[0], 'bg-secondary': pagesFocus[0]}">{{ 1 }}</button>
                 </li>
                 <li v-show="pagination > 1" class="page-item">
@@ -97,7 +97,7 @@
                 <li v-show="totalPages > 3 && paginationRet < totalPages-4" class="page-item">
                     <button class="page-link bg-primary text-light">...</button>
                 </li>
-                <li class="page-item" :key="totalPages-1">
+                <li v-if="totalPages > 1" class="page-item" :key="totalPages-1">
                     <button class="page-link text-light" @click="page(totalPages-1)" :class="{'bg-primary': !pagesFocus[totalPages-1], 'bg-secondary': pagesFocus[totalPages-1]}">{{ totalPages }}</button>
                 </li>
                 <li class="page-item">
@@ -107,7 +107,6 @@
         </nav>
         </div>
     </div>
-    <button @click="teste">TEste</button>
 </div>
 </template>
 

@@ -184,10 +184,10 @@ const validateToken = async () => {
 }
 
 .auth-container{
-	border-radius: 15px;
+	border-radius: 8px;
 	width: 120%;
 	flex-direction: column;
-    margin-top: 30px;
+	margin-top: 80px;
 }
 .auth {
     padding-bottom: 10px;
@@ -201,9 +201,10 @@ const validateToken = async () => {
 }
 
 .header {
+	border: solid 1px #D9D9D9;
 	width: 100%;
 	height: 65px;
-	border-radius: 15px 15px 0px 0px;
+	border-radius: 8px 8px 0px 0px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;

@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout>
       <Popup :isPopup="isPopup" :popupText="popupText" :popupBg="popupBg"/>
-      <NuxtPage />
+      <NuxtPage/>
     </NuxtLayout>
   </div>
 </template>
