@@ -177,7 +177,7 @@ export default {
 }
 .offcanvas{
     border: none;
-    width: 10em;
+    width: 11em;
     height: 100vh;  
     top: 0%;
     padding-top: 20px;
@@ -203,11 +203,11 @@ export default {
 }
 .list-group-flush{
     margin-bottom: 50px;
-    margin-left: -4px;
+    margin-left: -5px;
 }
 .list-group-item{
     display: flex;
-    font-size: 12px;
+    font-size: 13px;
     margin-left: 7px;
     margin-right: 0px;
     margin-top: 1px;
@@ -228,7 +228,7 @@ export default {
     margin-top: 30px;
     padding-left: 7px;
     height: 42px;
-    width: 145px;
+    width: 160px;
 }
 .item-bg a{
     display: flex;
@@ -240,7 +240,7 @@ export default {
     width: 50px; 
 }
 .colapse-btn{
-    width: 160px;
+    width: 175px;
     border-radius: 0;
     bottom: 0;
     height: 40px;
