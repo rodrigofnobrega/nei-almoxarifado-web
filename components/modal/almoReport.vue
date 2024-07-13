@@ -131,8 +131,39 @@
 
 <script setup>
 import { onMounted, provide, ref } from 'vue';
+import logo from '../../assets/svg/logo.svg';
 import jsPDF from 'jspdf';
 import { useStorageStore } from '../../stores/storage';
+
+// Convertendo logo svg para um formato compativel ao jsPDF
+const svgToDataUri = (svgPath) => {
+    return new Promise((resolve, reject) => {
+        fetch(svgPath)
+            .then(response => response.text())
+            .then(svg => {
+                const svgBlob = new Blob([svg], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(svgBlob);
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    const dataUri = canvas.toDataURL('image/png');
+                    URL.revokeObjectURL(url);
+                    resolve(dataUri);
+                };
+                img.onerror = (err) => {
+                    URL.revokeObjectURL(url);
+                    reject(err);
+                };
+                img.src = url;
+            })
+            .catch(err => reject(err));
+    });
+};
+
 
 const props = defineProps({
     id:{
@@ -260,7 +291,8 @@ const userType = ref('');
     doc.save('relatorio.pdf');
 }; */
 
-const generateReport = () => {
+
+const generateReport = async () => {
     const doc = new jsPDF();
 
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -270,28 +302,34 @@ const generateReport = () => {
     // Adicionar um cabeçalho com fundo colorido
     doc.setFillColor(220, 220, 220);
     doc.rect(0, 0, pageWidth, 20, 'F');
+
+    // Logo
+    const logoDataUri = await svgToDataUri(logo);
+    doc.addImage(logoDataUri, 'PNG', 10, 5, 10, 10);
     
     // Título
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
-    doc.setTextColor(0, 51, 102); // Cor do título
+    doc.setTextColor(0, 51, 102);
     const titleWidth = doc.getStringUnitWidth(title) * doc.getFontSize() / doc.internal.scaleFactor;
     const titleX = (pageWidth - titleWidth) / 2;
     doc.text(title, titleX, 10);
 
-    // Data
+    // Data e hora atual
     doc.setFontSize(11);
-    doc.setTextColor(0, 0, 0); // Cor do texto
+    doc.setTextColor(0, 0, 0);
     doc.text('Data:', titleX + 50, 10);
     doc.setFont('helvetica', 'normal');
     doc.text(`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`, titleX + 62, 10);
     doc.setDrawColor(0, 51, 102);
-    doc.line(10, 13, 200, 13);
+    doc.line(20, 13, 200, 13);
+    doc.line(20, 13, 200, 13);
 
-    // Conteúdo do relatório
+
     doc.setFont('times', 'normal');
     doc.setFontSize(10);
 
+    // Função de adição de seção
     const addSectionTitle = (text, y) => {
         doc.setFont('times', 'bold');
         doc.setTextColor(255, 255, 255);
@@ -300,6 +338,7 @@ const generateReport = () => {
         doc.text(text, 12, y);
     };
 
+    // Logica de dados
     if (reportPeriod.value === 'all') {
         if (props.id === 1) {
             if (reportOptions.value.dataset[0]) {
@@ -307,6 +346,8 @@ const generateReport = () => {
                 for (let i = 0; i < months.length; i++) {
                     doc.setTextColor(0, 0, 0);
                     doc.text(`${months[i].slice(0, 3)}`, titleX - 40 + (i * 10), 30);
+                    doc.setDrawColor(0, 51, 102);
+                    doc.line(titleX - 40 + (i * 10), 34, titleX - 40 + (i * 10) + 6, 34);
                     doc.text(`${props.data.requests[0][i]}`, titleX - 39 + (i * 10), 40);
                 }
             }
@@ -315,6 +356,8 @@ const generateReport = () => {
                 for (let i = 0; i < months.length; i++) {
                     doc.setTextColor(0, 0, 0);
                     doc.text(`${months[i].slice(0, 3)}`, titleX - 40 + (i * 10), 60);
+                    doc.setDrawColor(0, 51, 102);
+                    doc.line(titleX - 40 + (i * 10), 64, titleX - 40 + (i * 10) + 6, 64);
                     doc.text(`${props.data.requestsAccepted[0][i]}`, titleX - 39 + (i * 10), 70);
                 }
             }
@@ -323,6 +366,8 @@ const generateReport = () => {
                 for (let i = 0; i < months.length; i++) {
                     doc.setTextColor(0, 0, 0);
                     doc.text(`${months[i].slice(0, 3)}`, titleX - 40 + (i * 10), 90);
+                    doc.setDrawColor(0, 51, 102);
+                    doc.line(titleX - 40 + (i * 10), 94, titleX - 40 + (i * 10) + 6, 94);
                     doc.text(`${props.data.requestsRejected[0][i]}`, titleX - 39 + (i * 10), 100);
                 }
             }
@@ -331,18 +376,22 @@ const generateReport = () => {
                 addSectionTitle('Itens mais Solicitados', 20);
                 doc.setTextColor(0, 0, 0);
                 doc.text(`${props.data.labels.mostItems[0]}`, 10, 30);
+                doc.setDrawColor(0, 51, 102);
+                doc.line(titleX - 40 + (i * 10), 34, titleX - 40 + (i * 10) + 6, 34);
                 doc.text(`${props.data.datasets.mostItemsTime[0]}`, 10, 40);
             }
             if (reportOptions.value.dataset[1]) {
                 addSectionTitle('Usuários com Mais Solicitações', 50);
                 doc.setTextColor(0, 0, 0);
                 doc.text(`${props.data.labels.mostRequesters[0]}`, 83, 60);
+                doc.setDrawColor(0, 51, 102);
+                doc.line(titleX - 40 + (i * 10), 64, titleX - 40 + (i * 10) + 6, 64);
                 doc.text(`${props.data.datasets.mostRequestersTime[0]}`, 83, 70);
             }
         }
     } else if (reportPeriod.value === 'monthly') {
         if (props.id === 1) {
-            addSectionTitle('Resumo Mensal', 20);
+            addSectionTitle('Resumo Mensal', 20); 
             doc.setTextColor(0, 0, 0);
             doc.setFont('times', 'bold');
             doc.text(`Total de Requisições`, 10, 30);
@@ -351,17 +400,21 @@ const generateReport = () => {
             doc.setFont('times', 'normal');
             for (let i = 0; i < selectedMonths.value.length; i++) {
                 if (reportOptions.value.dataset[0]) {
-                    doc.text(`${months[selectedMonths.value[i]]}: ${props.data.requests[1][selectedMonths.value[i]]}`, 10, 40 + (10 * i));
+                    const totalRequests = props.data.requests[1][selectedMonths.value[i]].reduce((sum, value) => sum + value, 0);
+                    doc.text(`${months[selectedMonths.value[i]]}: ${totalRequests}`, 10, 40 + (10 * i));
                 }
                 if (reportOptions.value.dataset[1]) {
-                    doc.text(`${months[selectedMonths.value[i]]}: ${props.data.requestsAccepted[1][selectedMonths.value[i]]}`, 83, 40 + (10 * i));
+                    const acceptedRequests = props.data.requestsAccepted[1][selectedMonths.value[i]].reduce((sum, value) => sum + value, 0);
+                    doc.text(`${months[selectedMonths.value[i]]}: ${acceptedRequests}`, 83, 40 + (10 * i));
                 }
                 if (reportOptions.value.dataset[2]) {
-                    doc.text(`${months[selectedMonths.value[i]]}: ${props.data.requestsRejected[1][selectedMonths.value[i]]}`, 150, 40 + (10 * i));
+                    const rejectedRequests = props.data.requestsRejected[1][selectedMonths.value[i]].reduce((sum, value) => sum + value, 0);
+                    doc.text(`${months[selectedMonths.value[i]]}: ${rejectedRequests}`, 150, 40 + (10 * i));
                 }
             }
         } else if (props.id === 2) {
             addSectionTitle('Resumo Mensal', 20);
+            console.log(props.data.datasets.mostItensTime)
             for (let i = 0; i < selectedMonths.value.length; i++) {
                 if (reportOptions.value.dataset[0]) {
                     if (props.data.datasets.mostItemsTime[1][selectedMonths.value[i]] !== undefined) {
@@ -380,10 +433,9 @@ const generateReport = () => {
             }
         }
     }
-
-    // Salvar o PDF
     doc.save('relatorio.pdf');
 };
+
 
 </script>
 
