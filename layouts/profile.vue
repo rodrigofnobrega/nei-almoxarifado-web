@@ -25,7 +25,7 @@
                   </template>
                 </TitlesTitle>
               </div>
-              <div class="main-content pb-5 d-flex justify-content-center">
+              <div class="main-content bg-fade pb-5 d-flex justify-content-center">
                 <slot />
               </div>
           </div>

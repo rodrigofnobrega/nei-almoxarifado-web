@@ -1,5 +1,5 @@
 <template>
-<ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="currentItem" />
+<ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="searchItem ? searchItem : currentItem"/>
 <ModalActionConfirm>
     <template v-slot:title> Confirmar aceitação </template>
     <template v-slot:text> 
@@ -140,7 +140,7 @@
 import { useStorageStore } from '../../stores/storage.ts';
 import { useSearch } from '../../stores/search.ts';
 import { ref, computed, onMounted, onUpdated, inject } from 'vue';
-import { getItems } from '../../services/items/itemsGET.ts';
+import { getItem, getItems } from '../../services/items/itemsGET.ts';
 import { useUser } from '../../stores/user.ts';
 import { usePopupStore } from '../../stores/popup.ts';
 import { postRequest } from '../../services/requests/requestsPOST.ts';
@@ -383,18 +383,23 @@ const sendRequest = async () => {
         const res = await postRequest(userStore, currentItem.value.id, currentItem.value.quantity, description.value)
     }catch(err){
         console.log(err)
-        return popUpStore.throwPopup('Erro: quantidade solicitada é maior que a disponível', '#B71C1C')
+        return popUpStore.throwPopup('Erro: digite uma mensagem de solicitação', '#B71C1C')
     }
     return popUpStore.throwPopup('Solicitação enviada', '#0B3B69')
+}
+const searchItem = ref(undefined);
+const showSearchingDetails = async (itemId) => {
+    const res = await getItem(userStore, itemId);
+    searchItem.value = res;
+    const searching = document.getElementsByClassName('searching-btn'); 
+    searching[0].click()
 }
 const toolTipState = ref([[], []]);
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     initialLoading.value = false;
     if(searchStore.itemSearch.searching){
-        showDetails(searchStore.itemSearch.itemId);
-        const searching = document.getElementsByClassName('searching-btn'); 
-        searching[0].click()
+        showSearchingDetails(searchStore.itemSearch.itemId);
         searchStore.itemSearch.searching = false;
     }
     if(store.isMobile){

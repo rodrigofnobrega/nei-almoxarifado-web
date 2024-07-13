@@ -1,6 +1,6 @@
 <template>
     <div class="dropdown">
-        <button @click.stop @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="dropdown-principal filter-btn action-btn d-flex btn btn-outline-ligth text-dark-emphasis mx-1 px-2" data-bs-toggle="dropdown" data-bs-close="inside" data-bs-offset="0,2" aria-expanded="false">
+        <button @click.stop @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="dropdown-principal filter-btn action-btn d-flex btn btn-outline-ligth mx-1 px-2" data-bs-toggle="dropdown" data-bs-close="inside" data-bs-offset="0,2" aria-expanded="false">
             Filtro
             <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
         </button>
@@ -169,8 +169,12 @@ li{
     border-bottom: 1px ridge #1F69B1;
 }
 .btn-outline-ligth{
-    color: white !important; 
-    background-color: #0B3B69 !important; 
+    box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
+    color: rgb(0, 0, 0, 0.7); 
+}
+.btn-outline-ligth:hover{
+    color: white; 
+    background-color: #0B3B69; 
 }
 .btn-transparent:hover{
     color: white;
