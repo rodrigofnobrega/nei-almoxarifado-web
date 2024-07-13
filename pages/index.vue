@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="margin-left: 0px;">
+  <div class="container-fluid" style="margin-left: 0px;">
     <div class="d-flex paralalel-section">
       <div class="dashboard-section me-2 bg-light mb-4 pb-0 pt-0 rounded-3">
         <div class="section-title pt-2 mb-4 bg-light-background-header">
@@ -101,7 +101,7 @@
       <div class="section-title pt-2  bg-light-background-header">
         <h5 class="header ps-2">Movimentações mais recentes</h5>
       </div>
-      <TablesTable >
+      <TablesTable>
         <template v-slot:header>
           <tr class="bg-light">
             <th class="col-title table-col text-center py-2" scope="col">Usuário</th>
@@ -157,10 +157,10 @@
               </th>
             </tr>
             </template>
-            </TablesTable>
-              <div v-if="records.content.length === 0" class="search-empty d-flex justify-content-center">
-                <p class="text-dark-emphasis fs-5 opacity-50">Nenhuma movimentação</p>
-              </div>
+          </TablesTable>
+          <div v-if="records.content.length === 0" class="search-empty d-flex justify-content-center">
+            <p class="text-dark-emphasis fs-5 opacity-50">Nenhuma movimentação</p>
+          </div>
     </div>    
     <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
       <DashboardBarChartItems />
@@ -290,6 +290,7 @@ sendDataToParent();
 	padding-left: 15px;
   flex-direction: column;
 }
+
 .record-btn{
   text-wrap: nowrap;
 }

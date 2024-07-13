@@ -139,7 +139,7 @@ const resetPassword = () => {
 
 .auth-container{
 	border-radius: 8px;
-	width: 120%;
+	width: 450px;
 	flex-direction: column;
 	margin-top: 80px;
     margin: 10px;

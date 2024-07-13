@@ -1,16 +1,16 @@
 <template>
     <LoadersPageLoading :isLoading="loading" class="loader"/>
-	<div class="d-flex justify-content-center  bg-light-emphasis auth-container">
-		<div class="container-fluid login-container d-flex justify-content-center" :style="{'transform': switchState ? 'translateX(91%)' : '', 'border-radius': switchState ? '8px 0px 0px 8px;' : '0px 8px 8px 0px;'}">
+	<div class="d-flex justify-content-center  bg-primary auth-container">
+		<div class="container-fluid login-container d-flex justify-content-center" :style="{'transform': switchState ? 'translateX(94.52%)' : '', 'border-radius': delayedSwitchState ? '0px 8px 8px 0px' : '8px 0px 0px 8px'}">
 			<div class="header d-flex justify-content-center align-items-center">
-				<p v-if="delayedSwitchState === false" class="texto">Entrar</p>
-				<p v-else class="texto">Cadastrar</p>
+				<p v-if="delayedSwitchState === false" class="texto text-light">Entrar</p>
+				<p v-else class="texto text-light">Cadastrar</p>
 			</div>
 			<form v-if="delayedSwitchState === false" class="login-form mt-4" @submit.prevent="submitLogin">
 				<div class="form-group">
 					<div class="input-container">
 						<input 
-							:class="{'border-dark-alert': email && !isValidSimpleEmail(email)}"
+							:class="{'border-dark-alert border-2': email && !isValidSimpleEmail(email)}"
 							type="email" 
 							id="email"  
 							v-model="email" 
@@ -18,17 +18,14 @@
 							@focus="isEmailFocused = true"
 							@blur="isEmailFocused = false"
 							placeholder="">
-						<label class="fw-bold rounded-1" :class="{'label-focus': isEmailFocused || email}" for="email">Email:</label>
+					<label class="fw-bold rounded-1" :class="{'label-focus': isEmailFocused || email, 'text-light-alert': email && !isValidSimpleEmail(email)  }" for="email">{{email && !isValidSimpleEmail(email) ? 'Email inválido' : 'Email:'}}</label>
 					</div>
-					<p class="fw-bold text-dark-alert mb-2 mt-0 d-flex align-items-center" v-if="email && !isValidSimpleEmail(email)">
-						<IconsInformation class="me-1"/>
-						E-mail inválido
-					</p>
 				</div>
 				<div class="form-group">
 					<div class="input-container">
 						<div class="d-flex align-items-center justify-content-end">
 							<input 
+								:class="{'border-dark-alert border-2': !password && email}"
 								id="password" 
 								:type="showPassword[0] ? 'text' : 'password'" 
 								v-model="password" 
@@ -36,15 +33,11 @@
 								@focus="isPasswordFocused = true"
 								@blur="isPasswordFocused = false"
 								placeholder="">
-							<label class="fw-bold rounded-1" :class="{'label-focus': isPasswordFocused || password}" for="password">Senha:</label>
+							<label class="fw-bold rounded-1" :class="{'label-focus': isPasswordFocused || password, 'text-light-alert': !password && email}" for="password">{{ !password && email ? 'Digite a senha' : 'Senha:'}}</label>
 							<IconsOpenEye v-if="!showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
 							<IconsCloseEye v-if="showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
 						</div>
 					</div>
-					<p class="fw-bold text-dark-alert mb-2 mt-0 d-flex align-items-center" v-if="!password && email">
-						<IconsInformation class="me-1"/>
-						Digite a senha
-					</p>
 				</div>
 				<button 
 					:class="!isValidSimpleEmail(email) || !password ? 'disabled-button' : ''" 
@@ -56,7 +49,7 @@
 					Entrar
 				</button>
 			</form>
-			<form v-else class="login-form mt-4" @submit.prevent="submitRegister">
+			<form v-else class="login-form mt-2" @submit.prevent="submitRegister">
 				<div class="form-group">
 					<div class="input-container">
 						<input
@@ -72,25 +65,23 @@
 				</div>
 				<div class="form-group">
 					<div class="input-container">
-						<input :class="{'border-dark-alert': email && !isValidEmail(email)}"
-							type="text" 
+						<input 
+							:class="{'border-dark-alert border-2': email && !isValidEmail(email)}"
+							type="email" 
 							id="email"  
 							v-model="email" 
 							required
 							@focus="isEmailFocused = true"
 							@blur="isEmailFocused = false"
 							placeholder="">
-							<label class="fw-bold rounded-1" :class="{'label-focus': isEmailFocused || email}" for="email">Email:</label>
+					<label class="fw-bold rounded-1" :class="{'label-focus': isEmailFocused || email, 'text-light-alert': email && !isValidEmail(email)  }" for="email">{{email && !isValidEmail(email) ? 'Email inválido' : 'Email:'}}</label>
 					</div>
-					<p class="fw-bold text-dark-alert mb-2 mt-0 d-flex align-items-center" v-if="email && !isValidEmail(email)">
-						<IconsInformation class="me-1"/>
-						E-mail inválido
-					</p>
 				</div>
 				<div class="form-group">
 					<div class="input-container">
 						<div class="d-flex align-items-center justify-content-end">
-							<input :class="{'border-dark-alert': password && password.length < 6}"
+							<input 
+								:class="{'border-dark-alert border-2': password && password.length < 6}"
 								:type="showPassword[1] ? 'text' : 'password'" 
 								id="password"  
 								v-model="password" 
@@ -98,37 +89,29 @@
 								@focus="isPasswordFocused = true"
 								@blur="isPasswordFocused = false"
 								placeholder="">
-							<label class="fw-bold rounded-1" :class="{'label-focus': isPasswordFocused || password}" for="password">Senha:</label>
+							<label class="fw-bold rounded-1" :class="{'label-focus': isPasswordFocused || password, 'text-light-alert': password && password.length < 6}" for="password">{{password && password.length < 6 ? 'Senha deve ser de 6 a mais caracteres' : 'Senha:'}}</label>
 							<IconsOpenEye v-if="!showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
 							<IconsCloseEye v-if="showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
 						</div>
-							
 					</div>
-					<p class="fw-bold text-dark-alert mb-2 mt-0 d-flex align-items-center" v-if="password && password.length < 6">
-						<IconsInformation class="me-1"/>
-						A senha deve possuir de 6 ou mais caracteres
-					</p>
 				</div>
 				<div class="form-group">
 					<div class="input-container">
 						<div class="d-flex align-items-center justify-content-end">
-							<input :class="{'border-dark-alert': rePassword && rePassword !== password}"
-								:type="showPassword ? 'text' : 'password'" 
+							<input 
+								:class="{'border-dark-alert border-2': rePassword && rePassword !== password}"
+								:type="showPassword[2] ? 'text' : 'password'" 
 								id="rePassword"  
 								v-model="rePassword" 
 								required
 								@focus="isRePasswordFocused = true"
 								@blur="isRePasswordFocused = false"
 								placeholder="">
-							<label class="fw-bold rounded-1" :class="{'label-focus': isRePasswordFocused || rePassword}" for="rePassword">Confirmar Senha:</label>
+							<label class="fw-bold rounded-1" :class="{'label-focus': isRePasswordFocused || rePassword, 'text-dark-alert': rePassword && rePassword !== password}" for="rePassword">{{rePassword && rePassword !== password ? 'As senhas não conferem' : 'Confirmar senha:'}}</label>
 							<IconsOpenEye v-if="!showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
 							<IconsCloseEye v-if="showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
 						</div>
 					</div>
-					<p class="fw-bold text-dark-alert mb-2 mt-0 d-flex align-items-center" v-if="rePassword && rePassword != password">
-						<IconsInformation class="me-1"/>
-						As senhas não conferem.
-					</p>
 				</div>
 				<button 
 					:class="!isValidEmail(email) || rePassword !== password || password.length < 6 ? 'disabled-button' : ''" 
@@ -140,13 +123,15 @@
 				</button>
 			</form>
 			<div class="info">
-				<NuxtLink to="/emailAuth">Esqueceu sua senha?</NuxtLink>
+				<NuxtLink class="text-light text-decoration-underline" to="/recuperar-senha">Esqueceu sua senha?</NuxtLink>
+				<br class="mb-2">
+				<a class="text-light text-decoration-underline" href="mailto:almoxarifado957@gmail.com">Dúvidas? Clique aqui para contato.</a>
 			</div>
 		</div>
 
-		<div class="container bg-warning info-container d-flex align-items-center justify-content-center" :style="{'transform': switchState ? 'translateX(-106%)' : ''}">
+		<div class="container bg-warning info-container d-flex align-items-center justify-content-center" :style="{'transform': switchState ? 'translateX(-106%)' : '', 'border-radius': delayedSwitchState ? '8px 0px 0px 8px' : '0px 8px 8px 0px'}">
 			<div class="text-center mb-5">
-				<h2 class="fw-bolder mb-3">{{ delayedSwitchState ? 'Bem-vindo!' : 'Vamos lá!'}}</h2>
+				<h2 class="fw-bolder mb-3">{{ delayedSwitchState ?  'Vamos lá!' : 'Bem-vindo!'}}</h2>
 				<div class=" text-center">				
 					<p class="text-center fs-6 fw-bold">
 						{{ delayedSwitchState ? 'Digite corretamento os dados' : 'Ainda não possui uma conta?' }}
@@ -154,7 +139,7 @@
 						{{delayedSwitchState ? 'e verifique o endereço e-mail correto' : 'Cadastre-se:' }}
 					</p>
 					<button class="btn sign-up-btn btn-light-alert text-light fw-bold" style="margin-left: 3px;" @click="switchAuth">
-						{{delayedSwitchState ? 'Logar' : 'Cadastrar'}}
+						{{delayedSwitchState ? 'Entrar' : 'Cadastrar'}}
 					</button>
 				</div>
 			</div>
@@ -262,12 +247,14 @@ onBeforeRouteLeave(() => {
   opacity: 40%;
 }
 .auth-container {  
-	box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 1);
-	box-shadow: inset 0px 0px 80px 0px rgba(0, 0, 0, 0.3);
-	margin-top: 80px;	
+	box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 1) !important;
+	margin-top: 50px;	
 	width: 650px;
 	height: 450px;
 	border-radius: 8px;
+}
+.inset-shadow{
+	box-shadow: inset 0px 0px 80px 0px rgba(0, 0, 0, 0.3);
 }
 .login-container {
 	width: 110%;
@@ -295,9 +282,12 @@ onBeforeRouteLeave(() => {
 	margin-top: 0px;
 	padding: 0px;
 }
+.alert-text{
+	z-index: 10000;
+}
 
 .login-form {
-	margin-top: 10px;
+	margin-top: 1px;
 	margin-left: 10px;
 	margin-right: 10px;
 	padding: 12px;
@@ -315,21 +305,13 @@ onBeforeRouteLeave(() => {
 .login-form label {
 	position: absolute;
 	left: 12px;
+	color: rgb(0, 0, 0, 0.5);
 	top: 40%;
 	transform: translateY(-50%);
 	transition: all 0.3s ease;
 	pointer-events: none;
-	z-index: -1;
 }
-input:focus + label{
-	z-index: 1 !important;
-}
-input:focus + label{
-	z-index: 1 !important;
-}
-input:placeholder-shown + label {
-	z-index: 1 !important;
-}
+
 .login-form input[type="email"],
 .login-form input[type="password"],
 .login-form input[type="text"] {
@@ -343,7 +325,13 @@ input:placeholder-shown + label {
 .login-form .input-container:focus-within label {
 	top: 0;
 	font-size: 12px;
-	background-color: #fff; /* Ajuste conforme necessário */
+	background-color: #fff;
+	padding: 0 5px;
+}
+.login-form input:not(:placeholder-shown) + label{
+	top: 0;
+	font-size: 12px;
+	background-color: #fff; 
 	padding: 0 5px;
 }
 
@@ -363,7 +351,7 @@ input:placeholder-shown + label {
 .info {
 	margin-top: 10px;
 	margin-bottom: 10px;
-	padding: 12px;
+	padding: 0px;
 	text-align: center;
 }
 

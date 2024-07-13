@@ -4,7 +4,7 @@
             <svg class="d-flex align-items-center" width="50" height="50">
               <image class="custom-logo" xlink:href="/logo.svg" width="45" height="45"/>
             </svg>
-            <h5 class="almo-title text-light m-0 ms-2 p-0">ALMOXARIFADO NEI</h5>
+            <h5 class="almo-title text-light m-0 ms-2 p-0">Nei Almoxarifado</h5>
           </a>
         </div>
 </template>

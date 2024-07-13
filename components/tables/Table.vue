@@ -1,6 +1,6 @@
 <template>
     <ModalItemRegister />
-    <div class="container col-12 rounded">
+    <div class="container-fluid mx-0 px-0 col-12 rounded">
         <table class="table table-hover border">
           <thead>
             <slot name="header" />
