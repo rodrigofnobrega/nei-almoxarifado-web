@@ -208,10 +208,6 @@ export default {
 .list-group-item{
     display: flex;
     font-size: 13px;
-<<<<<<< HEAD
-=======
-    font-weight: bold;
->>>>>>> origin/main
     margin-left: 7px;
     margin-right: 0px;
     margin-top: 1px;
