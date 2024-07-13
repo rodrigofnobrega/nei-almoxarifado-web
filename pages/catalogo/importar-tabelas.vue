@@ -2,10 +2,10 @@
     <LoadersPageLoading :isLoading="loading" class="loader"/>
     <div class="container">
         <div class="dashboard-section me-2 bg-light mb-4 pb-0 pt-0 rounded-3">
-             <div class="section-title pt-2 mb-4 bg-light-background-header">
-               <h5 class="header ps-2">Importação dos itens</h5>
-             </div>
-             <div>
+            <div class="section-title pt-2 mb-4 bg-light-background-header">
+                <h5 class="header ps-2">Importação dos itens</h5>
+            </div>
+            <div>
                 <p class="px-3">A tabela selecionada deve estar nas formtações .xlsx, .xls ou .csv, com os seguintes dados dispostos: nome do produto, tipo unitário e estoque atual. </p>
                 <p class="px-3">Caso tenha dúvidas sobre o formato da planilha temos o seguinte modelo padrão para se seguir: <a href="/planilha_padrao.xlsx">Planilha Padrão</a> </p>
                 <p class="px-3 d-flex fw-bold align-items-center bg-new-gray text-light rounded-2 mx-5 opacity-75">
@@ -88,27 +88,27 @@ const sendUploadedData = async() => {
 
 <style scoped>
 .container{
-  width: 100%;
-  padding-left: 5%;
-  padding-right: 5%;
-  flex-direction: column;
+    width: 100%;
+    padding-left: 5%;
+    padding-right: 5%;
+    flex-direction: column;
 }
 .dashboard-section{   
-  width: 99%;
-  padding-top: 10px;
-  padding-bottom: 0px;
-  padding-left: 0;
-  padding-right: 0;
-  border: 1px #D9D9D9 solid;
-  box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);
+    width: 99%;
+    padding-top: 10px;
+    padding-bottom: 0px;
+    padding-left: 0;
+    padding-right: 0;
+    border: 1px #D9D9D9 solid;
+    box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);
 }
 .section-title{
-  border-radius: 8px 8px 0px 0px;
-  border-bottom: 1px solid rgb(0, 0, 0, 0.2);
+    border-radius: 8px 8px 0px 0px;
+    border-bottom: 1px solid rgb(0, 0, 0, 0.2);
 }
 h5{
-  font-weight: 300;
-  color: rgb(51,51,51, 0.8);
+    font-weight: 300;
+    color: rgb(51,51,51, 0.8);
 }
 .form-control:hover::before {
     background: #0056b3 !important; /* Altere para a cor desejada ao passar o mouse */

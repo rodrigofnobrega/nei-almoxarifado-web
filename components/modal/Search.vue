@@ -83,7 +83,7 @@ export default {
       this.pagination = 0;
       clearTimeout(this.typingTimeout);
       this.typingTimeout = setTimeout(() => {
-         this.fetchSearchResults();
+        this.fetchSearchResults();
       }, 1000);
       this.showResults = true;
     },

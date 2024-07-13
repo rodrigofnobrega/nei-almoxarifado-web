@@ -173,7 +173,7 @@
       <div class="section-title pt-2 mb-3 bg-light-background-header">
           <h5 class="header ps-2">Catálogos</h5>
         </div>
-       <div class="dashboard-container container-fluid d-flex px-0 justify-content-center aligm-items-center">
+        <div class="dashboard-container container-fluid d-flex px-0 justify-content-center aligm-items-center">
           <CardsImageCard class="dashboard-viewcard">
             <template v-slot:image-cap>
               <img src="/almo.png" class="card-img-top" alt="...">
