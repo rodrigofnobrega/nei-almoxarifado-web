@@ -65,25 +65,25 @@
         <div class="users-management-scroll">
           <TablesTable>
             <template v-slot:header>
-              <tr class="col-line">
-                <th class="col-title text-center py-2" scope="col">Usuário</th>
-                <th class="col-title py-2" scope="col">Email</th>
-                <th class="col-title py-2" scope="col">Encargo</th>
+              <tr>
+                <th class="col-title  py-2" scope="col">Usuário</th>
+                <th class="col-title text-center py-2" scope="col">Email</th>
+                <th class="col-title text-center py-2" scope="col">Encargo</th>
               </tr>
             </template>
             <template v-slot:content>
               <tr v-for="user in users.content" :key="user.id" @mouseover="isProfileBtn[user.id] = true" @mouseout="isProfileBtn[user.id] = false">
-                <th class="text-start table-cell d-flex align-items-center justify-content-center" scope="row">
-                  <IconsPerfil class="me-3 opacity-70" width="30px" height="30px" />
+                <th class="text-center table-cell d-flex align-items-center " scope="row">
+                  <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
                   {{ user.name }}
                 </th>
-                <th class="text-start table-cell align-cell" scope="row" style="padding-top: 11px;">
+                <th class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
                   {{user.email}}
                 </th>
-                <th class="text-start table-cell align-cell" scope="row" style="padding-top: 11px;">
+                <th class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
                   {{user.role}}
                 </th>
-                <th class="text-start table-cell pb-1" scope="row">
+                <th class="text-center table-cell pb-1" scope="row">
                   <div class="position-sticky">
                     <a :href="`/perfil?userId=${user.id}`" :route="`/perfil/${user.id}`" :class="{'d-none': !isProfileBtn[user.id]}" class="d-flex align-items-center profile-btn position-absolute btn btn-primary">
                       <IconsLowProfile width="16px" height="16px"/>
@@ -99,11 +99,11 @@
     </div>
     <div class="dashboard-section recent-records bg-light mb-4 pb-0 pt-0 rounded-3">
       <div class="section-title pt-2  bg-light-background-header">
-        <h5 class="header ps-2 fw-bold">Movimentações mais recentes</h5>
+        <h5 class="header ps-2  fw-bold">Movimentações mais recentes</h5>
       </div>
       <TablesTable>
         <template v-slot:header>
-          <tr class="col-line">
+          <tr>
             <th class="col-title table-col text-center py-2" scope="col">Usuário</th>
             <th class="col-title table-col text-center py-2" scope="col">Movimentação</th>
             <th class="col-title table-col text-center py-2" scope="col">Item</th>
@@ -330,7 +330,7 @@ h5{
 .col-title{
   font-size: 14px;
   color: rgb(51,51,51, 0.9);
-  opacity: 99%;
+  opacity: 90%;
   font-weight: bold;
   margin-top: 0;
 }
