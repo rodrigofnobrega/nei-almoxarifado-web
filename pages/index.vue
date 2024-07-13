@@ -116,7 +116,7 @@
           <tr v-if="records.content.length > 0" v-for="record in records.content" :key="record.id" class="text-center" @mouseover="isProfileBtnRecord[record.id] = true" @mouseout="isProfileBtnRecord[record.id] = false"> 
               <th class="table-cell mov-cell" scope="row">
                 <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
-                  <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
+                  <IconsPerfil class="me-3 mb-0 opacity-70" width="30px" height="30px" />
                   {{ record.user.name }}
                 </div>
               </th>
@@ -276,7 +276,6 @@ sendDataToParent();
   max-height: 227px !important;
 }
 .users-management{
-  
   position: static !important;
   text-wrap: nowrap !important;
   overflow-y: scroll !important;
@@ -334,6 +333,9 @@ h5{
   opacity: 90%;
   font-weight: bold;
   margin-top: 0;
+}
+.col-line {
+  border-bottom: 1px solid rgba(80, 76, 76, 0.174);
 }
 .table-cell{
   font-size: 14px;

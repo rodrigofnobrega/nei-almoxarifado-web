@@ -15,7 +15,7 @@
                 <a class="text-decoration-none" href="/controle-de-acesso" aria-current="true">
                     <div class="item-bg" :class="{'active': $route.path === '/controle-de-acesso', 'text-dark-emphasis': $route.path !== '/controle-de-acesso' }">
                         <IconsControl class="nav-icon"/>
-                        <span class="list-group-item">Controle de Acesso</span>
+                        <span class="list-group-item text-wrap">Controle de Acesso</span>
                     </div>
                 </a>
                 <a class="text-decoration-none" href="/catalogo" aria-current="true">
@@ -208,6 +208,10 @@ export default {
 .list-group-item{
     display: flex;
     font-size: 13px;
+<<<<<<< HEAD
+=======
+    font-weight: bold;
+>>>>>>> origin/main
     margin-left: 7px;
     margin-right: 0px;
     margin-top: 1px;

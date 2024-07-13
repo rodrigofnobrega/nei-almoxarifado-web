@@ -28,6 +28,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
+thead {
+    position: sticky;
+    top: -1px;
+}
 .container{
     margin-left: -1px;
     width: 100%;
