@@ -1,4 +1,6 @@
 <template>
+<ModalItemDetails :item_index="itemIndex" :item_details="currentItem" />
+<button id="modalToggle" data-bs-toggle="modal" data-bs-target="#itemDetailing" class="disabled d-none"></button>
   <div class="container-fluid" style="margin-left: 0px;">
     <div class="d-flex paralalel-section">
       <div class="dashboard-section me-2 bg-light mb-4 pb-0 pt-0 rounded-3">
@@ -69,10 +71,11 @@
                 <th class="col-title  py-2" scope="col">Usuário</th>
                 <th class="col-title text-center py-2" scope="col">Email</th>
                 <th class="col-title text-center py-2" scope="col">Encargo</th>
+                <th class="col-title text-center py-2 justify-content-center" scope="col">Ações</th>
               </tr>
             </template>
             <template v-slot:content>
-              <tr v-for="user in users.content" :key="user.id" @mouseover="isProfileBtn[user.id] = true" @mouseout="isProfileBtn[user.id] = false">
+              <tr v-for="user in users.content" :key="user.id"  >
                 <th class="text-center table-cell d-flex align-items-center " scope="row">
                   <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
                   {{ user.name }}
@@ -83,11 +86,10 @@
                 <th class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
                   {{user.role}}
                 </th>
-                <th class="text-center table-cell pb-1" scope="row">
+                <th class="text-center table-cell pt-2" scope="row" width="5%">
                   <div class="position-sticky">
-                    <a :href="`/perfil?userId=${user.id}`" :route="`/perfil/${user.id}`" :class="{'d-none': !isProfileBtn[user.id]}" class="d-flex align-items-center profile-btn position-absolute btn btn-primary">
+                    <a title="Perfil" :href="`/perfil?userId=${user.id}`" :route="`/perfil/${user.id}`" class="table-btn d-flex align-items-center justify-content-center  btn btn-primary">
                       <IconsLowProfile width="16px" height="16px"/>
-                      perfil
                     </a>
                   </div>
                 </th>
@@ -110,13 +112,14 @@
             <th class="col-title table-col text-center py-2" scope="col">Tipo unitário</th>
             <th class="col-title table-col text-center py-2" scope="col">Quantidade</th>
             <th class="col-title table-col text-center py-2" scope="col">Data e horário</th>
+            <th class="col-title table-col text-center py-2" scope="col">Ações</th>
           </tr>
         </template>
         <template v-slot:content>
-          <tr v-if="records.content.length > 0" v-for="record in records.content" :key="record.id" class="text-center" @mouseover="isProfileBtnRecord[record.id] = true" @mouseout="isProfileBtnRecord[record.id] = false"> 
+          <tr v-if="records.content.length > 0" v-for="(record, index) in records.content" :key="record.id" class="text-center"> 
               <th class="table-cell mov-cell" scope="row">
                 <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
-                  <IconsPerfil class="me-3 mb-0 opacity-70" width="30px" height="30px" />
+                  <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
                   {{ record.user.name }}
                 </div>
               </th>
@@ -144,16 +147,16 @@
                 <div class="d-flex table-text align-items-end mt-1 justify-content-center">
                   {{record.creationDate.slice(0, 19)}}
                 </div>
-                <div class="d-flex align-items-center justify-content-between position-sticky">
-                  <NuxtLink :to="`/registro?recordId=${record.id}`"  :route="`/registro/${record.id}`" :class="{'d-none': !isProfileBtnRecord[record.id]}" style="margin-right: 63px; margin-top: -25px !important;" class="d-flex align-items-center profile-btn record-btn position-absolute btn btn-primary">
-                    <IconsRequest class="me-1" width="16px" height="16px"/>
-                    registro
-                  </NuxtLink>
-                  <a :href="`/perfil?userId=${record.user.id}`" :class="{'d-none': !isProfileBtnRecord[record.id]}" style="margin-top: -25px !important;" class="d-flex align-items-center profile-btn position-absolute btn btn-primary">
-                      <IconsLowProfile class="me-1" width="16px" height="16px"/>
-                      perfil
-                  </a>
-                </div>
+              </th>
+              <th class="text-center table-cell pt-2" scope="row" width="5%">
+                  <div class="d-flex">
+                    <button @click="showDetails(index, record.item.id)" title="Detalhes" :href="`/registro?recordId=${record.id}`"  :route="`/registro/${record.id}`" class="table-btn d-flex align-items-center justify-content-center  btn btn-secondary">
+                      <IconsSearchGlass width="16px" height="16px"/>
+                    </button>
+                    <a title="Perfil" :href="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="m-0 table-btn d-flex align-items-center justify-content-center  btn btn-primary">
+                      <IconsLowProfile width="16px" height="16px"/>
+                    </a>
+                  </div>
               </th>
             </tr>
             </template>
@@ -209,17 +212,18 @@
 
 <script setup>
 import { inject, ref, onMounted } from 'vue';
-import { getItems } from '../services/items/itemsGET.ts';
+import { getItem, getItems } from '../services/items/itemsGET.ts';
 import { getRequests } from '../services/requests/requestsGET.ts';
 import { getUsers } from '../services/users/userGET.ts';
 import { getRecords } from '../services/record/recordGET.ts';
 import { getRequestByStatus } from '../services/requests/requestsGET.ts';
 import { useUser } from '../stores/user';
+import { useSearch } from '../stores/search.ts';
 
 
-const isProfileBtnRecord = ref([])
-const isProfileBtn = ref([])
+
 const userStore = useUser();
+const searchStore = useSearch();
 const route = useRouter();
 
 const users = await getUsers(userStore, 0)
@@ -253,7 +257,20 @@ for(let i = 1; i < items.totalPages; i++){
   }
   items = await getItems(userStore, 0)
 }
-
+const currentItem = ref(undefined);
+const itemIndex = ref(0);
+const isShowDetails = ref(false);
+const showDetails = async (index, itemId) => {
+  const modalToggleDom = document.getElementById('modalToggle');  
+  itemIndex.value = index;
+  try{
+    const res = await getItem(userStore, itemId);
+    currentItem.value = res;
+    await modalToggleDom.click();
+  }catch(err){
+    console.log(err)
+  }
+}
 
 const setpageTitle = inject('setpageTitle');
 const sendDataToParent = () => {
@@ -317,12 +334,15 @@ h5{
   color: rgb(51,51,51, 0.8);
   border-left: 3px solid #FED51E;
 }
-.profile-btn{
-  border-radius: 4px;
-  top: 0px;
-  font-size: 12px;
-  padding: 4px 3px 4px 3px;
-  right: 0px !important;
+.table-btn{
+    border-radius: 4px;
+    top: 0px;
+    font-size: 12px;
+    padding: 4px 3px 4px 3px;
+    z-index: 00;
+    font-size: 13px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 .catalog-header{
     justify-content: space-between;

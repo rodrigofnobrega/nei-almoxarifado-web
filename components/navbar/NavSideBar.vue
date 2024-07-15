@@ -7,7 +7,7 @@
             </div>
             <ul class="list-group-flush container d-block" :class="{ 'collapsed': isCollapsed }">
                 <a class="text-decoration-none" href="/" aria-current="true">
-                    <div class="item-bg item-top" :class="{'active': $route.path === '/', 'text-dark-emphasis': $route.path !== '/'}">
+                    <div class="item-bg item-top mb-2" :class="{'active': $route.path === '/', 'text-dark-emphasis': $route.path !== '/'}">
                         <IconsHome class="nav-icon"/>
                         <span class="list-group-item">Início</span>
                     </div>

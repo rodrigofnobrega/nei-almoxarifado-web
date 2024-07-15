@@ -5,8 +5,8 @@
         </div>
         <div class="card-body">
             <div class="d-flex align-items-center justify-content-start">
-                <IconsInformation width="25" height="25" class="mb-2 me-2" />
-                <h4 class="card-title">Aviso</h4>
+                <IconsInformation width="23" height="23" class="mb-2 me-2" />
+                <h5 class="card-title">Aviso</h5>
             </div>
             <p class="card-text d-flex justify-content-start">{{ popupText }}</p>
         </div>
@@ -88,7 +88,7 @@ export default{
 }
 .popup{
     transition: opacity 1s ease-in-out;
-    font-size: 19px;
+    font-size: 17px;
     width: 18rem;
     position: fixed;
     bottom: 10px;

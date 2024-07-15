@@ -19,13 +19,13 @@
         </p>
     </div>
     <div class="table-box row d-block bg-light mx-2">
-        <div class="table-actions d-flex justify-content-between aling-items-center" style="margin-bottom: -1px !important;">
+        <div class="table-actions d-flex justify-content-between aling-items-center">
             <div class="d-flex align-items-center">
-                <ButtonsNewItem v-if="uploadReloader === 1" style="margin-top: 3px;" />
-                <ButtonsFilter style="margin-top: 3px;" />
-                <ButtonsConfigure style="margin-top: 3px;" />
+                <ButtonsNewItem v-if="uploadReloader === 1" />
+                <ButtonsFilter />
+                <ButtonsConfigure />
             </div>
-            <span v-if="itemsLoad" class="position-sticky d-flex align-items-center table-searchbar">
+            <span v-if="itemsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 0.8px;">
                 <IconsSearchGlass class="search-glass"/>
                 <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
             </span>
@@ -60,8 +60,8 @@
                    <span>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</span>
                </th>
                <th class="border" width="5%">
-                   <TooltipsRectangular class="toolTip me-5 pe-5 mb-5" style="margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
-                   <TooltipsRectangular class="toolTip me-5 pe-5" style="margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Histórico'"/>
+                   <TooltipsFastRectangular class="toolTip me-5 pe-5 mb-5" style="margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
+                   <TooltipsFastRectangular class="toolTip me-5 pe-5" style="margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Histórico'"/>
                     <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         <IconsSearchGlass width="18px" height="19px"/>
                     </button>
@@ -70,8 +70,8 @@
                     </button>
                </th>
             </tr>
-            <div v-else-if="itemsCache.length === 0 && !initialLoading" class="search-empty position-absolute mt-5">
-                <p class="text-dark-emphasis fs-5 opacity-50">Nenhum item Encontrado.</p>
+            <div v-else-if="itemsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)" class="search-empty position-absolute mt-5">
+                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado.</p>
             </div>
         </template>
         </TablesTable>
@@ -85,19 +85,19 @@
                 <li class="page-item">
                     <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
                 </li>
-                <li v-if="totalPages > 1" class="page-item" :key="0">
+                <li v-if="totalPages > 4" class="page-item" :key="0">
                     <button class="page-link text-light" @click="page(0)" :class="{'bg-primary': !pagesFocus[0], 'bg-secondary': pagesFocus[0]}">{{ 1 }}</button>
                 </li>
-                <li v-show="pagination > 1" class="page-item">
+                <li v-show="pagination >= 3 && totalPages > 5" class="page-item">
                     <button class="page-link bg-primary text-light">...</button>
                 </li>
-                <li class="page-item" v-for="i in totalPages >= 3 ? range(1+paginationRet, 3+paginationRet) : range(1,totalPages)" :key="i-1">
+                <li class="page-item" v-for="i in totalPages > 4 ? range(1+paginationRet, 3+paginationRet) : range(1,totalPages)" :key="i-1">
                     <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
                 </li>
                 <li v-show="totalPages > 3 && paginationRet < totalPages-4" class="page-item">
                     <button class="page-link bg-primary text-light">...</button>
                 </li>
-                <li v-if="totalPages > 1" class="page-item" :key="totalPages-1">
+                <li v-if="totalPages > 4" class="page-item" :key="totalPages-1">
                     <button class="page-link text-light" @click="page(totalPages-1)" :class="{'bg-primary': !pagesFocus[totalPages-1], 'bg-secondary': pagesFocus[totalPages-1]}">{{ totalPages }}</button>
                 </li>
                 <li class="page-item">
@@ -118,7 +118,6 @@ import { getItem, getItems } from '../../services/items/itemsGET.ts';
 import { useUser } from '../../stores/user.ts'
 import { getRecordByItemId } from '../../services/record/recordGET.ts';
 import { useRoute, useRouter } from 'vue-router';
-import { patchItem } from '../../services/items/itemsPATCH.ts';
 /*SETANDO STORES*/
 const userStore = useUser()
 const store = useStorageStore();
@@ -128,6 +127,7 @@ const paginationRet = ref(1)
 function range(start, end) {
   return Array.from({ length: end - start + 1 }, (_, index) => start + index);
 }
+
 
 let pagination = ref(0); //paginação padrão
 let invertedPagination = ref(0); //paginação invertida para filtro
@@ -208,7 +208,7 @@ const itemsReq = async (sort, isInverted, pagination, loadRequest, paginationInv
     totalElements.value = res.totalElements;
     invertedPagination.value = totalPages-1;
     loadRequest ? cacheIndex.value++ : 0;
-    itemsCache.value.push(res.content);
+    res.content.length === 0 ? null : itemsCache.value.push(res.content);
     return res.totalPages
 }; 
 
@@ -249,7 +249,6 @@ const itemsLoad = computed(async() => {
     itemsReq(queryParams.value.sort, false, pagination.value, true, queryParams.value.isInverted);
     reqsIndexCache.push(pagination.value)
 })
-
 
 provide('setItemsFilter', (filter, inverted) => {
     queryParams.value.sort = filter;
@@ -369,10 +368,6 @@ const showSearchingDetails = async (itemId) => {
 }
 const toolTipState = ref([[], []]);
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
-const teste = async () => {
-    const res = await patchItem(userStore, 401, 10);
-}
-
 onMounted(async () => {
     initialLoading.value = false;
     if(searchStore.itemSearch.searching){
@@ -500,8 +495,8 @@ p{
 }
 .table-searchbar{
     border: none;
-    border-radius: 10px 10px 0px 0px;
     border-bottom: solid 1px #1F69B1;
+    border-radius: 10px 10px 0px 0px;
     box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
     color: rgb(0, 0, 0, 0.7); 
     transition: box-shadow 0.3s ease;
@@ -555,7 +550,7 @@ p{
     display: flex;
     justify-content: center;
     margin-left: 30%;    
-    margin-right: 30%;
+    margin-right: 40%;
     white-space: nowrap;
 }
 .pagination{

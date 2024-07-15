@@ -1,5 +1,5 @@
 <template>
-  <ModalSmallModal id="updatePasswordModal" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
+  <Modal id="updatePasswordModal" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
     <template v-slot:header>
       <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Atualizar Senha</h6>
       <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
@@ -15,8 +15,8 @@
           <IconsOpenEye v-if="!showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
           <IconsCloseEye v-if="showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
         </div>
-        <label v-if="handleUpdateBtn && currentPassword" class="form-label" for="newPassword">Nova senha:</label>
-        <div v-if="handleUpdateBtn && currentPassword" id="newPassword" class="d-flex justify-content-end">
+        <label v-if="currentPassword" class="form-label" for="newPassword">Nova senha:</label>
+        <div v-if="currentPassword" id="newPassword" class="d-flex justify-content-end">
           <input :class="newPassword === currentPassword || newPassword && newPassword.length < 6 ? 'border-light-alert' : ''" class="form-control mb-2" :type="showPassword[1] ? 'text' : 'password'" v-model="newPassword">
           <IconsOpenEye v-if="!showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
           <IconsCloseEye v-if="showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
@@ -24,8 +24,8 @@
         <p class="text-dark-alert fw-bold" v-if="newPassword && newPassword.length < 6">A senha deve possuir 6 caracteres ou mais.</p>
         <p class="text-dark-alert fw-bold" v-if="newPassword && newPassword === currentPassword">A nova senha deve ser diferente da atual.</p>
 
-        <label v-if="handleUpdateBtn && currentPassword && newPassword != currentPassword && newPassword.length >= 6" class="form-label" for="confirmPassword">Confirmar senha:</label>
-        <div v-if="handleUpdateBtn && currentPassword && newPassword != currentPassword && newPassword.length >= 6" class="d-flex justify-content-end">
+        <label v-if="currentPassword && newPassword != currentPassword && newPassword.length >= 6" class="form-label" for="confirmPassword">Confirmar senha:</label>
+        <div v-if="currentPassword && newPassword != currentPassword && newPassword.length >= 6" class="d-flex justify-content-end">
           <input id="confirmPassword" :class="confirmPassword && newPassword != confirmPassword ? 'border-light-alert' : ''" class="form-control" :type="showPassword[2] ? 'text' : 'password'" v-model="confirmPassword">
           <IconsOpenEye v-if="!showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
           <IconsCloseEye v-if="showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
@@ -35,50 +35,50 @@
     </template>
     <template v-slot:footer>
       <div class="container-fluid d-flex align-items-center justify-content-end">
-        <button v-if="handleUpdateBtn && currentPassword && newPassword === confirmPassword && newPassword != currentPassword" @click="changePassword" class="btn btn-secondary me-2 text-light fw-bold px-1">Confirmar</button>
+        <button v-if="currentPassword && newPassword === confirmPassword && newPassword != currentPassword" @click="changePassword" class="btn btn-secondary me-2 text-light fw-bold px-1">Confirmar</button>
         <button @click="resetModal" class="btn btn-light-alert text-light fw-bold px-1" data-bs-dismiss="modal">Cancelar</button>
       </div>
     </template>
-  </ModalSmallModal>
-  <div class="container-fluid profile-container d-flex">
-    <div class="profile-sidebar bg-light rounded-3 d-flex flex-column align-items-center">
+  </Modal>
+  <div class="container-fluid profile-container">
+    <div class="profile-sidebar bg-light rounded-3 flex-column align-items-center">
+      <div class="d-flex justify-content-center mb-4 bg-light-background-header history-title">
+          <h5 class="text-center mt-2 fw-bold">Informações do perfil</h5>
+      </div>
       <div class="profile-picture aspect-ratio">
         <div class="img-container">
           <img :src="user.profilePicture" class="img-top" alt="Foto de Perfil">
         </div>
         <input type="file" @change="uploadProfilePicture" ref="fileInput" hidden>
-        <button @click="selectProfilePicture">Alterar Foto</button>
+        <!--<button @click="selectProfilePicture">Alterar Foto</button>-->
       </div>
       <div class="profile-details">
         <div>
-          <h3>{{ userData.name }}</h3>
-          <p><strong>Email:</strong> {{ userData.email }}</p>
-          <p><strong>Cargo:</strong> {{ userData.role }}</p>
+          <h3 class="text-center mb-4">{{ userData.name }}</h3>
+          <p class="mt-3"><strong>Email:</strong> {{ userData.email }}</p>
+          <p class="mt-3"><strong>Encargo:</strong> {{ userData.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</p>
+          <p class="mt-3"><strong>Status da conta:</strong> {{ userData.active ? 'Ativa' : 'Desativada' }}</p>
         </div>
       </div>
-      <div class="profile-actions">
+      <div class="profile-actions mt-5">
         <button data-bs-target="#updatePasswordModal" data-bs-toggle="modal">Alterar Senha</button>
       </div>
     </div>
     <div class="profile-main-content">
-      <div class="profile-header">
-        <h2>Informações do Usuário</h2>
-      </div>
-      
-      <div class="profile-posts me-2 bg-light mb-4 pb-0 pt-0 rounded-3">
+      <div class="profile-posts me-2 bg-light mb-4 mt-0 pb-0 pt-0 rounded-3">
         <div class="history-title pt-2 bg-light-background-header">
-          <h5 class="ms-3">Solicitações feitas</h5>
+          <h5 class="ms-3 fw-bold">Histórico de Solicitações</h5>
         </div>
         <div class="posts-table">
           <TablesTable>
             <template v-slot:header>
               <tr class="bg-light">
-                <th class="col-title table-col text-center py-2" scope="col">Nome</th>
-                <th class="col-title table-col text-center py-2" scope="col">Tipo</th>
-                <th class="col-title table-col text-center py-2" scope="col">Sipac</th>
-                <th class="col-title table-col text-center py-2" scope="col">Quantidade</th>
-                <th class="col-title table-col text-center py-2" scope="col">Status</th>
-                <th class="col-title table-col text-center py-2" scope="col">Data e horário</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Nome</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Sipac</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Quantidade</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Status</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Data e horário</th>
               </tr>
             </template>
             <template v-slot:content>
@@ -125,21 +125,27 @@
 
       <div v-if="userRecords.length > 0" class="profile-posts me-2 bg-light mb-4 pb-0 pt-0 rounded-3">
         <div class="history-title pt-2 bg-light-background-header">
-          <h5 class="ms-3">Itens cadastrados</h5>
+          <h5 class="ms-3 fw-bold">Registros da conta</h5>
         </div>
         <div class="posts-table">
           <TablesTable>
             <template v-slot:header>
               <tr class="bg-light">
-                <th class="col-title table-col text-center py-2" scope="col">Nome</th>
-                <th class="col-title table-col text-center py-2" scope="col">Tipo</th>
-                <th class="col-title table-col text-center py-2" scope="col">Sipac</th>
-                <th class="col-title table-col text-center py-2" scope="col">Quantidade</th>
-                <th class="col-title table-col text-center py-2" scope="col">Data e horário</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Nome</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Sipac</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Quantidade</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Data e horário</th>
               </tr>
             </template>
             <template v-slot:content>
               <tr v-if="userRecords.length > 0" v-for="post in userRecords" :key="post.id" class="text-center"> 
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
+                    {{ post.operation || 'Nome não disponível' }}
+                  </div>
+                </th>
                 <th class="table-cell mov-cell" scope="row">
                   <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
                     {{ post.item.name || 'Nome não disponível' }}
@@ -283,7 +289,7 @@ const setpageTitle = inject('setpageTitle');
 const sendDataToParent = () => {
   const title = "Perfil";
   const route = `${useRoute().fullPath.slice(0, 7)}`;
-  setpageTitle(title, route);
+  setpageTitle(title, route, 'profile');
 };
 sendDataToParent();
 
@@ -321,21 +327,27 @@ onMounted(async () => {
 <style scoped>
 .profile-container {
   display: flex;
-  height: 100vh;
 }
 .btn{
   font-size: 13px;
 }
+h3{
+  color: rgb(51,51,51, 0.9);
+}
 .profile-sidebar {
   flex: 1;
+  margin-bottom: 23px;
   background-color: #f9f9f9;
-  padding: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.profile-details, .profile-actions{
+  padding: 0px 20px 0px 20px;
 }
 
 .profile-main-content {
   flex: 3;
-  padding: 20px;
+  padding: 0px 20px 0px 20px;
+  margin-top: 0px !important;
 }
 
 .profile-header {
