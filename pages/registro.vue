@@ -55,18 +55,18 @@
                  <span>{{ record.creationDate.slice(0, 19) }}</span>
              </th>
              <th class="border" width="5%">
-                   <TooltipsRectangular class="toolTip" style=" right: 7.4%; margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
-                   <TooltipsRectangular class="toolTip" style=" right: 6%; margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Perfil'"/>
+                    <TooltipsFastRectangular class="toolTip me-5 pe-5 mb-5" style="margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
+                   <TooltipsFastRectangular class="toolTip me-5 pe-5" style="margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Perfil'"/>
                    <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         <IconsSearchGlass width="18px" height="19px"/>
                     </button>
-                    <NuxtLink :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`"  class="my-0 details-btn position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}">
+                    <NuxtLink  @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false"  :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`"  class="my-0 details-btn position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}">
                       <IconsLowProfile width="16px" height="16px"/>  
                     </NuxtLink>
                </th>
           </tr>
-          <div v-else-if="recordsCache.length === 0 && !initialLoading" class="search-empty position-absolute mt-5">
-                <p class="text-dark-emphasis fs-5 opacity-50">Nenhum item Encontrado.</p>
+          <div v-else-if="recordsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)" class="search-empty position-absolute mt-5">
+                <p class="text-dark-emphasis fs-5 bg-transparent opacity-75 mt-5">Nenhum item Encontrado.</p>
           </div>
       </template>
   </TablesTable>
@@ -76,30 +76,30 @@
           <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 px-2 pages-info">Quantidade total de registros: {{ totalElements }}</span>
       </div>
       <nav v-if="recordsCache.length > 0 && finded.length === 0" aria-label="Page navigation" class="pagination">
-          <ul class="pagination mb-2 mt-2">
-              <li class="page-item">
-                  <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
-              </li>
-              <li class="page-item" :key="0">
-                  <button class="page-link text-light" @click="page(0)" :class="{'bg-primary': !pagesFocus[0], 'bg-secondary': pagesFocus[0]}">{{ 1 }}</button>
-              </li>
-              <li v-show="pagination > 1" class="page-item">
-                  <button class="page-link bg-primary text-light">...</button>
-              </li>
-              <li class="page-item" v-for="i in totalPages >= 3 ? range(1+paginationRet, 3+paginationRet) : range(1,totalPages)" :key="i-1">
-                  <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
-              </li>
-              <li v-show="totalPages > 3 && paginationRet < totalPages-4" class="page-item">
-                  <button class="page-link bg-primary text-light">...</button>
-              </li>
-              <li class="page-item" :key="totalPages-1">
-                  <button class="page-link text-light" @click="page(totalPages-1)" :class="{'bg-primary': !pagesFocus[totalPages-1], 'bg-secondary': pagesFocus[totalPages-1]}">{{ totalPages }}</button>
-              </li>
-              <li class="page-item">
-                  <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1 || searchInput !== ''}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
-              </li>
-          </ul>
-      </nav>
+            <ul class="pagination mb-2 mt-2">
+                <li class="page-item">
+                    <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
+                </li>
+                <li v-if="totalPages > 4" class="page-item" :key="0">
+                    <button class="page-link text-light" @click="page(0)" :class="{'bg-primary': !pagesFocus[0], 'bg-secondary': pagesFocus[0]}">{{ 1 }}</button>
+                </li>
+                <li v-show="pagination >= 3 && totalPages > 5" class="page-item">
+                    <button class="page-link bg-primary text-light">...</button>
+                </li>
+                <li class="page-item" v-for="i in totalPages > 4 ? range(1+paginationRet, 3+paginationRet) : range(1,totalPages)" :key="i-1">
+                    <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
+                </li>
+                <li v-show="totalPages > 3 && paginationRet < totalPages-4" class="page-item">
+                    <button class="page-link bg-primary text-light">...</button>
+                </li>
+                <li v-if="totalPages > 4" class="page-item" :key="totalPages-1">
+                    <button class="page-link text-light" @click="page(totalPages-1)" :class="{'bg-primary': !pagesFocus[totalPages-1], 'bg-secondary': pagesFocus[totalPages-1]}">{{ totalPages }}</button>
+                </li>
+                <li class="page-item">
+                    <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1 || searchInput !== ''}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
+                </li>
+            </ul>
+        </nav>
   </div>
   </div>
 </div>
@@ -120,7 +120,7 @@ const searchStore = useSearch();
 const setpageTitle = inject('setpageTitle');
 const sendDataToParent = () => {
     const title = "Registro";
-    const route = `${useRoute().fullPath}`
+    const route = `${useRoute().fullPath.slice(0, 9)}`
     setpageTitle(title, route, 'directory');
 };
 sendDataToParent();
@@ -223,11 +223,11 @@ const recordsLoad = computed(async() => {
         return 0;
     }
     if(searchInput.value != ''){
+        isSearching.value = true;
         clearTimeout(typingTimer);
         typingTimer = setTimeout(() => {
             recordsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted)
         }, debounceTime);
-        isSearching.value = true;
     }
     if(searchInput.value === ''){
         if(isSearching.value === true){
@@ -373,9 +373,9 @@ const backPage = (async () => {
 });
 /*FUNÇÕES PARA OS BOTÕES DE DETALHE E HISTÓRICO*/
 
-const showDetails = async (index, itemId) => {
+const showDetails = async (index, recordId) => {
     recordIndex.value = index;
-    const res = await getItem(userStore, itemId);
+    const res = await getItem(userStore, recordId);
     currentItem.value = res;
 }
 
@@ -383,12 +383,6 @@ const toolTipState = ref([[], []]);
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     initialLoading.value = false;
-    if(searchStore.itemSearch.searching){
-        showDetails(searchStore.itemSearch.itemId);
-        const searching = document.getElementsByClassName('searching-btn'); 
-        searching[0].click()
-        searchStore.itemSearch.searching = false;
-    }
     if(store.isMobile){
         const catalogTextElement = document.querySelector('.sub-catalog p')
         const textElements = document.querySelectorAll('tr p');

@@ -23,6 +23,9 @@
                         <option value="unidade">unidade</option>
                         <option value="sacola">sacola</option>
                         <option value="caixa">caixa</option>
+                        <option value="folha">folha</option>
+                        <option value="resma">resma</option>
+                        <option value="pacote">pacote</option>
                     </select>
                 </div>
                 <div class="d-block ms-5">
@@ -100,6 +103,10 @@ export default{
 </script>
 
 <style scoped>
+.form-select{
+    max-height: 100px !important;
+    overflow-y: scroll;
+}
 .close{
     position: relative;
     left: 20px;

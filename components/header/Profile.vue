@@ -1,8 +1,8 @@
 <template>
     <div class="d-flex profile align-items-center me-3">
           <div class="me-2 nav-item dropdown">
-            <button class="svg-button bg-primary px-0" data-bs-toggle="dropdown" data-bs-offset="20,15" aria-expanded="false">
-              <IconsBell @mouseover="toolTip = true" @mouseout="toolTip = false" with="16px" height="16px"/>
+            <button  class="svg-button bg-primary px-0" data-bs-toggle="dropdown" data-bs-offset="20,1" aria-expanded="false" title="Notificações">
+              <IconsBell with="16px" height="16px"/>
               <span v-if="requests.length > 0" class="position-absolute start-100 translate-middle badge rounded-pill bg-danger">
                 {{requests.length}}
                 <span class="visually-hidden">unread messages</span>
@@ -17,12 +17,11 @@
                  </div>
                 <span class="notification-text ms-0 opacity-75 text-dark-emphasis">Há {{ passedDate[index].month }} {{ passedDate[index].day }} {{ passedDate[index].hour }} {{ passedDate[index].minute }}</span>
               </li>
-              <li v-show="!isNotification || requests.length === 0" class="mt-5 dropdown-item fs-6 text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
+              <li v-show="!isNotification || requests.length === 0" class=" dropdown-item fs-6 text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
             </ul>
-            <TooltipsRectangular class="pt-3" :toolTipState="toolTip" :toolTipText="'Notificações'"/>
           </div>
           <div class="nav-item dropdown">
-            <button class="svg-button  d-flex bg-primary align-items-center" @click="rotate" data-bs-toggle="dropdown" data-bs-offset="10,10" data-bs-auto-close="inside" aria-expanded="false">
+            <button class="svg-button  d-flex bg-primary align-items-center" @click="rotate" title="Perfil" data-bs-toggle="dropdown" data-bs-offset="10,0" data-bs-auto-close="inside" aria-expanded="false">
               <p class="profile-drop user-text text-light px-1 m-0 fw-light"> {{ user.username }} </p>
               <LoadersLoading class="small-loader text-light p-1"/>
                 <IconsDownArrow class="rotate-arrow" :style="{ transform: isRoted ? 'rotate(180deg)' : 'rotate(0deg)'}" width="24px" height="24px"/>
@@ -53,7 +52,7 @@ import { useStorageStore } from '../../stores/storage';
 import { getUserByEmail } from '../../services/users/userGET';
 import { getRequestByStatus } from '../../services/requests/requestsGET';
 import { onMounted, ref } from 'vue';
-const toolTip = ref(false)
+const toolTip = ref([false, false])
 
 const actualDate = new Date;
 const userStore = useUser();

@@ -1,6 +1,6 @@
 <template>
    <div>
-    <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="new-btn action-btn btn-outline-ligth justify-content-end d-flex btn mx-1 px-2" data-bs-toggle="modal" data-bs-target="#itemRegistration" aria-expanded="false">
+    <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="new-btn action-btn btn-outline-ligth justify-content-end d-flex btn mx-1 px-2 mt-1" data-bs-toggle="modal" data-bs-target="#itemRegistration" aria-expanded="false">
         Adicionar
         <IconsPlus class="mx-1" width="1.5em" height="1.5em"/>
     </button>   
