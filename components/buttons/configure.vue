@@ -1,6 +1,6 @@
 <template>
     <div class="dropdown">
-        <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-ligth text-dark-emphasis mx-1 px-2" data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
+        <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-ligth mx-1 px-2 mt-1" data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
             Mais ações
             <IconsSettings class="mx-1" width="1.5em" height="1.5em"/>
         </button>
@@ -106,8 +106,12 @@ li{
 }
 
 .btn-outline-ligth{
-    color: white !important; 
-    background-color: #0B3B69 !important; 
+    box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
+    color: rgb(0, 0, 0, 0.7); 
+}
+.btn-outline-ligth:hover{
+    color: white; 
+    background-color: #0B3B69; 
 }
 .form-check-input:active{
     background-color: #1F69B1 !important;

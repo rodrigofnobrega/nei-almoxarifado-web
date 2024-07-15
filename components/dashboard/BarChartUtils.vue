@@ -1,7 +1,7 @@
 <template>
   <ModalAlmoReport :id="2" :data="{datasets: datasets, labels: labels}"/>
   <div class="graph-header d-flex align-items-end justify-content-between section-title pt-2 mb-3 bg-light-background-header">
-        <h5 class="ps-2">Gráfico dos mais solicitados</h5>
+        <h5 class="ps-2 fw-bold">Gráfico dos mais solicitados</h5>
         <div class="dropdown mb-1 mx-2 d-flex">
             <button class="d-flex align-items-center graph-btn btn btn-transparent " @click="toggleDataType">{{ currentDataTypeLabel }}</button>
             <button class="d-flex align-items-center graph-btn btn btn-transparent dropdown-toggle mx-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">

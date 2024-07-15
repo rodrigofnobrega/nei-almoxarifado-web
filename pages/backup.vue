@@ -138,9 +138,10 @@ const resetPassword = () => {
 }
 
 .auth-container{
-	border-radius: 15px;
-	width: 120%;
+	border-radius: 8px;
+	width: 450px;
 	flex-direction: column;
+	margin-top: 80px;
     margin: 10px;
 }
 .auth {
@@ -167,15 +168,15 @@ const resetPassword = () => {
 }
 
 .header {
+	border: solid 1px #D9D9D9;
 	width: 100%;
 	height: 65px;
-	border-radius: 15px 15px 0px 0px;
+	border-radius: 8px 8px 0px 0px;
 	background-color: #0B3B69;
 	color: #ffff;
 	margin-top: 0px;
 	padding: 0px;
 }
-
 
 .auth-form {
     margin-bottom: 5px;

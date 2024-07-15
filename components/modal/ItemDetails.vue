@@ -1,5 +1,5 @@
 <template>
-    <Modal v-if="item_details != []" id="itemDetailing" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
+    <Modal id="itemDetailing" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
             <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Detalhes do item</h6>
             <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
@@ -7,7 +7,7 @@
             </button>
         </template> 
         <template v-slot:body>
-            <div class="row">
+            <div v-if="item_details != undefined" class="row">
 				<div class="col-6">
                     <div class="mb-3"> 
                         <label class="form-label fw-bold"> Nome </label>
@@ -57,19 +57,21 @@
                     <button class="btn inset-shadow btn-light-success text-light mx-1" id="fetch-inputs" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="fetchNewData" data-bs-dismiss="modal">Confirmar</button>
                 </div>
                 <div v-if="userStore.role === 'ADMIN' && item_route !== 'registro'" class="d-flex align-items-center justify-content-center">
-                    <button class="btn inset-shadow mode-btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#itemReposition">Repor</button>
+                    <button class="btn inset-shadow mode-btn btn-secondary mx-1" data-bs-toggle="modal" data-bs-target="#itemReposition">
+                        Reposição</button>
                 </div>
                 <div v-if="userStore.role === 'USER'" class="d-flex align-items-center justify-content-center">
-                    <button class="btn btn-light-alert text-light" data-bs-dismiss="modal">Fechar</button>
+                    <button class="btn btn-light-alert text-light mx-1" data-bs-dismiss="modal">Fechar</button>
+                    <button class="btn btn-secondary text-light mx-1" data-bs-toggle="modal" data-bs-target="#actionConfirm">Solicitar</button>
                 </div>
-                <div v-if="userStore.role === 'ADMIN'" @click="getRecord" data-bs-target="#itemHistory" data-bs-toggle="modal" type="button" class="btn btn-primary  my-1 bg-primary rounded-2 p-1 d-flex justify-content-end text-light">
+                <div v-if="userStore.role === 'ADMIN'" @click="getRecord" data-bs-target="#itemHistory" data-bs-toggle="modal" title="Histórico" type="button" class="btn btn-primary  my-1 bg-primary rounded-2 p-1 d-flex justify-content-end text-light">
                     <IconsHistory width="25px" height="25px"/>
                 </div>
             </div>
         </template> 
     </Modal>
     <ModalItemHistory v-if="toggleHistory"/>
-    <ModalItemReposition :itemName="item_details.name" :itemSipac="item_details.sipacCode" :itemType="item_details.type" :itemIndex="item_index"/>
+    <ModalItemReposition v-if="item_details != undefined" :itemName="item_details.name" :itemSipac="item_details.sipacCode" :itemType="item_details.type" :itemIndex="item_index"/>
 </template>
 
 <script>
@@ -165,6 +167,9 @@ export default {
 </script>
 
 <style scoped>
+.mode-btn{
+    font-size: 15px;
+}
 .inset-shadow{
     padding: 6px 10px 6px 10px;
     box-shadow: inset 1px 1px 15px 1px rgb(0, 0, 0, 0.2);

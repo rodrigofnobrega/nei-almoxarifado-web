@@ -1,6 +1,6 @@
 <template>
    <div>
-    <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="new-btn action-btn btn-outline-ligth text-dark-emphasis justify-content-end d-flex btn mx-1 px-2" data-bs-toggle="modal" data-bs-target="#itemRegistration" aria-expanded="false">
+    <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="new-btn action-btn btn-outline-ligth justify-content-end d-flex btn mx-1 px-2 mt-1" data-bs-toggle="modal" data-bs-target="#itemRegistration" aria-expanded="false">
         Adicionar
         <IconsPlus class="mx-1" width="1.5em" height="1.5em"/>
     </button>   
@@ -39,8 +39,12 @@ onMounted(() => {
     border-bottom: 1px ridge #388E3C;
 }
 .btn-outline-ligth{
-    color: white !important; 
-    background-color: #388E3C !important; 
+    box-shadow: inset 0px -12px 16px -18px rgb(56, 142, 60, 0.7);
+    color: rgb(0, 0, 0, 0.7); 
+}
+.btn-outline-ligth:hover{
+    color: white; 
+    background-color: #388E3C; 
 }
 .btn-transparent:hover{
     color: white;

@@ -3,7 +3,7 @@
     <ModalItemHistory v-if="itemsCache.length > 0"/>
 <div class="table-container d-block mt-2">
     <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
-    <div class="sub-catalog bg-light mb-4 ps-2 pe-2">
+    <div class="sub-catalog bg-light my-1 ps-2 pe-2">
         <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
             Descrição da página
@@ -12,16 +12,22 @@
             Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
         <span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
     </div>
-    <div class="table-box row d-block">
-        <div class="table-actions d-flex justify-content-between aling-items-center" style="margin-bottom: -1px !important;">
-            <div class="d-flex">
-                <ButtonsNewItem v-if="uploadReloader === 1" style="margin-top: 3px;" />
-                <ButtonsFilter style="margin-top: 3px;" />
-                <ButtonsConfigure style="margin-top: 3px;" />
+    <div class="table-box-title position-absolute bg-light-emphasis d-flex align-items-center">
+        <IconsBox class="me-1" width="25" height="25"/>
+        <p class="box-title-text">
+            Tabela dos itens do almoxarifado
+        </p>
+    </div>
+    <div class="table-box row d-block bg-light mx-2">
+        <div class="table-actions d-flex justify-content-between aling-items-center">
+            <div class="d-flex align-items-center">
+                <ButtonsNewItem v-if="uploadReloader === 1" />
+                <ButtonsFilter />
+                <ButtonsConfigure />
             </div>
-            <span v-if="itemsLoad" class="position-sticky d-flex align-items-center bg-primary table-searchbar">
-                <input id="tableSearch" v-model="searchInput" class="searchbar bg-light form-control" placeholder="Pesquisar"/>          
-                <IconsSearchGlass class="bg-primary text-light search-glass"/>
+            <span v-if="itemsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 0.8px;">
+                <IconsSearchGlass class="search-glass"/>
+                <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
             </span>
         </div>
         <TablesTable>
@@ -54,8 +60,8 @@
                    <span>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</span>
                </th>
                <th class="border" width="5%">
-                   <TooltipsRectangular class="toolTip me-5 pe-5 mb-5" style="margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
-                   <TooltipsRectangular class="toolTip me-5 pe-5" style="margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Histórico'"/>
+                   <TooltipsFastRectangular class="toolTip me-5 pe-5 mb-5" style="margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
+                   <TooltipsFastRectangular class="toolTip me-5 pe-5" style="margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Histórico'"/>
                     <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         <IconsSearchGlass width="18px" height="19px"/>
                     </button>
@@ -64,40 +70,42 @@
                     </button>
                </th>
             </tr>
-            <div v-else-if="itemsCache.length === 0 && !initialLoading" class="search-empty position-absolute mt-5">
-                <p class="text-dark-emphasis fs-5 opacity-50">Nenhum item Encontrado.</p>
+            <div v-else-if="itemsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)" class="search-empty position-absolute mt-5">
+                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado.</p>
             </div>
         </template>
         </TablesTable>
-    </div>
-    <div class="d-flex justify-content-between me-2 mt-2">
-        <span v-if="itemsCache.length > 0" class="ms-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span>
-        
+    <div class="d-flex justify-content-between align-items-center me-2 mt-2">
+        <div>
+            <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 px-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span>
+            <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 px-2 pages-info">Quantidade total de itens: {{ totalElements }}</span>
+        </div>
         <nav v-if="itemsCache.length > 0 && finded.length === 0" aria-label="Page navigation" class="pagination">
-            <ul class="pagination">
+            <ul class="pagination mb-2 mt-2">
                 <li class="page-item">
-                    <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
+                    <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
                 </li>
-                <li class="page-item" :key="0">
+                <li v-if="totalPages > 4" class="page-item" :key="0">
                     <button class="page-link text-light" @click="page(0)" :class="{'bg-primary': !pagesFocus[0], 'bg-secondary': pagesFocus[0]}">{{ 1 }}</button>
                 </li>
-                <li v-show="pagination > 1" class="page-item">
+                <li v-show="pagination >= 3 && totalPages > 5" class="page-item">
                     <button class="page-link bg-primary text-light">...</button>
                 </li>
-                <li class="page-item" v-for="i in totalPages >= 3 ? range(1+paginationRet, 3+paginationRet) : range(1,totalPages)" :key="i-1">
+                <li class="page-item" v-for="i in totalPages > 4 ? range(1+paginationRet, 3+paginationRet) : range(1,totalPages)" :key="i-1">
                     <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
                 </li>
                 <li v-show="totalPages > 3 && paginationRet < totalPages-4" class="page-item">
                     <button class="page-link bg-primary text-light">...</button>
                 </li>
-                <li class="page-item" :key="totalPages-1">
+                <li v-if="totalPages > 4" class="page-item" :key="totalPages-1">
                     <button class="page-link text-light" @click="page(totalPages-1)" :class="{'bg-primary': !pagesFocus[totalPages-1], 'bg-secondary': pagesFocus[totalPages-1]}">{{ totalPages }}</button>
                 </li>
                 <li class="page-item">
-                    <button class="page-link bg-primary text-light" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1 || searchInput !== ''}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
+                    <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1 || searchInput !== ''}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
                 </li>
             </ul>
         </nav>
+        </div>
     </div>
 </div>
 </template>
@@ -120,6 +128,7 @@ function range(start, end) {
   return Array.from({ length: end - start + 1 }, (_, index) => start + index);
 }
 
+
 let pagination = ref(0); //paginação padrão
 let invertedPagination = ref(0); //paginação invertida para filtro
 let queryParams = ref({ 
@@ -132,6 +141,7 @@ const itemsCache = ref([]);
 const searchCache = ref([])
 const cacheIndex = ref(0);
 const totalPages = ref(0);
+const totalElements = ref(0);
 const isSearching = ref(false);
 let finded = [];
 const itemsReq = async (sort, isInverted, pagination, loadRequest, paginationInverted) => {
@@ -187,16 +197,18 @@ const itemsReq = async (sort, isInverted, pagination, loadRequest, paginationInv
     }
     if(isInverted){
         const res = await getItems(userStore, paginationInverted, sort)
-        totalPages.value = res.totalPages
+        totalPages.value = res.totalPages;
+        totalElements.value = res.totalElements;
         invertedPagination.value = totalPages-1;
         itemsCache.value.push(res.content);
         return res.totalPages
     } 
     const res = await getItems(userStore, pagination, sort)
-    totalPages.value = res.totalPages
+    totalPages.value = res.totalPages;
+    totalElements.value = res.totalElements;
     invertedPagination.value = totalPages-1;
     loadRequest ? cacheIndex.value++ : 0;
-    itemsCache.value.push(res.content);
+    res.content.length === 0 ? null : itemsCache.value.push(res.content);
     return res.totalPages
 }; 
 
@@ -237,7 +249,6 @@ const itemsLoad = computed(async() => {
     itemsReq(queryParams.value.sort, false, pagination.value, true, queryParams.value.isInverted);
     reqsIndexCache.push(pagination.value)
 })
-
 
 provide('setItemsFilter', (filter, inverted) => {
     queryParams.value.sort = filter;
@@ -414,21 +425,35 @@ onUpdated(async () => {
     display: block !important;
 }
 .table-box{
-    margin: 0;
+    margin-top: 60px;
+    border-radius: 0px 10px 10px 10px;
     overflow-x: scroll;
+    box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.5);
+    border: 1px #D9D9D9 solid;
+}
+.table-box-title{
+    margin-left: 8px;
+    margin-top: 18px;
+    padding: 4px;
+    font-weight: 400;
+    color: rgb(51,51,51, 0.8);
+    border-radius: 10px 10px 0px 0px;
+}
+.box-title-text{
+    font-size: 20px;
 }
 .table-actions{
     width: 100%;
 }
 .sub-catalog{
-    border-radius: 13px;
+    border-radius: 10px;
     margin-top: -14px;
     padding-top: 10px;
     padding-bottom: 20px;
     margin-right: 10%;
     margin-left: 10%;
     border: 1px #D9D9D9 solid;
-    box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);
+    box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.5);
 }
 .sub-catalog-text{
     padding: 0px 10px 0px 10px;
@@ -470,11 +495,22 @@ p{
 }
 .table-searchbar{
     border: none;
+    border-bottom: solid 1px #1F69B1;
     border-radius: 10px 10px 0px 0px;
-    top: 70px;
+    box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
+    color: rgb(0, 0, 0, 0.7); 
+    transition: box-shadow 0.3s ease;
+}
+.table-searchbar:hover {
+    box-shadow: inset 0px -12px 15px -18px rgba(11, 59, 105, 0.7), 0px 0px 7px 0px rgba(11, 59, 105, 0.7);
+}
+.table-searchbar:hover,
+.table-searchbar:focus-within {
+    box-shadow: inset 0px -12px 15px -18px rgba(11, 59, 105, 0.7), 0px 0px 7px rgba(11, 59, 105, 0.7); /* Sombra interna na parte inferior e contorno ao redor */
 }
 .searchbar{
-    border-radius: 8px 0px 0px 0px;
+    border: none;
+    border-radius: 0;
     font-weight: 500;
 }
 .search-glass{
@@ -492,6 +528,7 @@ p{
 }
 .pages-info{
     font-size: 13px;
+    border-radius: 5px;
 }
 .table-btn{
     border-radius: 4px;
@@ -513,7 +550,7 @@ p{
     display: flex;
     justify-content: center;
     margin-left: 30%;    
-    margin-right: 30%;
+    margin-right: 40%;
     white-space: nowrap;
 }
 .pagination{
@@ -521,6 +558,16 @@ p{
     display: flex !important;
     justify-content: space-around !important;
     z-index: 0;
+}
+.page-item{
+    margin: 0px 2px 0px 2px;
+}
+.page-link{
+    border: none;
+    border-radius: 7px;
+}
+.page-nav-radius{
+    border-radius: 5px;
 }
 tr:hover .table-btn{
     opacity: 100%;

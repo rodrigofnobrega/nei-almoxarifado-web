@@ -1,21 +1,21 @@
 <template>
   <div id="content">
     <Header />
-    <div class="d-flex"> 
+    <div class="d-flex bg-fade"> 
       <div class="fluid-container"> 
         <NavbarNavSideBar />
       </div>
       <div class="main">
-        <div class="main-title">
+        <div class="main-title mt-5">
           <TitlesTitle>
             <template v-slot:titulo>
                 <div class="d-flex align-items-center">
                   <IconsSpreadSheet v-if="pageIcon === 'spreadsheet'" width="30px" height="30px"/>
-                  <IconsControl v-if="pageIcon === 'control'" width="30px" height="30px"/>
-                  <IconsDirectory v-if="pageIcon === 'directory'" width="30px" height="30px"/>
-                  <IconsSettings v-if="pageIcon === 'settings'" width="30px" height="30px"/>
-                  <IconsInformation v-if="pageIcon === 'information'" width="30px" height="30px"/>
-                  <IconsHome v-if="pageIcon === 'home'" width="30px" height="30px"/>
+                  <IconsControl v-else-if="pageIcon === 'control'" width="30px" height="30px"/>
+                  <IconsDirectory v-else-if="pageIcon === 'directory'" width="30px" height="30px"/>
+                  <IconsSettings v-else-if="pageIcon === 'settings'" width="30px" height="30px"/>
+                  <IconsInformation v-else-if="pageIcon === 'information'" width="30px" height="30px"/>
+                  <IconsHome v-else-if="pageIcon === 'home'" width="30px" height="30px"/>
                   <span class="ms-2">
                     {{ pageTitle }}
                   </span>

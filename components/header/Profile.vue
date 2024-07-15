@@ -1,28 +1,27 @@
 <template>
     <div class="d-flex profile align-items-center me-3">
-          <div @mouseover="toolTip = true" @mouseout="toolTip = false" class="me-2 nav-item dropdown">
-            <button class="svg-button bg-primary px-0" data-bs-toggle="dropdown" data-bs-offset="20,15" aria-expanded="false">
+          <div class="me-2 nav-item dropdown">
+            <button  class="svg-button bg-primary px-0" data-bs-toggle="dropdown" data-bs-offset="20,1" aria-expanded="false" title="Notificações">
               <IconsBell with="16px" height="16px"/>
-              <span v-if="requests.content.length > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{requests.content.length}}
+              <span v-if="requests.length > 0" class="position-absolute start-100 translate-middle badge rounded-pill bg-danger">
+                {{requests.length}}
                 <span class="visually-hidden">unread messages</span>
               </span>
             </button>
             <ul class="dropdown-menu notification-menu py-2">
-              <li v-for="(request, index) in requests.content" :key="index" class="dropdown-item notification">
+              <li v-for="(request, index) in requests" :key="index" class="dropdown-item notification">
                 <div class="text-dark-emphasis d-flex align-items-center">
                   <IconsWarning class="me-2 notification-text"/>
-                  <p class="notification-text m-0 p-0">{{request.user.name}} solicitou {{ request.quantityRequested }} {{request.item.name}}.
+                  <p class="notification-text m-0 p-0">{{request.user.name}} solicitou {{ request.quantityRequested }} "{{request.item.name}}"
                   </p>
                  </div>
                 <span class="notification-text ms-0 opacity-75 text-dark-emphasis">Há {{ passedDate[index].month }} {{ passedDate[index].day }} {{ passedDate[index].hour }} {{ passedDate[index].minute }}</span>
               </li>
-              <li v-show="!isNotification || requests.content.length === 0" class="mt-5 dropdown-item fs-6 text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
+              <li v-show="!isNotification || requests.length === 0" class=" dropdown-item fs-6 text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
             </ul>
-            <TooltipsRectangular class="pt-3" :toolTipState="toolTip" :toolTipText="'Notificações'"/>
           </div>
           <div class="nav-item dropdown">
-            <button class="svg-button  d-flex bg-primary align-items-center" @click="rotate" data-bs-toggle="dropdown" data-bs-offset="10,10" data-bs-auto-close="inside" aria-expanded="false">
+            <button class="svg-button  d-flex bg-primary align-items-center" @click="rotate" title="Perfil" data-bs-toggle="dropdown" data-bs-offset="10,0" data-bs-auto-close="inside" aria-expanded="false">
               <p class="profile-drop user-text text-light px-1 m-0 fw-light"> {{ user.username }} </p>
               <LoadersLoading class="small-loader text-light p-1"/>
                 <IconsDownArrow class="rotate-arrow" :style="{ transform: isRoted ? 'rotate(180deg)' : 'rotate(0deg)'}" width="24px" height="24px"/>
@@ -53,11 +52,58 @@ import { useStorageStore } from '../../stores/storage';
 import { getUserByEmail } from '../../services/users/userGET';
 import { getRequestByStatus } from '../../services/requests/requestsGET';
 import { onMounted, ref } from 'vue';
-const toolTip = ref(false)
+const toolTip = ref([false, false])
 
 const actualDate = new Date;
 const userStore = useUser();
-const requests = await getRequestByStatus(userStore, 'pendente')
+const pagination = ref(0);
+const requests = ref([]);
+
+let passedDate = [];
+function toPositive(number) {
+  return Math.abs(number);
+}
+
+const loadNotifications = async () => {
+  const res = await getRequestByStatus(userStore, 'pendente', pagination.value);
+  res.content.map((request) => {
+    requests.value.push(request)
+  })
+
+  if(res.totalPages > 1){
+    for(let i = 0; i < res.totalPages; i++){
+      pagination.value++;
+      const res = await getRequestByStatus(userStore, 'pendente', pagination.value);
+      res.content.map((request) => {
+          requests.value.push(request)
+      })
+    }
+  }
+
+  for (let i = 0; i < requests.value.length; i++) {
+    passedDate[i] = {};
+
+    const creationDate = new Date(requests.value[i].creationDate);
+
+    let monthDiff = toPositive(actualDate.getMonth() - creationDate.getMonth());
+    passedDate[i].month = monthDiff > 0 ? (monthDiff === 1 ? `${monthDiff} mês` : `${monthDiff} meses`) : '';
+
+    let dayDiff = toPositive(actualDate.getDate() - creationDate.getDate());
+    passedDate[i].day = dayDiff > 0 ? (dayDiff === 1 ? `${dayDiff} dia` : `${dayDiff} dias`) : '';
+
+    let hourDiff = actualDate.getHours() - creationDate.getHours();
+    let minuteDiff = actualDate.getMinutes() - creationDate.getMinutes();
+
+    if (minuteDiff < 0) {
+      minuteDiff += 60;
+      hourDiff--; 
+    }
+
+    passedDate[i].hour = hourDiff > 0 ? (hourDiff === 1 ? `${hourDiff} hora` : `${hourDiff} horas`) : '';
+
+    passedDate[i].minute = minuteDiff > 0 ? (minuteDiff === 1 ? `${minuteDiff} minuto` : `${minuteDiff} minutos`) : '';
+  }
+}
 
 const isNotification = ref(true)
 const isRoted = ref(false);
@@ -73,35 +119,22 @@ async function getUsername(){
   const res = await getUserByEmail(userStore, userStore.email); 
   user.value.username = res.name;
 }
-function toPositive(number) {
-  return Math.abs(number);
-}
-
-let passedDate = [];
-
-for (let i = 0; i < requests.content.length; i++) {
-  passedDate[i] = {};
-
-  const creationDate = new Date(requests.content[i].creationDate);
-
-  let monthDiff = toPositive(actualDate.getMonth() - creationDate.getMonth());
-  passedDate[i].month = monthDiff > 0 ? (monthDiff === 1 ? `${monthDiff} mês` : `${monthDiff} meses`) : '';
-
-  let dayDiff = toPositive(actualDate.getDate() - creationDate.getDate());
-  passedDate[i].day = dayDiff > 0 ? (dayDiff === 1 ? `${dayDiff} dia` : `${dayDiff} dias`) : '';
-
-  let hourDiff = actualDate.getHours() - creationDate.getHours();
-  let minuteDiff = actualDate.getMinutes() - creationDate.getMinutes();
-
-  if (minuteDiff < 0) {
-    minuteDiff += 60;
-    hourDiff--; 
+const totalElements = ref(0);
+onMounted(async () => {
+  const res = await getRequestByStatus(userStore, 'pendente', pagination.value);
+  totalElements.value = res.totalElements;
+  if(JSON.parse(localStorage.getItem('notifications')).length > 0){
+    if(JSON.parse(localStorage.getItem('notifications-meta')).totalElements !== totalElements.value){
+      await loadNotifications();
+      return 1;
+    }
+    requests.value = JSON.parse(localStorage.getItem('notifications'));
+  }else{
+    await loadNotifications();
+    localStorage.setItem('notifications', JSON.stringify(requests.value));
+    localStorage.setItem('notifications-meta', JSON.stringify({totalElements: totalElements.value}));
   }
-
-  passedDate[i].hour = hourDiff > 0 ? (hourDiff === 1 ? `${hourDiff} hora` : `${hourDiff} horas`) : '';
-
-  passedDate[i].minute = minuteDiff > 0 ? (minuteDiff === 1 ? `${minuteDiff} minuto` : `${minuteDiff} minutos`) : '';
-}
+})
 
 </script>
 
@@ -110,7 +143,7 @@ for (let i = 0; i < requests.content.length; i++) {
   transform: scale(1.30);
 }
 .notification-menu{
-  height: 172px;
+  max-height: 160px;
   overflow-y: scroll;
 }
 .small-loader{
@@ -127,6 +160,7 @@ for (let i = 0; i < requests.content.length; i++) {
   font-size: 14px;
 }
 .rounded-pill{
+  margin-top: -20px !important;
   align-items: center;
   justify-content: center;
   display: flex !important;
@@ -140,11 +174,14 @@ for (let i = 0; i < requests.content.length; i++) {
   font-weight: bold;
   font-size: 12px;
 }
+
 .svg-button{
+    height: 49px;
     border: none;
     padding: 0;
     margin: 0;
     background: none;
+    transition: box-shadow 0.4s ease, border-bottom 0.4s ease-in-out;
 }
 .user-text {
     font-size: 20px;
@@ -152,9 +189,9 @@ for (let i = 0; i < requests.content.length; i++) {
 .dropdown-item:hover .notification-text{
   font-weight: bold
 }
-.svg-button:hover img{
-  transition: filter 0.3s ease-in-out;
-  filter: drop-shadow(0px 0px 7px rgba(254, 213, 30, 1));
+.svg-button:hover{
+  border-bottom: solid 1px #FED51E;
+  box-shadow: inset 0px -12px 15px -13px rgb(254, 213, 30, 0.7);
 }
 .profile-drop:hover{
   transition: filter 0.3s ease-in;

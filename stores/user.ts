@@ -10,7 +10,7 @@ export const useUser = defineStore('user', {
         token: '',
         email: '',
         id: null,
-        role: null
+        role: null,
     }),
     actions: {
         async fetchData(password, email){
@@ -25,6 +25,7 @@ export const useUser = defineStore('user', {
                 this.id = response.id
                 this.role = response.role
                 localStorage.setItem('session', JSON.stringify(res.token))
+                popUpStore.throwPopup("Logado com sucesso", "blue");
                 return navigateTo('/');
             } catch(err) { 
                 popUpStore.throwPopup("ERRO: credenciais inválidas", "#B71C1C")

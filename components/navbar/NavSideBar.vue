@@ -7,7 +7,7 @@
             </div>
             <ul class="list-group-flush container d-block" :class="{ 'collapsed': isCollapsed }">
                 <a class="text-decoration-none" href="/" aria-current="true">
-                    <div class="item-bg item-top" :class="{'active': $route.path === '/', 'text-dark-emphasis': $route.path !== '/'}">
+                    <div class="item-bg item-top mb-2" :class="{'active': $route.path === '/', 'text-dark-emphasis': $route.path !== '/'}">
                         <IconsHome class="nav-icon"/>
                         <span class="list-group-item">Início</span>
                     </div>
@@ -15,7 +15,7 @@
                 <a class="text-decoration-none" href="/controle-de-acesso" aria-current="true">
                     <div class="item-bg" :class="{'active': $route.path === '/controle-de-acesso', 'text-dark-emphasis': $route.path !== '/controle-de-acesso' }">
                         <IconsControl class="nav-icon"/>
-                        <span class="list-group-item">Controle de Acesso</span>
+                        <span class="list-group-item text-wrap">Controle de Acesso</span>
                     </div>
                 </a>
                 <a class="text-decoration-none" href="/catalogo" aria-current="true">
@@ -177,7 +177,7 @@ export default {
 }
 .offcanvas{
     border: none;
-    width: 10em;
+    width: 11em;
     height: 100vh;  
     top: 0%;
     padding-top: 20px;
@@ -203,11 +203,11 @@ export default {
 }
 .list-group-flush{
     margin-bottom: 50px;
-    margin-left: -4px;
+    margin-left: -5px;
 }
 .list-group-item{
     display: flex;
-    font-size: 12px;
+    font-size: 13px;
     margin-left: 7px;
     margin-right: 0px;
     margin-top: 1px;
@@ -228,7 +228,7 @@ export default {
     margin-top: 30px;
     padding-left: 7px;
     height: 42px;
-    width: 145px;
+    width: 160px;
 }
 .item-bg a{
     display: flex;
@@ -240,7 +240,7 @@ export default {
     width: 50px; 
 }
 .colapse-btn{
-    width: 160px;
+    width: 175px;
     border-radius: 0;
     bottom: 0;
     height: 40px;
