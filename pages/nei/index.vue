@@ -60,14 +60,13 @@ definePageMeta({
 }
 .bg-degrade{
     border-radius: 40px 40px 40px 40px;
-    background: linear-gradient(to bottom, rgb(11, 59, 105, 0.9) 10%, rgb(254, 213, 30, 0.9) 150%)
-   
+    background: linear-gradient(to bottom, rgb(11, 59, 105, 0.9) 10%, rgb(254, 213, 30, 0.9) 150%)  
 }
 .bg-fade { 
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.01), rgba(255, 255, 255, 1) 85%),
-              radial-gradient(ellipse at top left, rgba(11, 59, 105, 0.5), transparent 50%),
-              radial-gradient(ellipse at top right, rgba(11, 59, 105, 0.5), transparent 50%),
-              radial-gradient(ellipse at center right, rgba(254, 213, 30, 0.8), transparent 50%),
-              radial-gradient(ellipse at center left, rgba(254, 213, 30, 0.8), transparent 50%) !important;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.01), rgba(255, 255, 255, 1) 85%),
+                radial-gradient(ellipse at top left, rgba(11, 59, 105, 0.5), transparent 50%),
+                radial-gradient(ellipse at top right, rgba(11, 59, 105, 0.5), transparent 50%),
+                radial-gradient(ellipse at center right, rgba(254, 213, 30, 0.8), transparent 50%),
+                radial-gradient(ellipse at center left, rgba(254, 213, 30, 0.8), transparent 50%) !important;
 }
 </style>

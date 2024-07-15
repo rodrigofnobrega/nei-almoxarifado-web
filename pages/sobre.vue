@@ -2,7 +2,6 @@
   <div>
     <div class="descricao">
       <h1 class="d-flex justify-content-center">Sistema de Gerenciamento de Almoxarifado NEI</h1>
-
       <br>
       <p>Este sistema foi projetado para a gestão e organização eficiente dos itens do almoxarifado do 
         Núcleo de Educação da Infância (NEI) - CAp/UFRN, garantindo o controle preciso da entrada e saída de materiais. 
@@ -12,13 +11,9 @@
         <a href="https://www.ufrn.br/">UFRN</a>, de forma totalmente voluntária e de acordo com as normas da instituição
         . O sistema reflete um compromisso com a inovação e a excelência acadêmica, 
         oferecendo uma solução robusta e prática para as necessidades de gerenciamento do NEI.</p>
-
       <br>
-
     </div>
-
     <div class="container">
-
       <h2 class="d-flex mb-5 justify-content-center">Desenvolvedores</h2>
       <div class="row d-flex justify-content-center">
         <div class="col-12 col-sm-6 col-md-4 mb-4" v-for="(card, index) in cards" :key="index">
@@ -30,7 +25,6 @@
             <div class="card-body d-flex flex-column">
               <h5 class="card-title d-flex justify-content-center">{{ card.title }}</h5>
               <p class="card-text flex-grow-1 text-center">{{ card.description }}</p>
-
               <div class="mt-auto links d-flex justify-content-center align-items-center">
                 <a :href="card.link1" class="btn btn-dark btn-links p-1 d-flex align-items-center" target="_blank">GitHub
                   <img class="ms-1" src="/github.svg" width="16" height="16">
@@ -39,15 +33,11 @@
                   <img class="ms-1" src="/linkedin.png" width="18" height="15">
                 </a>
               </div>
-
             </div>
-
           </div>
         </div>
-
       </div>
     </div>
-
   </div>
 </template>
 

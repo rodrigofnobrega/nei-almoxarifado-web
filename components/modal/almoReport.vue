@@ -131,8 +131,39 @@
 
 <script setup>
 import { onMounted, provide, ref } from 'vue';
+import logo from '../../assets/svg/logo.svg';
 import jsPDF from 'jspdf';
 import { useStorageStore } from '../../stores/storage';
+
+// Convertendo logo svg para um formato compativel ao jsPDF
+const svgToDataUri = (svgPath) => {
+    return new Promise((resolve, reject) => {
+        fetch(svgPath)
+            .then(response => response.text())
+            .then(svg => {
+                const svgBlob = new Blob([svg], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(svgBlob);
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    const dataUri = canvas.toDataURL('image/png');
+                    URL.revokeObjectURL(url);
+                    resolve(dataUri);
+                };
+                img.onerror = (err) => {
+                    URL.revokeObjectURL(url);
+                    reject(err);
+                };
+                img.src = url;
+            })
+            .catch(err => reject(err));
+    });
+};
+
 
 const props = defineProps({
     id:{
@@ -142,16 +173,16 @@ const props = defineProps({
     data: {
         type: Object,
         required: true
-  }
+    }
 });
 
 const store = useStorageStore();
 
-const months = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 const weeks = ['1ª semana', '2ª semana', '3ª semana', '4ª semana'];
 
 const reportOptions = ref({
-  dataset: [false, false, false]
+    dataset: [false, false, false]
 });
 
 const reportPeriod = ref('all');
@@ -162,104 +193,249 @@ const includeMonthlyAverage = ref(false);
 const includeUsers = ref(false);
 const userType = ref('');
 
-const generateReport = () => {
-  const doc = new jsPDF();
+/* const generateReport = () => {
+    const doc = new jsPDF();
 
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const date = new Date();
-  const title = 'RELATÓRIO';
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
-  const titleWidth = doc.getStringUnitWidth(title) * doc.getFontSize() / doc.internal.scaleFactor;
-  const titleX = (pageWidth - titleWidth) / 2;
-  doc.text(title, titleX, 10);
-  doc.setFontSize(11);
-  doc.text('Data:', titleX+50, 10);
-  doc.setFont('helvetica', 'light');
-  doc.text(`${date.getDate()}/${date.getMonth()}/${date.getFullYear()} - ${date.getHours()}:${date.getUTCMinutes()}:${date.getSeconds()}`, titleX+62, 10);
-  doc.line(10, 13, 200, 13);
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const date = new Date();
+    const title = 'RELATÓRIO';
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16);
+    const titleWidth = doc.getStringUnitWidth(title) * doc.getFontSize() / doc.internal.scaleFactor;
+    const titleX = (pageWidth - titleWidth) / 2;
+    doc.text(title, titleX, 10);
+    doc.setFontSize(11);
+    doc.text('Data:', titleX+50, 10);
+    doc.setFont('helvetica', 'light');
+    doc.text(`${date.getDate()}/${date.getMonth()}/${date.getFullYear()} - ${date.getHours()}:${date.getUTCMinutes()}:${date.getSeconds()}`, titleX+62, 10);
+    doc.line(10, 13, 200, 13);
 
-  doc.setFont('times', 'light');
-  doc.setFontSize(10);
+    doc.setFont('times', 'light');
+    doc.setFontSize(10);
 
-  if (reportPeriod.value === 'all') {
-    if(props.id === 1){
-        if (reportOptions.value.dataset[0]) {
-          for(let i = 0; i < months.length; i++){
-              doc.text(`${months[i].slice(0, 3)}`, titleX-40+(i*10), 20);  
-              doc.text(`${props.data.requests[0][i]}`, titleX-39+(i*10), 30);  
-          }
-          doc.text('Total de requisições: ', 10, 30);
-        }
-        if (reportOptions.value.dataset[1]) {
-          for(let i = 0; i < months.length; i++){
-            doc.text(`${months[i].slice(0, 3)}`, titleX-40+(i*10), 20);  
-            doc.text(`${props.data.requestsAccepted[0][i]}`, titleX-39+(i*10), 40);  
-          }
-          doc.text('Total de aceitações: ', 10, 40);
-        }
-        if (reportOptions.value.dataset[2]) {
-          for(let i = 0; i < months.length; i++){
-            doc.text(`${months[i].slice(0, 3)}`, titleX-40+(i*10), 20);  
-            doc.text(`${props.data.requestsRejected[0][i]}`, titleX-39+(i*10), 50);  
-          }
-          doc.text('Total de rejeições:', 10, 50);
-        }
-    }
-    else if(props.id === 2){
-        if (reportOptions.value.dataset[0]) {
-          doc.text(`Itens mais solicitados`, 10, 20)
-          doc.text(`${props.data.labels.mostItems[0]}`, 10, 30);
-          doc.text(`${props.data.datasets.mostItemsTime[0]}`, 10, 40);
-        }
-        if (reportOptions.value.dataset[1]) {
-          doc.text('Usuários com mais solicitações', 83, 20);
-          doc.text(`${props.data.labels.mostRequesters[0]}`, 83, 30);
-          doc.text(`${props.data.datasets.mostRequestersTime[0]}`, 83, 40);
-        }
-    }
-  } else if (reportPeriod.value === 'monthly') {
-    if(props.id === 1){
-        doc.setFont('times', 'bold');
-        doc.text(`Total de requisições`, 10, 20);
-        doc.text(`Requisições aceitas`, 83, 20);
-        doc.text(`Requisições recusadas`, 150, 20);
-        doc.setFont('times', 'light');
-        for(let i = 0; i < selectedMonths.value.length; i++){
-          if(reportOptions.value.dataset[0]){
-            doc.text(`${months[selectedMonths.value[i]]}: ${props.data.requests[1][selectedMonths.value[i]]}`, 10, 30+(10*i));
-          }
-          if(reportOptions.value.dataset[1]){
-              doc.text(`${months[selectedMonths.value[i]]} : ${props.data.requestsAccepted[1][selectedMonths.value[i]]}`, 83, 30+(10*i));
-          }
-          if(reportOptions.value.dataset[2]){
-              doc.text(`${months[selectedMonths.value[i]]}: ${props.data.requestsRejected[1][selectedMonths.value[i]]}`, 150, 30+(10*i));
-          }
-      }
-    }
-    else if(props.id === 2){
-        doc.text(`Itens mais solicitados`, 10, 20)
-        doc.text('Usuários com mais solicitações', 83, 20);
-        for(let i = 0; i < selectedMonths.value.length; i++){
+    if (reportPeriod.value === 'all') {
+        if(props.id === 1){
             if (reportOptions.value.dataset[0]) {
-                if(props.data.datasets.mostItemsTime[1][selectedMonths.value[i]] != undefined){
-                    doc.text(`${props.data.labels.mostItems[1][selectedMonths.value[i]]}`, 10, 30+(10*i));
-                    doc.text(`${months[selectedMonths.value[i]]}: ${props.data.datasets.mostItemsTime[1][selectedMonths.value[i]]}`, 10, 35+(10*i));
+            for(let i = 0; i < months.length; i++){
+                doc.text(`${months[i].slice(0, 3)}`, titleX-40+(i*10), 20);  
+                doc.text(`${props.data.requests[0][i]}`, titleX-39+(i*10), 30);  
+            }
+            doc.text('Total de requisições: ', 10, 30);
+            }
+            if (reportOptions.value.dataset[1]) {
+            for(let i = 0; i < months.length; i++){
+                doc.text(`${months[i].slice(0, 3)}`, titleX-40+(i*10), 20);  
+                doc.text(`${props.data.requestsAccepted[0][i]}`, titleX-39+(i*10), 40);  
+            }
+            doc.text('Total de aceitações: ', 10, 40);
+            }
+            if (reportOptions.value.dataset[2]) {
+            for(let i = 0; i < months.length; i++){
+                doc.text(`${months[i].slice(0, 3)}`, titleX-40+(i*10), 20);  
+                doc.text(`${props.data.requestsRejected[0][i]}`, titleX-39+(i*10), 50);  
+            }
+            doc.text('Total de rejeições:', 10, 50);
+            }
+        }
+        else if(props.id === 2){
+            if (reportOptions.value.dataset[0]) {
+            doc.text(`Itens mais solicitados`, 10, 20)
+            doc.text(`${props.data.labels.mostItems[0]}`, 10, 30);
+            doc.text(`${props.data.datasets.mostItemsTime[0]}`, 10, 40);
+            }
+            if (reportOptions.value.dataset[1]) {
+            doc.text('Usuários com mais solicitações', 83, 20);
+            doc.text(`${props.data.labels.mostRequesters[0]}`, 83, 30);
+            doc.text(`${props.data.datasets.mostRequestersTime[0]}`, 83, 40);
+            }
+        }
+    } else if (reportPeriod.value === 'monthly') {
+        if(props.id === 1){
+            doc.setFont('times', 'bold');
+            doc.text(`Total de requisições`, 10, 20);
+            doc.text(`Requisições aceitas`, 83, 20);
+            doc.text(`Requisições recusadas`, 150, 20);
+            doc.setFont('times', 'light');
+            for(let i = 0; i < selectedMonths.value.length; i++){
+            if(reportOptions.value.dataset[0]){
+                doc.text(`${months[selectedMonths.value[i]]}: ${props.data.requests[1][selectedMonths.value[i]]}`, 10, 30+(10*i));
+            }
+            if(reportOptions.value.dataset[1]){
+                doc.text(`${months[selectedMonths.value[i]]} : ${props.data.requestsAccepted[1][selectedMonths.value[i]]}`, 83, 30+(10*i));
+            }
+            if(reportOptions.value.dataset[2]){
+                doc.text(`${months[selectedMonths.value[i]]}: ${props.data.requestsRejected[1][selectedMonths.value[i]]}`, 150, 30+(10*i));
+            }
+        }
+        }
+        else if(props.id === 2){
+            doc.text(`Itens mais solicitados`, 10, 20)
+            doc.text('Usuários com mais solicitações', 83, 20);
+            for(let i = 0; i < selectedMonths.value.length; i++){
+                if (reportOptions.value.dataset[0]) {
+                    if(props.data.datasets.mostItemsTime[1][selectedMonths.value[i]] != undefined){
+                        doc.text(`${props.data.labels.mostItems[1][selectedMonths.value[i]]}`, 10, 30+(10*i));
+                        doc.text(`${months[selectedMonths.value[i]]}: ${props.data.datasets.mostItemsTime[1][selectedMonths.value[i]]}`, 10, 35+(10*i));
+                    }
+                }
+                if (reportOptions.value.dataset[1]) {
+                    if(props.data.datasets.mostRequestersTime[1][selectedMonths.value[i]] != undefined){
+                        doc.text(`${props.data.labels.mostRequesters[1][selectedMonths.value[i]]}`, 83, 30+(10*i));
+                        doc.text(`${months[selectedMonths.value[i]]}: ${props.data.datasets.mostRequestersTime[1][selectedMonths.value[i]]}`, 83, 35+(10*i));
+                    }
+                }
+            }
+        }
+    }
+    // Salvar o PDF
+    doc.save('relatorio.pdf');
+}; */
+
+
+const generateReport = async () => {
+    const doc = new jsPDF();
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const date = new Date();
+    const title = 'RELATÓRIO';
+
+    // Adicionar um cabeçalho com fundo colorido
+    doc.setFillColor(220, 220, 220);
+    doc.rect(0, 0, pageWidth, 20, 'F');
+
+    // Logo
+    const logoDataUri = await svgToDataUri(logo);
+    doc.addImage(logoDataUri, 'PNG', 10, 5, 10, 10);
+    
+    // Título
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.setTextColor(0, 51, 102);
+    const titleWidth = doc.getStringUnitWidth(title) * doc.getFontSize() / doc.internal.scaleFactor;
+    const titleX = (pageWidth - titleWidth) / 2;
+    doc.text(title, titleX, 10);
+
+    // Data e hora atual
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Data:', titleX + 50, 10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`, titleX + 62, 10);
+    doc.setDrawColor(0, 51, 102);
+    doc.line(20, 13, 200, 13);
+    doc.line(20, 13, 200, 13);
+
+
+    doc.setFont('times', 'normal');
+    doc.setFontSize(10);
+
+    // Função de adição de seção
+    const addSectionTitle = (text, y) => {
+        doc.setFont('times', 'bold');
+        doc.setTextColor(255, 255, 255);
+        doc.setFillColor(0, 51, 102);
+        doc.rect(10, y - 4, pageWidth - 20, 8, 'F');
+        doc.text(text, 12, y);
+    };
+
+    // Logica de dados
+    if (reportPeriod.value === 'all') {
+        if (props.id === 1) {
+            if (reportOptions.value.dataset[0]) {
+                addSectionTitle('Total de Requisições por Mês', 20);
+                for (let i = 0; i < months.length; i++) {
+                    doc.setTextColor(0, 0, 0);
+                    doc.text(`${months[i].slice(0, 3)}`, titleX - 40 + (i * 10), 30);
+                    doc.setDrawColor(0, 51, 102);
+                    doc.line(titleX - 40 + (i * 10), 34, titleX - 40 + (i * 10) + 6, 34);
+                    doc.text(`${props.data.requests[0][i]}`, titleX - 39 + (i * 10), 40);
                 }
             }
             if (reportOptions.value.dataset[1]) {
-                if(props.data.datasets.mostRequestersTime[1][selectedMonths.value[i]] != undefined){
-                    doc.text(`${props.data.labels.mostRequesters[1][selectedMonths.value[i]]}`, 83, 30+(10*i));
-                    doc.text(`${months[selectedMonths.value[i]]}: ${props.data.datasets.mostRequestersTime[1][selectedMonths.value[i]]}`, 83, 35+(10*i));
+                addSectionTitle('Total de Aceitações por Mês', 50);
+                for (let i = 0; i < months.length; i++) {
+                    doc.setTextColor(0, 0, 0);
+                    doc.text(`${months[i].slice(0, 3)}`, titleX - 40 + (i * 10), 60);
+                    doc.setDrawColor(0, 51, 102);
+                    doc.line(titleX - 40 + (i * 10), 64, titleX - 40 + (i * 10) + 6, 64);
+                    doc.text(`${props.data.requestsAccepted[0][i]}`, titleX - 39 + (i * 10), 70);
+                }
+            }
+            if (reportOptions.value.dataset[2]) {
+                addSectionTitle('Total de Rejeições por Mês', 80);
+                for (let i = 0; i < months.length; i++) {
+                    doc.setTextColor(0, 0, 0);
+                    doc.text(`${months[i].slice(0, 3)}`, titleX - 40 + (i * 10), 90);
+                    doc.setDrawColor(0, 51, 102);
+                    doc.line(titleX - 40 + (i * 10), 94, titleX - 40 + (i * 10) + 6, 94);
+                    doc.text(`${props.data.requestsRejected[0][i]}`, titleX - 39 + (i * 10), 100);
+                }
+            }
+        } else if (props.id === 2) {
+            if (reportOptions.value.dataset[0]) {
+                addSectionTitle('Itens mais Solicitados', 20);
+                doc.setTextColor(0, 0, 0);
+                doc.text(`${props.data.labels.mostItems[0]}`, 10, 30);
+                doc.setDrawColor(0, 51, 102);
+                doc.line(titleX - 40 + (i * 10), 34, titleX - 40 + (i * 10) + 6, 34);
+                doc.text(`${props.data.datasets.mostItemsTime[0]}`, 10, 40);
+            }
+            if (reportOptions.value.dataset[1]) {
+                addSectionTitle('Usuários com Mais Solicitações', 50);
+                doc.setTextColor(0, 0, 0);
+                doc.text(`${props.data.labels.mostRequesters[0]}`, 83, 60);
+                doc.setDrawColor(0, 51, 102);
+                doc.line(titleX - 40 + (i * 10), 64, titleX - 40 + (i * 10) + 6, 64);
+                doc.text(`${props.data.datasets.mostRequestersTime[0]}`, 83, 70);
+            }
+        }
+    } else if (reportPeriod.value === 'monthly') {
+        if (props.id === 1) {
+            addSectionTitle('Resumo Mensal', 20); 
+            doc.setTextColor(0, 0, 0);
+            doc.setFont('times', 'bold');
+            doc.text(`Total de Requisições`, 10, 30);
+            doc.text(`Requisições Aceitas`, 83, 30);
+            doc.text(`Requisições Recusadas`, 150, 30);
+            doc.setFont('times', 'normal');
+            for (let i = 0; i < selectedMonths.value.length; i++) {
+                if (reportOptions.value.dataset[0]) {
+                    const totalRequests = props.data.requests[1][selectedMonths.value[i]].reduce((sum, value) => sum + value, 0);
+                    doc.text(`${months[selectedMonths.value[i]]}: ${totalRequests}`, 10, 40 + (10 * i));
+                }
+                if (reportOptions.value.dataset[1]) {
+                    const acceptedRequests = props.data.requestsAccepted[1][selectedMonths.value[i]].reduce((sum, value) => sum + value, 0);
+                    doc.text(`${months[selectedMonths.value[i]]}: ${acceptedRequests}`, 83, 40 + (10 * i));
+                }
+                if (reportOptions.value.dataset[2]) {
+                    const rejectedRequests = props.data.requestsRejected[1][selectedMonths.value[i]].reduce((sum, value) => sum + value, 0);
+                    doc.text(`${months[selectedMonths.value[i]]}: ${rejectedRequests}`, 150, 40 + (10 * i));
+                }
+            }
+        } else if (props.id === 2) {
+            addSectionTitle('Resumo Mensal', 20);
+            console.log(props.data.datasets.mostItensTime)
+            for (let i = 0; i < selectedMonths.value.length; i++) {
+                if (reportOptions.value.dataset[0]) {
+                    if (props.data.datasets.mostItemsTime[1][selectedMonths.value[i]] !== undefined) {
+                        doc.setTextColor(0, 0, 0);
+                        doc.text(`${props.data.labels.mostItems[1][selectedMonths.value[i]]}`, 10, 30 + (10 * i));
+                        doc.text(`${months[selectedMonths.value[i]]}: ${props.data.datasets.mostItemsTime[1][selectedMonths.value[i]]}`, 10, 35 + (10 * i));
+                    }
+                }
+                if (reportOptions.value.dataset[1]) {
+                    if (props.data.datasets.mostRequestersTime[1][selectedMonths.value[i]] !== undefined) {
+                        doc.setTextColor(0, 0, 0);
+                        doc.text(`${props.data.labels.mostRequesters[1][selectedMonths.value[i]]}`, 83, 30 + (10 * i));
+                        doc.text(`${months[selectedMonths.value[i]]}: ${props.data.datasets.mostRequestersTime[1][selectedMonths.value[i]]}`, 83, 35 + (10 * i));
+                    }
                 }
             }
         }
     }
-  }
-
-  // Salvar o PDF
-  doc.save('relatorio.pdf');
+    doc.save('relatorio.pdf');
 };
+
 
 </script>
 

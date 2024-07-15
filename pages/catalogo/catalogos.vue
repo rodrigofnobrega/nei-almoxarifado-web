@@ -2,7 +2,7 @@
 <div class="container" style="margin-left: 0px;"> 
   <div class="dashboard-section bg-light mb-4 pb-3 rounded-3 ps-2 pe-2">
       <h2 class="pb-1 pt-0 ps-2">Catálogos</h2>
-       <div class="dashboard-container container-fluid d-flex px-0 justify-content-center aligm-items-center">
+        <div class="dashboard-container container-fluid d-flex px-0 justify-content-center aligm-items-center">
           <CardsImageCard class="dashboard-viewcard">
             <template v-slot:image-cap>
               <img src="/almo.png" class="card-img-top" alt="...">
