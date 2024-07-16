@@ -10,9 +10,9 @@ import { useSettingsStore } from '../../stores/settings.ts';
 
 const settingsStore = useSettingsStore();
 
-const teste = ref(settingsStore.layout === 2 ? true : false);
+const teste = ref(settingsStore.layout === 1 ? true : false);
 const themeSwitch = () => {
-    teste.value === false ? settingsStore.layout = 2 : settingsStore.layout = 0;
+    teste.value === false ? settingsStore.layout = 1 : settingsStore.layout = 0;
 }
 </script>
 

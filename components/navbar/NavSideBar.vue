@@ -282,8 +282,4 @@ export default {
     color: #333333;
     border-radius: 9px;
 }
-.list-group-item:hover{
-    color: #333333;
-}
-
 </style>
