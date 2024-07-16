@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-		<div class="card-header"> 
+		<div class="card-header bg-primary"> 
 			<slot name="header" />	
 		</div>
 		<div class="card-body">

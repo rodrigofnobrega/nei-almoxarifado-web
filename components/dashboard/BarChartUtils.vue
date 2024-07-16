@@ -1,5 +1,14 @@
 <template>
-  <ModalAlmoReport :id="2" :data="{datasets: datasets, labels: labels}"/>
+  <ModalAlmoReport :id="2" 
+  :data="{
+    datasets: {
+      mostItemsTime: [datasets.mostItemsTime[0].slice(0, 15), datasets.mostItemsTime[1].slice(0, 15)], 
+      mostRequestersTime: [datasets.mostRequestersTime[0].slice(0, 15), datasets.mostRequestersTime[1].slice(0, 15)]
+    }, 
+    labels: {
+      mostItems: [labels.mostItems[0].slice(0, 15), labels.mostItems[1].slice(0, 15)], 
+      mostRequesters: [labels.mostRequesters[0].slice(0, 15), labels.mostRequesters[1].slice(0, 15)]
+      }}"/>
   <div class="graph-header d-flex align-items-end justify-content-between section-title pt-2 mb-3 bg-light-background-header">
         <h5 class="ps-2 fw-bold">Gráfico dos mais solicitados</h5>
         <div class="dropdown mb-1 mx-2 d-flex">
@@ -35,7 +44,7 @@
     <div class="d-flex justify-content-center z-5">
       <LoadersLoading class="position-absolute p-5 mt-5"/>
     </div>
-    <Bar class="chart-graph" :data="chartData" :options="chartOptions" />
+    <Chart class="chart-graph" :data="chartData" :options="chartOptions" :type="'pie'"/>
   </div>
 </template>
 
@@ -47,29 +56,32 @@ import { useStorageStore } from '../../stores/storage.ts';
 import { getRequestByItem, getRequestByUser, getRequests } from '../../services/requests/requestsGET.ts';
 import { getItems } from '../../services/items/itemsGET.ts';
 import { getUsers } from '../../services/users/userGET.ts';
+import { Chart } from 'vue-chartjs';
 import {
   Chart as ChartJS,
   Title,
   Tooltip,
   Legend,
-  Filler,
   BarElement,
+  LineElement,
+  PointElement,
+  ArcElement,
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement
+  Filler,
 } from 'chart.js';
 
 ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler,
   BarElement,
+  LineElement,
+  PointElement,
+  ArcElement, 
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement
+  Filler 
 );
 
 const userStore = useUser();
@@ -188,12 +200,16 @@ const currentDataType = ref('mostItems');
 const currentDataTypeLabel = ref('Usuários com mais solicitações');
 
 const chartData = ref({
-  labels: labels[currentDataType.value][0],
+  labels: labels[currentDataType.value][0].slice(0, 15),
   datasets: [
     {
       label: currentLabelName.value,
-      backgroundColor: '#0B3B69',
-      data: datasets[currentDataType.value + 'Time'][0],
+      backgroundColor: [
+  "#4D0000", "#590000", "#650000", "#710800", "#7D1300",
+  "#881D00", "#942800", "#A23500", "#AF4400", "#BB5801",
+  "#C76D05", "#D4870F", "#E0A21A", "#EBC334", "#FED51E"
+],
+      data: datasets[currentDataType.value + 'Time'][0].slice(0, 15),
     },
   ],
 });
@@ -213,11 +229,11 @@ const changeLabel = (monthIndex) => {
     currentIndex.value = 0;
     chartData.value = {
       ...chartData.value,
-      labels: labels[currentDataType.value][0],
+      labels: labels[currentDataType.value][0].slice(0, 15),
       datasets: [
         {
           ...chartData.value.datasets[0],
-          data: datasets[currentDataType.value + 'Time'][0],
+          data: datasets[currentDataType.value + 'Time'][0].slice(0, 15),
         },
       ],
     };
@@ -225,11 +241,11 @@ const changeLabel = (monthIndex) => {
     currentIndex.value = 1;
     chartData.value = {
       ...chartData.value,
-      labels: labels[currentDataType.value][1][monthIndex - 1],
+      labels: labels[currentDataType.value][1][monthIndex - 1].slice(0, 15),
       datasets: [
         {
           ...chartData.value.datasets[0],
-          data: datasets[currentDataType.value + 'Time'][1][monthIndex - 1],
+          data: datasets[currentDataType.value + 'Time'][1][monthIndex - 1].slice(0, 15),
         },
       ],
     };

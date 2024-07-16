@@ -110,6 +110,7 @@ export default {
 			this.popupStore.throwPopup('Erro: Quantidade solicitada maior que a disponível', '#B71C1C')
 		},
 		async RejectRequest(){
+			console.log(this.requestId)
 			const res = await requestDecline(this.userStore, this.requestId);
 			if(res){
 				this.popupStore.throwPopup('Solicitação rejeitada', '#0B3B69');

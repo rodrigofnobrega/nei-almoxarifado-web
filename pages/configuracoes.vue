@@ -1,6 +1,6 @@
 <template>
-    <div class="settings-container container mb-5">
-     <!--   
+<!-- 
+<div class="settings-container container mb-5">
     <section class="settings-section mb-5">
         <h4 class="section-title">Níveis Limite de Estoque</h4>
         <div class="section-content d-flex flex-column justify-content-center">
@@ -42,36 +42,37 @@
             </div>
         </div>
     </section>
+-->
     <section class="settings-section mb-5">
-        <h4 class="section-title">Personalizar Temas e Layouts</h4>
+        <h4 class="section-title text-dark">Personalizar Temas e Layouts</h4>
         <div class="dashboard-container container-fluid d-flex px-0 justify-content-center align-items-center">
-            <div class="card mx-2 bg-primary rounded-4" onclick="document.getElementById('themeRadio1').checked = true;">
+            <div class="card mx-2 bg-primary rounded-4" @click="changeLayout(0)"  onclick="document.getElementById('themeRadio1').checked = true;">
                 <img src="/almo.png" class="card-img-top" alt="...">
                 <div class="card-body p-3 text-dark-emphasis">
                     <div class="form-check text-light">
-                      <input class="form-check-input" type="radio" id="themeRadio1" name="themeOptions" value="option1">
+                      <input :checked="settingsStore.layout === 0" class="form-check-input" type="radio" id="themeRadio1" name="themeOptions" value="option1">
                       <label class="card-text fw-bold form-check-label fw-bold" for="themeRadio1">
                         Tema padrão
                       </label>
                     </div>
                 </div>
             </div>
-            <div class="card mx-2 bg-primary rounded-4" onclick="document.getElementById('themeRadio2').checked = true;">
+            <div class="card mx-2 bg-primary rounded-4" @click="changeLayout(1)"  onclick="document.getElementById('themeRadio2').checked = true;">
                 <img src="/almo.png" class="card-img-top" alt="...">
                 <div class="card-body p-3 text-dark-emphasis">
                     <div class="form-check text-light">
-                      <input class="form-check-input" type="radio" id="themeRadio2" name="themeOptions" value="option2">
+                      <input :checked="settingsStore.layout === 1" class="form-check-input" type="radio" id="themeRadio2" name="themeOptions" value="option2">
                       <label class="card-text fw-bold form-check-label fw-bold" for="themeRadio2">
                         Tema alternativo
                       </label>
                     </div>
                 </div>
             </div>
-            <div class="card mx-2 bg-primary rounded-4" onclick="document.getElementById('themeRadio3').checked = true;">
+            <div class="card mx-2 bg-primary rounded-4" @click="changeLayout(2)"  onclick="document.getElementById('themeRadio3').checked = true;">
                 <img src="/almo.png" class="card-img-top" alt="...">
                 <div class="card-body p-3 text-dark-emphasis">
                     <div class="form-check text-light">
-                      <input class="form-check-input" type="radio" id="themeRadio3" name="themeOptions" value="option3">
+                      <input :checked="settingsStore.layout === 2" class="form-check-input" type="radio" id="themeRadio3" name="themeOptions" value="option3">
                       <label class="card-text fw-bold form-check-label fw-bold" for="themeRadio3">
                         Tema escuro
                       </label>
@@ -80,27 +81,28 @@
             </div>
         </div>
     </section>
-    ---<div>
-                <label class="form-check-label fw-bold">
-                    <input class="form-check-input" type="checkbox" v-model="reportSettings.includeTaxes[2]" />
-                    Solicitações recusadas
-                </label>
-                <p class="position-absolute">Esta opção processará todas as solicitações de cada mês do ano.</p>
-            </div>
-            <div>
-                <label class="form-check-label fw-bold">
-                    <input class="form-check-input" type="checkbox" v-model="reportSettings.includeTaxes[3]" />
-                    Itens mais solicitados
-                </label>
-                <p class="position-absolute">Esta opção processará todas as solicitações de cada mês do ano.</p>
-            </div>
-            <div>
-                <label class="form-check-label fw-bold">
-                    <input class="form-check-input" type="checkbox" v-model="reportSettings.includeTaxes[4]" />
-                    Usuários mais solicitantes
-                </label>
-                <p class="position-absolute">Esta opção processará todas as solicitações de cada mês do ano.</p>
-            </div>
+    <!--
+    <div>
+        <label class="form-check-label fw-bold">
+            <input class="form-check-input" type="checkbox" v-model="reportSettings.includeTaxes[2]" />
+            Solicitações recusadas
+        </label>
+        <p class="position-absolute">Esta opção processará todas as solicitações de cada mês do ano.</p>
+    </div>
+    <div>
+        <label class="form-check-label fw-bold">
+            <input class="form-check-input" type="checkbox" v-model="reportSettings.includeTaxes[3]" />
+            Itens mais solicitados
+        </label>
+        <p class="position-absolute">Esta opção processará todas as solicitações de cada mês do ano.</p>
+    </div>
+    <div>
+        <label class="form-check-label fw-bold">
+            <input class="form-check-input" type="checkbox" v-model="reportSettings.includeTaxes[4]" />
+            Usuários mais solicitantes
+        </label>
+        <p class="position-absolute">Esta opção processará todas as solicitações de cada mês do ano.</p>
+    </div>
     <section class="settings-section mb-5">
         <h4 class="section-title">Relatórios Automáticos Personalizados</h4>
         <div class="section-content">
@@ -163,12 +165,12 @@
         </div>
     </section>
     <button class="btn btn-primary fw-bold" @click="saveSettings">Salvar Configurações</button>
--->
-</div>
+</div>-->
 </template>
 
 <script setup>
-import { inject } from 'vue';
+import { inject, onUpdated } from 'vue';
+import { useSettingsStore } from '../stores/settings';
 
 const setpageTitle = inject('setpageTitle');
 const sendDataToParent = () => {
@@ -178,6 +180,12 @@ const sendDataToParent = () => {
 };
 sendDataToParent();
 // Dados de configuração inicial
+const settingsStore = useSettingsStore();
+const changeLayout = (index) => {
+    settingsStore.layout = index
+}
+
+
 const stockItems = ref([
 { id: 1, name: 'Item 1', min: 10, max: 100 },
 { id: 2, name: 'Item 2', min: 5, max: 50 },
@@ -231,7 +239,7 @@ console.log('Salvando configurações...', {
     reportSettings: reportSettings.value,
     itemCategories: itemCategories.value,
 });
-    };
+};
 </script>
 
 <style scoped>

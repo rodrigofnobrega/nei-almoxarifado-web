@@ -77,6 +77,10 @@ export default{
                 this.popup.throwPopup('Erro: Nome inválido', '#B71C1C')
                 return false
             }
+            if(this.itemName.length > 46){
+                this.popup.throwPopup('Erro: Nome não deve passar de 20 caracteres', '#B71C1C')
+                return false
+            }
             return true
         },
         itemRegister(){

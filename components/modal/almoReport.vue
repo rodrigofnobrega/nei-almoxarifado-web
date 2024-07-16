@@ -1,6 +1,6 @@
 <template>
     <Modal :id="`almoReport${props.id}`" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
-        <template v-slot:header>
+        <template v-slot:header> 
             <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Gerar Relatório</h6>
             <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
@@ -193,105 +193,6 @@ const includeMonthlyAverage = ref(false);
 const includeUsers = ref(false);
 const userType = ref('');
 
-/* const generateReport = () => {
-    const doc = new jsPDF();
-
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const date = new Date();
-    const title = 'RELATÓRIO';
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(16);
-    const titleWidth = doc.getStringUnitWidth(title) * doc.getFontSize() / doc.internal.scaleFactor;
-    const titleX = (pageWidth - titleWidth) / 2;
-    doc.text(title, titleX, 10);
-    doc.setFontSize(11);
-    doc.text('Data:', titleX+50, 10);
-    doc.setFont('helvetica', 'light');
-    doc.text(`${date.getDate()}/${date.getMonth()}/${date.getFullYear()} - ${date.getHours()}:${date.getUTCMinutes()}:${date.getSeconds()}`, titleX+62, 10);
-    doc.line(10, 13, 200, 13);
-
-    doc.setFont('times', 'light');
-    doc.setFontSize(10);
-
-    if (reportPeriod.value === 'all') {
-        if(props.id === 1){
-            if (reportOptions.value.dataset[0]) {
-            for(let i = 0; i < months.length; i++){
-                doc.text(`${months[i].slice(0, 3)}`, titleX-40+(i*10), 20);  
-                doc.text(`${props.data.requests[0][i]}`, titleX-39+(i*10), 30);  
-            }
-            doc.text('Total de requisições: ', 10, 30);
-            }
-            if (reportOptions.value.dataset[1]) {
-            for(let i = 0; i < months.length; i++){
-                doc.text(`${months[i].slice(0, 3)}`, titleX-40+(i*10), 20);  
-                doc.text(`${props.data.requestsAccepted[0][i]}`, titleX-39+(i*10), 40);  
-            }
-            doc.text('Total de aceitações: ', 10, 40);
-            }
-            if (reportOptions.value.dataset[2]) {
-            for(let i = 0; i < months.length; i++){
-                doc.text(`${months[i].slice(0, 3)}`, titleX-40+(i*10), 20);  
-                doc.text(`${props.data.requestsRejected[0][i]}`, titleX-39+(i*10), 50);  
-            }
-            doc.text('Total de rejeições:', 10, 50);
-            }
-        }
-        else if(props.id === 2){
-            if (reportOptions.value.dataset[0]) {
-            doc.text(`Itens mais solicitados`, 10, 20)
-            doc.text(`${props.data.labels.mostItems[0]}`, 10, 30);
-            doc.text(`${props.data.datasets.mostItemsTime[0]}`, 10, 40);
-            }
-            if (reportOptions.value.dataset[1]) {
-            doc.text('Usuários com mais solicitações', 83, 20);
-            doc.text(`${props.data.labels.mostRequesters[0]}`, 83, 30);
-            doc.text(`${props.data.datasets.mostRequestersTime[0]}`, 83, 40);
-            }
-        }
-    } else if (reportPeriod.value === 'monthly') {
-        if(props.id === 1){
-            doc.setFont('times', 'bold');
-            doc.text(`Total de requisições`, 10, 20);
-            doc.text(`Requisições aceitas`, 83, 20);
-            doc.text(`Requisições recusadas`, 150, 20);
-            doc.setFont('times', 'light');
-            for(let i = 0; i < selectedMonths.value.length; i++){
-            if(reportOptions.value.dataset[0]){
-                doc.text(`${months[selectedMonths.value[i]]}: ${props.data.requests[1][selectedMonths.value[i]]}`, 10, 30+(10*i));
-            }
-            if(reportOptions.value.dataset[1]){
-                doc.text(`${months[selectedMonths.value[i]]} : ${props.data.requestsAccepted[1][selectedMonths.value[i]]}`, 83, 30+(10*i));
-            }
-            if(reportOptions.value.dataset[2]){
-                doc.text(`${months[selectedMonths.value[i]]}: ${props.data.requestsRejected[1][selectedMonths.value[i]]}`, 150, 30+(10*i));
-            }
-        }
-        }
-        else if(props.id === 2){
-            doc.text(`Itens mais solicitados`, 10, 20)
-            doc.text('Usuários com mais solicitações', 83, 20);
-            for(let i = 0; i < selectedMonths.value.length; i++){
-                if (reportOptions.value.dataset[0]) {
-                    if(props.data.datasets.mostItemsTime[1][selectedMonths.value[i]] != undefined){
-                        doc.text(`${props.data.labels.mostItems[1][selectedMonths.value[i]]}`, 10, 30+(10*i));
-                        doc.text(`${months[selectedMonths.value[i]]}: ${props.data.datasets.mostItemsTime[1][selectedMonths.value[i]]}`, 10, 35+(10*i));
-                    }
-                }
-                if (reportOptions.value.dataset[1]) {
-                    if(props.data.datasets.mostRequestersTime[1][selectedMonths.value[i]] != undefined){
-                        doc.text(`${props.data.labels.mostRequesters[1][selectedMonths.value[i]]}`, 83, 30+(10*i));
-                        doc.text(`${months[selectedMonths.value[i]]}: ${props.data.datasets.mostRequestersTime[1][selectedMonths.value[i]]}`, 83, 35+(10*i));
-                    }
-                }
-            }
-        }
-    }
-    // Salvar o PDF
-    doc.save('relatorio.pdf');
-}; */
-
-
 const generateReport = async () => {
     const doc = new jsPDF();
 
@@ -317,7 +218,6 @@ const generateReport = async () => {
 
     // Data e hora atual
     doc.setFontSize(11);
-    doc.setTextColor(0, 0, 0);
     doc.text('Data:', titleX + 50, 10);
     doc.setFont('helvetica', 'normal');
     doc.text(`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`, titleX + 62, 10);
@@ -326,78 +226,139 @@ const generateReport = async () => {
     doc.line(20, 13, 200, 13);
 
 
-    doc.setFont('times', 'normal');
+    doc.setFont('helvetica', 'normal');
     doc.setFontSize(10);
 
     // Função de adição de seção
     const addSectionTitle = (text, y) => {
-        doc.setFont('times', 'bold');
+        doc.setFont('helvetica', 'bold');
         doc.setTextColor(255, 255, 255);
         doc.setFillColor(0, 51, 102);
-        doc.rect(10, y - 4, pageWidth - 20, 8, 'F');
-        doc.text(text, 12, y);
+        doc.rect(5, y - 4, pageWidth - 10, 8, 'F');
+        doc.text(text, 7, y);
     };
-
     // Logica de dados
     if (reportPeriod.value === 'all') {
         if (props.id === 1) {
+            addSectionTitle('Tipo de Relatório', 20);
+            doc.setTextColor(0, 0, 0);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Relatório de Solicitações:', 7, 30);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Registra todas as solicitações e separa entre as aceitas e recusadas', titleX-20, 30);
+
+            addSectionTitle('Tipo de Dados', 40);
+            doc.setTextColor(0, 0, 0);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Total de Solicitações:', 7, 50);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`${reportOptions.value.dataset[0] === true ? 'Sim' : 'Não'}`, titleX-20, 50);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Solicitações Aceitas:', 7, 60);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`${reportOptions.value.dataset[1] === true ? 'Sim' : 'Não'}`, titleX-20, 60);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Solicitações Recusadas:', titleX+20, 50);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`${reportOptions.value.dataset[2] === true ? 'Sim' : 'Não'}`, titleX+80, 50);
+
+            addSectionTitle('Período', 70);
+            doc.setTextColor(0, 0, 0);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Todo Período:', 7, 80);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Consiste no tempo anual completo', titleX-20, 80);
             if (reportOptions.value.dataset[0]) {
-                addSectionTitle('Total de Requisições por Mês', 20);
+                addSectionTitle('Total de Solicitações por Mês', 90);
                 for (let i = 0; i < months.length; i++) {
                     doc.setTextColor(0, 0, 0);
-                    doc.text(`${months[i].slice(0, 3)}`, titleX - 40 + (i * 10), 30);
+                    doc.text(`${months[i].slice(0, 3)}`, titleX - 40 + (i * 10), 100);
                     doc.setDrawColor(0, 51, 102);
-                    doc.line(titleX - 40 + (i * 10), 34, titleX - 40 + (i * 10) + 6, 34);
-                    doc.text(`${props.data.requests[0][i]}`, titleX - 39 + (i * 10), 40);
+                    doc.line(titleX - 40 + (i * 10), 104, titleX - 40 + (i * 10) + 6, 104);
+                    doc.text(`${props.data.requests[0][i]}`, titleX - 39 + (i * 10), 110);
                 }
             }
             if (reportOptions.value.dataset[1]) {
-                addSectionTitle('Total de Aceitações por Mês', 50);
+                addSectionTitle('Total de Solicitações Aceitas por Mês', 120);
                 for (let i = 0; i < months.length; i++) {
                     doc.setTextColor(0, 0, 0);
-                    doc.text(`${months[i].slice(0, 3)}`, titleX - 40 + (i * 10), 60);
+                    doc.text(`${months[i].slice(0, 3)}`, titleX - 40 + (i * 10), 130);
                     doc.setDrawColor(0, 51, 102);
-                    doc.line(titleX - 40 + (i * 10), 64, titleX - 40 + (i * 10) + 6, 64);
-                    doc.text(`${props.data.requestsAccepted[0][i]}`, titleX - 39 + (i * 10), 70);
+                    doc.line(titleX - 40 + (i * 10), 134, titleX - 40 + (i * 10) + 6, 134);
+                    doc.text(`${props.data.requestsAccepted[0][i]}`, titleX - 39 + (i * 10), 140);
                 }
             }
             if (reportOptions.value.dataset[2]) {
-                addSectionTitle('Total de Rejeições por Mês', 80);
+                addSectionTitle('Total de Solicitações Rejeitadas por Mês', 150);
                 for (let i = 0; i < months.length; i++) {
                     doc.setTextColor(0, 0, 0);
-                    doc.text(`${months[i].slice(0, 3)}`, titleX - 40 + (i * 10), 90);
+                    doc.text(`${months[i].slice(0, 3)}`, titleX - 40 + (i * 10), 160);
                     doc.setDrawColor(0, 51, 102);
-                    doc.line(titleX - 40 + (i * 10), 94, titleX - 40 + (i * 10) + 6, 94);
-                    doc.text(`${props.data.requestsRejected[0][i]}`, titleX - 39 + (i * 10), 100);
+                    doc.line(titleX - 40 + (i * 10), 164, titleX - 40 + (i * 10) + 6, 164);
+                    doc.text(`${props.data.requestsRejected[0][i]}`, titleX - 39 + (i * 10), 170);
                 }
             }
         } else if (props.id === 2) {
+            addSectionTitle('Tipo de Relatório', 20);
+            doc.setTextColor(0, 0, 0);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Relatório de Itens e Usuários:', 7, 30);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Calcula métricas de uso e consumo nos itens e usuários respectivamente ', titleX-20, 30);
+
+            addSectionTitle('Tipo de Dados', 40);
+            doc.setTextColor(0, 0, 0);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Itens:', 7, 50);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`${reportOptions.value.dataset[0] === true ? 'Sim' : 'Não'}`, titleX-20, 50);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Usuários:', 7, 60);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`${reportOptions.value.dataset[1] === true ? 'Sim' : 'Não'}`, titleX-20, 60);
+
+            addSectionTitle('Período', 70);
+            doc.setTextColor(0, 0, 0);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Todo Período:', 7, 80);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Consiste no tempo anual completo', titleX-20, 80);
+            let currentY = 90;
+            let currentX = 7;
             if (reportOptions.value.dataset[0]) {
-                addSectionTitle('Itens mais Solicitados', 20);
+                addSectionTitle('Itens com Mais Solicitações', currentY);
                 doc.setTextColor(0, 0, 0);
-                doc.text(`${props.data.labels.mostItems[0]}`, 10, 30);
-                doc.setDrawColor(0, 51, 102);
-                doc.line(titleX - 40 + (i * 10), 34, titleX - 40 + (i * 10) + 6, 34);
-                doc.text(`${props.data.datasets.mostItemsTime[0]}`, 10, 40);
+                for(let i = 0; i < props.data.labels.mostItems[0].length; i++){ 
+                    currentX = 7;   
+                    i % 2 === 1 ? currentX = 112 : currentY += 10;   
+                    //doc.text(`${i+1}º`, ((i+1)*7), currentY+10);           
+                    doc.text(`${i+1}º posição: `, currentX, currentY);  
+                    doc.text(`${props.data.labels.mostItems[0][i]}`, currentX+22, currentY);
+                    doc.text(`Quantidade solicitada: ${props.data.datasets.mostItemsTime[0][i]}`, currentX, currentY+5);
+                    //doc.text(`${props.data.datasets.mostItemsTime[0][i]}`, 10*(i+1), currentY+30);
+                }
             }
             if (reportOptions.value.dataset[1]) {
-                addSectionTitle('Usuários com Mais Solicitações', 50);
+                addSectionTitle('Usuários com Mais Solicitações', currentY);
                 doc.setTextColor(0, 0, 0);
-                doc.text(`${props.data.labels.mostRequesters[0]}`, 83, 60);
-                doc.setDrawColor(0, 51, 102);
-                doc.line(titleX - 40 + (i * 10), 64, titleX - 40 + (i * 10) + 6, 64);
-                doc.text(`${props.data.datasets.mostRequestersTime[0]}`, 83, 70);
+                for(let i = 0; i < props.data.labels.mostRequesters[0].length; i++){
+                    doc.text(`${i+1}º`, ((i+1)*7), currentY+10);
+                    doc.setDrawColor(0, 51, 102);
+                    doc.line(((i+1)*7)-1, currentY+14, ((i+1)*7)+5, currentY+14);
+                    doc.text(`${props.data.labels.mostRequesters[0][i]}`, 10*(i+1)+(i*props.data.labels.mostRequesters[0][i].length), currentY+20);
+                    doc.text(`${props.data.datasets.mostRequestersTime[0][i]}`, 7*(i+1), currentY+30);
+                }
             }
         }
     } else if (reportPeriod.value === 'monthly') {
         if (props.id === 1) {
             addSectionTitle('Resumo Mensal', 20); 
             doc.setTextColor(0, 0, 0);
-            doc.setFont('times', 'bold');
+            doc.setFont('helvetica', 'bold');
             doc.text(`Total de Requisições`, 10, 30);
             doc.text(`Requisições Aceitas`, 83, 30);
             doc.text(`Requisições Recusadas`, 150, 30);
-            doc.setFont('times', 'normal');
+            doc.setFont('helvetica', 'normal');
             for (let i = 0; i < selectedMonths.value.length; i++) {
                 if (reportOptions.value.dataset[0]) {
                     const totalRequests = props.data.requests[1][selectedMonths.value[i]].reduce((sum, value) => sum + value, 0);

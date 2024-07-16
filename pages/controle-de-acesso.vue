@@ -49,11 +49,32 @@ sendDataToParent();
 
 const userStore = useUser()
 const res = await getRequestByStatus(userStore, 'pendente');
-const solicitations = ref(res.content)
+const solicitations = ref([])
+res.content.map((request) => {
+	solicitations.value.push(request)
+})
+if(res.totalPages > 1){
+	for(let i = 1; i < res.totalPages; i++){
+		const res = await getRequestByStatus(userStore, 'pendente', i);
+		res.content.map((request) => {
+			solicitations.value.push(request);
+		})
+	}
+}
 
 provide('setSolicitations', async () => {
 	const res = await getRequestByStatus(userStore, 'pendente');
-	solicitations.value = res.content
+	res.content.map((request) => {
+		solicitations.value.push(request)
+	})
+	if(res.totalPages > 1){
+	for(let i = 1; i < res.totalPages; i++){
+		const res = await getRequestByStatus(userStore, 'pendente', i);
+		res.content.map((request) => {
+			solicitations.value.push(request);
+		})
+	}
+}
 })
 </script>
 
