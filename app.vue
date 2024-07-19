@@ -57,14 +57,8 @@ function checkIfMobile() {
   background-color: #34495E !important; 
 }
 
-.darkLayout [class*="light-success"] {
-  background-color: #27AE60 !important; 
-}
 .darkLayout [class*="light-alert"] {
   background-color: #E74C3C !important; 
-}
-.darkLayout [class*="dark-alert"] {
-  background-color: #C0392B !important; 
 }
 .darkLayout [class*="warning"] {
   background-color: #F39C12 !important; 

@@ -13,7 +13,7 @@
                 de <a class="text-decoration-none" href="/nei/catalogo">catálogo</a>, procure o item desejado e solicite. <br>Para acompanhar as suas solicitações basta navegar para a<br> página de <a class="text-decoration-none" href="/nei/solicitacoes">solicitações</a>.
             </h4>
         </div>
-        <div class="search-section d-flex justify-content-center ms-3">
+        <div class="search-section d-flex justify-content-center ms-5">
             <UtilsSearch class="mb-5"/>
             <div class="search-bar d-flex mx-1">
                 <button class="d-flex btn btn-search align-items-center ps-0" type="button" tabindex="-1" data-bs-target="#neiSearchModal" data-bs-toggle="modal">

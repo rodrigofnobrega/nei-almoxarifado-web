@@ -4,28 +4,29 @@
         <Brand class="ms-3"/>
         <TooltipsRectangular class="ms-5 ps-5 pt-2" :toolTipState="toolTip" :toolTipText="'Página Inicial'"/>
       </div> 
-      <nav class="navbar navbar-expand" style="width: 400px !important;">
+      <nav class="navbar navbar-expand py-0" style="width: 400px !important;">
           <div class="container-fluid">
             <ul class="navbar-nav d-flex">
-              <li class="nav-item">
+                <li class="nav-item" :class="{'navbar-active': currentRoute.fullPath === '/nei/'}">
                     <a class="nav-link text-light" href="/nei/" type="button">Início</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" :class="{'navbar-active': currentRoute.fullPath === '/nei/catalogo'}">
                     <a class="nav-link text-light" href="/nei/catalogo" type="button">Catálogo</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" :class="{'navbar-active': currentRoute.fullPath === '/nei/solicitacoes'}">
                     <a class="nav-link text-light" href="/nei/solicitacoes" type="button">Solicitações</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" :class="{'navbar-active': currentRoute.fullPath === '/nei/configuracoes'}">
                     <a class="nav-link text-light" href="/nei/configuracoes" type="button">Configurações</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" :class="{'navbar-active': currentRoute.fullPath === '/nei/sobre'}">
                     <a class="nav-link text-light" href="/nei/sobre" type="button">Sobre</a>
                 </li>
             </ul>
           </div>
       </nav>
       <div class="d-flex justify-content-end align-items-center">
+          <ThemeSwitch />
           <IconsSearchGlass :class="{'d-none': !responsive}" class="mobile-search text-light" type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal"/>
           <Profile />
       </div>     
@@ -36,13 +37,15 @@
 import Brand from './Brand.vue'
 import Profile from './Profile.vue'
 import { useStorageStore } from "../../../stores/storage";
+import { useRoute } from 'vue-router';
+import ThemeSwitch from '../ThemeSwitch.vue';
 export default{
     data(){
       return{
         responsive: false
       }
     },
-    components: { Profile, Brand },
+    components: { Profile, Brand, ThemeSwitch },
     mounted(){
       window.addEventListener('resize', this.mobileMode)
       this.mobileMode()
@@ -60,11 +63,13 @@ export default{
       }
     },
     setup(){
-      const toolTip = ref(false)
+      const toolTip = ref(false);
+      const currentRoute = useRoute();
       const store = useStorageStore();
       return{
         store,
-        toolTip
+        toolTip,
+        currentRoute
       }
     }
 }
@@ -84,6 +89,25 @@ export default{
 .header{
   position: fixed;
   z-index: 1050;
+}
+.nav-link{
+  font-weight: bold;
+}
+.nav-item{
+  padding-top: 6px;
+  padding-bottom: 6px;
+  transition: padding 0.2s ease-in-out,box-shadow 0.4s ease, border-bottom 0.4s ease-in-out;
+}
+.nav-item:hover{
+  border-bottom: solid 1px #FED51E;
+  box-shadow: inset 0px -12px 15px -13px rgb(254, 213, 30, 0.7);
+  padding: 0px 0px 0px 0px;
+}
+.navbar-active{
+  border-bottom: solid 1px #FED51E;
+  box-shadow: inset 0px -12px 15px -13px rgb(254, 213, 30, 0.7);
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
 .mobile-search{
   margin-top: 2.9px;

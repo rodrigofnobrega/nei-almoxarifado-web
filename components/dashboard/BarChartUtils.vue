@@ -1,6 +1,5 @@
 <template>
-  <ModalAlmoReport :id="2" 
-  :data="{
+  <ModalAlmoReport :id="2" :data="{
     datasets: {
       mostItemsTime: [datasets.mostItemsTime[0].slice(0, 15), datasets.mostItemsTime[1].slice(0, 15)], 
       mostRequestersTime: [datasets.mostRequestersTime[0].slice(0, 15), datasets.mostRequestersTime[1].slice(0, 15)]
@@ -10,7 +9,7 @@
       mostRequesters: [labels.mostRequesters[0].slice(0, 15), labels.mostRequesters[1].slice(0, 15)]
       }}"/>
   <div class="graph-header d-flex align-items-end justify-content-between section-title pt-2 mb-3 bg-light-background-header">
-        <h5 class="ps-2 fw-bold">Gráfico dos mais solicitados</h5>
+        <h5 class="ps-2">Gráfico dos mais solicitados</h5>
         <div class="dropdown mb-1 mx-2 d-flex">
             <button class="d-flex align-items-center graph-btn btn btn-transparent " @click="toggleDataType">{{ currentDataTypeLabel }}</button>
             <button class="d-flex align-items-center graph-btn btn btn-transparent dropdown-toggle mx-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -44,7 +43,7 @@
     <div class="d-flex justify-content-center z-5">
       <LoadersLoading class="position-absolute p-5 mt-5"/>
     </div>
-    <Chart class="chart-graph" :data="chartData" :options="chartOptions" :type="'pie'"/>
+    <Chart :type="'pie'" class="chart-graph" :data="chartData" :options="chartOptions" />
   </div>
 </template>
 
@@ -62,26 +61,26 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
   BarElement,
-  LineElement,
-  PointElement,
-  ArcElement,
   CategoryScale,
   LinearScale,
-  Filler,
+  PointElement, 
+  ArcElement,
+  LineElement
 } from 'chart.js';
 
 ChartJS.register(
   Title,
   Tooltip,
   Legend,
+  Filler,
   BarElement,
-  LineElement,
-  PointElement,
-  ArcElement, 
   CategoryScale,
   LinearScale,
-  Filler 
+  PointElement,
+  ArcElement, 
+  LineElement
 );
 
 const userStore = useUser();
@@ -175,7 +174,7 @@ do{
     dataUsers = resultArray.sort((a, b) => b.qtd - a.qtd)
     for(let j = 0; j < 12; j++){
       if(usersNameByMonth[j].length > 0){
-        const frequencyMap = usersNameByMonth[j].reduce((acc, item) => {
+        const frequencyMap = usersName.reduce((acc, item) => {
           acc[item] = (acc[item] || 0) + 1;
           return acc;
         }, {});
@@ -205,10 +204,10 @@ const chartData = ref({
     {
       label: currentLabelName.value,
       backgroundColor: [
-  "#4D0000", "#590000", "#650000", "#710800", "#7D1300",
-  "#881D00", "#942800", "#A23500", "#AF4400", "#BB5801",
-  "#C76D05", "#D4870F", "#E0A21A", "#EBC334", "#FED51E"
-],
+        "#4D0000", "#590000", "#650000", "#710800", "#7D1300",
+        "#881D00", "#942800", "#A23500", "#AF4400", "#BB5801",
+        "#C76D05", "#D4870F", "#E0A21A", "#EBC334", "#FED51E"
+      ],
       data: datasets[currentDataType.value + 'Time'][0].slice(0, 15),
     },
   ],
@@ -241,14 +240,14 @@ const changeLabel = (monthIndex) => {
     currentIndex.value = 1;
     chartData.value = {
       ...chartData.value,
-      labels: labels[currentDataType.value][1][monthIndex - 1].slice(0, 15),
+      labels: labels[currentDataType.value][1][monthIndex - 1] === undefined ? [] : labels[currentDataType.value][1][monthIndex - 1].slice(0, 15),
       datasets: [
         {
           ...chartData.value.datasets[0],
-          data: datasets[currentDataType.value + 'Time'][1][monthIndex - 1].slice(0, 15),
+          data: datasets[currentDataType.value + 'Time'][1][monthIndex - 1] === undefined ? [] : datasets[currentDataType.value + 'Time'][1][monthIndex - 1].slice(0, 15),
         },
       ],
-    };
+    }
   }
 };
 

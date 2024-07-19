@@ -1,5 +1,23 @@
 <template>
 <ModalItemDetails :item_index="itemIndex" :item_details="currentItem" />
+<Modal id="removeUser" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
+  <template v-slot:header>
+    <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Invalidar usuário</h6>
+    <button class="btn btn-transparent text-light border-0 close-btn" type="button" data-bs-dismiss="modal">
+        <IconsClose class="close ms-5" width="1.3em" height="1.3em"/>
+    </button>
+  </template>
+  <template v-slot:body>
+    <p class="fw-medium text-center">Como administrador você tem permissões especiais para desativar a conta de qualquer usuário comum, para melhor controle e gestão de quem tem acesso ao sistema.</p>
+    <p class="fw-bold text-center">Deseja realmente desativar esta conta?</p>
+  </template>
+  <template v-slot:footer>
+    <div class="container-fluid d-flex justify-content-end align-items-center">
+        <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" @click="deleteAccount" class="btn btn-secondary inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Desativar</button>
+    </div>
+  </template>
+</Modal>
 <button id="modalToggle" data-bs-toggle="modal" data-bs-target="#itemDetailing" class="disabled d-none"></button>
   <div class="container-fluid" style="margin-left: 0px;">
     <div class="d-flex paralalel-section">
@@ -75,22 +93,26 @@
               </tr>
             </template>
             <template v-slot:content>
-              <tr v-for="user in users.content" :key="user.id"  >
-                <th class="text-center table-cell d-flex align-items-center " scope="row">
+              <tr v-for="user in users.content" :key="user.id">
+                <th :class="{'user-disabled': !user.active}" class="text-center table-cell d-flex align-items-center" scope="row">
                   <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
                   {{ user.name }}
+                <p v-if="!user.active" class="opacity-100 disabled-account bg-light text-dark-alert position-absolute rounded-2 fw-bold py-1 mt-3 px-2" style="margin-left: 20%;">Conta desativada</p>
                 </th>
-                <th class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
+                <th :class="{'user-disabled': !user.active}" class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
                   {{user.email}}
                 </th>
-                <th class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
+                <th :class="{'user-disabled': !user.active}" class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
                   {{user.role}}
                 </th>
-                <th class="text-center table-cell pt-2" scope="row" width="5%">
-                  <div class="position-sticky">
-                    <a title="Perfil" :href="`/perfil?userId=${user.id}`" :route="`/perfil/${user.id}`" class="table-btn d-flex align-items-center justify-content-center  btn btn-primary">
+                <th :class="{'user-disabled': !user.active}" class="text-center table-cell user-actions pt-2" scope="row" width="5%">
+                  <div class="position-sticky d-flex justify-content-center">
+                    <a title="Perfil" :href="`/perfil?userId=${user.id}`" :route="`/perfil/${user.id}`" class="ms-1 me-0 table-btn d-flex align-items-center justify-content-center btn btn-primary">
                       <IconsLowProfile width="16px" height="16px"/>
                     </a>
+                    <button v-if="user.role !== 'ADMIN' && user.active === true" @click="userRejectId = user.id" data-bs-toggle="modal" data-bs-target="#removeUser" title="Desativar Conta" class="ms-1 me-0 table-btn d-flex align-items-center justify-content-center text-light  btn btn-light-alert">
+                      <IconsReject width="16px" height="16px"/>
+                    </button>
                   </div>
                 </th>
               </tr>
@@ -219,13 +241,15 @@ import { getRecords } from '../services/record/recordGET.ts';
 import { getRequestByStatus } from '../services/requests/requestsGET.ts';
 import { useUser } from '../stores/user';
 import { useSearch } from '../stores/search.ts';
-
-
+import { deleteUser } from '../services/users/userDELETE';
+import { usePopupStore } from '../stores/popup.ts';
 
 const userStore = useUser();
 const searchStore = useSearch();
 const route = useRouter();
+const popUpStore = usePopupStore();
 
+const userRejectId = ref(0);
 const users = await getUsers(userStore, 0)
 const records = await getRecords(userStore, 0, 'id,desc')
 const requestsByStatus = await getRequestByStatus(userStore, 'pendente');
@@ -272,6 +296,14 @@ const showDetails = async (index, itemId) => {
   }
 }
 
+const deleteAccount = async () => {
+  try{
+    const res = await deleteUser(userStore, userRejectId.value);
+    popUpStore.throwPopup('Conta desativada com sucesso, atualize a página', 'blue');
+  }catch(err){
+    popUpStore.throwPopup('ERRO: Algum problema interno do servidor ocorreu, contate o suporte', 'red')
+  }
+}
 const setpageTitle = inject('setpageTitle');
 const sendDataToParent = () => {
     const title = "Painel Geral";
@@ -282,10 +314,6 @@ sendDataToParent();
 </script>
 
 <style scoped>
-.teste{
-  filter: drop-shadow()
-}
-
 .users-management-scroll{
   position: static !important;
   text-wrap: nowrap !important;
@@ -339,7 +367,7 @@ h5{
     top: 0px;
     font-size: 12px;
     padding: 4px 3px 4px 3px;
-    z-index: 00;
+    z-index: 0;
     font-size: 13px;
     margin-right: 10px;
     margin-left: 10px;
@@ -358,6 +386,7 @@ h5{
   border-bottom: 1px solid rgba(80, 76, 76, 0.174);
 }
 .table-cell{
+  z-index: 1000 !important;
   font-size: 14px;
   font-weight: 400;
   color: rgb(51,51,51, 0.9);
@@ -370,6 +399,18 @@ h5{
   margin-top: 7% !important;
   white-space: nowrap;
 }
+.close{
+    position: relative;
+    left: 20px;
+}
+.header-title{
+    font-weight: 300;
+    margin: -1px 0 -1px 0;
+    padding: 0;
+}
+.user-disabled{
+  background-color: rgb(229, 57, 53, 0.3);
+}
 .align-cell{
   padding-top: 12px !important;
 }
@@ -381,6 +422,12 @@ h5{
 }
 .card:hover .card-img-top{
     opacity: 100%;
+}
+tr:hover .disabled-account{
+  display: none;
+}
+tr:hover .user-invalided{
+  filter: blur(0px);
 }
 @media screen and (max-width: 1253px) {
   .summary-text-re{

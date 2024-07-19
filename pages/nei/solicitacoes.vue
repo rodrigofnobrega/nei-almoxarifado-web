@@ -1,298 +1,307 @@
 <template>
     <div class="container-fluid">
-        <div class="sub-catalog bg-light mb-4 mt-1 ps-2 pe-2">
+        <div class="sub-catalog bg-light mt-1 ps-2 pe-2">
             <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
                 <IconsInformation class="me-2"/>
-                Descrição da página {{ requestsLoad }}
+                Descrição da página
             </h6>
-            <p class="sub-catalog-text opacity-75 mb-0">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
+            <p class="sub-catalog-text opacity-75">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
                 Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
             <span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
         </div>
-        <div class="d-flex align-items-center justify-content-start">
-            <span class="ms-5 position-sticky d-flex align-items-center">
-                    <IconsSearchGlass class="text-dark search-glass"/>
-                    <input id="tableSearch" v-model="searchInput" class="bg-transparent text-dark form-control border-0" placeholder="Pesquisar"/>          
-            </span>
+        <div class="table-box-title position-absolute bg-light-emphasis d-flex align-items-center text">
+            <IconsRequest class="me-1" width="25" height="25"/>
+            <p class="box-title-text">
+                Acompanhamento das Solicitações
+            </p>
         </div>
-        <div class="requests-container d-flex justify-content-between">
-            <div class="ms-5">
-                <div class="d-flex align-items-center justify-content-between my-3">
-                    <div class="d-flex align-items-center">
-                        <IconsCloseArrow width="30" height="30"/>
-                        <h5 class="m-0 p-0">Em Progresso
-                        </h5>
-                        <span>({{requestsCache.inProgressRequests.length}})</span>
-                    </div>
-                    <div class="dropdown">
-                          <button class="btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
-                            <IconsSettingsDots width="25" height="25" />
-                          </button>
-                          <div class="dropdown-menu">
-                                <li class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'date', 'asc')">Data (Ascendente)</li>
-                                <li class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'date', 'desc')">Data (Descendente)</li>
-                                <li class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'name', 'asc')">Nome (Ascendente)</li>
-                                <li class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'name', 'desc')">Nome (Descendente)</li>
-                        </div>
-                    </div>
-                </div>
-                <div class="requests-box">
-                    <CardsCard v-if="requestsCache.inProgressRequests.length > 0" v-for="(request, index) in requestsCache.inProgressRequests.slice(0, requestsLoaded[0])" :key="index" class="card-container mb-3">
-                        <template v-slot:header>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="justify-content-start mb-3 fw-bold">
-                                    Solicitação
-                                </h6>
-                                <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.creationDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
-                            </div>
-                        </template>
-                        <template v-slot:default>
-                            <div class="row cards-row">
-                                <div class="mb-3"> 
-                                    <label class="form-label fw-semibold"> Item solicitado </label>
-                                    <div class="overflow-x-auto">
-                                        <input readonly class="form-control overflow-x-auto" :value="request.item.name"> 
-                                    </div>
-                                </div>
-                                <div class="col-6 me-0">
-                                    <div class="mb-3"> 
-                                        <label class="form-label fw-semibold"> Quantidade Solicitada </label>
-                                        <input readonly class="form-control" :value="request.quantityRequested">
-                                    </div>		
-                                    <div class="mb-3"> 
-                                        <label class="form-label fw-semibold"> Código Sipac </label>
-                                        <input readonly class="form-control" :value="request.item.sipacCode"> 
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="mb-3"> 
-                                        <label class="form-label fw-semibold"> Quantidade Disponível </label>
-                                        <input readonly class="form-control" :value="request.item.quantity"> 
-                                    </div>		
-                                    <div class="mb-0"> 
-                                        <label class="form-label fw-semibold"> Tipo </label>
-                                        <input readonly class="form-control" :value="request.item.type">
-                                    </div>	
-                                </div>
-                                <div class="mb-0"> 
-                                    <label class="form-label fw-semibold"> Mensagem </label>
-                                    <div class="d-flex">
-                                        <textarea readonly class="form-control"> {{ request.description }} </textarea>
-                                    </div>
-                                </div>	
-                            </div>
-                        </template>
-                        <template v-slot:footer>
-                            <div class="d-flex align-items-center justify-content-end">
-                                <button @click="cancelRequest(request.id)" class="btn btn-dark-alert fw-bold py-1 px-1">
-                                    cancelar
-                                </button>
-                            </div>
-                        </template>
-                    </CardsCard>
-                    <p class="mt-5 pt-2 opacity-75" v-else>Nenhuma solicitação encontrada...</p>
-                </div>
-                <div v-if="requestsLoaded[0] < requestsCache.inProgressRequests.length">
-                    <div class="d-flex justify-content-center">
-                        <button @click="requestsLoaded[0] += 3" class="btn btn-secondary fw-bold px-2 py-2">Carregar mais</button>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <p class="fs-1">...</p>
-                    </div>
-                </div>
+        <div class="requests-container mx-2 bg-light">
+            <div class="table-actions container mx-3 d-flex justify-content-between aling-items-center border-bottom">
+                <span @click="changeView = !changeView" type="button" class="position-sticky d-flex align-items-center searchbar">
+                    <IconsGrid  class="me-1"/>
+                    Vizualização
+                </span>
+                <span v-if="requestsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 0.8px;">
+                    <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
+                    <IconsSearchGlass class="search-glass"/>
+                </span>
             </div>
-            <div>
-                <div class="d-flex align-items-center justify-content-between my-3">
-                    <div class="d-flex align-items-center">
-                        <IconsConfirm class="text-light-success" width="30" height="30"/>
-                        <h5 class="m-0 p-0">Aceitos
-                        </h5>
-                        <span>({{requestsCache.acceptedRequests.length}})</span>
+            <div :class="{'d-flex': !changeView, 'd-block': changeView}" class="justify-content-between mb-5">
+                <div class="ms-5">
+                    <div class="d-flex align-items-center justify-content-between my-3">
+                        <div class="d-flex align-items-center">
+                            <IconsCloseArrow width="30" height="30"/>
+                            <h5 class="m-0 p-0">Em Progresso
+                            </h5>
+                            <span>({{requestsCache.inProgressRequests.length}})</span>
+                        </div>
+                        <div class="dropdown">
+                              <button class="btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
+                                <IconsSettingsDots width="25" height="25" />
+                              </button>
+                              <div class="dropdown-menu">
+                                    <li class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'date', 'asc')">Data (Ascendente)</li>
+                                    <li class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'date', 'desc')">Data (Descendente)</li>
+                                    <li class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'name', 'asc')">Nome (Ascendente)</li>
+                                    <li class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'name', 'desc')">Nome (Descendente)</li>
+                            </div>
+                        </div>
                     </div>
-                    <div class="dropdown">
-                          <button class="btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
-                            <IconsSettingsDots width="25" height="25" />
-                          </button>
-                          <div class="dropdown-menu">
-                                <li class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'date', 'asc')">Data (Ascendente)</li>
-                                <li class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'date', 'desc')">Data (Descendente)</li>
-                                <li class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'name', 'asc')">Nome (Ascendente)</li>
-                                <li class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'name', 'desc')">Nome (Descendente)</li>
+                    <div :class="{'d-flex': changeView, 'd-block': !changeView}" class="requests-box">
+                        <CardsCard v-if="requestsCache.inProgressRequests.length > 0" v-for="(request, index) in requestsCache.inProgressRequests.slice(0, requestsLoaded[0])" :key="index" class="card-container mb-3 mx-2 bg-light-background-header">
+                            <template v-slot:header>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="justify-content-start mb-3 fw-bold">
+                                        Solicitação
+                                    </p>
+                                    <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.creationDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
+                                </div>
+                            </template>
+                            <template v-slot:default>
+                                <div class="row cards-row">
+                                    <div class="mb-3"> 
+                                        <label class="form-label fw-semibold"> Item solicitado </label>
+                                        <div class="overflow-x-auto">
+                                            <input readonly class="form-control overflow-x-auto" :value="request.item.name"> 
+                                        </div>
+                                    </div>
+                                    <div class="col-6 me-0">
+                                        <div class="mb-3"> 
+                                            <label class="form-label fw-semibold"> Quantidade Solicitada </label>
+                                            <input readonly class="form-control" :value="request.quantityRequested">
+                                        </div>		
+                                        <div class="mb-3"> 
+                                            <label class="form-label fw-semibold"> Código Sipac </label>
+                                            <input readonly class="form-control" :value="request.item.sipacCode"> 
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-3"> 
+                                            <label class="form-label fw-semibold"> Quantidade Disponível </label>
+                                            <input readonly class="form-control" :value="request.item.quantity"> 
+                                        </div>		
+                                        <div class="mb-0"> 
+                                            <label class="form-label fw-semibold"> Tipo </label>
+                                            <input readonly class="form-control" :value="request.item.type">
+                                        </div>	
+                                    </div>
+                                    <div class="mb-0"> 
+                                        <label class="form-label fw-semibold"> Mensagem </label>
+                                        <div class="d-flex">
+                                            <textarea readonly class="form-control"> {{ request.description }} </textarea>
+                                        </div>
+                                    </div>	
+                                </div>
+                            </template>
+                            <template v-slot:footer>
+                                <div class="d-flex align-items-center justify-content-end">
+                                    <button @click="cancelRequest(request.id)" class="btn btn-dark-alert fw-bold py-1 px-1">
+                                        cancelar
+                                    </button>
+                                </div>
+                            </template>
+                        </CardsCard>
+                        <p class="mt-5 pt-2 opacity-75" v-else>Nenhuma solicitação encontrada...</p>
+                    </div>
+                    <div v-if="requestsLoaded[0] < requestsCache.inProgressRequests.length">
+                        <div class="d-flex justify-content-center">
+                            <button @click="requestsLoaded[0] += 3" class="btn btn-secondary fw-bold px-2 py-2">Carregar mais</button>
+                        </div>
+                        <div class="d-flex justify-content-center">
                         </div>
                     </div>
                 </div>
-                <div class="requests-box">
-                    <CardsCard v-if="requestsCache.acceptedRequests.length > 0" v-for="(request, index) in requestsCache.acceptedRequests.slice(0, requestsLoaded[1])" :key="index" class="card-container mb-3">
-                        <template v-slot:header>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="justify-content-start mb-3 fw-bold">
-                                    Solicitação
-                                </h6>
-                                <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.creationDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
+                <div>
+                    <div class="d-flex align-items-center justify-content-between my-3">
+                        <div class="d-flex align-items-center">
+                            <IconsConfirm class="text-light-success" width="30" height="30"/>
+                            <h5 class="m-0 p-0">Aceitos
+                            </h5>
+                            <span>({{requestsCache.acceptedRequests.length}})</span>
+                        </div>
+                        <div class="dropdown">
+                              <button class="btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
+                                <IconsSettingsDots width="25" height="25" />
+                              </button>
+                              <div class="dropdown-menu">
+                                    <li class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'date', 'asc')">Data (Ascendente)</li>
+                                    <li class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'date', 'desc')">Data (Descendente)</li>
+                                    <li class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'name', 'asc')">Nome (Ascendente)</li>
+                                    <li class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'name', 'desc')">Nome (Descendente)</li>
                             </div>
-                        </template>
-                        <template v-slot:default>
-                            <div class="row cards-row">
-                                <div class="mb-3"> 
-                                    <label class="form-label fw-semibold"> Item solicitado </label>
-                                    <div class="overflow-x-auto">
-                                        <input readonly class="form-control overflow-x-auto" :value="request.item.name"> 
-                                    </div>
+                        </div>
+                    </div>
+                    <div :class="{'d-flex': changeView, 'd-block': !changeView}" class="requests-box">
+                        <CardsCard v-if="requestsCache.acceptedRequests.length > 0" v-for="(request, index) in requestsCache.acceptedRequests.slice(0, requestsLoaded[1])" :key="index" class="card-container mb-3 bg-light-background-header">
+                            <template v-slot:header>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="justify-content-start mb-3 fw-bold">
+                                        Solicitação
+                                    </p>
+                                    <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.creationDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
                                 </div>
-                                <div class="col-6 me-0">
+                            </template>
+                            <template v-slot:default>
+                                <div class="row cards-row">
                                     <div class="mb-3"> 
-                                        <label class="form-label fw-semibold"> Quantidade Solicitada </label>
-                                        <input readonly class="form-control" :value="request.quantityRequested">
-                                    </div>		
-                                    <div class="mb-3"> 
-                                        <label class="form-label fw-semibold"> Código Sipac </label>
-                                        <input readonly class="form-control" :value="request.item.sipacCode"> 
+                                        <label class="form-label fw-semibold"> Item solicitado </label>
+                                        <div class="overflow-x-auto">
+                                            <input readonly class="form-control overflow-x-auto" :value="request.item.name"> 
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="mb-3"> 
-                                        <label class="form-label fw-semibold"> Quantidade Disponível </label>
-                                        <input readonly class="form-control" :value="request.item.quantity"> 
-                                    </div>		
+                                    <div class="col-6 me-0">
+                                        <div class="mb-3"> 
+                                            <label class="form-label fw-semibold"> Quantidade Solicitada </label>
+                                            <input readonly class="form-control" :value="request.quantityRequested">
+                                        </div>		
+                                        <div class="mb-3"> 
+                                            <label class="form-label fw-semibold"> Código Sipac </label>
+                                            <input readonly class="form-control" :value="request.item.sipacCode"> 
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-3"> 
+                                            <label class="form-label fw-semibold"> Quantidade Disponível </label>
+                                            <input readonly class="form-control" :value="request.item.quantity"> 
+                                        </div>		
+                                        <div class="mb-0"> 
+                                            <label class="form-label fw-semibold"> Tipo </label>
+                                            <input readonly class="form-control" :value="request.item.type">
+                                        </div>	
+                                    </div>
                                     <div class="mb-0"> 
-                                        <label class="form-label fw-semibold"> Tipo </label>
-                                        <input readonly class="form-control" :value="request.item.type">
+                                        <label class="form-label fw-semibold"> Mensagem </label>
+                                        <div class="d-flex">
+                                            <textarea readonly class="form-control"> {{ request.description }} </textarea>
+                                        </div>
                                     </div>	
                                 </div>
-                                <div class="mb-0"> 
-                                    <label class="form-label fw-semibold"> Mensagem </label>
-                                    <div class="d-flex">
-                                        <textarea readonly class="form-control"> {{ request.description }} </textarea>
-                                    </div>
-                                </div>	
-                            </div>
-                        </template>
-                        <template v-slot:footer>
-                            <div class="d-flex align-items-center justify-content-end">
-                                Resposta feita em: {{ request.updatedDate.slice(0,19) }}
-                                <!--<button class="btn btn-secondary fw-bold px-2 py-1">Ver resposta</button>-->
-                            </div>
-                        </template>
-                    </CardsCard>
-                    <!--
-                    <CardsCard v-if="requestsCache.acceptedRequests.length > 0" v-for="(request, index) in requestsCache.acceptedRequests.slice(0, requestsLoaded[1])" :key="index" class="response-container mb-3">
-                        <template v-slot:header>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="justify-content-start mb-3 fw-bold">
-                                    Resposta a solicitação
-                                </h6>
-                                <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.updatedDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
-                            </div>
-                        </template>
-                        <template v-slot:default>
-                            <div class="row cards-row">
-                                <div class="mb-0"> 
-                                    <label class="form-label fw-semibold"> Resposta </label>
-                                    <div class="d-flex">
-                                        <textarea readonly class="form-control"> {{ request.description }} </textarea>
-                                    </div>
-                                </div>	
-                            </div>
-                        </template>
-                        <template v-slot:footer>
-                            <div class="d-flex align-items-center justify-content-end">
-                                <button class="btn btn-secondary fw-bold px-2 py-1">Ver solicitação</button>
-                            </div>
-                        </template>
-                    </CardsCard>
-                    -->
-                    <p class="mt-5 pt-2 opacity-75" v-else>Nenhuma solicitação encontrada...</p>
-                </div>
-                <div v-if="requestsLoaded[1] < requestsCache.acceptedRequests.length">
-                    <div class="d-flex justify-content-center">
-                        <button @click="requestsLoaded[1] += 3" class="btn btn-secondary fw-bold px-2 py-2">Carregar mais</button>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <p class="fs-1">...</p>
-                    </div>
-                </div>
-            </div>
-            <div class="me-5">
-                <div class="d-flex align-items-center justify-content-between my-3">
-                    <div class="d-flex align-items-center">
-                        <IconsClose class="text-dark-alert" width="30" height="30"/>
-                        <h5 class="m-0 p-0">Recusados
-                        </h5>
-                        <span>({{ requestsCache.rejectedRequests.length }})</span>
-                    </div>
-                    <div class="dropdown">
-                          <button class="btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
-                            <IconsSettingsDots width="25" height="25" />
-                          </button>
-                          <div class="dropdown-menu">
-                                <li class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'date', 'asc')">Data (Ascendente)</li>
-                                <li class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'date', 'desc')">Data (Descendente)</li>
-                                <li class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'name', 'asc')">Nome (Ascendente)</li>
-                                <li class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'name', 'desc')">Nome (Descendente)</li>
+                            </template>
+                            <template v-slot:footer>
+                                <div class="d-flex align-items-center justify-content-end">
+                                    Resposta feita em: {{ request.updatedDate.slice(0,19) }}
+                                    <!--<button class="btn btn-secondary fw-bold px-2 py-1">Ver resposta</button>-->
+                                </div>
+                            </template>
+                        </CardsCard>
+                        <!--
+                        <CardsCard v-if="requestsCache.acceptedRequests.length > 0" v-for="(request, index) in requestsCache.acceptedRequests.slice(0, requestsLoaded[1])" :key="index" class="response-container mb-3">
+                            <template v-slot:header>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="justify-content-start mb-3 fw-bold">
+                                        Resposta a solicitação
+                                    </h6>
+                                    <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.updatedDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
+                                </div>
+                            </template>
+                            <template v-slot:default>
+                                <div class="row cards-row">
+                                    <div class="mb-0"> 
+                                        <label class="form-label fw-semibold"> Resposta </label>
+                                        <div class="d-flex">
+                                            <textarea readonly class="form-control"> {{ request.description }} </textarea>
+                                        </div>
+                                    </div>	
+                                </div>
+                            </template>
+                            <template v-slot:footer>
+                                <div class="d-flex align-items-center justify-content-end">
+                                    <button class="btn btn-secondary fw-bold px-2 py-1">Ver solicitação</button>
+                                </div>
+                            </template>
+                        </CardsCard>
+                        -->
+                        <p class="mt-5 pt-2 opacity-75" v-else>Nenhuma solicitação encontrada...</p>
+                    </div>    
+                    <div v-if="requestsLoaded[1] < requestsCache.acceptedRequests.length">
+                        <div class="d-flex justify-content-center">
+                            <button @click="requestsLoaded[1] += 3" class="btn btn-secondary fw-bold px-2 py-2">Carregar mais</button>
+                        </div>
+                        <div class="d-flex justify-content-center">
                         </div>
                     </div>
                 </div>
-                <div class="requests-box">
-                    <CardsCard v-if="requestsCache.rejectedRequests.length > 0" v-for="(request, index) in requestsCache.rejectedRequests.slice(0, requestsLoaded[2])" :key="index" class="card-container mb-3">
-                        <template v-slot:header>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="justify-content-start mb-3 fw-bold">
-                                    Solicitação
-                                </h6>
-                                <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.creationDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
+                <div class="me-5">
+                    <div class="d-flex align-items-center justify-content-between my-3">
+                        <div class="d-flex align-items-center">
+                            <IconsClose class="text-dark-alert" width="30" height="30"/>
+                            <h5 class="m-0 p-0">Recusados
+                            </h5>
+                            <span>({{ requestsCache.rejectedRequests.length }})</span>
+                        </div>
+                        <div class="dropdown">
+                              <button class="btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
+                                <IconsSettingsDots width="25" height="25" />
+                              </button>
+                              <div class="dropdown-menu">
+                                    <li class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'date', 'asc')">Data (Ascendente)</li>
+                                    <li class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'date', 'desc')">Data (Descendente)</li>
+                                    <li class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'name', 'asc')">Nome (Ascendente)</li>
+                                    <li class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'name', 'desc')">Nome (Descendente)</li>
                             </div>
-                        </template>
-                        <template v-slot:default>
-                            <div class="row cards-row">
-                                <div class="mb-3"> 
-                                    <label class="form-label fw-semibold"> Item solicitado </label>
-                                    <div class="overflow-x-auto">
-                                        <input readonly class="form-control overflow-x-auto" :value="request.item.name"> 
-                                    </div>
+                        </div>
+                    </div>
+                    <div :class="{'d-flex': changeView, 'd-block': !changeView}" class="requests-box">
+                        <CardsCard v-if="requestsCache.rejectedRequests.length > 0" v-for="(request, index) in requestsCache.rejectedRequests.slice(0, requestsLoaded[2])" :key="index" class="card-container mb-3 bg-light-background-header">
+                            <template v-slot:header>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="justify-content-start mb-3 fw-bold">
+                                        Solicitação
+                                    </p>
+                                    <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.creationDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
                                 </div>
-                                <div class="col-6 me-0">
+                            </template>
+                            <template v-slot:default>
+                                <div class="row cards-row">
                                     <div class="mb-3"> 
-                                        <label class="form-label fw-semibold"> Quantidade Solicitada </label>
-                                        <input readonly class="form-control" :value="request.quantityRequested">
-                                    </div>		
-                                    <div class="mb-3"> 
-                                        <label class="form-label fw-semibold"> Código Sipac </label>
-                                        <input readonly class="form-control" :value="request.item.sipacCode"> 
+                                        <label class="form-label fw-semibold"> Item solicitado </label>
+                                        <div class="overflow-x-auto">
+                                            <input readonly class="form-control overflow-x-auto" :value="request.item.name"> 
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="mb-3"> 
-                                        <label class="form-label fw-semibold"> Quantidade Disponível </label>
-                                        <input readonly class="form-control" :value="request.item.quantity"> 
-                                    </div>		
+                                    <div class="col-6 me-0">
+                                        <div class="mb-3"> 
+                                            <label class="form-label fw-semibold"> Quantidade Solicitada </label>
+                                            <input readonly class="form-control" :value="request.quantityRequested">
+                                        </div>		
+                                        <div class="mb-3"> 
+                                            <label class="form-label fw-semibold"> Código Sipac </label>
+                                            <input readonly class="form-control" :value="request.item.sipacCode"> 
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-3"> 
+                                            <label class="form-label fw-semibold"> Quantidade Disponível </label>
+                                            <input readonly class="form-control" :value="request.item.quantity"> 
+                                        </div>		
+                                        <div class="mb-0"> 
+                                            <label class="form-label fw-semibold"> Tipo </label>
+                                            <input readonly class="form-control" :value="request.item.type">
+                                        </div>	
+                                    </div>
                                     <div class="mb-0"> 
-                                        <label class="form-label fw-semibold"> Tipo </label>
-                                        <input readonly class="form-control" :value="request.item.type">
+                                        <label class="form-label fw-semibold"> Mensagem </label>
+                                        <div class="d-flex">
+                                            <textarea readonly class="form-control"> {{ request.description }} </textarea>
+                                        </div>
                                     </div>	
                                 </div>
-                                <div class="mb-0"> 
-                                    <label class="form-label fw-semibold"> Mensagem </label>
-                                    <div class="d-flex">
-                                        <textarea readonly class="form-control"> {{ request.description }} </textarea>
-                                    </div>
-                                </div>	
-                            </div>
-                        </template>
-                        <template v-slot:footer>
-                            <div class="d-flex align-items-center justify-content-center">
-                                Resposta feita em: {{ request.updatedDate.slice(0,19) }}
-                                <!--<button class="btn btn-secondary fw-bold px-2 py-1">Ver resposta</button>-->
-                            </div>
-                        </template>
-                    </CardsCard>
-                    <p class="mt-5 pt-2 opacity-75" v-else>Nenhuma solicitação encontrada...</p>
-                </div>
-                <div v-if="requestsLoaded[2] < requestsCache.rejectedRequests.length">
-                    <div class="d-flex justify-content-center">
-                        <button @click="requestsLoaded[2] += 3" class="btn btn-secondary fw-bold px-2 py-2">Carregar mais</button>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <p class="fs-1">...</p>
+                            </template>
+                            <template v-slot:footer>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    Resposta feita em: {{ request.updatedDate.slice(0,19) }}
+                                    <!--<button class="btn btn-secondary fw-bold px-2 py-1">Ver resposta</button>-->
+                                </div>
+                            </template>
+                        </CardsCard>
+                        <p class="mt-5 pt-2 opacity-75" v-else>Nenhuma solicitação encontrada...</p>
+                        </div>
+                    <div v-if="requestsLoaded[2] < requestsCache.rejectedRequests.length">
+                        <div class="d-flex justify-content-center">
+                            <button @click="requestsLoaded[2] += 3" class="btn btn-secondary fw-bold px-2 py-2">Carregar mais</button>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -325,6 +334,8 @@ const requestsLoaded = ref([5, 5, 5]);
 const searchInput = ref('');
 
 const filter = ref({ type: '', order: '' });
+
+const changeView = ref(false);
 
 const applyFilter = (requests, type, order) => {
     filter.value.type = type;
@@ -479,16 +490,32 @@ onBeforeMount(() => {
 
 <style scoped>
 .container-fluid{
-    padding: 100px 0 100px 0;
+    padding: 80px 0 100px 0;
 }
 .requests-container{
+    box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.5);
+    border: 1px #D9D9D9 solid;
+    border-radius: 0px 10px 10px 10px;
     border-top: solid 1px #ccc;
 }
 .card-container{
     box-shadow: 0px 0px 10px 1px rgb(0, 0, 0, 0.3);
     border: solid 1px rgb(0, 0, 0, 0.3);
-    width: 350px;
+    width: 370px;
     transition: box-shadow 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+.table-box-title{
+    margin-left: 8px;
+    margin-top: -38px;
+    padding: 4px;
+    font-weight: 400;
+    color: rgb(51,51,51, 0.8);
+    border-radius: 10px 10px 0px 0px;
+}
+.requests-box{
+}
+.box-title-text{
+    font-size: 20px;
 }
 .card-container:hover{
     box-shadow: 0px 0px 15px 1px rgb(254, 213, 30, 0.8);
@@ -503,28 +530,35 @@ onBeforeMount(() => {
     position: absolute;
     background-color: red;
 }
-
+.requests-search{
+    border-bottom: solid 1px rgb(51, 51, 51, 0.2)
+}
 .resquest-time{
 	font-size: 15px;
 	opacity: 80%;
 }
 .sub-catalog{
-    border-radius: 13px;
+    border-radius: 10px;
     margin-top: -14px;
+    margin-bottom: 60px !important;
     padding-top: 10px;
     padding-bottom: 20px;
     margin-right: 10%;
     margin-left: 10%;
     border: 1px #D9D9D9 solid;
-    box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);
+    box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.5);
 }
 .sub-catalog-text{
     padding: 0px 10px 0px 10px;
     font-size: 15px;
 }
-.sub-catalog-title{
+h6{
     font-weight: 400;
     color: rgb(51,51,51, 0.8);
+}
+p{
+    padding: 0;
+    margin: 0;
 }
 .table-searchbar{
     width: 300px;
@@ -535,5 +569,37 @@ onBeforeMount(() => {
 .searchbar{
     border-radius: 8px 0px 0px 8px;
     font-weight: 500;
+}
+.action-btn{
+    margin-right: 10px;
+    border: none;
+    border-radius: 10px 10px 0px 0px;
+    border-bottom: 1px ridge #1F69B1;
+}
+.table-searchbar{
+    border: none;
+    border-bottom: solid 1px #1F69B1;
+    border-radius: 10px 10px 0px 0px;
+    box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
+    color: rgb(0, 0, 0, 0.7); 
+    transition: box-shadow 0.3s ease;
+}
+.table-actions{
+    width: 100%;
+}
+.table-searchbar:hover {
+    box-shadow: inset 0px -12px 15px -18px rgba(11, 59, 105, 0.7), 0px 0px 7px 0px rgba(11, 59, 105, 0.7);
+}
+.table-searchbar:hover,
+.table-searchbar:focus-within {
+    box-shadow: inset 0px -12px 15px -18px rgba(11, 59, 105, 0.7), 0px 0px 7px rgba(11, 59, 105, 0.7); /* Sombra interna na parte inferior e contorno ao redor */
+}
+.searchbar{
+    border: none;
+    border-radius: 0;
+    font-weight: 500;
+}
+.search-glass{
+    padding-left: 0px;
 }
 </style>

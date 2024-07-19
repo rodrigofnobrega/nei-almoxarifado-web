@@ -1,7 +1,7 @@
 <template>
     <div id="content">
       <HeaderNeiHeader />
-        <div class="d-flex"> 
+        <div class="d-flex bg-fade"> 
           <div class="main">
               <slot />
           </div> 

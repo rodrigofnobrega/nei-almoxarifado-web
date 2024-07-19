@@ -154,17 +154,42 @@
             </label>
     </section>-->
     <section class="settings-section mb-5">
-        <h3 class="section-title mx-2 pb-2">Configurar Tipos e Categorias</h3>
+        <div class="section-title d-flex align-items-center justify-content-between">
+            <h3 class="mx-2">Configurar Tipos e Categorias</h3>
+            <button class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#categoryRegister">Adicionar</button>
+        </div>
         <p class="fs-6 mx-2">Escolha um dos temas visuais abaixos para que a estilização do aplicativo esteja de acordo com suas preferências estéticas. O tema escolhido ficará salvo como preferências do usuário, ao sair da aplicação o tema continuará salvo.  </p>
-        <div class="section-content container d-flex">
-            <div class="d-flex" v-for="(category, index) in itemCategories" :key="index">
-                <input class="form-control" type="text" v-model="itemCategories[index]" placeholder="Categoria de Item" />
-                <button class="btn mx-3 btn-light-alert text-light fw-bold" @click="removeItemCategory(index)">Remover</button>
+        <div class="section-content row">
+            <div class="d-flex" style="width: 230px;" v-for="(category, index) in settingsStore.categories" :key="index">
+                <div class="bg-light my-3 d-flex align-items-center text-wrap me-3 rounded-2">
+                    <input class="form-control border-0" type="text" :placeholder="category" />
+                    <IconsDelete class="trash me-2" @click="removeItemCategory(index)" width="27" height="27"/>
+                </div>
             </div>
         </div>
     </section>
-    <button class="btn btn-primary ms-3 fw-bold" @click="saveSettings">Salvar Configurações</button>
 </div>
+
+<Modal id="categoryRegister" tabindex="-1" data-bs-backdrop="true" aria-labelledby="scrollableModalLabel" aria-hidden="true">
+    <template v-slot:header>
+        <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Digite a nova categoria</h6>
+        <button class="btn btn-transparent text-light border-0 close-btn" type="button" data-bs-dismiss="modal">
+            <IconsClose class="close ms-5" width="1.3em" height="1.3em"/>
+        </button>
+    </template>
+    <template v-slot:body>
+        <div class="d-block">
+            <label class="fw-bold text-dark-emphasis mb-2">Nome da categoria:</label>
+            <input class="form-control" v-model="itemCategory" type="text" placeholder="Nova categoria">
+        </div>
+    </template>
+    <template v-slot:footer>
+        <div class="container-fluid d-flex justify-content-end align-items-center">
+            <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" @click="addItemCategory" class="btn btn-light-success inset-shadow text-light mx-1" data-bs-dismiss="modal">Criar</button>
+        </div>
+    </template>
+</Modal>
 </template>
 
 <script setup>
@@ -183,7 +208,7 @@ const settingsStore = useSettingsStore();
 const changeLayout = (index) => {
     settingsStore.layout = index
 }
-
+const itemCategory = ref('');
 
 const stockItems = ref([
 { id: 1, name: 'Item 1', min: 10, max: 100 },
@@ -201,7 +226,6 @@ const reportSettings = ref({
     includeTaxes: [],
     specificTax: 0,
 });
-const itemCategories = ref(['Categoria 1', 'Categoria 2']);
 // Funções para manipulação de eventuais dados
 const addOne = ref(false)
 const isValidEmail = (email) => {
@@ -224,10 +248,10 @@ const cancelValidation = (index) => {
     addOne.value = false;
 }
 const addItemCategory = () => {
-    itemCategories.value.push('');
+    settingsStore.categories.push(itemCategory.value)
 };
 const removeItemCategory = (index) => {
-    itemCategories.value.splice(index, 1);
+    settingsStore.categories.splice(index, 1);
 };
 const saveSettings = () => {
 // Função para salvar configurações, *integrar á API*
@@ -260,7 +284,7 @@ section {
 .stock-item {
     margin-bottom: 10px;
 }
-.btn, .form-control, p{
+.btn, p{
     font-size: 13px;
 }
 .btn{
@@ -274,15 +298,24 @@ section {
 .card-text{
     font-size: 15px;
 }
-.form-control{
-    width: 110%;
-}
 .stretched-link{
   text-decoration: none;
 }
 .card-img-top{
   transition: opacity 0.5s ease-in-out;
   opacity: 85%;
+}
+.close{
+    position: relative;
+    left: 20px;
+}
+.header-title{
+    font-weight: 300;
+    margin: -1px 0 -1px 0;
+    padding: 0;
+}
+.trash:hover{
+    transform: scale(1.2)
 }
 .card:hover .stretched-link{
     color: white !important;

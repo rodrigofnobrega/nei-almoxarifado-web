@@ -20,12 +20,8 @@
                     <label for="item-qtd">Tipo Unitário</label> 
                     <select v-model="itemType" class="form-select me-5" aria-label="Default select">
                         <option disabled selected>Selecione o tipo</option>
-                        <option value="unidade">unidade</option>
-                        <option value="sacola">sacola</option>
-                        <option value="caixa">caixa</option>
-                        <option value="folha">folha</option>
-                        <option value="resma">resma</option>
-                        <option value="pacote">pacote</option>
+                        <option v-for="(category, index) in settingsStore.categories" :key="index" :value="category">{{ category }}</option>
+
                     </select>
                 </div>
                 <div class="d-block ms-5">
@@ -48,6 +44,7 @@
 import { usePopupStore } from '~/stores/popup';
 import { sipacHandeling } from '../../composables/inputHandler';
 import { useStorageStore } from '../../stores/storage';
+import { useSettingsStore } from '../../stores/settings';
 export default{
     data() {
         return{
@@ -99,8 +96,9 @@ export default{
     setup(){
         const store = useStorageStore();
         const popup = usePopupStore();
+        const settingsStore = useSettingsStore();
         return{
-            store, popup
+            store, popup, settingsStore 
         }
     }
 }
