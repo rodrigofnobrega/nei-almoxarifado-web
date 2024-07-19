@@ -63,6 +63,8 @@ if(res.totalPages > 1){
 }
 
 provide('setSolicitations', async () => {
+	console.log("WHATAFICL")
+	solicitations.value = []
 	const res = await getRequestByStatus(userStore, 'pendente');
 	res.content.map((request) => {
 		solicitations.value.push(request)

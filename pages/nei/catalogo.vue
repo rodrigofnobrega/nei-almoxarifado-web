@@ -60,7 +60,7 @@
             <div class="d-flex align-items-center">
                 <ButtonsFilter v-if="uploadReloader === 1"/>
             </div>
-            <span v-if="itemsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 0.8px;">
+            <span v-if="itemsLoad" class="position-sticky d-flex align-items-center table-searchbar">
                 <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
                 <IconsSearchGlass class="search-glass"/>
             </span>
@@ -392,7 +392,7 @@ const showConfirm = (index) => {
 }
 const sendRequest = async () => {
     try{
-        const res = await postRequest(userStore, currentItem.value.id, currentItem.value.quantity, description.value)
+        const res = await postRequest(userStore, currentItem.value.id, itemQtd.value, description.value)
     }catch(err){
         console.log(err)
         return popUpStore.throwPopup('Erro: digite uma mensagem de solicitação', '#B71C1C')
@@ -534,6 +534,7 @@ p{
     border-bottom: 1px ridge #1F69B1;
 }
 .table-searchbar{
+    height: 36px;
     border: none;
     border-bottom: solid 1px #1F69B1;
     border-radius: 10px 10px 0px 0px;

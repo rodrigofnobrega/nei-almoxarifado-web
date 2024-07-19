@@ -3,11 +3,11 @@
         <div class="sub-catalog bg-light mt-1 ps-2 pe-2">
             <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
                 <IconsInformation class="me-2"/>
-                Descrição da página
+                Descrição da página 
             </h6>
             <p class="sub-catalog-text opacity-75">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
                 Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
-            <span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
+            <span class="border-bottom border-dark-success pb-1">Adicionar <IconsThinPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
         </div>
         <div class="table-box-title position-absolute bg-light-emphasis d-flex align-items-center text">
             <IconsRequest class="me-1" width="25" height="25"/>
@@ -16,8 +16,8 @@
             </p>
         </div>
         <div class="requests-container mx-2 bg-light">
-            <div class="table-actions container mx-3 d-flex justify-content-between aling-items-center border-bottom">
-                <span @click="changeView = !changeView" type="button" class="position-sticky d-flex align-items-center searchbar">
+            <div class="table-actions container mx-3 d-flex justify-content-between aling-items-center">
+                <span @click="changeView = !changeView" type="button" class="px-2 action-btn position-sticky d-flex align-items-center">
                     <IconsGrid  class="me-1"/>
                     Vizualização
                 </span>
@@ -27,8 +27,8 @@
                 </span>
             </div>
             <div :class="{'d-flex': !changeView, 'd-block': changeView}" class="justify-content-between mb-5">
-                <div class="ms-5">
-                    <div class="d-flex align-items-center justify-content-between my-3">
+                <div class="mx-2 requests-comp text-dark-emphasis rounded-2" >
+                    <div class="d-flex align-items-center justify-content-between mt-2 mx-3">
                         <div class="d-flex align-items-center">
                             <IconsCloseArrow width="30" height="30"/>
                             <h5 class="m-0 p-0">Em Progresso
@@ -36,19 +36,22 @@
                             <span>({{requestsCache.inProgressRequests.length}})</span>
                         </div>
                         <div class="dropdown">
-                              <button class="btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                <IconsSettingsDots width="25" height="25" />
+                              <button class="d-flex align-items-center btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
+                                <IconsBarFilter width="25" height="25" />
                               </button>
                               <div class="dropdown-menu">
-                                    <li class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'date', 'asc')">Data (Ascendente)</li>
-                                    <li class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'date', 'desc')">Data (Descendente)</li>
-                                    <li class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'name', 'asc')">Nome (Ascendente)</li>
-                                    <li class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'name', 'desc')">Nome (Descendente)</li>
+                                    <li type=button class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'date', 'asc')">Data (Ascendente)</li>
+                                    <li type=button class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'date', 'desc')">Data (Descendente)</li>
+                                    <li type=button class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'name', 'asc')">Nome (Ascendente)</li>
+                                    <li type=button class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'name', 'desc')">Nome (Descendente)</li>
                             </div>
                         </div>
                     </div>
-                    <div :class="{'d-flex': changeView, 'd-block': !changeView}" class="requests-box">
-                        <CardsCard v-if="requestsCache.inProgressRequests.length > 0" v-for="(request, index) in requestsCache.inProgressRequests.slice(0, requestsLoaded[0])" :key="index" class="card-container mb-3 mx-2 bg-light-background-header">
+                    <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}" class="requests-box">
+                        <CardsCard :class="{'card-width-adjust': changeView}" 
+                        v-if="requestsCache.inProgressRequests.length > 0" 
+                        v-for="(request, index) in requestsCache.inProgressRequests.slice(0, requestsLoaded[0])" 
+                        :key="index" class="col-6 card-container mb-3 mx-2 bg-gray-light">
                             <template v-slot:header>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <p class="justify-content-start mb-3 fw-bold">
@@ -95,24 +98,27 @@
                             </template>
                             <template v-slot:footer>
                                 <div class="d-flex align-items-center justify-content-end">
-                                    <button @click="cancelRequest(request.id)" class="btn btn-dark-alert fw-bold py-1 px-1">
-                                        cancelar
+                                    <button @click="cancelRequest(request.id, index)" class="btn btn-dark-alert fw-bold py-1 px-1 d-flex align-items-center">
+                                        Cancelar
+                                        <IconsClose style="margin-top: 2px;" height="21" width="22"/>
                                     </button>
                                 </div>
                             </template>
                         </CardsCard>
                         <p class="mt-5 pt-2 opacity-75" v-else>Nenhuma solicitação encontrada...</p>
+                    <div :class="{'d-flex align-items-center ms-2': changeView}" v-if="requestsLoaded[0] < requestsCache.inProgressRequests.length">
+                        <div class="d-flex justify-content-center">
+                            <button @click="requestsLoaded[0] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold" style="padding: 4px;">
+                                <IconsThinPlus width="30" height="30"/>
+                            </button>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                        </div>
                     </div>
-                    <div v-if="requestsLoaded[0] < requestsCache.inProgressRequests.length">
-                        <div class="d-flex justify-content-center">
-                            <button @click="requestsLoaded[0] += 3" class="btn btn-secondary fw-bold px-2 py-2">Carregar mais</button>
-                        </div>
-                        <div class="d-flex justify-content-center">
-                        </div>
                     </div>
                 </div>
-                <div>
-                    <div class="d-flex align-items-center justify-content-between my-3">
+                <div class="requests-comp text-dark-emphasis me-2 mt-2 rounded-2" :class="{'ms-2': changeView, 'mt-4': changeView}">
+                    <div class="d-flex align-items-center justify-content-between mt-2 mx-3">
                         <div class="d-flex align-items-center">
                             <IconsConfirm class="text-light-success" width="30" height="30"/>
                             <h5 class="m-0 p-0">Aceitos
@@ -121,18 +127,20 @@
                         </div>
                         <div class="dropdown">
                               <button class="btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                <IconsSettingsDots width="25" height="25" />
+                                <IconsBarFilter width="25" height="25" />
                               </button>
                               <div class="dropdown-menu">
-                                    <li class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'date', 'asc')">Data (Ascendente)</li>
-                                    <li class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'date', 'desc')">Data (Descendente)</li>
-                                    <li class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'name', 'asc')">Nome (Ascendente)</li>
-                                    <li class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'name', 'desc')">Nome (Descendente)</li>
+                                    <li type=button class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'date', 'asc')">Data (Ascendente)</li>
+                                    <li type=button class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'date', 'desc')">Data (Descendente)</li>
+                                    <li type=button class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'name', 'asc')">Nome (Ascendente)</li>
+                                    <li type=button class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'name', 'desc')">Nome (Descendente)</li>
                             </div>
                         </div>
                     </div>
-                    <div :class="{'d-flex': changeView, 'd-block': !changeView}" class="requests-box">
-                        <CardsCard v-if="requestsCache.acceptedRequests.length > 0" v-for="(request, index) in requestsCache.acceptedRequests.slice(0, requestsLoaded[1])" :key="index" class="card-container mb-3 bg-light-background-header">
+                    <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}" class="requests-box">
+                        <CardsCard :class="{'card-width-adjust': changeView}" 
+                        v-if="requestsCache.acceptedRequests.length > 0"
+                         v-for="(request, index) in requestsCache.acceptedRequests.slice(0, requestsLoaded[1])" :key="index" class="col-6 card-container mb-3 mx-2 bg-gray-light">
                             <template v-slot:header>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <p class="justify-content-start mb-3 fw-bold">
@@ -184,45 +192,20 @@
                                 </div>
                             </template>
                         </CardsCard>
-                        <!--
-                        <CardsCard v-if="requestsCache.acceptedRequests.length > 0" v-for="(request, index) in requestsCache.acceptedRequests.slice(0, requestsLoaded[1])" :key="index" class="response-container mb-3">
-                            <template v-slot:header>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="justify-content-start mb-3 fw-bold">
-                                        Resposta a solicitação
-                                    </h6>
-                                    <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.updatedDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
-                                </div>
-                            </template>
-                            <template v-slot:default>
-                                <div class="row cards-row">
-                                    <div class="mb-0"> 
-                                        <label class="form-label fw-semibold"> Resposta </label>
-                                        <div class="d-flex">
-                                            <textarea readonly class="form-control"> {{ request.description }} </textarea>
-                                        </div>
-                                    </div>	
-                                </div>
-                            </template>
-                            <template v-slot:footer>
-                                <div class="d-flex align-items-center justify-content-end">
-                                    <button class="btn btn-secondary fw-bold px-2 py-1">Ver solicitação</button>
-                                </div>
-                            </template>
-                        </CardsCard>
-                        -->
                         <p class="mt-5 pt-2 opacity-75" v-else>Nenhuma solicitação encontrada...</p>
-                    </div>    
-                    <div v-if="requestsLoaded[1] < requestsCache.acceptedRequests.length">
+                    <div :class="{'d-flex align-items-center ms-2': changeView}" v-if="requestsLoaded[1] < requestsCache.acceptedRequests.length">
                         <div class="d-flex justify-content-center">
-                            <button @click="requestsLoaded[1] += 3" class="btn btn-secondary fw-bold px-2 py-2">Carregar mais</button>
+                            <button @click="requestsLoaded[1] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold" style="padding: 4px;">
+                                <IconsThinPlus width="30" height="30"/>
+                            </button>
                         </div>
                         <div class="d-flex justify-content-center">
                         </div>
                     </div>
+                    </div>    
                 </div>
-                <div class="me-5">
-                    <div class="d-flex align-items-center justify-content-between my-3">
+                <div class="requests-comp text-dark-emphasis me-2 rounded-2" :class="{'me-5': !changeView, 'ms-2': changeView, 'mt-4': changeView}">
+                    <div class="d-flex align-items-center justify-content-between mt-2 mx-3">
                         <div class="d-flex align-items-center">
                             <IconsClose class="text-dark-alert" width="30" height="30"/>
                             <h5 class="m-0 p-0">Recusados
@@ -231,18 +214,21 @@
                         </div>
                         <div class="dropdown">
                               <button class="btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                <IconsSettingsDots width="25" height="25" />
+                                
+                                <IconsBarFilter width="25" height="25" />
                               </button>
                               <div class="dropdown-menu">
-                                    <li class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'date', 'asc')">Data (Ascendente)</li>
-                                    <li class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'date', 'desc')">Data (Descendente)</li>
-                                    <li class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'name', 'asc')">Nome (Ascendente)</li>
-                                    <li class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'name', 'desc')">Nome (Descendente)</li>
+                                    <li type=button class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'date', 'asc')">Data (Ascendente)</li>
+                                    <li type=button class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'date', 'desc')">Data (Descendente)</li>
+                                    <li type=button class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'name', 'asc')">Nome (Ascendente)</li>
+                                    <li type=button class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'name', 'desc')">Nome (Descendente)</li>
                             </div>
                         </div>
                     </div>
-                    <div :class="{'d-flex': changeView, 'd-block': !changeView}" class="requests-box">
-                        <CardsCard v-if="requestsCache.rejectedRequests.length > 0" v-for="(request, index) in requestsCache.rejectedRequests.slice(0, requestsLoaded[2])" :key="index" class="card-container mb-3 bg-light-background-header">
+                    <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}" class="requests-box">
+                        <CardsCard :class="{'card-width-adjust': changeView}" v-if="requestsCache.rejectedRequests.length > 0" 
+                            v-for="(request, index) in requestsCache.rejectedRequests.slice(0, requestsLoaded[2])" :key="index" 
+                            class="col-6 card-container mb-3 mx-2 bg-gray-light">
                             <template v-slot:header>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <p class="justify-content-start mb-3 fw-bold">
@@ -295,13 +281,15 @@
                             </template>
                         </CardsCard>
                         <p class="mt-5 pt-2 opacity-75" v-else>Nenhuma solicitação encontrada...</p>
+                        <div :class="{'d-flex align-items-center ms-2': changeView}" v-if="requestsLoaded[2] < requestsCache.rejectedRequests.length">
+                            <div class="d-flex justify-content-center">
+                                <button @click="requestsLoaded[2] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold" style="padding: 4px;">
+                                    <IconsThinPlus width="30" height="30"/>
+                                </button>
+                            </div>
+                            <div class="d-flex justify-content-center">
                         </div>
-                    <div v-if="requestsLoaded[2] < requestsCache.rejectedRequests.length">
-                        <div class="d-flex justify-content-center">
-                            <button @click="requestsLoaded[2] += 3" class="btn btn-secondary fw-bold px-2 py-2">Carregar mais</button>
-                        </div>
-                        <div class="d-flex justify-content-center">
-                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -329,8 +317,9 @@ const requestsCache = ref({
     rejectedRequests: []
 })
 const totalPages = ref(0);
+const totalElements = ref(0);
 const pagination = ref(0);
-const requestsLoaded = ref([5, 5, 5]);
+const requestsLoaded = ref([3, 3, 3]);
 const searchInput = ref('');
 
 const filter = ref({ type: '', order: '' });
@@ -359,7 +348,6 @@ const sortRequests = (requests, type, order) => {
         });
     }
 };
-
 const requestsReq = async () => {
     const res = await getRequestByUser(userStore, userStore.id, 0);
     res.content.map((request) => {
@@ -375,10 +363,11 @@ const requestsReq = async () => {
                 break;
         }
     })
+    totalElements.value = res.totalElements;
     totalPages.value = res.totalPages;
     pagination.value++;
     if(totalPages.value > 1){
-        for(let i = 0; i < totalPages.value; i++){
+        for(let i = 1; i < totalPages.value; i++){
             const res = await getRequestByUser(userStore, userStore.id, pagination.value);
             res.content.map((request) => {
             switch(request.status){
@@ -449,43 +438,41 @@ const requestsSearchreq = async (searchQuery) => {
 const loadRequests = ref(true);
 let typingTimeout = null;
 const requestsLoad = computed(() => {
-    if(loadRequests.value){
-        requestsReq();
-        return 1;
-    }
     if(searchInput.value !== ''){
         clearTimeout(typingTimeout);
         typingTimeout = setTimeout(() => {
+            pagination.value = 0;
             requestsCache.value = {acceptedRequests: [], inProgressRequests: [], rejectedRequests: []};
             requestsSearchreq(searchInput.value);
         }, 1000);
         return 1;
     }
+    if(loadRequests.value && searchInput.value !== ''){
+        requestsReq();
+        return 1;
+    }
     clearTimeout(typingTimeout);
     typingTimeout = setTimeout(() => {
-        requestsCache.value = {acceptedRequests: [], inProgressRequests: [], rejectedRequests: []};
         pagination.value = 0;
+        requestsCache.value = {acceptedRequests: [], inProgressRequests: [], rejectedRequests: []};
         requestsSearchreq(searchInput.value);
     }, 500);
     return 1;
 })
 
 
-const cancelRequest = async (requestId) => {
+const cancelRequest = async (requestId, index) => {
     try{
         const res = await requestCancel(userStore, requestId);
         popUpStore.throwPopup("Solicitação cancelada com sucesso", 'blue');
-        requestsCache.value = {acceptedRequests: [], inProgressRequests: [], rejectedRequests: []};
-        requestsReq();
+        requestsCache.value.InProgressRequests.split(index, 1);
+        
     } catch(err){
         popUpStore.throwPopup("ERRO: Algum problema ocorreu, contate o suporte", 'red')
     }
 
 }
 
-onBeforeMount(() => {
-    loadRequests.value = false;
-})
 </script>
 
 <style scoped>
@@ -501,7 +488,7 @@ onBeforeMount(() => {
 .card-container{
     box-shadow: 0px 0px 10px 1px rgb(0, 0, 0, 0.3);
     border: solid 1px rgb(0, 0, 0, 0.3);
-    width: 370px;
+    width: 350px;
     transition: box-shadow 0.2s ease-in-out, transform 0.1s ease-in-out;
 }
 .table-box-title{
@@ -513,11 +500,13 @@ onBeforeMount(() => {
     border-radius: 10px 10px 0px 0px;
 }
 .requests-box{
+    padding: 10px;
+    overflow-x: scroll;
 }
 .box-title-text{
     font-size: 20px;
 }
-.card-container:hover{
+.card-container:hover {
     box-shadow: 0px 0px 15px 1px rgb(254, 213, 30, 0.8);
     transform: scale(1.03)
 }
@@ -528,10 +517,13 @@ onBeforeMount(() => {
     width: 0px;
     top: 342px;
     position: absolute;
-    background-color: red;
 }
 .requests-search{
     border-bottom: solid 1px rgb(51, 51, 51, 0.2)
+}
+.requests-comp{
+    background-color: rgb(242, 242, 242);
+    border: solid 1px rgb(0, 0, 0, 0.2);
 }
 .resquest-time{
 	font-size: 15px;
@@ -561,7 +553,7 @@ p{
     margin: 0;
 }
 .table-searchbar{
-    width: 300px;
+    
     border: none;
     border-radius: 10px 10px 10px 10px;
     top: 70px;
@@ -571,10 +563,19 @@ p{
     font-weight: 500;
 }
 .action-btn{
-    margin-right: 10px;
+    font-weight: 500;
+    font-size: 15px;
     border: none;
     border-radius: 10px 10px 0px 0px;
     border-bottom: 1px ridge #1F69B1;
+    margin-right: 10px;
+    box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
+    color: rgb(0, 0, 0, 0.7); 
+    transition: background-color 0.2s ease-in-out;
+}
+.action-btn:hover{
+    color: white !important; 
+    background-color: #0B3B69; 
 }
 .table-searchbar{
     border: none;
@@ -601,5 +602,12 @@ p{
 }
 .search-glass{
     padding-left: 0px;
+}
+
+.width-adjust{
+    width: 1320px;
+}
+.card-width-adjust{
+    width: 371px;
 }
 </style>

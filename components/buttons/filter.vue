@@ -1,6 +1,6 @@
 <template>
     <div class="dropdown">
-        <button @click.stop @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="dropdown-principal filter-btn action-btn d-flex btn btn-outline-ligth mx-1 px-2 mt-1" data-bs-toggle="dropdown" data-bs-close="inside" data-bs-offset="0,2" aria-expanded="false">
+    <button @click.stop @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="dropdown-principal filter-btn action-btn d-flex btn btn-outline-ligth mx-1 px-2"  data-bs-toggle="dropdown" data-bs-close="inside" data-bs-offset="0,2" aria-expanded="false">
             Filtro
             <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
         </button>

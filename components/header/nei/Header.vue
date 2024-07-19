@@ -7,21 +7,11 @@
       <nav class="navbar navbar-expand py-0" style="width: 400px !important;">
           <div class="container-fluid">
             <ul class="navbar-nav d-flex">
-                <li class="nav-item" :class="{'navbar-active': currentRoute.fullPath === '/nei/'}">
-                    <a class="nav-link text-light" href="/nei/" type="button">Início</a>
-                </li>
-                <li class="nav-item" :class="{'navbar-active': currentRoute.fullPath === '/nei/catalogo'}">
-                    <a class="nav-link text-light" href="/nei/catalogo" type="button">Catálogo</a>
-                </li>
-                <li class="nav-item" :class="{'navbar-active': currentRoute.fullPath === '/nei/solicitacoes'}">
-                    <a class="nav-link text-light" href="/nei/solicitacoes" type="button">Solicitações</a>
-                </li>
-                <li class="nav-item" :class="{'navbar-active': currentRoute.fullPath === '/nei/configuracoes'}">
-                    <a class="nav-link text-light" href="/nei/configuracoes" type="button">Configurações</a>
-                </li>
-                <li class="nav-item" :class="{'navbar-active': currentRoute.fullPath === '/nei/sobre'}">
-                    <a class="nav-link text-light" href="/nei/sobre" type="button">Sobre</a>
-                </li>
+                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/'}" class="px-1 nav-item nav-link text-light" href="/nei/" type="button">Início</a>
+                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/catalogo'}" class="px-1 nav-item nav-link text-light" href="/nei/catalogo" type="button">Catálogo</a>
+                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/solicitacoes'}" class="px-1 nav-item nav-link text-light" href="/nei/solicitacoes" type="button">Solicitações</a>
+                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/configuracoes'}" class="px-1 nav-item nav-link text-light" href="/nei/configuracoes" type="button">Configurações</a>
+                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/sobre'}" class="px-1 nav-item nav-link text-light" href="/nei/sobre" type="button">Sobre</a>  
             </ul>
           </div>
       </nav>
@@ -94,11 +84,13 @@ export default{
   font-weight: bold;
 }
 .nav-item{
-  padding-top: 6px;
-  padding-bottom: 6px;
+  padding-top: 12px;
+  padding-bottom: 13px;
   transition: padding 0.2s ease-in-out,box-shadow 0.4s ease, border-bottom 0.4s ease-in-out;
 }
 .nav-item:hover{
+  padding-top: 6px !important;
+  padding-bottom: 19px !important;
   border-bottom: solid 1px #FED51E;
   box-shadow: inset 0px -12px 15px -13px rgb(254, 213, 30, 0.7);
   padding: 0px 0px 0px 0px;
@@ -106,8 +98,6 @@ export default{
 .navbar-active{
   border-bottom: solid 1px #FED51E;
   box-shadow: inset 0px -12px 15px -13px rgb(254, 213, 30, 0.7);
-  padding-top: 6px;
-  padding-bottom: 6px;
 }
 .mobile-search{
   margin-top: 2.9px;

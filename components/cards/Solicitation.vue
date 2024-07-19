@@ -1,12 +1,11 @@
 <template>
 	<Card class="mb-5 cards-grid">
 		<template v-slot:header>
-			<TooltipsRectangular class="tooltipMargin" :toolTipState="toolTip" :toolTipText="'Data e Horário da Solicitação'"/>
 			<div class="d-flex justify-content-between align-items-center">
 				<h6 class="justify-content-start mb-3">
 					Solicitação
     		    </h6>
-    		    <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{requestedAt.slice(0, 19)}}<IconsClock class="clock ms-2"/></p>
+    		    <p class="resquest-time mb-3">{{requestedAt.slice(0, 19)}}<IconsClock class="clock ms-2"/></p>
     		</div>
 		</template>
 		<template v-slot:default> 

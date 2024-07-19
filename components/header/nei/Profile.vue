@@ -98,7 +98,6 @@ const adjustTime = () => {
   } 
 }
 const loadNotifications = async () => {
-  console.log("TESTe")
   const res = await getRequestByUser(userStore, userStore.id, pagination.value);
   totalElements.value = res.totalElements;
   res.content.map((request) => {
