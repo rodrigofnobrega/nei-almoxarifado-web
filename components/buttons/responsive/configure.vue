@@ -6,8 +6,8 @@
             <IconsSettings class="mx-1" width="1.5em" height="1.5em"/>
         </button>
         <ul class="dropdown-menu large-menu py-0">
-            <li class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2 pe-0">
-                <label class="form-check-label" for="editCheck">habilitar edição</label>
+            <li type="button" class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2 pe-0">
+                <label type="button" class="form-check-label" for="editCheck">habilitar edição</label>
                 <input v-model="store.isEditionMode" @click="store.isEditionMode = !store.isEditionMode" class="form-check-input me-2" value="" id="editCheck" type="checkbox">
             </li>
             <li class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2 pe-0 mb-0" style="padding-bottom: 4px;">
@@ -70,12 +70,7 @@ const sendDataToParent = (filter, isInverted) => {
     setItemsFilter(filter, isInverted)
 }
 
-onMounted(() => {
-    if(store.isMobile){
-        const btnText = document.querySelectorAll('.filter-btn');
-        btnText.forEach(element => element.style.fontSize = '9px');
-    }
-})
+
 </script>
 
 <style scoped>

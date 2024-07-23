@@ -17,13 +17,6 @@ import { onMounted } from 'vue';
 import { useStorageStore } from '../../stores/storage';
 
 const store = useStorageStore();
-onMounted(() => {
-    if(store.isMobile){
-        const columnTitles = document.querySelectorAll('.col-title');
-        columnTitles.forEach(element => element.style.fontSize = '8px')
-    }
-
-})
 
 </script>
 
@@ -83,7 +76,7 @@ tr:hover .table-btn{
 tr:hover p{
     opacity: 70%;
 }
-
+/*
 @media screen and (max-width: 1030px) {
     .col-title{
         font-size: 13px;
@@ -119,5 +112,5 @@ tr:hover p{
     .table-btn{
         font-size: 11px;
     }
-}
+}*/
 </style>

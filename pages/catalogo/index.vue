@@ -66,10 +66,10 @@
                <th class="border" width="5%">
                    <TooltipsFastRectangular class="toolTip me-5 pe-5 mb-5" style="margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
                    <TooltipsFastRectangular class="toolTip me-5 pe-5" style="margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Histórico'"/>
-                    <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                    <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         <IconsSearchGlass width="18px" height="19px"/>
                     </button>
-                    <button @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false" class="my-0 position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}"  @click="showHistory(item.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                    <button @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false" class="my-0 position-sticky table-btn btn btn-secondary"   @click="showHistory(item.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
                         <IconsHistory width="18px" height="19px"/>
                     </button>
                </th>
@@ -79,37 +79,47 @@
             </div>
         </template>
         </TablesTable>
-    <div class="table-footer d-flex justify-content-between align-items-center  mt-2">
-        <div class="d-flex justify-content-center me-3 ">
-            <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span>
-            <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de itens: {{ totalElements }}</span>
+        <div class="table-footer d-flex justify-content-between align-items-center  mt-2">
+            <div class="d-flex justify-content-center me-3 ">
+                <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span>
+                <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de itens: {{ totalElements }}</span>
+            </div>
+            <nav v-if="itemsCache.length > 0 && finded.length === 0" aria-label="Page navigation" class="pagination">
+                <ul class="pagination mb-2 mt-2">
+                    <li class="page-item">
+                        <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
+                    </li>
+                    <li v-if="totalPages > 4" class="page-item" :key="0">
+                        <button class="page-link text-light" @click="page(0)" :class="{'bg-primary': !pagesFocus[0], 'bg-secondary': pagesFocus[0]}">{{ 1 }}</button>
+                    </li>
+                    <li v-show="pagination >= 3 && totalPages > 5" class="page-item">
+                        <button class="page-link bg-primary text-light">...</button>
+                    </li>
+                    <li class="page-item" v-for="i in totalPages > 4 ? range(1+paginationRet, 3+paginationRet) : range(1,totalPages)" :key="i-1">
+                        <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
+                    </li>
+                    <li v-show="totalPages > 3 && paginationRet < totalPages-4" class="page-item">
+                        <button class="page-link bg-primary text-light">...</button>
+                    </li>
+                    <li v-if="totalPages > 4" class="page-item" :key="totalPages-1">
+                        <button class="page-link text-light" @click="page(totalPages-1)" :class="{'bg-primary': !pagesFocus[totalPages-1], 'bg-secondary': pagesFocus[totalPages-1]}">{{ totalPages }}</button>
+                    </li>
+                    <li class="page-item">
+                        <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1 || searchInput !== ''}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
+                    </li>
+                </ul>
+            </nav>
         </div>
-        <nav v-if="itemsCache.length > 0 && finded.length === 0" aria-label="Page navigation" class="pagination">
-            <ul class="pagination mb-2 mt-2">
-                <li class="page-item">
-                    <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
-                </li>
-                <li v-if="totalPages > 4" class="page-item" :key="0">
-                    <button class="page-link text-light" @click="page(0)" :class="{'bg-primary': !pagesFocus[0], 'bg-secondary': pagesFocus[0]}">{{ 1 }}</button>
-                </li>
-                <li v-show="pagination >= 3 && totalPages > 5" class="page-item">
-                    <button class="page-link bg-primary text-light">...</button>
-                </li>
-                <li class="page-item" v-for="i in totalPages > 4 ? range(1+paginationRet, 3+paginationRet) : range(1,totalPages)" :key="i-1">
-                    <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
-                </li>
-                <li v-show="totalPages > 3 && paginationRet < totalPages-4" class="page-item">
-                    <button class="page-link bg-primary text-light">...</button>
-                </li>
-                <li v-if="totalPages > 4" class="page-item" :key="totalPages-1">
-                    <button class="page-link text-light" @click="page(totalPages-1)" :class="{'bg-primary': !pagesFocus[totalPages-1], 'bg-secondary': pagesFocus[totalPages-1]}">{{ totalPages }}</button>
-                </li>
-                <li class="page-item">
-                    <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1 || searchInput !== ''}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
-                </li>
-            </ul>
-        </nav>
-        </div>
+    </div>
+    <div class="d-flex fw-bold justify-content-center mt-5">
+        <a class="warning-box mx-4 text-decoration-none p-2 text-center bg-warning-op80 text-dark" type="button" href="/sobre">
+            <IconsInformation class="mb-1"/>
+            Dúvidas? Clique aqui para ver a documentação
+        </a>
+        <a class="warning-box mx-4 p-2 text-center bg-secondary-op80 text-decoration-none text-light" type="button" href="mailto:almoxarifado957@gmail.com">
+            <IconsInformation class="mb-1"/>
+            Sugestões? Clique aqui e envie um email para equipe
+        </a>
     </div>
 </div>
 </template>
@@ -122,10 +132,12 @@ import { getItem, getItems } from '../../services/items/itemsGET.ts';
 import { useUser } from '../../stores/user.ts'
 import { getRecordByItemId } from '../../services/record/recordGET.ts';
 import { useRoute, useRouter } from 'vue-router';
+import { useSettingsStore } from '../../stores/settings';
 /*SETANDO STORES*/
 const userStore = useUser()
 const store = useStorageStore();
 const searchStore = useSearch();
+const settingsStore = useSettingsStore();
 /*VARIÁVEIS ÚTEIS PARA REQUISITAR OS ITENS E FILTRÁ-LOS*/ 
 const paginationRet = ref(1)
 function range(start, end) {
@@ -378,43 +390,6 @@ onMounted(async () => {
         showSearchingDetails(searchStore.itemSearch.itemId);
         searchStore.itemSearch.searching = false;
     }
-    if(store.isMobile){
-        const catalogTextElement = document.querySelector('.sub-catalog p')
-        const textElements = document.querySelectorAll('tr p');
-        const searchBar = document.querySelector('.searchbar');
-        const searchBox = document.querySelector('.table-searchbar');
-        const tableLines = document.querySelectorAll('tr');
-
-        searchBox.style.fontSize = '8px';
-        searchBar.style.width = '100%';
-        searchBar.style.fontSize = '8px';
-        catalogTextElement.style.fontSize = '8px';
-        tableLines.forEach(element => {
-            element.addEventListener('click', (() => {
-                element.children[4].children[1].children[0].click()
-            }))
-        });
-        textElements.forEach(element => element.style.fontSize = '7px');
-    }
-});
-onUpdated(async () => {  
-    if(store.isMobile){
-        const catalogTextElement = document.querySelector('.sub-catalog p')
-        const textElements = document.querySelectorAll('tr p');
-        const searchBar = document.querySelector('.searchbar');
-        const tableLines = document.querySelectorAll('tr');
-
-        tableLines.forEach((element, index) => {
-            element.addEventListener('click', (() => {
-                element.children[4].children[1].children[0].click()
-            }))
-        });
-
-        searchBar.style.width = '100%';
-        searchBar.style.fontSize = '8px';
-        catalogTextElement.style.fontSize = '8px';
-        textElements.forEach(element => element.style.fontSize = '7px');
-    }
 });
 </script>
 
@@ -425,7 +400,7 @@ onUpdated(async () => {
 }
 .table-container{
     padding-top: 6px;
-    margin-bottom: 152px;
+    margin-bottom: 62px;
     width: 100%;
     display: block !important;
 }
@@ -483,8 +458,9 @@ th span{
     font-size: 12px;
 }
 .col-title{
-    font-size: 13px;
-    opacity: 80%;
+    font-size: 14px;
+    color: rgb(51,51,51, 0.9);
+    opacity: 90%;
     font-weight: 600;
     margin-top: 0;
 }
@@ -551,6 +527,29 @@ p{
     margin-top: 5%;
     margin-left: 35%;
 }
+.bg-warning-op80{
+    opacity: 80%;
+    background-color: rgba(254, 213, 30);
+}
+.bg-secondary-op80{
+    opacity: 80%;
+    background-color: #0052a4;
+}
+.warning-box{
+    color: black;
+    font-size: 15px;
+    border-radius: 7px;
+    width: 280px;
+    transition: width 0.3s ease-in-out, box-shadow 0.4s ease-in-out;
+}
+.bg-warning-op80:hover{
+    box-shadow: 0px 0px 15px 4px rgb(160, 152, 2);
+    width: 290px;
+}
+.bg-secondary-op80:hover{
+    box-shadow: 0px 0px 15px 4px rgb(5, 64, 119);
+    width: 290px;
+}
 .search-empty{
     margin-top: 5%;
     display: flex;
@@ -582,11 +581,7 @@ tr:hover p{
     opacity: 50%;
 }
 /*RESPONSIVIDADE*/
-@media screen and (max-width: 1030px) {
-    th span, .col-title{
-        font-size: 11px;
-    }
-}
+
 @media screen and (max-width: 900px){
     .actions-buttons{
         justify-content: center;
@@ -603,11 +598,7 @@ tr:hover p{
         margin-top: 9px !important;
     }
     .col-title{
-        font-size: 12px;
-        padding: 0px 5  px 0px 5px;
-    }
-    th span{
-        font-size: 10px;
+        padding: 0px 5px 0px 5px;
     }
     .table-footer{
         display: block !important;
@@ -616,6 +607,7 @@ tr:hover p{
 
     .table-searchbar{
         min-width: 120px;
+        margin-top: 8px !important; 
         display: block;
     }
 }

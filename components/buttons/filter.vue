@@ -101,9 +101,10 @@
 import { inject, onMounted} from 'vue';
 import { useUser } from '../../stores/user';
 import { useStorageStore } from '../../stores/storage';
+import { useSettingsStore } from '../../stores/settings';
 
 
-
+const settingsStore = useSettingsStore();
 const toolTip = ref(false);
 const store = useStorageStore();
 
@@ -127,15 +128,6 @@ const sendDataToParent = (filter, isInverted) => {
     setItemsFilter(filter, isInverted)
 }
 
-onMounted(() => {
-    if(store.isMobile){
-        const btnText = document.querySelectorAll('.filter-btn');
-        const dropdownToggle = document.querySelector('.dropdown-principal');
-        dropdownToggle.removeAttribute('data-bs-auto-close')
-        dropdownToggle.setAttribute('data-bs-auto-close', 'outside')
-        btnText.forEach(element => element.style.fontSize = '9px');
-    }
-})
 </script>
 
 <style scoped>

@@ -17,11 +17,11 @@
         </p>
     </div>
   <div class="table-box row d-block bg-light mx-2">
-      <div class="table-actions d-flex justify-content-between aling-items-center" style="margin-bottom: -1px !important;">
+      <div class="table-actions d-flex justify-content-between aling-items-center" style="margin-bottom: 0px !important;">
         <div class="d-flex me-1">
-            <ButtonsFilter v-if="uploadReloader === 1" style="margin-top: 3px;"/>
+            <ButtonsFilter class="action-sbtn" v-if="uploadReloader === 1" style="margin-top: 0px;"/>
         </div>
-        <span v-if="recordsLoad" class="position-sticky d-flex align-items-center table-searchbar">
+        <span v-if="recordsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 3px;">
             <IconsSearchGlass class="search-glass"/>
             <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
         </span>
@@ -29,9 +29,9 @@
       <TablesTable>
           <template v-slot:header>
               <tr>
+                  <th class="col-title py-2 border" scope="col">Item</th>
                   <th class="col-title py-2 border" scope="col">Autor</th>
                   <th class="col-title py-2 border" scope="col">Operação</th>
-                  <th class="col-title py-2 border" scope="col">Item</th>
                   <th class="col-title py-2 border" scope="col">Quantidade</th>
                   <th class="col-title py-2" scope="col">Data e horário </th>
                   <th class="col-title py-2" scope="col">Ações</th>
@@ -39,14 +39,14 @@
           </template>
           <template v-slot:content>
           <tr v-if="recordsCache.length > 0" v-for="(record, index) in recordsCache[cacheIndex]" :key="index" :data-index="index">
+             <th class="border">
+                 <span>{{ record.item.name }}</span>
+             </th>
              <th class="border" scope="row">
                   <span>{{ record.user.name }}</span>
              </th>
              <th class="border">
                  <span>{{ record.operation }}</span>
-              </th>
-              <th class="border">
-                  <span>{{ record.item.name }}</span>
               </th>
              <th class="border">
                  <span>{{ record.quantity }}</span>
@@ -57,10 +57,10 @@
              <th class="border" width="5%">
                     <TooltipsFastRectangular class="toolTip me-5 pe-5 mb-5" style="margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
                    <TooltipsFastRectangular class="toolTip me-5 pe-5" style="margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Perfil'"/>
-                   <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                   <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary"  @click="showDetails(index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         <IconsSearchGlass width="18px" height="19px"/>
                     </button>
-                    <NuxtLink  @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false"  :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`"  class="my-0 details-btn position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}">
+                    <NuxtLink  @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false"  :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`"  class="my-0 details-btn position-sticky table-btn btn btn-secondary">
                       <IconsLowProfile width="16px" height="16px"/>  
                     </NuxtLink>
                </th>
@@ -70,7 +70,7 @@
           </div>
       </template>
   </TablesTable>
-<div class="table-footer d-flex justify-content-between align-items-center me-2 mt-2">
+    <div class="table-footer d-flex justify-content-between align-items-center me-2 mt-2">
       <div class="d-flex justify-content-center me-3 ">
           <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de registros da página: {{ recordsCache[cacheIndex].length }}</span>
           <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de registros: {{ totalElements }}</span>
@@ -100,8 +100,18 @@
                 </li>
             </ul>
         </nav>
+    </div>
   </div>
-  </div>
+  <div class="d-flex fw-bold justify-content-center mt-5">
+        <a class="warning-box mx-4 text-decoration-none p-2 text-center bg-warning-op80 text-dark" type="button" href="/sobre">
+            <IconsInformation class="mb-1"/>
+            Dúvidas? Clique aqui para ver a documentação
+        </a>
+        <a class="warning-box mx-4 p-2 text-center bg-secondary-op80 text-decoration-none text-light" type="button" href="mailto:almoxarifado957@gmail.com">
+            <IconsInformation class="mb-1"/>
+            Sugestões? Clique aqui e envie um email para equipe
+        </a>
+    </div>
 </div>
 </template>
 
@@ -117,6 +127,7 @@ import { useRoute } from 'vue-router';
 const userStore = useUser()
 const store = useStorageStore();
 const searchStore = useSearch();
+
 const setpageTitle = inject('setpageTitle');
 const sendDataToParent = () => {
     const title = "Registro";
@@ -383,43 +394,6 @@ const toolTipState = ref([[], []]);
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     initialLoading.value = false;
-    if(store.isMobile){
-        const catalogTextElement = document.querySelector('.sub-catalog p')
-        const textElements = document.querySelectorAll('tr p');
-        const searchBar = document.querySelector('.searchbar');
-        const searchBox = document.querySelector('.table-searchbar');
-        const tableLines = document.querySelectorAll('tr');
-
-        searchBox.style.fontSize = '8px';
-        searchBar.style.width = '100%';
-        searchBar.style.fontSize = '8px';
-        catalogTextElement.style.fontSize = '8px';
-        tableLines.forEach(element => {
-            element.addEventListener('click', (() => {
-                element.children[4].children[1].children[0].click()
-            }))
-        });
-        textElements.forEach(element => element.style.fontSize = '7px');
-    }
-});
-onUpdated(async () => {  
-    if(store.isMobile){
-        const catalogTextElement = document.querySelector('.sub-catalog p')
-        const textElements = document.querySelectorAll('tr p');
-        const searchBar = document.querySelector('.searchbar');
-        const tableLines = document.querySelectorAll('tr');
-
-        tableLines.forEach((element, index) => {
-            element.addEventListener('click', (() => {
-                element.children[4].children[1].children[0].click()
-            }))
-        });
-
-        searchBar.style.width = '100%';
-        searchBar.style.fontSize = '8px';
-        catalogTextElement.style.fontSize = '8px';
-        textElements.forEach(element => element.style.fontSize = '7px');
-    }
 });
 </script>
 
@@ -430,7 +404,7 @@ onUpdated(async () => {
 }
 .table-container{
     padding-top: 6px;
-    margin-bottom: 152px;
+    margin-bottom: 62px;
     width: 100%;
     display: block !important;
 }
@@ -488,8 +462,9 @@ th span{
     font-size: 12px;
 }
 .col-title{
-    font-size: 13px;
-    opacity: 80%;
+    font-size: 14px;
+    color: rgb(51,51,51, 0.9);
+    opacity: 90%;
     font-weight: 600;
     margin-top: 0;
 }
@@ -556,6 +531,29 @@ p{
     margin-top: 5%;
     margin-left: 35%;
 }
+.bg-warning-op80{
+    opacity: 80%;
+    background-color: rgba(254, 213, 30);
+}
+.bg-secondary-op80{
+    opacity: 80%;
+    background-color: #0052a4;
+}
+.warning-box{
+    color: black;
+    font-size: 15px;
+    border-radius: 7px;
+    width: 280px;
+    transition: width 0.3s ease-in-out, box-shadow 0.4s ease-in-out;
+}
+.bg-warning-op80:hover{
+    box-shadow: 0px 0px 15px 4px rgb(160, 152, 2);
+    width: 290px;
+}
+.bg-secondary-op80:hover{
+    box-shadow: 0px 0px 15px 4px rgb(5, 64, 119);
+    width: 290px;
+}
 .search-empty{
     margin-top: 5%;
     display: flex;
@@ -587,17 +585,14 @@ tr:hover p{
     opacity: 50%;
 }
 /*RESPONSIVIDADE*/
-@media screen and (max-width: 1030px) {
-    th span, .col-title{
-        font-size: 11px;
-    }
-}
 @media screen and (max-width: 900px){
     .actions-buttons{
         justify-content: center;
         align-content: center;
     }
-
+    .action-sbtn{
+        margin-top: 4px !important;
+    }
     .pages-info{
         text-wrap: wrap;
         text-align: center;
@@ -605,11 +600,7 @@ tr:hover p{
 }
 @media screen and (max-width: 790px) {
     .col-title{
-        font-size: 12px;
-        padding: 0px 5  px 0px 5px;
-    }
-    th span{
-        font-size: 10px;
+        padding: 0px 5px 0px 5px;
     }
     .table-footer{
         display: block !important;
@@ -618,6 +609,7 @@ tr:hover p{
 
     .table-searchbar{
         min-width: 120px;
+        margin-top: 3px !important; 
         display: block;
     }
 }

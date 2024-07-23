@@ -128,15 +128,7 @@ const sendDataToParent = (filter, isInverted) => {
     setItemsFilter(filter, isInverted)
 }
 
-onMounted(() => {
-    if(store.isMobile){
-        const btnText = document.querySelectorAll('.filter-btn');
-        const dropdownToggle = document.querySelector('.dropdown-principal');
-        dropdownToggle.removeAttribute('data-bs-auto-close')
-        dropdownToggle.setAttribute('data-bs-auto-close', 'outside')
-        btnText.forEach(element => element.style.fontSize = '9px');
-    }
-})
+    
 </script>
 
 <style scoped>

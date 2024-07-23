@@ -20,13 +20,6 @@ import { onMounted } from 'vue';
 import { useStorageStore } from '../../../stores/storage';
 const store = useStorageStore();
 const toolTip = ref(false);
-onMounted(() => {
-    if(store.isMobile){
-        const btnText = document.querySelector('.new-btn');
-        btnText.style.fontSize = '9px';
-    }
-
-})
 
 </script>
 
