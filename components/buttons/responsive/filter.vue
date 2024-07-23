@@ -1,6 +1,6 @@
 <template>
     <div class="dropdown">
-        <button v-if="settingsStore.isMobile" @click.stop @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" 
+    <button v-if="settingsStore.isMobile" @click.stop @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" 
         class="dropdown-principal mt-1 filter-btn action-btn d-flex btn btn-outline-ligth mx-1 px-2"  
         data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
         Filtro
@@ -99,13 +99,14 @@
 
 <script setup>
 import { inject, onMounted} from 'vue';
-import { useUser } from '../../stores/user';
-import { useStorageStore } from '../../stores/storage';
+import { useStorageStore } from '../../../stores/storage';
+import { useSettingsStore } from '../../../stores/settings';
 
 
 
 const toolTip = ref(false);
 const store = useStorageStore();
+const settingsStore = useSettingsStore();
 
 const dropdownStates = ref([false, false, false, false]);
 const toggleDropdown = (dropdown_id) => {
@@ -194,6 +195,13 @@ li{
 @media screen and (max-width: 820px){
     .action-btn{
         font-size:  12px;
+    }
+}
+@media screen and (max-width: 500px){
+    .action-btn{
+        border-radius: 10px 10px 10px 10px;
+        background-color: #0B3B69;
+        color: white;
     }
 }
 /*

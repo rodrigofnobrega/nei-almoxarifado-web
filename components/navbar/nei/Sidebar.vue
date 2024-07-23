@@ -1,25 +1,25 @@
 <template>
-    <div class="modal-backdrop" :style="{'display': (responsive && isMobile) ? 'block' : 'none' }"></div>
-    <div class="sidebar pt-0 nav bg-light d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed, 'hide': (responsive && !isMobile) || (settingsStore.isMobile && !responsive), 'mobile-spacement': responsive && isMobile, 'mobile-fixed': responsive }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+    <div class="modal-backdrop" :style="{'display': responsive && isMobile ? 'block' : 'none' }"></div>
+    <div v-if="responsive" class="sidebar pt-0 nav bg-light d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed, 'hide': responsive && !isMobile, 'mobile-spacement': responsive && isMobile, 'mobile-fixed': responsive }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-body ps-0" :class="{'mobile-padding': responsive }">
             <div class="mobile-sidebar-header bg-primary m-0 p-0 text-light" :class="{'show': responsive && isMobile}" :style="{'width': responsive && isMobile ? '165px': '0px'}">
                 <IconsClose @click="hideSidebar()" class="exit-btn me-3" style="width: 25px; height: 25px;"/>
             </div>
             <ul class="list-group-flush container d-block" :class="{ 'collapsed': isCollapsed }">
                 <a class="text-decoration-none" href="/" aria-current="true">
-                    <div class="item-bg item-top mb-2" :class="{'bg-primary text-white active': $route.path === '/', 'text-dark-emphasis': $route.path !== '/'}">
+                    <div class="item-bg item-top mb-2" :class="{'bg-primary text-white active': $route.path === '/nei/', 'text-dark-emphasis': $route.path !== '/nei/'}">
                         <IconsHome class="nav-icon"/>
                         <span class="list-group-item">Início</span>
                     </div>
                 </a>
-                <a class="text-decoration-none" href="/controle-de-acesso" aria-current="true">
-                    <div class="item-bg" :class="{'bg-primary text-white active': $route.path === '/controle-de-acesso', 'text-dark-emphasis': $route.path !== '/controle-de-acesso' }">
-                        <IconsControl class="nav-icon"/>
-                        <span class="list-group-item text-wrap">Controle de Acesso</span>
+                <a class="text-decoration-none" href="/nei/solicitacoes" aria-current="true">
+                    <div class="item-bg" :class="{'bg-primary text-white active': $route.path === '/nei/solicitacoes', 'text-dark-emphasis': $route.path !== '/nei/solicitacoes' }">
+                        <IconsRequest width="20" height="21" class="nav-icon"/>
+                        <span class="list-group-item text-wrap">Solicitações</span>
                     </div>
                 </a>
-                <a class="text-decoration-none" href="/catalogo" aria-current="true">
-                    <div class="item-bg" :class="{'bg-primary text-white active': $route.path === '/catalogo', 'text-dark-emphasis': $route.path !== '/catalogo' }">
+                <a class="text-decoration-none" href="/nei/catalogo" aria-current="true">
+                    <div class="item-bg" :class="{'bg-primary text-white active': $route.path === '/nei/catalogo', 'text-dark-emphasis': $route.path !== '/nei/catalogo' }">
                         <IconsSpreadSheet class="nav-icon"/>
                         <span class="list-group-item">Catálogo</span>
                     </div>
@@ -41,20 +41,14 @@
                         </div>
                     </a>
                 </div>
-                <a class="text-decoration-none" href="/registro" aria-current="true">
-                    <div class="item-bg" :class="{'bg-primary text-white active': $route.path === '/registro', 'text-dark-emphasis': $route.path !== '/registro'}">
-                        <IconsDirectory class="nav-icon"/>
-                        <span class="list-group-item">Registro</span>
-                    </div>
-                </a>
-                <a class="text-decoration-none" href="/configuracoes" aria-current="true">
-                    <div class="item-bg" :class="{'bg-primary text-white active': $route.path === '/configuracoes', 'text-dark-emphasis': $route.path !== '/configuracoes'}">
+                <a class="text-decoration-none" href="/nei/configuracoes" aria-current="true">
+                    <div class="item-bg" :class="{'bg-primary text-white active': $route.path === '/nei/configuracoes', 'text-dark-emphasis': $route.path !== '/nei/configuracoes'}">
                         <IconsSettings class="nav-icon"/>
                         <span class="list-group-item">Configurações</span>
                     </div>
                 </a>
-                <a class="text-decoration-none" href="/sobre" aria-current="true">
-                    <div class="item-bg text-start" :class="{'bg-primary text-white active': $route.path === '/sobre', 'text-dark-emphasis': $route.path !== '/sobre'}">
+                <a class="text-decoration-none" href="/nei/sobre" aria-current="true">
+                    <div class="item-bg text-start" :class="{'bg-primary text-white active': $route.path === '/nei/sobre', 'text-dark-emphasis': $route.path !== '/nei/sobre'}">
                         <IconsInformation class="nav-icon"/>
                         <span class="d-inline-block list-group-item">Sobre</span>
                     </div>
@@ -70,8 +64,7 @@
 </template>
     
 <script >
-import { useSettingsStore } from '../../stores/settings';
-import { useStorageStore } from '../../stores/storage';
+import { useStorageStore } from '../../../stores/storage';
 import { ref } from 'vue';
 export default {
     data() {
@@ -104,7 +97,8 @@ export default {
             useStorageStore().setRotated();
         },
         mobileMode(){
-            this.responsive = window.innerWidth <= 897;
+            this.responsive = window.innerWidth <= 821;
+            this.store.isMobileMenu = window.innerWidth >= 821;
         },
         hideSidebar(){
             this.store.isMobileMenu = false;
@@ -125,10 +119,8 @@ export default {
     },
     setup(){
         const store = useStorageStore();
-        const settingsStore = useSettingsStore();
         return{
-            store,
-            settingsStore
+            store
         }
     }
 }
@@ -245,7 +237,7 @@ export default {
 .colapse-btn{
     width: 175px;
     border-radius: 0;
-    bottom: 0px;
+    bottom: 0;
     height: 40px;
     transition: width 0.6s ease-in-out;
     overflow: hidden;
@@ -282,7 +274,6 @@ export default {
 }
 .item-bg:hover{
     background: #D9D9D9;
-    color: #333333;
     border-radius: 9px;
 }
 </style>

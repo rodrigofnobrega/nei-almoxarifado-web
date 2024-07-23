@@ -37,7 +37,7 @@ export const useStorageStore = defineStore('storage', {
         }
         this.isReloadItems = true;
       },
-      async updateItems(items, item_id, item_name, item_sipac){
+      async updateItems(item_id, item_name, item_sipac){
         if(item_id){
           try{
             const userStore = useUser();
@@ -65,19 +65,6 @@ export const useStorageStore = defineStore('storage', {
           count++;
         };
         this.sendItems(this.items);
-      },
-      updateItemQtd(index: number, newName: string, newSipac: string, almoxarifado: string) {
-        let count = 0;
-        let item_id;
-        for(let i = 0; i < this.items.length; i++){
-            if(index == count){
-              item_id = this.items[i].id;
-              this.items[i].name = newName;
-              this.items[i].sipacCode = newSipac;
-            }
-          count ++;
-        };
-        this.updateItems(this.items, item_id, newName, newSipac);
       },
       setSublink(sublinks: string[]) {
           this.sidebarSublinks = sublinks;

@@ -2,6 +2,9 @@
     <div id="content">
       <HeaderNeiHeader />
         <div class="d-flex bg-fade"> 
+          <div class="fluid-container"> 
+            <NavbarNeiSidebar />
+          </div>
           <div class="main">
               <slot />
           </div> 

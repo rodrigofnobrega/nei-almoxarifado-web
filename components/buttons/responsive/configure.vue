@@ -1,6 +1,7 @@
 <template>
     <div class="dropdown">
-        <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-ligth mx-1 px-2 mt-1 text-nowrap" data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
+        <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-ligth mx-1 px-2 mt-1 text-nowrap" 
+        data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
             Mais ações
             <IconsSettings class="mx-1" width="1.5em" height="1.5em"/>
         </button>
@@ -18,9 +19,9 @@
 
 <script setup>
 import { inject, onMounted} from 'vue';
-import { useUser } from '../../stores/user';
-import { useStorageStore } from '../../stores/storage';
-import { postCreateItem } from '../../services/items/itemsPOST';
+import { useUser } from '../../../stores/user';
+import { useStorageStore } from '../../../stores/storage';
+import { postCreateItem } from '../../../services/items/itemsPOST';
 import * as XLSX from 'xlsx';
 
 
@@ -141,6 +142,13 @@ li{
     }
     .dropdown-item{
         font-size: 11px;
+    }
+}
+@media screen and (max-width: 500px){
+    .action-btn{
+        border-radius: 10px 10px 10px 10px;
+        background-color: #0B3B69;
+        color: white;
     }
 }
 </style>

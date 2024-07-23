@@ -1,10 +1,11 @@
 <template>
     <div class="header container-fluid d-flex justify-content-between align-items-center bg-primary p-0">  
-      <div @mouseover="toolTip = true" @mouseout="toolTip = false" class=" align-items-center" :class="{'d-none': responsive}">
+      <IconsMenu @click="expandSidebar()" class="d-none menu-color mx-3" :class="{'show-menu': settingsStore.isMobile}"/>
+      <div @mouseover="toolTip = true" @mouseout="toolTip = false" class=" align-items-center" :class="{'d-none': settingsStore.isMobile}">
         <Brand class="ms-3"/>
         <TooltipsRectangular class="ms-5 ps-5 pt-2" :toolTipState="toolTip" :toolTipText="'Página Inicial'"/>
       </div> 
-      <nav class="navbar navbar-expand py-0" style="width: 400px !important;">
+      <nav v-if="!settingsStore.isMobile" class="navbar navbar-expand py-0">
           <div class="container-fluid">
             <ul class="navbar-nav d-flex">
                 <a :class="{'navbar-active': currentRoute.fullPath === '/nei/'}" class="px-1 nav-item nav-link text-light" href="/nei/" type="button">Início</a>
@@ -16,35 +17,38 @@
           </div>
       </nav>
       <div class="d-flex justify-content-end align-items-center">
-          <ThemeSwitch />
-          <IconsSearchGlass :class="{'d-none': !responsive}" class="mobile-search text-light" type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal"/>
-          <Profile />
+        <IconsSearchGlass :class="{'d-none': !smallSearch}" class="mobile-search text-light me-2 mt-1" type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal"/>
+        <SearchBar :class="{'d-none': smallSearch}"  class="pb-1"/>
+        <ThemeSwitch class="mt-1"/>
+        <Profile />
       </div>     
-      </div>
+    </div>
   </template>
   
 <script>
 import Brand from './Brand.vue'
 import Profile from './Profile.vue'
+import SearchBar from '../SearchBar.vue';
 import { useStorageStore } from "../../../stores/storage";
 import { useRoute } from 'vue-router';
 import ThemeSwitch from '../ThemeSwitch.vue';
+import { useSettingsStore } from '../../../stores/settings';
 export default{
     data(){
       return{
-        responsive: false
+        responsive: true,
+        smallSearch: false
       }
     },
-    components: { Profile, Brand, ThemeSwitch },
+    components: { Profile, Brand, ThemeSwitch, SearchBar },
     mounted(){
       window.addEventListener('resize', this.mobileMode)
       this.mobileMode()
     },
     methods: {
       mobileMode(){
-          this.responsive = window.innerWidth <= 726;
-          this.store.isResponsive = window.innerWidth <= 726;
-          if(window.innerWidth === 726){
+          this.settingsStore.isMobile = window.innerWidth <= 821;
+          if(window.innerWidth === 821){
             this.store.responsive = false
           }
       },
@@ -55,11 +59,13 @@ export default{
     setup(){
       const toolTip = ref(false);
       const currentRoute = useRoute();
+      const settingsStore = useSettingsStore();
       const store = useStorageStore();
       return{
         store,
         toolTip,
-        currentRoute
+        currentRoute,
+        settingsStore
       }
     }
 }
@@ -79,6 +85,9 @@ export default{
 .header{
   position: fixed;
   z-index: 1050;
+}
+.navbar{
+  margin-left: 16%;
 }
 .nav-link{
   font-weight: bold;
@@ -101,5 +110,10 @@ export default{
 }
 .mobile-search{
   margin-top: 2.9px;
+}
+@media screen and (max-width: 984px){
+  .navbar{
+    margin-left: 0px;
+  }
 }
 </style>

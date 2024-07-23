@@ -3,7 +3,7 @@
     <ModalItemHistory v-if="itemsCache.length > 0"/>
 <div class="table-container d-block mt-2">
     <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
-    <div class="sub-catalog bg-light my-1 ps-2 pe-2">
+    <div class="sub-catalog bg-light mt-2 ps-2 pe-2">
         <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
             Descrição da página
@@ -20,16 +20,16 @@
     </div>
     <div class="table-box row d-block bg-light mx-2">
         <div class="table-actions d-flex justify-content-between aling-items-center">
-            <div class="d-flex align-items-center">
-                <ButtonsNewItem v-if="uploadReloader === 1" />
-                <ButtonsFilter />
-                <ButtonsConfigure />
+            <div class="d-flex align-items-center actions-btns">
+                <ButtonsResponsiveNewItem class="res-action-btn mt-1" v-if="uploadReloader === 1" />
+                <ButtonsResponsiveFilter class="res-action-btn mt-1"/>
+                <ButtonsResponsiveConfigure class="res-action-btn mt-1"/>
             </div>
-            <span v-if="itemsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 0.8px;">
-                <IconsSearchGlass class="search-glass"/>
-                <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
-            </span>
-        </div>
+                <span v-if="itemsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 7px;">
+                    <IconsSearchGlass class="search-glass"/>
+                    <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
+                </span>   
+            </div>
         <TablesTable>
             <template v-slot:header>
                 <tr style="border: 1px #D9D9D9 solid;">
@@ -42,13 +42,15 @@
                 </tr>
             </template>
             <template v-slot:content>
-            <tr v-if="itemsCache.length > 0" v-for="(item, index) in itemsCache[cacheIndex]" :key="index" :data-index="index">
+                <tr v-if="itemsCache.length > 0" v-for="(item, index) in itemsCache[cacheIndex]" :key="index" :data-index="index">
                <th class="border" scope="row">
-                    <span>{{ item.name }}</span>
+                    <div class="cell-text">
+                        <span>{{ item.name }}</span>
+                    </div>
                </th>
                <th class="border">
-                   <span v-if="item.sipacCode">{{ item.sipacCode }}</span>
-                   <span v-else>nenhum</span>
+                    <span v-if="item.sipacCode">{{ item.sipacCode }}</span>
+                    <span v-else>nenhum</span>
                 </th>
                 <th class="border">
                     <span>{{ item.type }}</span>
@@ -57,7 +59,9 @@
                    <span>{{ item.quantity }}</span>
                 </th>
                <th class="border">
-                   <span>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</span>
+                    <div class="cell-text">
+                        <span>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</span>
+                    </div>
                </th>
                <th class="border" width="5%">
                    <TooltipsFastRectangular class="toolTip me-5 pe-5 mb-5" style="margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
@@ -75,10 +79,10 @@
             </div>
         </template>
         </TablesTable>
-    <div class="d-flex justify-content-between align-items-center me-2 mt-2">
-        <div>
-            <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 px-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span>
-            <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 px-2 pages-info">Quantidade total de itens: {{ totalElements }}</span>
+    <div class="table-footer d-flex justify-content-between align-items-center  mt-2">
+        <div class="d-flex justify-content-center me-3 ">
+            <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span>
+            <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de itens: {{ totalElements }}</span>
         </div>
         <nav v-if="itemsCache.length > 0 && finded.length === 0" aria-label="Page navigation" class="pagination">
             <ul class="pagination mb-2 mt-2">
@@ -420,20 +424,20 @@ onUpdated(async () => {
     display: block;
 }
 .table-container{
-    margin-bottom: 149px;
+    padding-top: 6px;
+    margin-bottom: 152px;
     width: 100%;
     display: block !important;
 }
 .table-box{
-    margin-top: 60px;
+    margin-top: 80px;
     border-radius: 0px 10px 10px 10px;
-    overflow-x: scroll;
     box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.5);
     border: 1px #D9D9D9 solid;
 }
 .table-box-title{
     margin-left: 8px;
-    margin-top: 18px;
+    margin-top: 32px;
     padding: 4px;
     font-weight: 400;
     color: rgb(51,51,51, 0.8);
@@ -448,6 +452,7 @@ onUpdated(async () => {
 .sub-catalog{
     border-radius: 10px;
     margin-top: -14px;
+    margin-bottom: 10px;
     padding-top: 10px;
     padding-bottom: 20px;
     margin-right: 10%;
@@ -494,6 +499,7 @@ p{
     border-bottom: 1px ridge #1F69B1;
 }
 .table-searchbar{
+    height: 36px;
     border: none;
     border-bottom: solid 1px #1F69B1;
     border-radius: 10px 10px 0px 0px;
@@ -577,8 +583,8 @@ tr:hover p{
 }
 /*RESPONSIVIDADE*/
 @media screen and (max-width: 1030px) {
-    th p, .sub-catalog p{
-        font-size: 12px;
+    th span, .col-title{
+        font-size: 11px;
     }
 }
 @media screen and (max-width: 900px){
@@ -586,26 +592,64 @@ tr:hover p{
         justify-content: center;
         align-content: center;
     }
+
+    .pages-info{
+        text-wrap: wrap;
+        text-align: center;
+    }
 }
-@media screen and (max-width: 851px) {
+@media screen and (max-width: 790px) {
+    .res-action-btn{
+        margin-top: 9px !important;
+    }
     .col-title{
         font-size: 12px;
+        padding: 0px 5  px 0px 5px;
     }
-    th p, .sub-catalog p{
+    th span{
         font-size: 10px;
     }
-    .table-searchbar, .searchbar{
-        display: flex;
-        font-size: 12px; 
+    .table-footer{
+        display: block !important;
+        padding-right: 0px !important;
+    }
+
+    .table-searchbar{
+        min-width: 120px;
+        display: block;
+    }
+}
+@media screen and (max-width: 600px){
+    .pages-info{
+        font-size: 11px;
+    }
+    .page-link{
+        font-size: 13px;
+    }
+    .search-glass{
+        width: 25px;
+        height: 25px;
     }
     .searchbar{
-        width: 120px;
-    }
-    .table-searchbar{
-        width: 170px;
-    }
-    .sub-catalog-title, .search-empty p{
         font-size: 14px;
+    }
+    .table-actions{
+        width: 600px;
+        padding-left: 0px;
+    }
+} 
+@media screen and (max-width: 500px){
+    .box-title-text{
+        font-size: 18px;
+    }
+    .table-box-title{
+        margin-top: 35px;
+    }
+    .table-actions{
+        margin-left: 5px;
+        display: block !important;
+    }.actions-btns{
+        justify-content: center;
     }
 }
 </style>

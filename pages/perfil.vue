@@ -145,7 +145,7 @@
       <p class="ms-2">{{userRequests.length}} de {{requestsTotalElements}}</p>
       </div>
 
-      <div v-if="userRecords.length > 0" class="profile-posts me-2 bg-light mb-4 pb-0 pt-0 rounded-3">
+      <div v-if="userRecords.length > 0" class="overflow-x-scroll profile-posts me-2 bg-light mb-4 pb-0 pt-0 rounded-3">
         <div class="history-title pt-2 bg-light-background-header">
           <h5 class="ms-3 fw-bold">Registros da conta</h5>
         </div>
@@ -500,5 +500,9 @@ h5{
 .modal-btn{
   border-radius: 10px;
 }
-
+@media screen and (max-width: 834px){
+  .profile-container{
+    display: block;
+  }
+}
 </style>

@@ -1,12 +1,12 @@
 <template>
   <div class="header container-fluid d-flex justify-content-between align-items-center bg-primary p-0">  
-    <IconsMenu @click="expandSidebar()" class="d-none menu-color mx-3" :class="{'show-menu': responsive}"/>
-    <div class="align-items-center" :class="{'d-none': responsive}" title="Página inicial">
+    <IconsMenu @click="expandSidebar()" class="d-none menu-color mx-3" :class="{'show-menu': settingsStore.isMobile}"/>
+    <div class="align-items-center" :class="{'d-none': settingsStore.isMobile}" title="Página inicial">
       <Brand class="ms-3"/>
     </div> 
     <div class="d-flex justify-content-end align-items-center">
-        <SearchBar :class="{'d-none': responsive}" class="pb-1"/>
-        <IconsSearchGlass :class="{'d-none': !responsive}" class="mobile-search text-light " type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal"/>
+        <SearchBar :class="{'d-none': settingsStore.isMobile}" class="pb-1"/>
+        <IconsSearchGlass :class="{'d-none': !settingsStore.isMobile}" class="mobile-search text-light " type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal"/>
         <ThemeSwitch class="mt-1"/>
         <ModalSearch/>
         <Profile />
@@ -15,27 +15,29 @@
 </template>
 
 <script>
-import SearchBar from "./SearchBar.vue";
-import Brand from "./Brand.vue";
-import ThemeSwitch from "./ThemeSwitch.vue";
-import Profile from "./Profile.vue";
+import Brand from './Brand.vue'
+import Profile from './Profile.vue'
+import SearchBar from './SearchBar.vue';
 import { useStorageStore } from "../../stores/storage";
+import { useRoute } from 'vue-router';
+import ThemeSwitch from './ThemeSwitch.vue';
+import { useSettingsStore } from '../../stores/settings';
 export default{
     data(){
       return{
-        responsive: false
+        responsive: true,
+        smallSearch: false
       }
     },
-    components: { SearchBar, Brand, ThemeSwitch, Profile },
+    components: { Profile, Brand, ThemeSwitch, SearchBar },
     mounted(){
       window.addEventListener('resize', this.mobileMode)
       this.mobileMode()
     },
     methods: {
       mobileMode(){
-          this.responsive = window.innerWidth <= 726;
-          this.store.isResponsive = window.innerWidth <= 726;
-          if(window.innerWidth === 726){
+          this.settingsStore.isMobile = window.innerWidth <= 897;
+          if(window.innerWidth === 897){
             this.store.responsive = false
           }
       },
@@ -44,11 +46,15 @@ export default{
       }
     },
     setup(){
-      const toolTip = ref(false)
+      const toolTip = ref(false);
+      const currentRoute = useRoute();
+      const settingsStore = useSettingsStore();
       const store = useStorageStore();
       return{
         store,
-        toolTip
+        toolTip,
+        currentRoute,
+        settingsStore
       }
     }
 }
@@ -69,7 +75,34 @@ export default{
   position: fixed;
   z-index: 1050;
 }
+.navbar{
+  margin-left: 16%;
+}
+.nav-link{
+  font-weight: bold;
+}
+.nav-item{
+  padding-top: 12px;
+  padding-bottom: 13px;
+  transition: padding 0.2s ease-in-out,box-shadow 0.4s ease, border-bottom 0.4s ease-in-out;
+}
+.nav-item:hover{
+  padding-top: 6px !important;
+  padding-bottom: 19px !important;
+  border-bottom: solid 1px #FED51E;
+  box-shadow: inset 0px -12px 15px -13px rgb(254, 213, 30, 0.7);
+  padding: 0px 0px 0px 0px;
+}
+.navbar-active{
+  border-bottom: solid 1px #FED51E;
+  box-shadow: inset 0px -12px 15px -13px rgb(254, 213, 30, 0.7);
+}
 .mobile-search{
   margin-top: 2.9px;
+}
+@media screen and (max-width: 984px){
+  .navbar{
+    margin-left: 0px;
+  }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
-    <div class="descricao">
-      <h1 class="d-flex justify-content-center ">Sistema de Gerenciamento de Almoxarifado NEI</h1>
+  <div class="container-fluid">
+    <div class="description-container">
+      <h1 class="d-flex description-title justify-content-center ">Sistema de Gerenciamento de Almoxarifado NEI</h1>
 
       <br>
       <p>Este sistema foi projetado para a gestão e organização eficiente dos itens do almoxarifado do 
@@ -100,10 +100,11 @@ definePageMeta({
 </script>
 
 <style scoped>
-.container{
-  padding: 100px 0 100px 0;
+.container-fluid{
+  padding-top: 100px;
+  padding-bottom: 100px;
 }
-.descricao {
+.description-container {
   margin: 15px;
 }
 
@@ -167,5 +168,10 @@ definePageMeta({
 
 .card-text {
   flex-grow: 1;
+}
+@media screen and (max-width: 859px){
+  .description-title{
+    text-align: center;
+  }
 }
 </style>

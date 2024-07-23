@@ -33,6 +33,13 @@ const layoutBg = computed(() => {
   return settingsStore.layout
 })
 
+onBeforeMount(() => {
+  if(window.innerWidth <= 897){
+    settingsStore.isMobile = true;
+  } else{
+    settingsStore.isMobile = false;
+  }
+})
 onMounted(() => {
   checkIfMobile();
 });
@@ -61,7 +68,7 @@ function checkIfMobile() {
   background-color: #E74C3C !important; 
 }
 .darkLayout [class*="warning"] {
-  background-color: #F39C12 !important; 
+  color: #F39C12 !important; 
 }
 .darkLayout [class*="light-emphasis"] {
   background-color: #BDC3C7 !important; 

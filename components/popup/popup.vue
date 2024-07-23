@@ -95,7 +95,7 @@ export default{
     right: 30px;
     animation-name: movement;
     animation-duration: 1.3s;
-    z-index: 5000;
+    z-index: 15000;
     box-shadow: 0px 0px 10px 4px rgba(254, 213, 30, 0.7);
 }
 .progress-bar{

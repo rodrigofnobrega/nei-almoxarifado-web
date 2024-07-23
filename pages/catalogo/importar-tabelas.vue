@@ -8,9 +8,8 @@
             <div>
                 <p class="px-3">A tabela selecionada deve estar nas formtações .xlsx, .xls ou .csv, com os seguintes dados dispostos: nome do produto, tipo unitário e estoque atual. </p>
                 <p class="px-3">Caso tenha dúvidas sobre o formato da planilha temos o seguinte modelo padrão para se seguir: <a href="/planilha_padrao.xlsx">Planilha Padrão</a> </p>
-                <p class="px-3 d-flex fw-bold align-items-center bg-new-gray text-light rounded-2 mx-5 opacity-75">
-                    <span class="px-2 py-2 me-2 d-flex align-items-center"><IconsWarning class="me-2"/>Aviso:</span> 
-                    Qualquer linha branca/vazia, com dados obstruídos ou qualquer item com estoque atual negativo, não serão processados na importação, sendo necessario o cadastro manual.    
+                <p class="message-alert d-flex align-items-center mx-5">
+                   Aviso: Qualquer linha branca/vazia, com dados obstruídos ou qualquer item com estoque atual negativo, não serão processados na importação, sendo necessário o cadastro manual.
                 </p>
                 <div class="d-block">
                     <input class="form-control" type="file" @change="handleFileUpload" accept=".xlsx, .xls, .csv" />
@@ -18,8 +17,8 @@
             </div>
         </div>    
         <div class="d-flex mb-3">
-            <button @click="sendUploadedData" class="btn btn-light-success text-light me-2">Importar</button>    
-            <a href="/catalogo" class="btn btn-light-alert text-light">Cancelar</a>
+            <button @click="sendUploadedData" class="btn fw-bold btn-dark-success text-light me-2">Importar</button>    
+            <a href="/catalogo" class="btn fw-bold btn-light-alert text-light">Cancelar</a>
         </div>
     </div>
 </template>
@@ -105,6 +104,17 @@ const sendUploadedData = async() => {
 .section-title{
     border-radius: 8px 8px 0px 0px;
     border-bottom: 1px solid rgb(0, 0, 0, 0.2);
+}
+.message-alert {
+  padding: 15px;
+  margin: 20px 0;
+  background-color: #ffc107;
+  color: #212529;
+  border: 1px solid #ffca2c;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 16px;
+  opacity: 0.9;
 }
 h5{
     font-weight: 300;

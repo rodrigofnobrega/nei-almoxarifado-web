@@ -1,12 +1,12 @@
 <template>
     <div class="page-title bg-light row d-block ms-0">
         <div class="catalog-header d-flex align-items-center justify-content-between">
-            <h3 class="mt-2">
+            <h3 class="title-text mt-2">
                 <LoadersLoading class="small-loader text-dark-emphasis p-1"/>
                     <slot name="titulo" />
             </h3>
             <div class="me-3 mb-2 route">
-                <nav v-show="textLoading" aria-label="breadcrumb">
+                <nav class="title-link" v-show="textLoading" aria-label="breadcrumb">
                   <ol class="breadcrumb">
                     <li><a href="/">início</a></li>
                     <slot name="rota" />
@@ -60,5 +60,27 @@ h3{
 .route-link:hover{
   color: rgba(51, 51, 51, 0.6)
 }
-
+@media screen and (max-width: 650px){
+    .title-text{
+        padding-top: 10px;
+        margin: 0px;
+        display: flex !important;
+        justify-content: center;
+    }
+    .route{
+        padding-bottom: 1px !important;
+        display: flex !important;
+        margin-left: 17px;
+        justify-content: center;
+    }
+    .catalog-header{
+        display: block !important;
+    }
+}
+@media screen and (max-width: 400px){
+    .catalog-header{
+        padding-right: 2px;
+        padding-left: 2px;
+    }
+}
 </style>

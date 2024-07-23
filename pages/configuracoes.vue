@@ -43,11 +43,11 @@
         </div>
     </section>
 -->
-    <section class="settings-section mb-5">
+<section class="settings-section mb-5">
         <h3 class="section-title mx-2 pb-2">Personalizar Temas e Layouts</h3>
         <p class="fs-6 mx-2">Escolha um dos temas visuais abaixos para que a estilização do aplicativo esteja de acordo com suas preferências estéticas. O tema escolhido ficará salvo como preferências do usuário, ao sair da aplicação o tema continuará salvo.  </p>
         <div class="dashboard-container container-fluid d-flex px-0 justify-content-center align-items-center">
-            <div class="card mx-2 bg-primary rounded-4" @click="changeLayout(0)"  onclick="document.getElementById('themeRadio1').checked = true;">
+            <div class="card themes-card mx-2 bg-primary rounded-4" @click="changeLayout(0)"  onclick="document.getElementById('themeRadio1').checked = true;">
                 <img src="/defaultLayout.png" class="card-img-top" alt="...">
                 <div class="card-body p-3 text-dark-emphasis">
                     <div class="form-check text-light">
@@ -58,7 +58,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card mx-2 bg-primary rounded-4" @click="changeLayout(1)"  onclick="document.getElementById('themeRadio3').checked = true;">
+            <div class="card themes-card mx-2 bg-primary rounded-4" @click="changeLayout(1)"  onclick="document.getElementById('themeRadio3').checked = true;">
                 <img src="/darkLayout.png" class="card-img-top" alt="...">
                 <div class="card-body p-3 text-dark-emphasis">
                     <div class="form-check text-light">
@@ -69,7 +69,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card mx-2 bg-primary rounded-4" @click="changeLayout(2)"  onclick="document.getElementById('themeRadio2').checked = true;">
+            <div class="card themes-card mx-2 bg-primary rounded-4" @click="changeLayout(2)"  onclick="document.getElementById('themeRadio2').checked = true;">
                 <img src="/alternativeLayout.png" class="card-img-top" alt="...">
                 <div class="card-body p-3 text-dark-emphasis">
                     <div class="form-check text-light">
@@ -159,7 +159,7 @@
             <button class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#categoryRegister">Adicionar</button>
         </div>
         <p class="fs-6 mx-2">Escolha um dos temas visuais abaixos para que a estilização do aplicativo esteja de acordo com suas preferências estéticas. O tema escolhido ficará salvo como preferências do usuário, ao sair da aplicação o tema continuará salvo.  </p>
-        <div class="section-content row">
+        <div class="section-content row d-flex justify-content-center">
             <div class="d-flex" style="width: 230px;" v-for="(category, index) in settingsStore.categories" :key="index">
                 <div class="bg-light my-3 d-flex align-items-center text-wrap me-3 rounded-2">
                     <input class="form-control border-0" type="text" :placeholder="category" />
@@ -326,5 +326,22 @@ section {
 .form-check-input:checked {
     background-color: #1F69B1;
     box-shadow: none;
+}
+@media screen and (max-width: 750px){
+    .dashboard-container{
+        display: block !important;
+    }
+    .settings-section{
+        text-align: center;
+    }
+    .section-content{
+        text-align: center;
+    }
+    .themes-card{
+        margin-bottom: 40px;
+    }
+    .section-title{
+        text-align: center;
+    }
 }
 </style>

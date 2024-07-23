@@ -1,8 +1,8 @@
 <template>
     <div class="d-flex profile align-items-center me-3">
           <div class="me-2 nav-item dropdown">
-            <button class="svg-button bg-primary px-0" data-bs-toggle="dropdown" data-bs-offset="20,15" aria-expanded="false">
-              <IconsBell @mouseover="toolTip = true" @mouseout="toolTip = false" with="16px" height="16px"/>
+            <button title="Notificações" class="svg-button bg-primary px-0" data-bs-toggle="dropdown" data-bs-offset="20,15" aria-expanded="false">
+              <IconsBell with="16px" height="16px"/>
               <span v-if="requests.length > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                 {{requests.length}}
                 <span class="visually-hidden">unread messages</span>
@@ -10,22 +10,24 @@
             </button>
             <ul class="dropdown-menu notification-menu py-2">
               <li v-for="(request, index) in requests" :key="index" @mouseenter="closeNot[index] = true" @mouseover="closeNot[index] = true" @mouseout="closeNot[index] = false" class="dropdown-item notification">
-                <div :style="{'filter': closeNot[index] ? 'blur(0.8px)' : ''}" class="text-dark-emphasis d-flex align-items-center">
-                  <IconsClose v-if="request.status === 'RECUSADO'" width="20" height="20" class="me-2 text-dark-alert notification-text"/>
-                  <IconsConfirm v-if="request.status === 'ACEITO'" width="20" height="20" class="me-2 text-light-success  notification-text"/>
+                <div class="text-dark-emphasis d-flex align-items-center">
+                  <div>
+                    <IconsClose v-if="request.status === 'RECUSADO'" width="20" height="20" class="me-2 text-dark-alert notification-text"/>
+                    <IconsConfirm v-if="request.status === 'ACEITO'" width="20" height="20" class="me-2 text-light-success  notification-text"/>
+                  </div>
                   <p class="notification-text m-0 p-0">
                     Solicitação de {{ request.quantityRequested }} "{{request.item.name}}"
                     {{ request.status === 'ACEITO' ? 'aceita' : 'recusada' }}
                   </p>
                  </div>
-                <span :style="{'filter': closeNot[index] ? 'blur(0.8px)' : ''}" v-if="passedDate.length > 0" class="notification-text ms-0 opacity-75 text-dark-emphasis">Há {{ passedDate[index].month }} {{ passedDate[index].day }} {{ passedDate[index].hour }} {{ passedDate[index].minute }}</span>
+                <span  v-if="passedDate.length > 0" class="notification-text ms-0 opacity-75 text-dark-emphasis">Há {{ passedDate[index].month }} {{ passedDate[index].day }} {{ passedDate[index].hour }} {{ passedDate[index].minute }}</span>
+                <!--
                 <div v-if="closeNot[index] === true" class="d-flex justify-content-end align-items-end">
                   <IconsClose @mouseenter="closeNot[index] = true" @mouseover="closeNot[index] = true" @click="removeNot(index)" class="position-fixed mb-1" width="30" height="30"/>
-                </div>
+                </div>-->
               </li>
                 <li v-show="!isNotification || requests.length === 0" class="dropdown-item fs-6 text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
             </ul>
-            <TooltipsRectangular class="pt-3" :toolTipState="toolTip" :toolTipText="'Notificações'"/>
           </div>
           <div class="nav-item dropdown">
             <button class="svg-button  d-flex bg-primary align-items-center" @click="rotate" data-bs-toggle="dropdown" data-bs-offset="10,10" data-bs-auto-close="inside" aria-expanded="false">
@@ -67,6 +69,7 @@ const pagination = ref(0);
 const requests = ref([]);
 const closeNot = ref([]);
 const totalElements = ref(0);
+const totalPages = ref(0);
 function toPositive(number) {
   return Math.abs(number);
 }
@@ -92,14 +95,16 @@ const adjustTime = () => {
       hourDiff--;   
     }
 
-    passedDate[i].hour = hourDiff > 0 ? (hourDiff === 1 ? `${hourDiff} hora` : `${hourDiff} horas`) : '';
+    passedDate[i].hour = `${hourDiff} hora` ;
 
     passedDate[i].minute = minuteDiff > 0 ? (minuteDiff === 1 ? `${minuteDiff} minuto` : `${minuteDiff} minutos`) : '';
   } 
 }
+
 const loadNotifications = async () => {
   const res = await getRequestByUser(userStore, userStore.id, pagination.value);
   totalElements.value = res.totalElements;
+  totalPages.value = res.totalPages;
   res.content.map((request) => {
     if((request.status === 'ACEITO' || request.status === 'RECUSADO')  && parseInt(request.updatedDate.slice(5,7))+2 >= actualDate.getMonth()){
       for(let i = 0; i < requests.value.length; i++){
@@ -110,7 +115,6 @@ const loadNotifications = async () => {
       requests.value.push(request)
     }
   })
-
   if(res.totalPages > 1){
     for(let i = 0; i < res.totalPages; i++){
       pagination.value++;
@@ -121,6 +125,9 @@ const loadNotifications = async () => {
             if(requests.value[i].id === request.id){
               return 0;
             }
+          }
+          if(((actualDate.getMonth()+1) - parseInt(request.updatedDate.slice(5, 7)) > 1)){
+            return 1;
           }
           requests.value.push(request)
         }
@@ -145,13 +152,14 @@ async function getUsername(){
   user.value.username = res.name;
 }
 
+/*
 const removeNot = (index) => {
   let nots = JSON.parse(localStorage.getItem("notifications"));
   nots.splice(index, 1);
   requests.value = nots;
   localStorage.setItem('notifications', JSON.stringify(nots));
   console.log(nots)
-}
+} */
 
 onMounted(async() => {
   const res = await getRequestByUser(userStore, userStore.id, pagination.value);
@@ -227,5 +235,13 @@ onMounted(async() => {
 .profile-drop:hover{
   transition: filter 0.3s ease-in;
   filter: drop-shadow(0px 0px 8px rgba(254, 213, 30, 1));
+}
+@media screen and (max-width: 540px){
+  .notification-menu{
+    width: 80vw;
+  }
+  .notification-text{
+    text-wrap: wrap;
+  }
 }
 </style>

@@ -1,24 +1,4 @@
 <template>
-<ModalItemDetails :item_index="itemIndex" :item_details="currentItem" />
-<Modal id="removeUser" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
-  <template v-slot:header>
-    <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Invalidar usuário</h6>
-    <button class="btn btn-transparent text-light border-0 close-btn" type="button" data-bs-dismiss="modal">
-        <IconsClose class="close ms-5" width="1.3em" height="1.3em"/>
-    </button>
-  </template>
-  <template v-slot:body>
-    <p class="fw-medium text-center">Como administrador você tem permissões especiais para desativar a conta de qualquer usuário comum, para melhor controle e gestão de quem tem acesso ao sistema.</p>
-    <p class="fw-bold text-center">Deseja realmente desativar esta conta?</p>
-  </template>
-  <template v-slot:footer>
-    <div class="container-fluid d-flex justify-content-end align-items-center">
-        <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" @click="deleteAccount" class="btn btn-secondary inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Desativar</button>
-    </div>
-  </template>
-</Modal>
-<button id="modalToggle" data-bs-toggle="modal" data-bs-target="#itemDetailing" class="disabled d-none"></button>
   <div class="container-fluid" style="margin-left: 0px;">
     <div class="d-flex paralalel-section">
       <div class="dashboard-section me-2 bg-light mb-4 pb-0 pt-0 rounded-3">
@@ -27,53 +7,47 @@
         </div>
         <div class="d-flex align-items-center justify-content-between mb-3">
           <div class="px-3 ms-3 summary-text">
-            <p class="summary-text-re teste">
-              Solicitações com status pendente
-            </p>
-            <h5 class="d-flex align-items-center justify-content-between mt-1">{{ requestsByStatus.totalElements }}
+            <p class="summary-text-re teste">Solicitações com status pendente</p>
+            <h5 class="d-flex align-items-center justify-content-between mt-1">
+              {{ requestsByStatus.totalElements || 0 }}
               <IconsRequest width="20px" height="20px" class="mb-1" />
             </h5>
           </div>
           <div class="px-3 summary-text">
-            <p class="summary-text-re">
-              Solicitações do mês aceitas
-            </p>
-            <h5 class="d-flex align-items-center justify-content-between mt-1">{{acceptedRequests}}
-              <IconsRequest width="20px" height="20px" class="mb-1"/>
+            <p class="summary-text-re">Solicitações do mês aceitas</p>
+            <h5 class="d-flex align-items-center justify-content-between mt-1">
+              {{ acceptedRequests || 0 }}
+              <IconsRequest width="20px" height="20px" class="mb-1" />
             </h5>
           </div>
           <div class="px-3 summary-text">
-            <p class="summary-text-re">
-              Solicitações do mês recusadas 
-            </p>
-            <h5 class="d-flex align-items-center justify-content-between mt-1">{{ rejectedRequests }}
+            <p class="summary-text-re">Solicitações do mês recusadas</p>
+            <h5 class="d-flex align-items-center justify-content-between mt-1">
+              {{ rejectedRequests || 0 }}
               <IconsRequest width="20px" height="20px" class="mb-1" />
             </h5>
           </div>
         </div>
         <div class="d-flex align-items-center justify-content-between mb-3">
           <div class="px-3 ms-3 summary-text">
-            <p class="summary-text-re">
-              Quantidade de itens cadastrados
-            </p>
-            <h5 class="d-flex align-items-center justify-content-between mt-1">{{items.totalElements}}
-              <IconsSpreadSheet width="20px" height="20px" class="mb-1 "/>
+            <p class="summary-text-re">Quantidade de itens cadastrados</p>
+            <h5 class="d-flex align-items-center justify-content-between mt-1">
+              {{ items.totalElements || 0 }}
+              <IconsSpreadSheet width="20px" height="20px" class="mb-1 " />
             </h5>
           </div>
           <div class="px-3 summary-text">
-            <p class="summary-text-re">
-              Quantidade total de itens
-            </p>
-            <h5 class="d-flex align-items-center justify-content-between mt-1">{{ itemsQtd }}
-              <IconsSpreadSheet width="20px" height="20px" class="mb-1"/>
+            <p class="summary-text-re">Quantidade total de itens</p>
+            <h5 class="d-flex align-items-center justify-content-between mt-1">
+              {{ itemsQtd || 0 }}
+              <IconsSpreadSheet width="20px" height="20px" class="mb-1" />
             </h5>
           </div>
           <div class="px-3 summary-text">
-            <p class="summary-text-re">
-              Quantidade total de usuários
-            </p>
-            <h5 class="d-flex align-items-center justify-content-between mt-1">{{users.totalElements}}
-              <IconsLowProfile width="20px" height="20px" class="mb-1"/>
+            <p class="summary-text-re">Quantidade total de usuários</p>
+            <h5 class="d-flex align-items-center justify-content-between mt-1">
+              {{ users.totalElements || 0 }}
+              <IconsLowProfile width="20px" height="20px" class="mb-1" />
             </h5>
           </div>
         </div>
@@ -83,10 +57,10 @@
           <h5 class="header ps-2 fw-bold">Gestão de Usuários</h5>
         </div>
         <div class="users-management-scroll">
-          <TablesTable>
+          <TablesTable v-if="users.content && users.content.length">
             <template v-slot:header>
               <tr>
-                <th class="col-title  py-2" scope="col">Usuário</th>
+                <th class="col-title py-2" scope="col">Usuário</th>
                 <th class="col-title text-center py-2" scope="col">Email</th>
                 <th class="col-title text-center py-2" scope="col">Encargo</th>
                 <th class="col-title text-center py-2 justify-content-center" scope="col">Ações</th>
@@ -94,44 +68,43 @@
             </template>
             <template v-slot:content>
               <tr v-for="user in users.content" :key="user.id">
-                <th :class="{'user-disabled': !user.active}" class="text-center table-cell d-flex align-items-center" scope="row">
+                <th class="text-center table-cell d-flex align-items-center" scope="row">
                   <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
                   {{ user.name }}
-                <p v-if="!user.active" class="opacity-100 disabled-account bg-light text-dark-alert position-absolute rounded-2 fw-bold py-1 mt-3 px-2" style="margin-left: 20%;">Conta desativada</p>
                 </th>
-                <th :class="{'user-disabled': !user.active}" class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
-                  {{user.email}}
+                <th class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
+                  {{ user.email }}
                 </th>
-                <th :class="{'user-disabled': !user.active}" class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
-                  {{user.role}}
+                <th class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
+                  {{ user.role }}
                 </th>
-                <th :class="{'user-disabled': !user.active}" class="text-center table-cell user-actions pt-2" scope="row" width="5%">
+                <th class="text-center table-cell user-actions pt-2" scope="row" width="5%">
                   <div class="position-sticky d-flex justify-content-center">
                     <a title="Perfil" :href="`/perfil?userId=${user.id}`" :route="`/perfil/${user.id}`" class="ms-1 me-0 table-btn d-flex align-items-center justify-content-center btn btn-primary">
                       <IconsLowProfile width="16px" height="16px"/>
                     </a>
-                    <button v-if="user.role !== 'ADMIN' && user.active === true" @click="userRejectId = user.id" data-bs-toggle="modal" data-bs-target="#removeUser" title="Desativar Conta" class="ms-1 me-0 table-btn d-flex align-items-center justify-content-center text-light  btn btn-light-alert">
-                      <IconsReject width="16px" height="16px"/>
-                    </button>
                   </div>
                 </th>
               </tr>
             </template>
           </TablesTable>
+          <div v-if="loadContent && users.content.length === 0" class="search-empty d-flex justify-content-center">
+            <p class="text-dark-emphasis fs-5 opacity-50">Nenhum usuário encontrado</p>
+          </div>
         </div>
       </div>
     </div>
     <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
       <DashboardBarChartItems />
     </div> 
-    <div class="dashboard-section recent-records bg-light mb-4 pb-0 pt-0 rounded-3">
+    <div class="dashboard-section overflow-x-visible recent-records bg-light mb-4 pb-0 pt-0 rounded-3">
       <div class="section-title pt-2  bg-light-background-header">
         <h5 class="header ps-2  fw-bold">Movimentações mais recentes</h5>
       </div>
-      <TablesTable>
+      <TablesTable v-if="records.content && records.content.length">
         <template v-slot:header>
           <tr>
-            <th class="col-title table-col text-center py-2" scope="col">Usuário</th>
+            <th class="col-title table-col  py-2" scope="col">Usuário</th>
             <th class="col-title table-col text-center py-2" scope="col">Movimentação</th>
             <th class="col-title table-col text-center py-2" scope="col">Item</th>
             <th class="col-title table-col text-center py-2" scope="col">Tipo unitário</th>
@@ -141,95 +114,79 @@
           </tr>
         </template>
         <template v-slot:content>
-          <tr v-if="records.content.length > 0" v-for="(record, index) in records.content" :key="record.id" class="text-center"> 
-              <th class="table-cell mov-cell" scope="row">
-                <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
-                  <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
-                  {{ record.user.name }}
-                </div>
-              </th>
-              <th class="table-cell mov-cell" scope="row">
-                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                  {{ record.operation}}
-                </div>
-              </th>
-              <th class="table-cell mov-cell" scope="row">
-                <div class="d-flex table-text table-text align-items-end mt-1 justify-content-center">
-                  {{ record.item.name }}
-                </div>
-              </th>
-              <th class="table-cell mov-cell" scope="row">
-                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                  {{ record.item.type }}
-                </div>
-              </th>
-              <th class="table-cell mov-cell" scope="row">
-                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                  {{ record.quantity}}
-                </div>
-              </th>
-              <th class="table-cell mov-cell" scope="row">
-                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                  {{record.creationDate.slice(0, 19)}}
-                </div>
-              </th>
-              <th class="text-center table-cell pt-2" scope="row" width="5%">
-                  <div class="d-flex">
-                    <button @click="showDetails(index, record.item.id)" title="Detalhes" :href="`/registro?recordId=${record.id}`"  :route="`/registro/${record.id}`" class="table-btn d-flex align-items-center justify-content-center  btn btn-secondary">
-                      <IconsSearchGlass width="16px" height="16px"/>
-                    </button>
-                    <a title="Perfil" :href="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="m-0 table-btn d-flex align-items-center justify-content-center btn btn-primary">
-                      <IconsLowProfile width="16px" height="16px"/>
-                    </a>
-                  </div>
-              </th>
-            </tr>
-            </template>
-          </TablesTable>
-          <div v-if="records.content.length === 0" class="search-empty d-flex justify-content-center">
-            <p class="text-dark-emphasis fs-5 opacity-50">Nenhuma movimentação</p>
-          </div>
+          <tr v-for="(record, index) in records.content" :key="record.id" class="text-center"> 
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text align-items-center " style="padding-top: 0px;">
+                <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
+                {{ record.user.name }}
+              </div>
+            </th>
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                {{ record.operation }}
+              </div>
+            </th>
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                {{ record.item.name }}
+              </div>
+            </th>
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                {{ record.item.type }}
+              </div>
+            </th>
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                {{ record.quantity }}
+              </div>
+            </th>
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                {{ record.date }}
+              </div>
+            </th>
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text justify-content-center">
+                <button @click="showDetails(index, record.item.id)" title="Detalhes" :route="`/registro/${record.id}`" class="table-btn d-flex align-items-center justify-content-center btn btn-secondary">
+                  <IconsSearchGlass width="16px" height="16px"/>
+                </button>
+                <a title="Perfil" :href="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="m-0 table-btn d-flex align-items-center justify-content-center btn btn-primary">
+                  <IconsLowProfile width="16px" height="16px"/>
+                </a>
+              </div>
+            </th>
+          </tr>
+        </template>
+      </TablesTable>
+      <div v-if="loadContent && records.content.length === 0" class="search-empty d-flex justify-content-center">
+        <p class="text-dark-emphasis fs-5 opacity-50">Nenhuma movimentação</p>
+      </div>
     </div>  
     <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
       <DashboardBarChartUtils />
     </div>
-    <!--
-    <div class="dashboard-section bg-light mb-4 pb-3 pt-0 rounded-3">
-      <div class="section-title pt-2 mb-3 bg-light-background-header">
-          <h5 class="header ps-2">Catálogos</h5>
+    <button id="modalToggle" data-bs-toggle="modal" data-bs-target="#itemDetailing" class="disabled d-none"></button>
+    <ModalItemDetails v-if="currentItem" :item_index="itemIndex" :item_details="currentItem" />
+    <Modal id="removeUser" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
+      <template v-slot:header>
+        <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Invalidar usuário</h6>
+        <button class="btn btn-transparent text-light border-0 close-btn" type="button" data-bs-dismiss="modal">
+          <IconsClose class="close ms-5" width="1.3em" height="1.3em"/>
+        </button>
+      </template>
+      <template v-slot:body>
+        <p class="fw-medium text-center">Como administrador você tem permissões especiais para desativar a conta de qualquer usuário comum, para melhor controle e gestão de quem tem acesso ao sistema.</p>
+        <p class="fw-bold text-center">Deseja realmente desativar esta conta?</p>
+      </template>
+      <template v-slot:footer>
+        <div class="container-fluid d-flex justify-content-end align-items-center">
+          <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" @click="deleteAccount" class="btn btn-secondary inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Desativar</button>
         </div>
-        <div class="dashboard-container container-fluid d-flex px-0 justify-content-center aligm-items-center">
-          <CardsImageCard class="dashboard-viewcard">
-            <template v-slot:image-cap>
-              <img src="/almo.png" class="card-img-top" alt="...">
-            </template>
-            <template v-slot:body>
-              <a href="/inventario/almoxarifado-escolar" class="fs-5 fw-medium stretched-link text-dark-emphasis">Almoxarifado Escolar</a>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </template>
-          </CardsImageCard>
-          <CardsImageCard class="dashboard-viewcard">
-            <template v-slot:image-cap>
-              <img src="/almo2.png" class="card-img-top" alt="...">
-            </template>
-            <template v-slot:body>
-              <a href="/inventario/almoxarifado-escolar" class="fs-5 fw-medium stretched-link text-dark-emphasis">Almoxarifado Escolar</a>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </template>
-          </CardsImageCard>
-          <CardsImageCard class="dashboard-viewcard mb-0">
-            <template v-slot:image-cap>
-              <img src="/almo3.png" class="card-img-top" alt="...">
-            </template>
-            <template v-slot:body>
-              <a href="/inventario/almoxarifado-escolar" class="fs-5 fw-medium stretched-link text-dark-emphasis">Almoxarifado Escolar</a>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </template>
-          </CardsImageCard>
-        </div>
-    </div>
-    -->
-</div>
+      </template>
+    </Modal>
+  </div>
 </template>
 
 <script setup>
@@ -244,73 +201,94 @@ import { useSearch } from '../stores/search.ts';
 import { deleteUser } from '../services/users/userDELETE';
 import { usePopupStore } from '../stores/popup.ts';
 
+const setpageTitle = inject('setpageTitle');
+const sendDataToParent = () => {
+  const title = "Painel Geral";
+  const route = `${useRoute().fullPath}`
+  setpageTitle(title, route, 'home');
+};
+sendDataToParent();
+
 const userStore = useUser();
 const searchStore = useSearch();
 const route = useRouter();
 const popUpStore = usePopupStore();
 
 const userRejectId = ref(0);
-const users = await getUsers(userStore, 0)
-const records = await getRecords(userStore, 0, 'id,desc')
-const requestsByStatus = await getRequestByStatus(userStore, 'pendente');
+const users = ref({ content: [] }); // Inicializa com um objeto com array vazio
+const records = ref({ content: [] }); // Inicializa com um objeto com array vazio
+const requestsByStatus = ref({ totalElements: 0 });
+const acceptedRequests = ref(0);
+const rejectedRequests = ref(0);
+const items = ref({ content: [] }); // Inicializa com um objeto com array vazio
+const itemsQtd = ref(0);
 
-let data = new Date
-let actualMonth = data.getMonth()+1
-let acceptedRequests = 0;
-let rejectedRequests = 0;
-let requests = await getRequests(userStore, 0)
-for(let i = 1; i < requests.totalPages; i++){
-  for(let j = 0; j < requests.content.length; j++){
-    if(requests.content[j].updatedDate.slice(5, 7) == actualMonth){
-      if(requests.content[j].status == 'ACEITO'){
-        acceptedRequests++
-      }
-      if(requests.content[j].status == 'RECUSADO'){
-        rejectedRequests++
-      }
-    }
-  }
-  requests = await getRequests(userStore, i)
-}
-
-let items = await getItems(userStore, 0)
-let itemsQtd = 0;
-for(let i = 1; i < items.totalPages; i++){
-  for(let j = 0; j < items.content.length; j++){
-    itemsQtd += items.content[j].quantity
-  }
-  items = await getItems(userStore, 0)
-}
 const currentItem = ref(undefined);
 const itemIndex = ref(0);
 const isShowDetails = ref(false);
-const showDetails = async (index, itemId) => {
-  const modalToggleDom = document.getElementById('modalToggle');  
-  itemIndex.value = index;
-  try{
-    const res = await getItem(userStore, itemId);
-    currentItem.value = res;
-    await modalToggleDom.click();
-  }catch(err){
-    console.log(err)
+
+const loadContent = ref(false);
+
+const fetchData = async () => {
+  try {
+    users.value = await getUsers(userStore, 0);
+    records.value = await getRecords(userStore, 0, 'id,desc');
+    requestsByStatus.value = await getRequestByStatus(userStore, 'pendente');
+    
+    let data = new Date();
+    let actualMonth = data.getMonth() + 1;
+    let requestsData = await getRequests(userStore, 0);
+    for (let i = 1; i < requestsData.totalPages; i++) {
+      for (let j = 0; j < requestsData.content.length; j++) {
+        if (requestsData.content[j].updatedDate.slice(5, 7) == actualMonth) {
+          if (requestsData.content[j].status == 'ACEITO') {
+            acceptedRequests.value++;
+          }
+          if (requestsData.content[j].status == 'RECUSADO') {
+            rejectedRequests.value++;
+          }
+        }
+      }
+      requestsData = await getRequests(userStore, i);
+    }
+    
+    items.value = await getItems(userStore, 0);
+    for (let i = 1; i < items.value.totalPages; i++) {
+      for (let j = 0; j < items.value.content.length; j++) {
+        itemsQtd.value += items.value.content[j].quantity;
+      }
+      items.value = await getItems(userStore, i);
+    }
+  } catch (error) {
+    console.error('Failed to fetch data:', error);
   }
-}
+};
+
+onMounted(() => {
+  fetchData().finally(() => {
+    loadContent.value = true;
+  });
+});
+
+const showDetails = async (index, itemId) => {
+  const modalToggleDom = document.getElementById('modalToggle');
+  itemIndex.value = index;
+  try {
+    currentItem.value = await getItem(userStore, itemId);
+    modalToggleDom.click();
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 const deleteAccount = async () => {
-  try{
-    const res = await deleteUser(userStore, userRejectId.value);
+  try {
+    await deleteUser(userStore, userRejectId.value);
     popUpStore.throwPopup('Conta desativada com sucesso, atualize a página', 'blue');
-  }catch(err){
-    popUpStore.throwPopup('ERRO: Algum problema interno do servidor ocorreu, contate o suporte', 'red')
+  } catch (err) {
+    popUpStore.throwPopup('ERRO: Algum problema interno do servidor ocorreu, contate o suporte', 'red');
   }
-}
-const setpageTitle = inject('setpageTitle');
-const sendDataToParent = () => {
-    const title = "Painel Geral";
-    const route = `${useRoute().fullPath}`
-    setpageTitle(title, route, 'home');
 };
-sendDataToParent();
 </script>
 
 <style scoped>
@@ -440,7 +418,13 @@ tr:hover .user-invalided{
     max-height: 250px !important;
   }
 }
-@media screen and (max-width: 982px){
+@media screen and (max-width: 1040px){
+  .paralalel-section{
+    display: block !important;
+  }
+  .summary-text{
+    font-size: 15px !important;
+  }
   .users-management-scroll{
     max-height: 270px !important;
   }
@@ -448,7 +432,7 @@ tr:hover .user-invalided{
     padding: 3px!important;
   }
   .table-cell, .summary-text{
-    font-size: 13px;
+    font-size: 13px !important;
   }
   .align-cell{
     padding-top: 7px !important;
@@ -466,9 +450,6 @@ tr:hover .user-invalided{
   }
 }
 @media screen and (max-width: 854px){
-  .paralalel-section{
-    display: block !important;
-  }
   .table-cell, .summary-text{
     font-size: 14px;
   }
@@ -495,38 +476,18 @@ tr:hover .user-invalided{
   }
 }   
 @media screen and (max-width: 558px){
-  .mov-cell, .table-col{
-    padding: 0px !important;
-  }
-  .table-text, .table-col{  
-    padding-top: 5px;
-    font-size: 11px;
-  }
+
 }
 @media screen and (max-width: 435px){
-  .table-cell, .summary-text{
+  .summary-text{
     font-size: 12px;
-  }
-  .mov-cell, .table-col{
-    padding: 0px !important;
   }
   th{
     padding: 3px !important;
   }
-  .table-text, .table-col{  
-    font-size: 9px;
-  }
   .container{
     padding-left: 5px;
     padding-right: 5px;
-  }
-}
-@media screen and (max-width: 372px){
-  .mov-cell, .table-col{
-    padding: 0px !important;
-  }
-  .table-text, .table-col{  
-    font-size: 8px;
   }
 }
 </style>

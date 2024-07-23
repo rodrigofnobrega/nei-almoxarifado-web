@@ -13,12 +13,12 @@
                 de <a class="text-decoration-none" href="/nei/catalogo">catálogo</a>, procure o item desejado e solicite. <br>Para acompanhar as suas solicitações basta navegar para a<br> página de <a class="text-decoration-none" href="/nei/solicitacoes">solicitações</a>.
             </h4>
         </div>
-        <div class="search-section d-flex justify-content-center ms-5">
+        <div class="search-section d-flex justify-content-center">
             <UtilsSearch class="mb-5"/>
             <div class="search-bar d-flex mx-1">
-                <button class="d-flex btn btn-search align-items-center ps-0" type="button" tabindex="-1" data-bs-target="#neiSearchModal" data-bs-toggle="modal">
-                <IconsSearchGlass />
-                <span class="ms-1">Pesquisar</span>
+                <button class="d-flex btn btn-search align-items-center ps-1" type="button" tabindex="-1" data-bs-target="#neiSearchModal" data-bs-toggle="modal">
+                    <IconsSearchGlass class="mt-1" width="30" height="30"/>
+                    <span class="ms-1 fs-5">Pesquisar</span>
               </button>
             </div>
         </div>
@@ -34,8 +34,10 @@ definePageMeta({
 </script>
 
 <style scoped>
+.search-section{
+    margin-left: 10px;
+}
 .btn-search{
-
     width: 600px;
     font-weight: 600;
     color: #494b50 !important;
@@ -50,13 +52,11 @@ definePageMeta({
     border: 1px solid rgba(120, 117, 117, 0.5);
 }
 .search-result{
-    margin-left: 5px;
-    margin-right: 5px;
     border: none;
     box-shadow: 1px 1px 12px 2px rgb(0, 0, 0, 0.2);
 }
 .d-block{
-    padding: 100px 0px 100px 0px;
+    padding: 120px 0px 100px 0px;
 }
 .bg-degrade{
     border-radius: 40px 40px 40px 40px;
@@ -68,5 +68,26 @@ definePageMeta({
                 radial-gradient(ellipse at top right, rgba(11, 59, 105, 0.5), transparent 50%),
                 radial-gradient(ellipse at center right, rgba(254, 213, 30, 0.8), transparent 50%),
                 radial-gradient(ellipse at center left, rgba(254, 213, 30, 0.8), transparent 50%) !important;
+}
+@media screen and (max-width: 700px){
+    .btn-search{
+        width: 400px;
+    }
+    .search-section{
+        margin-left: 0px;
+    }
+}
+@media screen and (max-width: 430px){
+    .btn-search{
+        width: 300px;
+        padding-top: 1px;
+        padding-bottom: 1px;
+    }
+    .search-section{
+        margin-left: 0px;
+    }
+    h4{
+        font-size: 19px;
+    }
 }
 </style>

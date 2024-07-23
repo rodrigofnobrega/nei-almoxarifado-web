@@ -76,7 +76,7 @@
       <div class="profile-details">
         <div>
           <h3 class="text-center mb-4">{{ userData.name }}</h3>
-          <p class="mt-3"><strong>{{ userStore.id == route.currentRoute._rawValue.query.userId}} Email:</strong> {{ userData.email }}</p>
+          <p class="mt-3"><strong>Email:</strong> {{ userData.email }}</p>
           <p class="mt-3"><strong>Encargo:</strong> {{ userData.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</p>
           <p class="mt-3"><strong>Status da conta:</strong> {{ userData.active ? 'Ativa' : 'Desativada' }}</p>
         </div>
@@ -86,7 +86,7 @@
         <button v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6 btn-light-alert">Excluir Conta</button>
       </div>
     </div>
-    <div class="profile-main-content">
+    <div class="profile-main-content overflow-x-scroll">
       <div class="profile-posts me-2 bg-light mb-4 mt-0 pb-0 pt-0 rounded-3">
         <div class="history-title pt-2 bg-light-background-header">
           <h5 class="ms-3 fw-bold">Histórico de Solicitações</h5>
@@ -412,5 +412,9 @@ h5{
 .modal-btn{
   border-radius: 10px;
 }
-
+@media screen and (max-width: 834px){
+  .profile-container{
+    display: block;
+  }
+}
 </style>

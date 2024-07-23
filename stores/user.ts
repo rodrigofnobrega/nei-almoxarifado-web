@@ -13,20 +13,21 @@ export const useUser = defineStore('user', {
         role: null,
     }),
     actions: {
+        async fetchMetaData(){
+            const response = await getUserByEmail({token: this.token}, this.email)
+            this.id = response.id
+            this.role = response.role
+            localStorage.setItem('session', JSON.stringify(this.token));
+            return navigateTo('/');
+        },
         async fetchData(password, email){
             const popUpStore = usePopupStore();
             this.email = email
             try{
-                const router = useRouter();
                 const res = await authPost(password, email);
                 this.token = res.token;
-                
-                const response = await getUserByEmail({token: this.token}, email)
-                this.id = response.id
-                this.role = response.role
-                localStorage.setItem('session', JSON.stringify(res.token))
-                popUpStore.throwPopup("Logado com sucesso", "blue");
-                return navigateTo('/');
+                popUpStore.throwPopup("Credenciais validadas", "blue");
+                this.fetchMetaData();
             } catch(err) { 
                 popUpStore.throwPopup("ERRO: credenciais inválidas", "#B71C1C")
                 return err

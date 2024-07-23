@@ -13,7 +13,7 @@
   <div class="table-box-title position-absolute bg-light-emphasis d-flex align-items-center">
         <IconsHistory class="me-1" width="25" height="25"/>
         <p class="box-title-text">
-            Tabela dos registros do almoxarifado
+            Tabela de Registros
         </p>
     </div>
   <div class="table-box row d-block bg-light mx-2">
@@ -70,10 +70,10 @@
           </div>
       </template>
   </TablesTable>
-<div class="d-flex justify-content-between align-items-center me-2 mt-2">
-      <div>
-          <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 px-2 pages-info">Quantidade de registros da página: {{ recordsCache[cacheIndex].length }}</span>
-          <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 px-2 pages-info">Quantidade total de registros: {{ totalElements }}</span>
+<div class="table-footer d-flex justify-content-between align-items-center me-2 mt-2">
+      <div class="d-flex justify-content-center me-3 ">
+          <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de registros da página: {{ recordsCache[cacheIndex].length }}</span>
+          <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de registros: {{ totalElements }}</span>
       </div>
       <nav v-if="recordsCache.length > 0 && finded.length === 0" aria-label="Page navigation" class="pagination">
             <ul class="pagination mb-2 mt-2">
@@ -429,21 +429,21 @@ onUpdated(async () => {
     display: block;
 }
 .table-container{
-    margin-bottom: 149px;
+    padding-top: 6px;
+    margin-bottom: 152px;
     width: 100%;
     display: block !important;
 }
 .table-box{
-    margin-top: 60px;
+    margin-top: 80px;
     border-radius: 0px 10px 10px 10px;
-    overflow-x: scroll;
     box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.5);
     border: 1px #D9D9D9 solid;
 }
 .table-box-title{
     margin-left: 8px;
-    margin-top: 18px;
-    padding: 4px;
+    margin-top: 41px !important;
+    padding: 4px 4px 4px 4px;
     font-weight: 400;
     color: rgb(51,51,51, 0.8);
     border-radius: 10px 10px 0px 0px;
@@ -457,6 +457,7 @@ onUpdated(async () => {
 .sub-catalog{
     border-radius: 10px;
     margin-top: -14px;
+    margin-bottom: 10px;
     padding-top: 10px;
     padding-bottom: 20px;
     margin-right: 10%;
@@ -503,19 +504,20 @@ p{
     border-bottom: 1px ridge #1F69B1;
 }
 .table-searchbar{
+    height: 36px;
     border: none;
-    border-radius: 10px 10px 0px 0px;
     border-bottom: solid 1px #1F69B1;
-    box-shadow: inset 0px -12px 16px -18px rgb(11, 59, 105, 0.7);
+    border-radius: 10px 10px 0px 0px;
+    box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
     color: rgb(0, 0, 0, 0.7); 
     transition: box-shadow 0.3s ease;
 }
 .table-searchbar:hover {
-    box-shadow: inset 0px -12px 16px -18px rgba(11, 59, 105, 0.7), 0px 0px 7px 0px rgba(11, 59, 105, 0.7);
+    box-shadow: inset 0px -12px 15px -18px rgba(11, 59, 105, 0.7), 0px 0px 7px 0px rgba(11, 59, 105, 0.7);
 }
 .table-searchbar:hover,
 .table-searchbar:focus-within {
-    box-shadow: inset 0px -12px 16px -18px rgba(11, 59, 105, 0.7), 0px 0px 7px rgba(11, 59, 105, 0.7); /* Sombra interna na parte inferior e contorno ao redor */
+    box-shadow: inset 0px -12px 15px -18px rgba(11, 59, 105, 0.7), 0px 0px 7px rgba(11, 59, 105, 0.7); /* Sombra interna na parte inferior e contorno ao redor */
 }
 .searchbar{
     border: none;
@@ -559,7 +561,7 @@ p{
     display: flex;
     justify-content: center;
     margin-left: 30%;    
-    margin-right: 30%;
+    margin-right: 40%;
     white-space: nowrap;
 }
 .pagination{
@@ -586,8 +588,8 @@ tr:hover p{
 }
 /*RESPONSIVIDADE*/
 @media screen and (max-width: 1030px) {
-    th p, .sub-catalog p{
-        font-size: 12px;
+    th span, .col-title{
+        font-size: 11px;
     }
 }
 @media screen and (max-width: 900px){
@@ -595,26 +597,55 @@ tr:hover p{
         justify-content: center;
         align-content: center;
     }
+
+    .pages-info{
+        text-wrap: wrap;
+        text-align: center;
+    }
 }
-@media screen and (max-width: 851px) {
+@media screen and (max-width: 790px) {
     .col-title{
         font-size: 12px;
+        padding: 0px 5  px 0px 5px;
     }
-    th p, .sub-catalog p{
+    th span{
         font-size: 10px;
     }
-    .table-searchbar, .searchbar{
-        display: flex;
-        font-size: 12px; 
+    .table-footer{
+        display: block !important;
+        padding-right: 0px !important;
+    }
+
+    .table-searchbar{
+        min-width: 120px;
+        display: block;
+    }
+}
+@media screen and (max-width: 600px){
+    .pages-info{
+        font-size: 11px;
+    }
+    .page-link{
+        font-size: 13px;
+    }
+    .search-glass{
+        width: 25px;
+        height: 25px;
     }
     .searchbar{
-        width: 120px;
-    }
-    .table-searchbar{
-        width: 170px;
-    }
-    .sub-catalog-title, .search-empty p{
         font-size: 14px;
+    }
+    .table-actions{
+        width: 600px;
+        padding-left: 0px;
+    }
+} 
+@media screen and (max-width: 500px){
+    .box-title-text{
+        font-size: 18px;
+    }
+    .table-box-title{
+        margin-top: 35px;
     }
 }
 </style>

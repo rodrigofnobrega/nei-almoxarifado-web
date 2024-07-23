@@ -1,23 +1,23 @@
 <template>
     <Modal id="itemRegistration" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
-            <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Cadastro de Item</h6>
+            <h6 class="header-title d-flex fw-bold justify-content-start align-items-center">Cadastro de item</h6>
             <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
             </button>
         </template> 
         <template v-slot:body> 
             <div class="mb-3">
-                <label for="item-name">Nome do item</label> 
+                <label class="fw-bold" for="item-name">Nome do item</label> 
                 <input class="form-control" v-model="itemName" type="text">
             </div>
             <div class="sipac-container mb-3" :style="{opacity: itemSipac ? '100%' : '50%'}">
-               <label for="item-sipac">Código Sipac <span class="text-light-emphasis ms-3">*opcional*</span></label> 
+               <label class="fw-bold" for="item-sipac">Código Sipac <span class="text-light-emphasis ms-3">*opcional*</span></label> 
                <input class="form-control" v-model="itemSipac" type="number" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
             </div>
             <div class="mb-3 d-flex">
                 <div class="d-block">
-                    <label for="item-qtd">Tipo Unitário</label> 
+                    <label class="fw-bold" for="item-qtd">Tipo Unitário</label> 
                     <select v-model="itemType" class="form-select me-5" aria-label="Default select">
                         <option disabled selected>Selecione o tipo</option>
                         <option v-for="(category, index) in settingsStore.categories" :key="index" :value="category">{{ category }}</option>
@@ -25,15 +25,15 @@
                     </select>
                 </div>
                 <div class="d-block ms-5">
-                    <label for="item-qtd">Quantidade</label> 
+                    <label class="fw-bold" for="item-qtd">Quantidade</label> 
                     <input class="form-control" v-model="itemQtd" type="number" pattern="[0,9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 </div>
             </div>
         </template>
         <template v-slot:footer>
             <div class="container-fluid d-flex justify-content-end align-items-center">
-                <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" @click="itemRegister" class="btn btn-light-success inset-shadow text-light mx-1" data-bs-dismiss="modal">Cadastrar</button>
+                <button type="button" @click="itemRegister" class="btn btn-dark-success fw-bold inset-shadow text-light mx-1" data-bs-dismiss="modal">Cadastrar</button>
+                <button type="button" class="btn btn-light-alert inset-shadow text-light fw-bold mx-1" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </template>
     </Modal>
@@ -119,10 +119,10 @@ export default{
     padding: 0;
 }
 .btn{
-    border-radius: 9px;
+    border-radius: 5px;
+    padding: 6px 10px 6px 10px;
 }
 .inset-shadow{
-    padding: 5px;
     box-shadow: inset 1px 1px 15px 1px rgb(0, 0, 0, 0.2);
 }
 .close-btn{

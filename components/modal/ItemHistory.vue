@@ -2,7 +2,7 @@
 <template>
 	<Modal id="itemHistory" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
 		<template v-slot:header>
-            <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Histórico</h6>
+            <h6 class="header-title d-flex fw-bold justify-content-start align-items-center">Histórico</h6>
             <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
             </button>
@@ -11,10 +11,10 @@
 			<table class="table text-center"> 
 		<thead>
 			<tr>
-				<th scope="col"> Data </th> 
-				<th scope="col"> Operação </th> 
-				<th scope="col"> Quantidade </th> 
-				<th scope="col"> Autor </th> 
+				<th class="col-title" scope="col"> Data </th> 
+				<th class="col-title" scope="col"> Operação </th> 
+				<th class="col-title" scope="col"> Quantidade </th> 
+				<th class="col-title" scope="col"> Autor </th> 
 			</tr>
 		 </thead>
 		<tbody>
@@ -30,7 +30,7 @@
 		<template v-slot:footer>
 			<div class="container-fluid d-flex justify-content-center align-items-center my-3">
             </div>
-			<div data-bs-target="#itemDetailing" data-bs-toggle="modal" type="button" class=" btn btn-primary position-fixed bg-primary rounded-2 p-1 d-flex justify-content-end text-light">
+			<div title="Detalhes" data-bs-target="#itemDetailing" data-bs-toggle="modal" type="button" class=" btn btn-primary position-fixed bg-primary rounded-2 p-1 d-flex justify-content-end text-light">
                 <IconsInformation width="23px" height="23px"/>
             </div>
 		</template>
@@ -56,7 +56,7 @@ function isCreate(operation){
 	}
 }
 function isRequest(operation){
-	if(operation.includes('CONSUMIDO')){
+	if(operation.includes('CONSUMO')){
 		return true; 
 	}
 }

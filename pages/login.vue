@@ -6,7 +6,7 @@
 				<p v-if="delayedSwitchState === false" class="texto text-light">Entrar</p>
 				<p v-else class="texto text-light">Cadastrar</p>
 			</div>
-			<form v-if="delayedSwitchState === false" class="login-form mt-4" @submit.prevent="submitLogin">
+			<form v-if="delayedSwitchState === false" class="login-form mt-4 " @submit.prevent="submitLogin">
 				<div class="form-group">
 					<div class="input-container">
 						<input 
@@ -43,7 +43,7 @@
 					:class="!isValidSimpleEmail(email) || !password ? 'disabled-button' : ''" 
 					:disabled="!isValidSimpleEmail(email) || !password" 
 					id="submitLogin" 
-					class="fw-bold mt-4 disabled" 
+					class="fw-bold mt-4 auth-btn disabled" 
 					type="submit"
 				>
 					Entrar
@@ -117,7 +117,7 @@
 					:class="!isValidEmail(email) || rePassword !== password || password.length < 6 ? 'disabled-button' : ''" 
 					:disabled="!isValidEmail(email) || rePassword !== password || password.length < 6" 
 					id="submitLogin" 
-					class="fw-bold mt-4 disabled" 
+					class="fw-bold auth-btn mt-4 disabled" 
 					type="submit">
 					Cadastrar
 				</button>
@@ -138,7 +138,7 @@
 						<br> 
 						{{delayedSwitchState ? 'e verifique o endereço e-mail correto' : 'Cadastre-se:' }}
 					</p>
-					<button class="btn sign-up-btn btn-light-alert text-light fw-bold" style="margin-left: 3px;" @click="switchAuth">
+					<button class="btn sign-up-btn auth-btn btn-light-alert text-light fw-bold" style="margin-left: 3px;" @click="switchAuth">
 						{{delayedSwitchState ? 'Entrar' : 'Cadastrar'}}
 					</button>
 				</div>
@@ -192,8 +192,11 @@ const isValidEmail = (email) => {
       return emailRegex.test(email);
 };
 
+const loading = ref(false);
 const submitLogin = () => {
 	userStore.fetchData(password.value, email.value);
+	
+	loading.value = true;
 };
 
 
@@ -203,7 +206,7 @@ const submitRegister = async () => {
 		popUpStore.throwPopup('Sucesso ao se cadastrar', '#0B3B69')
 		switchAuth();
 		return 1;
-	}catch(err){
+	}catch(err){	
 		if(!err.response){
 			popUpStore.throwPopup("Erro: Servidor fora do ar contate o suporte", "#B71C1C")
 		}
@@ -227,14 +230,12 @@ const resetPassForm = () => {
 };
 
 
-const loading = ref(false);
-onBeforeRouteLeave(() => {
-	loading.value = true;
-});
+
 
 </script>
 
 <style scoped>
+
 .loader {
 	top: 0px;
 }
@@ -373,5 +374,31 @@ onBeforeRouteLeave(() => {
 	font-size: 12px;
 	background-color: #fff; /* Ajuste conforme necessário */
 	padding: 0 5px;
+}
+@media screen and (max-width: 680px){
+	.auth-container{
+		width: 90%;
+	}
+	.login-form{
+		margin-left: 2px;
+		padding-left: 2px;
+		margin-right: 2px;
+		padding-right: 2px;
+	}
+	.texto{
+		margin-bottom: 0px !important;
+		font-size: 26px !important;
+	}
+	.input-container{
+		font-size: 14px;
+	}
+	.auth-btn{
+		width: 90%;
+		padding: 8px 1px 8px 1px!important;
+		font-size: 13px;
+	}
+	.info{
+		font-size: 14px;
+	}
 }
 </style>
