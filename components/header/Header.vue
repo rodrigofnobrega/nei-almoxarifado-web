@@ -36,8 +36,8 @@ export default{
     },
     methods: {
       mobileMode(){
-          this.settingsStore.isMobile = window.innerWidth <= 897;
-          if(window.innerWidth === 897){
+          this.settingsStore.isMobile = window.innerWidth <= 988;
+          if(window.innerWidth === 988){
             this.store.responsive = false
           }
       },

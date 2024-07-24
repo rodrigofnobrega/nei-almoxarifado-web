@@ -186,6 +186,17 @@
         </div>
       </template>
     </Modal>
+
+    <div class="d-flex fw-bold justify-content-center my-5">
+        <a class="warning-box mx-4 text-decoration-none p-2 text-center bg-warning-op80 text-dark" type="button" href="/sobre">
+            <IconsInformation class="mb-1"/>
+            Dúvidas? Clique aqui para ver a documentação
+        </a>
+        <a class="warning-box mx-4 p-2 text-center bg-secondary-op80 text-decoration-none text-light" type="button" href="mailto:almoxarifado957@gmail.com">
+            <IconsInformation class="mb-1"/>
+            Sugestões? Clique aqui e envie um email para equipe
+        </a>
+    </div>
   </div>
 </template>
 
@@ -388,6 +399,30 @@ h5{
 }
 .user-disabled{
   background-color: rgb(229, 57, 53, 0.3);
+}
+.bg-warning-op80{
+    opacity: 80%;
+    background-color: rgba(254, 213, 30);
+}
+.bg-secondary-op80{
+    opacity: 80%;
+    background-color: #0052a4;
+}
+.warning-box{
+    border: solid 1px rgba(0, 0, 0, 0.3);
+    color: black;
+    font-size: 15px;
+    border-radius: 7px;
+    width: 280px;
+    transition: width 0.3s ease-in-out, box-shadow 0.4s ease-in-out;
+}
+.bg-warning-op80:hover{
+    box-shadow: 0px 0px 15px 4px rgb(160, 152, 2);
+    width: 290px;
+}
+.bg-secondary-op80:hover{
+    box-shadow: 0px 0px 15px 2px rgb(5, 64, 119);
+    width: 290px;
 }
 .align-cell{
   padding-top: 12px !important;

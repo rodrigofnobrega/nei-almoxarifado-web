@@ -11,6 +11,7 @@ export const useStorageStore = defineStore('storage', {
       isReloadItems: false,
       records: [],
       itemRecord: [],
+      itemDetails: undefined,
       requests: [],
       sidebarSublinks: [],
       isRotated: false,

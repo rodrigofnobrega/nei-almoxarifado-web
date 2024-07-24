@@ -44,7 +44,7 @@ export const getRecordByEmail = async (userStore, email, page) => {
     return data
 };
 export const getRecordByItemId = async (userStore, id) => {
-    const { data } = await axios(`http://localhost:8080/api/v1/records/query/itens?id=${id}`, {
+    const { data } = await axios(`http://localhost:8080/api/v1/records/query/itens?id=${id}&sort=id,desc`, {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",

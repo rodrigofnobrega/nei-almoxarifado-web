@@ -1,24 +1,25 @@
 <template>
     <LoadersPageLoading :isLoading="loading" class="loader"/>
-    <div class="container">
-        <div class="dashboard-section me-2 bg-light mb-4 pb-0 pt-0 rounded-3">
+    <div class="container-fluid mx-4">
+        <div class="dashboard-section me-2 bg-light mb-4 pb-0 pt-0">
             <div class="section-title pt-2 mb-4 bg-light-background-header">
-                <h5 class="header ps-2">Importação dos itens</h5>
-            </div>
+                <h5 class="header fw-bold ps-2">Importação de itens</h5>
+            </div> 
             <div>
-                <p class="px-3">A tabela selecionada deve estar nas formtações .xlsx, .xls ou .csv, com os seguintes dados dispostos: nome do produto, tipo unitário e estoque atual. </p>
-                <p class="px-3">Caso tenha dúvidas sobre o formato da planilha temos o seguinte modelo padrão para se seguir: <a href="/planilha_padrao.xlsx">Planilha Padrão</a> </p>
+                <p class="px-3">A tabela selecionada deve estar na formatação .xlsx, .xls ou .csv, com os seguintes dados dispostos: nome do produto,
+                     tipo unitário e quantidade estoque atual. Caso tenha dúvidas sobre o formato da planilha temos o seguinte modelo padrão para se seguir: <a href="/planilha_padrao.xlsx">Planilha Padrão</a> </p>
+                <p class="px-3"></p>
                 <p class="message-alert d-flex align-items-center mx-5">
-                   Aviso: Qualquer linha branca/vazia, com dados obstruídos ou qualquer item com estoque atual negativo, não serão processados na importação, sendo necessário o cadastro manual.
+                   Aviso: Qualquer linha branca/vazia, com dados obstruídos ou qualquer item com estoque atual negativo não serão processados na importação, sendo necessário o cadastro manual.
                 </p>
                 <div class="d-block">
                     <input class="form-control" type="file" @change="handleFileUpload" accept=".xlsx, .xls, .csv" />
                 </div>
             </div>
         </div>    
-        <div class="d-flex mb-3">
+        <div class="d-flex justify-content-center mb-3 pt-3 me-3">
             <button @click="sendUploadedData" class="btn fw-bold btn-dark-success text-light me-2">Importar</button>    
-            <a href="/catalogo" class="btn fw-bold btn-light-alert text-light">Cancelar</a>
+            <a href="/catalogo" class="btn fw-bold btn-light-alert ms-2 text-light">Voltar</a>
         </div>
     </div>
 </template>
@@ -67,22 +68,39 @@ const handleFileUpload = async (event) => {
 }
 
 let itemsUploaded = 0;
-const sendUploadedData = async() => {
+const sendUploadedData = async () => {
+    if(tableData.length <= 0){
+        popUpStore.throwPopup('Erro: Nenhuma linha importável da tabela, confira se ela segue o modelo padrão', 'red')
+        return 0;
+    }
     loading.value = true;
-    for(let i = 0; i < tableData.length; i++){
-        console.log(tableData[i][1], '', tableData[i][4], tableData[i][2])
-        try{
-            if(tableData[i][4] > 0){
-                let res = await postCreateItem(userStore, tableData[i][1], '', tableData[i][4], tableData[i][2]);
+    const concurrencyLimit = 10; // Limite de requisições simultâneas
+    let index = 0;
+    let itemsUploaded = 0;
+
+    const executeBatch = async () => {
+        const batchPromises = [];
+
+        while (index < tableData.length && batchPromises.length < concurrencyLimit) {
+            if (tableData[index][4] > 0) {
+                batchPromises.push(
+                    postCreateItem(userStore, tableData[index][1], '', tableData[index][4], tableData[index][2])
+                );
                 itemsUploaded++;
             }
-        }catch(err){
-            console.log(err)
+            index++;
         }
-    }
+
+        await Promise.all(batchPromises);
+        if (index < tableData.length) {
+            await executeBatch(); // Chama a si mesmo para o próximo lote
+        }
+    };
+
+    await executeBatch();
     navigateTo('/catalogo');
-    popUpStore.throwPopup(`Foram importados ${itemsUploaded} itens(linhas) da tabela.`, '#0B3B69')
-}
+    popUpStore.throwPopup(`Foram importados ${itemsUploaded} itens(linhas) da tabela.`, '#0B3B69');
+};
 </script>
 
 <style scoped>
@@ -92,6 +110,9 @@ const sendUploadedData = async() => {
     padding-right: 5%;
     flex-direction: column;
 }
+p{
+    color: rgba(51, 51, 51, 0.8);
+}
 .dashboard-section{   
     width: 99%;
     padding-top: 10px;
@@ -99,6 +120,7 @@ const sendUploadedData = async() => {
     padding-left: 0;
     padding-right: 0;
     border: 1px #D9D9D9 solid;
+    border-radius: 10px 10px 0px 0px;
     box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);
 }
 .section-title{
@@ -119,6 +141,9 @@ const sendUploadedData = async() => {
 h5{
     font-weight: 300;
     color: rgb(51,51,51, 0.8);
+}
+.form-control{
+    border-radius: 0px;
 }
 .form-control:hover::before {
     background: #0056b3 !important; /* Altere para a cor desejada ao passar o mouse */

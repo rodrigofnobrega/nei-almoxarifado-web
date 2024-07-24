@@ -6,12 +6,12 @@
             <IconsSettings class="mx-1" width="1.5em" height="1.5em"/>
         </button>
         <ul class="dropdown-menu large-menu py-0">
-            <li type="button" class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2 pe-0">
-                <label type="button" class="form-check-label" for="editCheck">habilitar edição</label>
-                <input v-model="store.isEditionMode" @click="store.isEditionMode = !store.isEditionMode" class="form-check-input me-2" value="" id="editCheck" type="checkbox">
-            </li>
             <li class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2 pe-0 mb-0" style="padding-bottom: 4px;">
                 <a type="button" class="text-decoration-none import-text" href="/catalogo/importar-tabelas">importar tabelas</a>
+            </li>
+            <li type="button" class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2">
+                <label type="button" class="form-check-label" for="editCheck">habilitar edição</label>
+                <input v-model="store.isEditionMode" @click="store.isEditionMode = !store.isEditionMode" class="ms-2 p-2 mb-1 form-check-input" value="" id="editCheck" type="checkbox">
             </li>
         </ul>   
     </div>  
@@ -75,14 +75,16 @@ const sendDataToParent = (filter, isInverted) => {
 
 <style scoped>
 .large-menu{
-    width: 140px;
+    width: 155px;
     min-width: 110px;
 }
 li{
     list-style-type: none;
 }
-.dropdown-item{
+.dropdown-item, .dropdown-item a{
     font-size: 14px;
+    color: rgb(51,51,51, 0.9);
+    font-weight: 600;
 }
 .form-check-input{
     border: 1px solid rgb(0, 0, 0, 0.3);
@@ -115,10 +117,7 @@ li{
 .form-check-input:checked{
     background-color: #1F69B1 !important;
 }
-.import-text{
-    color: rgb(0, 0, 0, 0.9);
-}
-.dropdown-item:hover .import-text{
+.dropdown-item:hover .import-text, .dropdown-item:hover{
     color: white !important;
 }
 .action-btn:hover{
@@ -141,7 +140,7 @@ li{
 }
 @media screen and (max-width: 500px){
     .action-btn{
-        border-radius: 10px 10px 10px 10px;
+        border-radius: 5px 5px 5px 5px;
         background-color: #0B3B69;
         color: white;
     }

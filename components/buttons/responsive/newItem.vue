@@ -53,7 +53,7 @@ const toolTip = ref(false);
 }
 @media screen and (max-width: 500px){
     .action-btn{
-        border-radius: 10px 10px 10px 10px;
+        border-radius: 5px 5px 5px 5px;
         background-color: #388E3C;
         color: white;
     }

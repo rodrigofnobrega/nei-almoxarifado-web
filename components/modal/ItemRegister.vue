@@ -1,7 +1,7 @@
 <template>
     <Modal id="itemRegistration" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
-            <h6 class="header-title d-flex fw-bold justify-content-start align-items-center">Cadastro de item</h6>
+            <p class="header-title d-flex fw-bold justify-content-start align-items-center">Cadastro de item</p>
             <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
             </button>

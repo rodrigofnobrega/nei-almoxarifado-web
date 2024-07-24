@@ -65,9 +65,13 @@
                     </NuxtLink>
                </th>
           </tr>
-          <div v-else-if="recordsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)" class="search-empty position-absolute mt-5">
-                <p class="text-dark-emphasis fs-5 bg-transparent opacity-75 mt-5">Nenhum item Encontrado.</p>
-          </div>
+          <div v-else-if="recordsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)"
+             class="search-empty my-5">
+                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado.</p>
+            </div>
+            <div v-else class="search-empty  my-5" style="padding-bottom: 300px;">
+                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent"></p>
+            </div>
       </template>
   </TablesTable>
     <div class="table-footer d-flex justify-content-between align-items-center me-2 mt-2">
@@ -102,16 +106,6 @@
         </nav>
     </div>
   </div>
-  <div class="d-flex fw-bold justify-content-center mt-5">
-        <a class="warning-box mx-4 text-decoration-none p-2 text-center bg-warning-op80 text-dark" type="button" href="/sobre">
-            <IconsInformation class="mb-1"/>
-            Dúvidas? Clique aqui para ver a documentação
-        </a>
-        <a class="warning-box mx-4 p-2 text-center bg-secondary-op80 text-decoration-none text-light" type="button" href="mailto:almoxarifado957@gmail.com">
-            <IconsInformation class="mb-1"/>
-            Sugestões? Clique aqui e envie um email para equipe
-        </a>
-    </div>
 </div>
 </template>
 
@@ -154,10 +148,20 @@ const totalPages = ref(0);
 const totalElements = ref(0);
 const isSearching = ref(false);
 let finded = [];
-const recordsReq = async (sort, isInverted, pagination, loadRequest, paginationInverted) => {
+const recordsReq = async (sort, isInverted, pagination_, loadRequest, paginationInverted) => {
     if(searchInput.value != ''){
+        cacheIndex.value = 0;
+        recordsCache.value = [];
+        reqsIndexCache = [0]
+        pagination.value = 0;
+        paginationRet.value = 1;
+        initialLoading.value = false
+
+        pagesFocus.value[count] = false;
+        count = 0;  
+        pagesFocus.value[0] = true;
+
         finded = [];
-        store.isReloadItems = true;
         if(searchCache.value.length >= totalPages.value){
             for(let i = 0; i < searchCache.value.length; i++){
                 for(let j = 0; j < searchCache.value[i].length; j++){
@@ -213,7 +217,7 @@ const recordsReq = async (sort, isInverted, pagination, loadRequest, paginationI
         recordsCache.value.push(res.content);
         return res.totalPages
     } 
-    const res = await getRecords(userStore, pagination, sort)
+    const res = await getRecords(userStore, pagination_, sort)
     totalPages.value = res.totalPages
     totalElements.value = res.totalElements;
     invertedPagination.value = totalPages-1;
@@ -239,16 +243,15 @@ const recordsLoad = computed(async() => {
         typingTimer = setTimeout(() => {
             recordsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted)
         }, debounceTime);
+        return 0;
     }
-    if(searchInput.value === ''){
-        if(isSearching.value === true){
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(() => {
-                store.isReloadItems = true;
-                isSearching.value = false;
-            }, debounceTime-500);
-            finded = [];
-        }
+    if(searchInput.value === '' && isSearching.value === true){
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => {
+            store.isReloadItems = true;
+            isSearching.value = false;
+        }, debounceTime-500);
+        finded = [];
     }
     for(let i = 0; i < reqsIndexCache.length; i++){
         if(pagination.value === reqsIndexCache[i]){
@@ -409,14 +412,14 @@ onMounted(async () => {
     display: block !important;
 }
 .table-box{
-    margin-top: 80px;
+    margin-top: 75px;
     border-radius: 0px 10px 10px 10px;
     box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.5);
     border: 1px #D9D9D9 solid;
 }
 .table-box-title{
     margin-left: 8px;
-    margin-top: 41px !important;
+    margin-top: 33px !important;
     padding: 4px 4px 4px 4px;
     font-weight: 400;
     color: rgb(51,51,51, 0.8);
@@ -531,35 +534,11 @@ p{
     margin-top: 5%;
     margin-left: 35%;
 }
-.bg-warning-op80{
-    opacity: 80%;
-    background-color: rgba(254, 213, 30);
-}
-.bg-secondary-op80{
-    opacity: 80%;
-    background-color: #0052a4;
-}
-.warning-box{
-    color: black;
-    font-size: 15px;
-    border-radius: 7px;
-    width: 280px;
-    transition: width 0.3s ease-in-out, box-shadow 0.4s ease-in-out;
-}
-.bg-warning-op80:hover{
-    box-shadow: 0px 0px 15px 4px rgb(160, 152, 2);
-    width: 290px;
-}
-.bg-secondary-op80:hover{
-    box-shadow: 0px 0px 15px 4px rgb(5, 64, 119);
-    width: 290px;
-}
 .search-empty{
     margin-top: 5%;
     display: flex;
     justify-content: center;
-    margin-left: 30%;    
-    margin-right: 40%;
+    margin-left: 120%;
     white-space: nowrap;
 }
 .pagination{
@@ -607,6 +586,9 @@ tr:hover p{
         padding-right: 0px !important;
     }
 
+    .searchbar{
+        font-size: 14px;
+    }
     .table-searchbar{
         min-width: 120px;
         margin-top: 3px !important; 
@@ -623,9 +605,6 @@ tr:hover p{
     .search-glass{
         width: 25px;
         height: 25px;
-    }
-    .searchbar{
-        font-size: 14px;
     }
     .table-actions{
         width: 600px;

@@ -149,7 +149,11 @@ li{
     height: 65px;
     min-width: 40px;
 }
-
+.filter-btn{
+    font-size: 14px;
+    color: rgb(51,51,51, 0.9);
+    font-weight: 600;
+}
 .dropdown-item{
     width: 130px;
     padding: 0px;

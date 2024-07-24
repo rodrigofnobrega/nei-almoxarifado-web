@@ -34,7 +34,7 @@ const layoutBg = computed(() => {
 })
 
 onBeforeMount(() => {
-  if(window.innerWidth <= 897){
+  if(window.innerWidth <= 988){
     settingsStore.isMobile = true;
   } else{
     settingsStore.isMobile = false;

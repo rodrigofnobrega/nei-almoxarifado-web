@@ -1,7 +1,7 @@
 <template>
     <Modal id="itemDetailing" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
-            <h6 class="header-title d-flex fw-bold justify-content-start align-items-center">Detalhes</h6>
+            <p class="header-title d-flex fw-bold justify-content-start align-items-center">Detalhes do item</p>
             <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
             </button>
@@ -21,7 +21,7 @@
 						<label class="form-label fw-bold"> Tipo </label>
 						<input readonly class="form-control bg-light-emphasis" :value="item_details.type"> 
 					</div>
-                    <div v-if="item_details.lastRecord != undefined" class="mb-3" style="width: 212%">
+                    <div v-if="item_details.lastRecord != undefined" class="mb-3">
                         <label class="form-label fw-bold"> Última atualização </label>
                         <input readonly class="form-control bg-light-emphasis" id="expansible-form" :value="`${item_details.lastRecord.operation} ${item_details.lastRecord.creationDate === undefined? item_details.lastRecord.data.slice(0, 19) : item_details.lastRecord.creationDate.slice(0, 19)} ${item_details.lastRecord.user.name}`">
                     </div>	
@@ -45,6 +45,10 @@
 						<label class="form-label fw-bold"> Criador </label>
 						<input readonly class="form-control bg-light-emphasis" :value="item_details.createdBy.name"> 
 					</div>
+                    <div class="mb-3"> 
+                        <label class="form-label fw-bold"> Disponibilidade </label>
+						<input readonly class="form-control bg-light-emphasis" :value="item_details.available === true ? 'disponível' : 'esgotado'"> 
+					</div>	
 				</div>
 			</div>
         </template>
@@ -180,7 +184,6 @@ export default {
     left: 20px;
 }
 .header-title{
-    font-weight: semibold;
     margin: -1px 0 -1px 0;
     padding: 0;
 }
