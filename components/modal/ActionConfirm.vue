@@ -1,7 +1,7 @@
 <template>
 	<Modal id="actionConfirm">
 		<template v-slot:header>
-			<p class="modal-title"> Confirmar ação </p>
+			<p class="modal-title fw-bold"> Confirmar ação </p>
 			 <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
             </button>

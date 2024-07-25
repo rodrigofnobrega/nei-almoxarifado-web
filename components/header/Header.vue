@@ -7,7 +7,7 @@
     <div class="d-flex justify-content-end align-items-center">
         <SearchBar :class="{'d-none': settingsStore.isMobile}" class="pb-1"/>
         <IconsSearchGlass :class="{'d-none': !settingsStore.isMobile}" class="mobile-search text-light " type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal"/>
-        <ThemeSwitch class="mt-1"/>
+        <ThemeSwitch/>
         <ModalSearch/>
         <Profile />
       </div>     

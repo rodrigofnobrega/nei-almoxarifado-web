@@ -13,6 +13,7 @@
         <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
     </button>
         <ul class="dropdown-menu large-menu">
+            <!--
             <li>
                 <div class="vue-dropdown" @click="ClicktoggleDropdown(0)" @mouseover="toggleDropdown(0)" @mouseout="toggleDropdown(0)">
                     <div class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
@@ -32,7 +33,7 @@
                         </li>
                     </ul>
                 </div>
-            </li>
+            </li>-->
             <li>
                 <div class="vue-dropdown" @click="ClicktoggleDropdown(1)"  @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
                     <div  class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">

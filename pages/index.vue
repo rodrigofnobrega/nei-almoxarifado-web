@@ -76,7 +76,7 @@
                   {{ user.email }}
                 </th>
                 <th class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
-                  {{ user.role }}
+                  {{ user.role === 'USER' ? 'USUÁRIO' : 'ADMIN'}}
                 </th>
                 <th class="text-center table-cell user-actions pt-2" scope="row" width="5%">
                   <div class="position-sticky d-flex justify-content-center">
@@ -94,9 +94,6 @@
         </div>
       </div>
     </div>
-    <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
-      <DashboardBarChartItems />
-    </div> 
     <div class="dashboard-section overflow-x-visible recent-records bg-light mb-4 pb-0 pt-0 rounded-3">
       <div class="section-title pt-2  bg-light-background-header">
         <h5 class="header ps-2  fw-bold">Movimentações mais recentes</h5>
@@ -143,7 +140,7 @@
             </th>
             <th class="table-cell mov-cell" scope="row">
               <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                {{ record.date }}
+                {{ record.creationDate }}
               </div>
             </th>
             <th class="table-cell mov-cell" scope="row">
@@ -163,6 +160,9 @@
         <p class="text-dark-emphasis fs-5 opacity-50">Nenhuma movimentação</p>
       </div>
     </div>  
+    <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
+      <DashboardBarChartItems />
+    </div> 
     <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
       <DashboardBarChartUtils />
     </div>
@@ -187,12 +187,16 @@
       </template>
     </Modal>
 
-    <div class="d-flex fw-bold justify-content-center my-5">
-        <a class="warning-box mx-4 text-decoration-none p-2 text-center bg-warning-op80 text-dark" type="button" href="/sobre">
+    <div class="d-flex fw-bold justify-content-center my-5 pt-5 pb-4">
+        <a class="warning-box mx-5 text-decoration-none p-2 text-center bg-warning-op80 text-dark" type="button" href="/sobre">
             <IconsInformation class="mb-1"/>
             Dúvidas? Clique aqui para ver a documentação
         </a>
-        <a class="warning-box mx-4 p-2 text-center bg-secondary-op80 text-decoration-none text-light" type="button" href="mailto:almoxarifado957@gmail.com">
+        <a class="warning-box mx-5 p-2 text-center bg-alert-op80 text-decoration-none text-light" type="button" href="mailto:almoxarifado957@gmail.com">
+            <IconsInformation class="mb-1"/>
+            Problemas? Clique aqui e relate o ocorrido
+        </a>
+        <a class="warning-box mx-5 p-2 text-center bg-secondary-op80 text-decoration-none text-light" type="button" href="mailto:almoxarifado957@gmail.com">
             <IconsInformation class="mb-1"/>
             Sugestões? Clique aqui e envie um email para equipe
         </a>
@@ -404,6 +408,10 @@ h5{
     opacity: 80%;
     background-color: rgba(254, 213, 30);
 }
+.bg-alert-op80{
+  opacity: 80%;
+  background-color: rgb(231, 15, 15);
+}
 .bg-secondary-op80{
     opacity: 80%;
     background-color: #0052a4;
@@ -423,6 +431,10 @@ h5{
 .bg-secondary-op80:hover{
     box-shadow: 0px 0px 15px 2px rgb(5, 64, 119);
     width: 290px;
+}
+.bg-alert-op80:hover{
+  width: 290px;
+  box-shadow: 0px 0px 15px 2px rgb(111, 7, 7);
 }
 .align-cell{
   padding-top: 12px !important;

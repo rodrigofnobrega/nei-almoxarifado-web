@@ -1,5 +1,5 @@
 <template>
-<div class="settings-container container mb-5">
+<div class="settings-container container mb-5 mt-3">
     <!-- 
     <section class="settings-section mb-5">
         <h4 class="section-title">Níveis Limite de Estoque</h4>
@@ -172,21 +172,21 @@
 
 <Modal id="categoryRegister" tabindex="-1" data-bs-backdrop="true" aria-labelledby="scrollableModalLabel" aria-hidden="true">
     <template v-slot:header>
-        <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Digite a nova categoria</h6>
+        <h6 class="header-title d-flex fw-medium justify-content-start align-items-center fw-bold">Digite a nova categoria</h6>
         <button class="btn btn-transparent text-light border-0 close-btn" type="button" data-bs-dismiss="modal">
             <IconsClose class="close ms-5" width="1.3em" height="1.3em"/>
         </button>
     </template>
     <template v-slot:body>
         <div class="d-block">
-            <label class="fw-bold text-dark-emphasis mb-2">Nome da categoria:</label>
+            <label class="fw-bold  mb-2">Nome da categoria:</label>
             <input class="form-control" v-model="itemCategory" type="text" placeholder="Nova categoria">
         </div>
     </template>
     <template v-slot:footer>
         <div class="container-fluid d-flex justify-content-end align-items-center">
+            <button type="button" @click="addItemCategory" class="btn btn-dark-success inset-shadow text-light mx-1" data-bs-dismiss="modal">Adicionar</button>
             <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" @click="addItemCategory" class="btn btn-light-success inset-shadow text-light mx-1" data-bs-dismiss="modal">Criar</button>
         </div>
     </template>
 </Modal>
@@ -284,8 +284,11 @@ section {
 .stock-item {
     margin-bottom: 10px;
 }
-.btn, p{
+.btn-primary,p{
     font-size: 13px;
+}
+.inset-shadow{
+    font-size: 15px;
 }
 .btn{
     font-weight: bold;

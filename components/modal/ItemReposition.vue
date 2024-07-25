@@ -70,8 +70,7 @@ const reposition = () => {
 
 <style scoped>
 .inset-shadow{
-    padding: 6px 10px 6px 10px;
-    box-shadow: inset 1px 1px 15px 1px rgb(0, 0, 0, 0.2);
+    padding: 5px;
 }
 .close{
     position: relative;

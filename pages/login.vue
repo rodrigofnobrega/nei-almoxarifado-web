@@ -193,10 +193,9 @@ const isValidEmail = (email) => {
 };
 
 const loading = ref(false);
-const submitLogin = () => {
-	userStore.fetchData(password.value, email.value);
-	
-	loading.value = true;
+const submitLogin = async () => {
+	const authData = await userStore.fetchData(password.value, email.value);
+	authData === 1 ? loading.value = true : 0;
 };
 
 

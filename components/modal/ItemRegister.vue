@@ -123,7 +123,7 @@ export default{
     padding: 6px 10px 6px 10px;
 }
 .inset-shadow{
-    box-shadow: inset 1px 1px 15px 1px rgb(0, 0, 0, 0.2);
+    padding: 5px;
 }
 .close-btn{
     border: none;

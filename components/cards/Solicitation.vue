@@ -50,29 +50,29 @@
 			</template>
 		<template v-slot:footer>
 			<div class="row justify-content-evenly"> 
-				<button class="action-btn btn btn-danger col-2 mx-2" data-bs-toggle="modal" :data-bs-target="`#rejectModal${requestId}`"> Rejeitar </button>
-				<button class="action-btn btn btn-outline-success col-2 mx-2" data-bs-toggle="modal" :data-bs-target="`#acceptModal${requestId}`"> Aceitar </button>
+				<button class="action-btn text-light btn fw-bold btn-dark-alert col-2 mx-2" data-bs-toggle="modal" :data-bs-target="`#rejectModal${requestId}`"> Rejeitar </button>
+				<button class="action-btn text-light btn fw-bold btn-dark-success col-2 mx-2" data-bs-toggle="modal" :data-bs-target="`#acceptModal${requestId}`"> Aceitar </button>
 			</div>
 		</template>
 	</Card>
 	<ModalActionConfirm :id="`acceptModal${requestId}`">
 		<template v-slot:title> Confirmar aceitação</template>
 		<template v-slot:text> 
-			<h6> Mensagem para a notificação </h6>
+			<p class="fw-bold"> Mensagem para a notificação </p>
 			<textarea class="form-control"> </textarea>
 		 </template>
 		<template v-slot:buttons> 
-			<button @click="AcceptRequest()" data-bs-dismiss="modal" class="btn btn-secondary mx-2"> Enviar </button>
+			<button @click="AcceptRequest()" data-bs-dismiss="modal" class="btn btn-secondary fw-bold mx-2"> Enviar </button>
 		</template>
 	 </ModalActionConfirm>
 	<ModalActionConfirm :id="`rejectModal${requestId}`">
 		<template v-slot:title> Confirmar rejeição </template>
 		<template v-slot:text> 
-			<h6> Mensagem para a notificação </h6>
+			<p class="fw-bold"> Mensagem para a notificação </p>
 			<textarea class="form-control"> </textarea>
 		 </template>
 		<template v-slot:buttons> 
-			<button @click="RejectRequest()"  data-bs-dismiss="modal" class="btn btn-secondary mx-2"> Enviar </button>
+			<button @click="RejectRequest()"  data-bs-dismiss="modal" class="btn btn-secondary fw-bold mx-2"> Enviar </button>
 		</template>
 	 </ModalActionConfirm>
 </template>
@@ -163,6 +163,7 @@ export default {
 	font-size: 15px;
 }
 .action-btn{
+	font-size: 15px !important;
 	width: 90px;
 	font-size: 17px;
 	white-space: nowrap;

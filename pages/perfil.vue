@@ -1,21 +1,21 @@
 <template>
   <Modal id="updatePasswordModal" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
     <template v-slot:header>
-      <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Atualizar Senha</h6>
+      <h6 class="header-title d-flex fw-medium justify-content-start align-items-center fw-bold">Atualizar Senha</h6>
       <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
         <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
       </button>
     </template>
     <template v-slot:body>
       <div class="container-fluid">
-        <p>Digite sua senha atual para prosseguir</p>
-        <label class="form-label" for="currentPassword">Senha atual:</label>
+        <p class="fw-medium text-dark-emphasis">Digite sua senha atual para prosseguir:</p>
+        <label class="form-label fw-bold" for="currentPassword">Senha atual:</label>
         <div class="d-flex justify-content-end">
           <input id="currentPassword" :class="handleUpdateBtn && currentPassword ? 'bg-light-emphasis' : 'bg-light'" class="form-control mb-2" :type="showPassword[0] ? 'text' : 'password'" v-model="currentPassword">
           <IconsOpenEye v-if="!showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
           <IconsCloseEye v-if="showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
         </div>
-        <label v-if="currentPassword" class="form-label" for="newPassword">Nova senha:</label>
+        <label v-if="currentPassword" class="form-label fw-bold" for="newPassword">Nova senha:</label>
         <div v-if="currentPassword" id="newPassword" class="d-flex justify-content-end">
           <input :class="newPassword === currentPassword || newPassword && newPassword.length < 6 ? 'border-light-alert' : ''" class="form-control mb-2" :type="showPassword[1] ? 'text' : 'password'" v-model="newPassword">
           <IconsOpenEye v-if="!showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
@@ -24,18 +24,18 @@
         <p class="text-dark-alert fw-bold" v-if="newPassword && newPassword.length < 6">A senha deve possuir 6 caracteres ou mais.</p>
         <p class="text-dark-alert fw-bold" v-if="newPassword && newPassword === currentPassword">A nova senha deve ser diferente da atual.</p>
 
-        <label v-if="currentPassword && newPassword != currentPassword && newPassword.length >= 6" class="form-label" for="confirmPassword">Confirmar senha:</label>
+        <label v-if="currentPassword && newPassword != currentPassword && newPassword.length >= 6" class="form-label fw-bold" for="confirmPassword">Confirmar senha:</label>
         <div v-if="currentPassword && newPassword != currentPassword && newPassword.length >= 6" class="d-flex justify-content-end">
           <input id="confirmPassword" :class="confirmPassword && newPassword != confirmPassword ? 'border-light-alert' : ''" class="form-control" :type="showPassword[2] ? 'text' : 'password'" v-model="confirmPassword">
           <IconsOpenEye v-if="!showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
           <IconsCloseEye v-if="showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
         </div>
-        <p class="text-dark-alert fw-bold" v-if="newPassword && confirmPassword && newPassword != confirmPassword">Senhas não conferem.</p>
+        <p class="text-dark-alert fw-bold" v-if="newPassword.length >= 6 && newPassword && confirmPassword && newPassword != confirmPassword">Senhas não conferem.</p>
       </div>
     </template>
     <template v-slot:footer>
       <div class="container-fluid d-flex align-items-center justify-content-end">
-        <button v-if="currentPassword && newPassword === confirmPassword && newPassword != currentPassword" @click="changePassword" class="btn btn-secondary me-2 text-light fw-bold px-1">Confirmar</button>
+        <button v-if="currentPassword && newPassword === confirmPassword && newPassword != currentPassword" @click="changePassword" data-bs-dismiss="modal" class="btn btn-dark-success me-2 text-light fw-bold px-1">Confirmar</button>
         <button @click="resetModal" class="btn btn-light-alert text-light fw-bold px-1" data-bs-dismiss="modal">Cancelar</button>
       </div>
     </template>
@@ -43,20 +43,20 @@
 
   <Modal id="deleteAccount" tabindex="-1" data-bs-backdrop="true" aria-labelledby="scrollableModalLabel" aria-hidden="true">
     <template v-slot:header>
-      <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Confirmar exclusão de conta</h6>
+      <h6 class="header-title d-flex fw-bold justify-content-start align-items-center">Confirmar exclusão de conta</h6>
         <button class="btn btn-transparent text-light border-0 close-btn" type="button" data-bs-dismiss="modal">
             <IconsClose class="close ms-5" width="1.3em" height="1.3em"/>
         </button>
     </template>
     <template v-slot:body>
-      <p class="fw-medium text-center">Ao excluir você não terá mais acesso ao sistema por meio dela, porém seus dados ainda ficarão
+      <p class="fw-medium text-dark-emphasis text-center">Ao excluir você não terá mais acesso ao sistema por meio dela, porém seus dados ainda ficarão
          disponíveis para os administradores como históricos e registros.</p>
          <p class="fw-bold text-center">Deseja realmente desativar a sua conta?</p>
     </template>
     <template v-slot:footer>
       <div class="container-fluid d-flex justify-content-end align-items-center">
+                <button type="button" @click="deleteAccount" class="btn btn-dark-success inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Confirmar</button>
                 <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" @click="deleteAccount" class="btn btn-light-success inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Confirmar</button>
             </div>
     </template>
   </Modal>
@@ -76,14 +76,14 @@
       <div class="profile-details">
         <div>
           <h3 class="text-center mb-4">{{ userData.name }}</h3>
-          <p class="mt-3"><strong>{{ userStore.id == route.currentRoute._rawValue.query.userId}} Email:</strong> {{ userData.email }}</p>
+          <p class="mt-3"><strong>Email:</strong> {{ userData.email }}</p>
           <p class="mt-3"><strong>Encargo:</strong> {{ userData.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</p>
           <p class="mt-3"><strong>Status da conta:</strong> {{ userData.active ? 'Ativa' : 'Desativada' }}</p>
         </div>
       </div>
       <div class="profile-actions mt-5">
-        <button v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#updatePasswordModal" data-bs-toggle="modal" class="btn btn-secondary">Alterar Senha</button>
-        <button v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6 btn-light-alert">Excluir Conta</button>
+        <button v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#updatePasswordModal" data-bs-toggle="modal" class="btn fw-bold btn-secondary">Alterar Senha</button>
+        <button v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6  fw-bold btn-light-alert">Excluir Conta</button>
       </div>
     </div>
     <div class="profile-main-content">
@@ -142,7 +142,7 @@
               </template>
             </TablesTable>
         </div>
-      <p class="ms-2">{{userRequests.length}} de {{requestsTotalElements}}</p>
+      <p class="ms-2 pt-2 fw-bold posts-loader">{{userRequests.length}} de {{requestsTotalElements}}</p>
       </div>
 
       <div v-if="userRecords.length > 0" class="overflow-x-scroll profile-posts me-2 bg-light mb-4 pb-0 pt-0 rounded-3">
@@ -200,7 +200,7 @@
               </template>
             </TablesTable>
         </div>
-      <p class="ms-2">{{userRecords.length}} de {{recordsTotalElements}}</p>
+      <p class="ms-2 pt-2 fw-bold posts-loader">{{userRecords.length}} de {{recordsTotalElements}}</p>
       </div>
     </div>
   </div>
@@ -330,23 +330,24 @@ onMounted(async () => {
   requestsTable.addEventListener('scroll', async () => {
     if(userRequests.value.length < requestsTotalElements.value){
       const isBottom = requestsTable.scrollHeight - requestsTable.scrollTop === requestsTable.clientHeight;
-      if (isBottom && currentPage.value < recordTotalPages.value - 1) {
+      if (isBottom && currentPage.value < requestsTotalPages.value - 1) {
         currentPage.value++;
         await fetchRequests(currentPage.value);
       }
     }
   });
-
-  const postsTable = document.getElementsByClassName('posts-table')[1];
-  postsTable.addEventListener('scroll', async () => {
-    if(userRecords.value.length < recordsTotalElements.value){
-      const isBottom = postsTable.scrollHeight - postsTable.scrollTop === postsTable.clientHeight;
-      if (isBottom && currentPage.value < recordTotalPages.value - 1) {
-        currentPage.value++;
-        await fetchRecords(currentPage.value);
+  if(userData.role === 'ADMIN'){
+    const postsTable = document.getElementsByClassName('posts-table')[1];
+    postsTable.addEventListener('scroll', async () => {
+      if(userRecords.value.length < recordsTotalElements.value){
+        const isBottom = postsTable.scrollHeight - postsTable.scrollTop === postsTable.clientHeight;
+        if (isBottom && currentPage.value < recordTotalPages.value - 1) {
+          currentPage.value++;
+          await fetchRecords(currentPage.value);
+        }
       }
-    }
-  });
+    });
+  }
 });
 </script>
 
@@ -449,7 +450,9 @@ h5{
   margin-bottom: 10px;
 }
 
-
+.posts-loader{
+  color: rgba(51,51,51, 0.9)
+}
 .profile-picture {
   display: flex;
   flex-direction: column;

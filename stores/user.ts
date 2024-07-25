@@ -28,9 +28,10 @@ export const useUser = defineStore('user', {
                 this.token = res.token;
                 popUpStore.throwPopup("Credenciais validadas", "blue");
                 this.fetchMetaData();
+                return 1;
             } catch(err) { 
                 popUpStore.throwPopup("ERRO: credenciais inválidas", "#B71C1C")
-                return err
+                return 0;
             };
         },
         logout(){

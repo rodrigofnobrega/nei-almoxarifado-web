@@ -20,5 +20,14 @@ const themeSwitch = () => {
 .form-check-input{
     padding: 8px;
 }
-
+.form-check{
+    padding-top: 8px;
+    margin-bottom: -4px;
+    height: 45px;
+    transition: box-shadow 0.4s ease, border-bottom 0.4s ease-in-out;
+}
+.form-check:hover{
+  border-bottom: solid 1px #FED51E;
+  box-shadow: inset 0px -12px 15px -13px rgb(254, 213, 30, 0.7);
+}
 </style>    

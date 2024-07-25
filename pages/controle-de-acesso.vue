@@ -90,8 +90,8 @@ provide('setSolicitations', async () => {
 	padding-left: 30px;
 }
 .warning-text{
-	position: absolute;
 	margin-top: 5%;
+	margin-bottom: 25%;
 	width: 80%;
 }
 .sub-catalog{
