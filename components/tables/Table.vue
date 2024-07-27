@@ -34,7 +34,10 @@ table{
     margin-bottom: 0px;
     width: 100%;
 }
-
+thead {
+    position: sticky !important;
+    top: -1px !important;
+}   
 .col-title{
     font-size: 18px;
     opacity: 80%;

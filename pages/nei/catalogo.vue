@@ -1,5 +1,5 @@
 <template>
-<ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="searchItem ? searchItem : currentItem" />
+<ModalNeiItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="searchItem ? searchItem : currentItem" />
 <ModalActionConfirm v-if="itemsCache.length > 0">
     <template v-slot:title> Confirmar aceitação </template>
     <template v-slot:text> 
@@ -39,7 +39,7 @@
 </ModalActionConfirm>
 
 <div class="table-container d-block mt-2">
-    <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
+    <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#NeiItemDetailing"></button>
     <div class="sub-catalog bg-light mt-2 ps-2 pe-2">
         <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
@@ -99,7 +99,7 @@
                     </div>
                </th>
                <th class="border" width="5%">
-                    <button title="Detalhes" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                    <button title="Detalhes" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#NeiItemDetailing">
                         <IconsSearchGlass class="action-icon" width="18px" height="19px"/>
                     </button>
                     <button title="Solicitar" class="my-0 details-btn position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}"  @click="showConfirm(index)" data-bs-toggle="modal" data-bs-target="#actionConfirm">

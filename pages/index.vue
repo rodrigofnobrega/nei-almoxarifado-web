@@ -53,14 +53,14 @@
         </div>
       </div>    
       <div class="dashboard-section users-management me-3 bg-light mb-4 pb-0 pt-0 rounded-3">
-        <div class="section-title pt-2  bg-light-background-header">
+        <div class="section-title pt-2 bg-light-background-header">
           <h5 class="header ps-2 fw-bold">Gestão de Usuários</h5>
         </div>
         <div class="users-management-scroll">
           <TablesTable v-if="users.content && users.content.length">
             <template v-slot:header>
               <tr>
-                <th class="col-title py-2" scope="col">Usuário</th>
+                <th class="col-title text-center py-2" scope="col">Usuário</th>
                 <th class="col-title text-center py-2" scope="col">Email</th>
                 <th class="col-title text-center py-2" scope="col">Encargo</th>
                 <th class="col-title text-center py-2 justify-content-center" scope="col">Ações</th>
@@ -68,7 +68,7 @@
             </template>
             <template v-slot:content>
               <tr v-for="user in users.content" :key="user.id">
-                <th class="text-center table-cell d-flex align-items-center" scope="row">
+                <th class="text-center table-cell text-start" scope="row">
                   <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
                   {{ user.name }}
                 </th>
@@ -94,14 +94,14 @@
         </div>
       </div>
     </div>
-    <div class="dashboard-section overflow-x-visible recent-records bg-light mb-4 pb-0 pt-0 rounded-3">
+    <div class="dashboard-section  overflow-x-visible recent-records bg-light mb-4 pb-0 pt-0 rounded-3">
       <div class="section-title pt-2  bg-light-background-header">
         <h5 class="header ps-2  fw-bold">Movimentações mais recentes</h5>
       </div>
       <TablesTable v-if="records.content && records.content.length">
         <template v-slot:header>
           <tr>
-            <th class="col-title table-col  py-2" scope="col">Usuário</th>
+            <th class="col-title table-col text-center py-2" scope="col">Usuário</th>
             <th class="col-title table-col text-center py-2" scope="col">Movimentação</th>
             <th class="col-title table-col text-center py-2" scope="col">Item</th>
             <th class="col-title table-col text-center py-2" scope="col">Tipo unitário</th>
@@ -359,9 +359,6 @@ h5{
   opacity: 90%;
   font-weight: bold;
   margin-top: 0;
-}
-.col-line {
-  border-bottom: 1px solid rgba(80, 76, 76, 0.174);
 }
 .table-cell{
   z-index: 1000 !important;

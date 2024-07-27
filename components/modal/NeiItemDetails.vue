@@ -1,5 +1,5 @@
 <template>
-    <Modal id="itemDetailing" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
+    <Modal id="NeiItemDetailing" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
             <p class="header-title d-flex fw-bold justify-content-start align-items-center">Detalhes do item</p>
             <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
@@ -105,7 +105,7 @@
                 <textarea v-model="description" class="form-control textarea"> </textarea>
                 <div class="d-block mt-2">
                     <label for="item-qtd">Quantidade a ser solicitada</label> 
-                    <input class="form-control" style="width: 225px !important;" v-model="item_details.quantity" type="number" pattern="[0,9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                    <input class="form-control" style="width: 225px !important;" v-model="itemQtd" type="number" pattern="[0,9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 </div>
             </div>
         </template>
@@ -118,9 +118,11 @@
 
 <script>
 import { useStorageStore } from '../../stores/storage';
+import { usePopupStore } from '../../stores/popup';
 import { inject } from 'vue';
 import { useUser } from '../../stores/user';
 import { getRecordByItemId } from '../../services/record/recordGET';
+import { postRequest } from '../../services/requests/requestsPOST';
 
 export default {
     data() {
@@ -132,6 +134,8 @@ export default {
             inputs: [],
             editionActive: false,
             toggleHistory: true,
+            itemQtd: 0,
+            description: ''
         }
     },
     methods: {
@@ -184,6 +188,15 @@ export default {
         async getRecord(){
             const res = await getRecordByItemId(this.userStore,this.item_details.id);
             this.store.itemRecord = res.content;
+        },
+        async sendRequest(){
+            try{
+                const res = await postRequest(this.userStore, this.item_details.id, this.itemQtd, this.description)
+            }catch(err){
+                console.log(err)
+                return this.popUpStore.throwPopup('Erro: digite uma mensagem de solicitação', '#B71C1C')
+            }
+            return this.popUpStore.throwPopup('Solicitação enviada', '#0B3B69')
         }
     },
     props: {
@@ -200,8 +213,9 @@ export default {
     setup(){
         const store = useStorageStore();
         const userStore = useUser();
+        const popUpStore = usePopupStore();
         return {
-            store, userStore
+            store, userStore, popUpStore
         }
     },
 }

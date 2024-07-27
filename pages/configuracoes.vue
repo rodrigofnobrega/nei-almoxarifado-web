@@ -83,12 +83,55 @@
         </div>
     </section>
     <section class="settings-section mb-5">
-        <h3 class="section-title mx-2 pb-2">Tipografia</h3>
-        <p class="fs-6 mx-2">Escolha um dos temas visuais abaixos para que a estilização do aplicativo esteja de acordo com suas preferências estéticas. O tema escolhido ficará salvo como preferências do usuário, ao sair da aplicação o tema continuará salvo.  </p>
-        <div class="dashboard-container container-fluid d-flex px-0 justify-content-center align-items-center">
-           
+    <h3 class="section-title mx-2 pb-2">Tipografia</h3>
+    <p class="fs-6 mx-2">Escolha uma das fontes visuais abaixo para que a estilização do aplicativo esteja de acordo com suas preferências estéticas. A fonte escolhida ficará salva como preferências do usuário, ao sair da aplicação a fonte continuará salva.</p>
+    <div class="dashboard-container container-fluid d-flex px-0 justify-content-between align-items-center">
+        <div class="card themes-card mx-2 bg-primary rounded-3 border-1" @click="changeFont(0)">
+            <img src="/poppins.png" class="card-img-top" alt="...">
+            <div class="card-body p-3 text-dark-emphasis">
+                <div class="form-check text-light">
+                    <input :checked="settingsStore.tipography === 0" class="form-check-input" type="radio" id="fontRadio1" name="fontOptions" value="option4">
+                    <label class="card-text fw-bold form-check-label fw-bold" for="fontRadio1">
+                        Poppins
+                    </label>
+                </div>
+            </div>
         </div>
-    </section>
+        <div class="card themes-card mx-2 bg-primary rounded-3 border-1" @click="changeFont(1)">
+            <img src="/inter.png" class="card-img-top" alt="...">
+            <div class="card-body p-3 text-dark-emphasis">
+                <div class="form-check text-light">
+                    <input :checked="settingsStore.tipography === 1" class="form-check-input" type="radio" id="fontRadio2" name="fontOptions" value="option5">
+                    <label class="card-text fw-bold form-check-label fw-bold" for="fontRadio2">
+                        Inter
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="card themes-card mx-2 bg-primary rounded-3 border-1" @click="changeFont(2)">
+            <img src="/montserrat.png" class="card-img-top" alt="...">
+            <div class="card-body p-3 text-dark-emphasis">
+                <div class="form-check text-light">
+                    <input :checked="settingsStore.tipography === 2" class="form-check-input" type="radio" id="fontRadio3" name="fontOptions" value="option6">
+                    <label class="card-text fw-bold form-check-label fw-bold" for="fontRadio3">
+                        Montserrat
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="card themes-card mx-2 bg-primary rounded-3 border-1" @click="changeFont(3)">
+            <img src="/lora.png" class="card-img-top" alt="...">
+            <div class="card-body p-3 text-dark-emphasis">
+                <div class="form-check text-light">
+                    <input :checked="settingsStore.tipography === 3" class="form-check-input" type="radio" id="fontRadio4" name="fontOptions" value="option7">
+                    <label class="card-text fw-bold form-check-label fw-bold" for="fontRadio4">
+                        Lora
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
     <!--
     <div>
         <label class="form-check-label fw-bold">
@@ -214,6 +257,9 @@ sendDataToParent();
 const settingsStore = useSettingsStore();
 const changeLayout = (index) => {
     settingsStore.layout = index
+}
+const changeFont = (index) => {
+    settingsStore.tipography = index;
 }
 const itemCategory = ref('');
 

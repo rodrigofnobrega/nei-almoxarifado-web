@@ -94,7 +94,7 @@ sendDataToParent();
     link2: 'https://www.linkedin.com/in/rodrigo-ferreira-da-n%C3%B3brega-509116305/'
   },
   {
-    image: 'https://via.placeholder.com/150',
+    image: '/foto_clezio.jpg',
     title: 'Clézio',
     description: 'Dev Description 5',
     email: 'caiodanielfonseca@gmail.com',

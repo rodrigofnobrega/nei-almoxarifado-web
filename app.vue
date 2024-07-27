@@ -8,6 +8,7 @@
     poppins: font === 0, 
     inter: font === 1, 
     montserrat: font === 2, 
+    lora: font === 3, 
   }">
     <NuxtLayout>
       <Popup class="popUp" :isPopup="isPopup" :popupText="popupText" :popupBg="popupBg"/>
@@ -72,8 +73,133 @@ function checkIfMobile() {
 .montserrat{
   font-family: 'Montserrat', sans-serif;
 }
+.lora{
+  font-family: 'Lora', sans-serif;
+}
 
-
+.darkLayout .bg-primary{
+  background-color: #020b15 !important;
+}
+.darkLayout .bg-light{
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout .modal-body{
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout .modal-footer{
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout .modal-header{
+  background-color: #020b15 !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout input{
+  color: rgb(255,255,255,0.8) !important;
+  background-color: #1A1A1A;
+  border: solid 1px #333333;
+  border-left: none !important;
+}
+.darkLayout input:focus{
+  color: rgb(255,255,255,0.8) !important;
+  background-color: #1A1A1A;
+  border: solid 1px #333333;
+}
+.darkLayout label{
+  color: rgb(255,255,255,0.8) !important;
+  background-color: #1A1A1A !important;
+}
+.darkLayout .search-icon{
+  border: 1px solid rgb(51, 51, 51, 1) !important; 
+  border-right: none !important; 
+}
+.darkLayout input::placeholder{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout img{
+  color: rgb(255,255,255,0.8) !important;
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout th{
+  color: rgb(255,255,255,0.8) !important;
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout td{
+  color: rgb(255,255,255,0.8) !important;
+  background-color: #1A1A1A;
+  border: solid 1px #333333 !important;
+}
+.darkLayout p{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout h3{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout h5{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout h6{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout li{
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout a{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout ul{
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+  border-bottom: none !important;
+}
+.darkLayout label{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout span{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout svg{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout .btn{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout .light-background{
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout .new-gray{
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout .bg-gray-light{
+  background-color: #2f2e2e !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout .bg-light-background-header{
+  background-color: #2f2e2e !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout .bg-light-emphasis{
+  background-color: #2f2e2e !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout [class*='dark']{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout [class*='dark-emphasis']{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout .bg-fade {
+  background: black;
+}
+/*
 .darkLayout [class*="primary"] {
   background-color: #2C3E50 !important; 
 }
@@ -91,7 +217,7 @@ function checkIfMobile() {
   background-color: #E74C3C !important; 
 }
 .darkLayout [class*="warning"] {
-  color: #F39C12 !important; 
+  background-color: #F39C12 !important; 
 }
 .darkLayout [class*="light-emphasis"] {
   background-color: #BDC3C7 !important; 
@@ -108,7 +234,7 @@ function checkIfMobile() {
 .darkLayout [class*="new-gray"] {
   background-color: #566573 !important; 
 }
-
+ */ 
 
 .alternativeLayout [class*="primary"] {
   background-color: #3e0d7a !important; /* Dark Slate Blue */
