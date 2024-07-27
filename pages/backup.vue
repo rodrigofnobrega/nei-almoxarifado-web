@@ -1,216 +1,741 @@
 <template>
-	<div class="container-fluid bg-light-emphasis auth-container d-flex col-1 justify-content-center">
-		<div class="header">
-			<p class="texto"><strong>Recuperar Senha</strong></p>
-		</div>
-		<div class="mx-2">
-			<p class="mt-3 mb-0">Para finalizar, digite a nova senha e confirme.</p>	
-			<form class="auth-form" @submit.prevent="submitForm">
-				<div class="auth">
-					<label class="fw-bold" for="password">Senha:</label>
-					<div class="d-flex justify-content-end">
-						<input class="form-control" id="password" placeholder="Nova Senha" :type="showPassword[0] ? 'text' : 'password'" v-model="newPassword" required>
-						<IconsOpenEye v-if="!showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
-						<IconsCloseEye v-if="showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
-					</div>
-					<p class="fw-bold text-dark-alert mb-2 my-1 d-flex align-items-center" v-if="newPassword && newPassword.length < 6">
-						<IconsInformation class="me-1"/>
-						A senha deve possuir 6 ou mais caracteres.
-					</p>	
-					<div class="mt-3">
-						<label class="fw-bold" for="re-password">Confirme sua Senha:</label>
-						<div class="d-flex justify-content-end">
-							<input class="form-control" id="rePassword" placeholder="Confirmar senha" :type="showPassword[1] ? 'text' : 'password'" v-model="newRePassword" required>
-							<IconsOpenEye v-if="!showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
-							<IconsCloseEye v-if="showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
-						</div>
-						<p class="fw-bold text-dark-alert mb-2 my-1 d-flex align-items-center" v-if="newRePassword && newPassword.length >= 6 && newRePassword != newPassword">
-							<IconsInformation class="me-1"/>
-							As senhas não conferem.
-						</p>
-					</div>
-				</div>  
-				<button :class="!newPassword || newPassword.length < 6 || !newRePassword || newPassword != newRePassword ? 'disabled-button' : ''" :disabled="!newPassword || newPassword.length < 6 || !newRePassword || newPassword != newRePassword " class="mb-2" type="submit" @click="verifyPassword">Enviar</button>
-			</form>
-		</div>
-	</div>
-
-</template>
-
-<script setup lang="ts"> 
-
-definePageMeta({
-  layout: 'authentication'
-});
-
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStorageStore } from '../stores/storage';
-import { useUser } from '../stores/user';
-import { forgotPasswordPUT } from '../services/users/userPUT';
-import { usePopupStore } from '../stores/popup';
-
-const store = useStorageStore();
-const userStore = useUser()
-const popUpStore = usePopupStore();
-// Váriaveis responsivas que armazenam os valores dos campos acima (integrar à API)
-const newPassword = ref('');
-const newRePassword = ref(''); 
-const isEqual = ref(true);
-
-const showPassword = ref([false, false, false]);
-
-// Router para voltar ao login
-const router = useRouter();
-
-// Métodos para fazer a rotina funcionar
-
-    // Verifica se as senhas estão iguais
-const verifyPassword = async () => {
-    if (newPassword.value === newRePassword.value) {
-		try{
-			const res = await forgotPasswordPUT(userStore.email, store.recoveryToken, newPassword.value, newRePassword.value)
-			router.push('/login');
-		}catch(err){
-			popUpStore.throwPopup('ERRO: Algum erro interno ocorreu, contate o suporte.', 'red')
-			isEqual.value = false;
-		}
-	}
-}
-
-    // Reiniciar a rotina
-const resetPassword = () => {
-    isEqual.value = true;
-}
-
-</script>
-
-<style scoped>
-
-.showButton {
-    max-width: 20px;
-    max-height: 20px;
-}
-
-.showButton:hover {
-    background-color: #007bff;
-}
-.showButton.active {
-  background-color: #007bff;
-}
-
-.blurred {
-	filter: blur(1.5px);
-}
-
-.pop-error {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 330px;
-	padding: 11px;
-	text-align: center;
-	background-color: #0B3B69;
-	border-radius: 5px;
-	color: #ffffff;
-	font-weight: bold;
-	}
-
-.pop-error button {
-	width: 75%;
-	margin-left: 0px;
-	margin-top: 7px;
-	padding: 0px;
-	background-color: rgba(200, 0, 0);
-	color: #fff;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-}
-
-.pop-error button:hover {
-  background-color: #ff3333; /* Altera a cor do botão quando hover */
-}
-
-.container-fluid {
-	padding: 0px;
-}
-
-.auth-container{
-	border-radius: 8px;
-	width: 450px;
-	flex-direction: column;
-	margin-top: 80px;
-    margin: 10px;
-}
-.auth {
-    padding-top: 0px;
-    justify-content: space-between;
-    margin-top: 10px;
+    <div class="container-fluid d-block">
+      <div class="profile-container">
+        <div class="profile-sidebar bg-light rounded-3  flex-column align-items-center">
+          <div class="d-flex justify-content-center mb-4 bg-light-background-header history-title">
+              <h5 class="text-center mt-2 fw-bold">Informações do perfil</h5>
+          </div>
+          <div class="profile-picture aspect-ratio">
+            <div class="img-container">
+              <img :src="user.profilePicture" class="img-top" alt="Foto de Perfil">
+            </div>
+            <input type="file" @change="uploadProfilePicture" ref="fileInput" hidden>
+            <!--<button @click="selectProfilePicture">Alterar Foto</button>-->
+          </div>
+          <div class="profile-details">
+            <div>
+              <h3 class="text-center mb-4">{{ userData.name }}</h3>
+              <p class="mt-3"><strong>Email:</strong> {{ userData.email }}</p>
+              <p class="mt-3"><strong>Encargo:</strong> {{ userData.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</p>
+              <p class="mt-3"><strong>Status da conta:</strong> {{ userData.active ? 'Ativa' : 'Desativada' }}</p>
+            </div>
+          </div>
+          <div class="profile-actions mt-5">
+            <button v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#updatePasswordModal" data-bs-toggle="modal" class="btn fw-bold btn-secondary">Alterar Senha</button>
+            <button v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6  fw-bold btn-light-alert">Excluir Conta</button>
+          </div>
+        </div>
+      <div>
+        <div class="profile-posts bg-light mb-4 mt-0 pb-0 pt-0 rounded-3" style="margin-right: 190px !important;">
+          <div class="history-title pt-2 bg-light-background-header">
+            <h5 class="ms-3 fw-bold">Solicitações Pendentes</h5>
+          </div>
+          <div class="posts-table">
+            <TablesTable>
+              <template v-slot:header>
+                <tr class="bg-light">
+                  <th class="col-title table-col fw-bold text-center py-2" scope="col">Nome</th>
+                  <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
+                  <th class="col-title table-col fw-bold text-center py-2" scope="col">Sipac</th>
+                  <th class="col-title table-col fw-bold text-center py-2" scope="col">Quantidade</th>
+                  <th class="col-title table-col fw-bold text-center py-2" scope="col">Data e horário</th>
+                </tr>
+              </template>
+              <template v-slot:content>
+                <tr v-if="pendingRequests.length > 0" v-for="request in pendingRequests" :key="request.id" class="text-center"> 
+                  <th class="table-cell mov-cell" scope="row">
+                    <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
+                      {{ request.item.name || 'Nome não disponível' }}
+                    </div>
+                  </th>
+                  <th class="table-cell mov-cell" scope="row">
+                    <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                      {{ request.item.type || 'Tipo não disponível' }}
+                    </div>
+                  </th>
+                  <th class="table-cell mov-cell" scope="row">
+                    <div class="d-flex table-text table-text align-items-end mt-1 justify-content-center">
+                      {{ request.item.sipacCode ? request.item.sipacCode : 'nenhum' }}
+                    </div>
+                  </th>
+                  <th class="table-cell mov-cell" scope="row">
+                    <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                      {{ request.quantityRequested }}
+                    </div>
+                  </th>
+                  <th class="table-cell mov-cell" scope="row">
+                    <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                      {{ request.creationDate.slice(0, 19) }}
+                    </div>
+                  </th>
+                </tr>
+                <tr v-else>
+                  <td colspan="5" class="text-center fw-bold text-dark-emphasis py-5 mt-5">Nenhuma solicitação encontrada</td>
+                </tr>
+                </template>
+              </TablesTable>
+          </div>
+        <p class="ms-2 pt-2 fw-bold posts-loader">{{pendingRequests.length}} de {{reqsTotalElements.pendingRequests}}</p>
+        </div>
+        <div class="profile-posts me-2 bg-light mb-4 mt-0 pb-0 pt-0 rounded-3" style="margin-right: 190px !important;">
+          <div class="history-title pt-2 bg-light-background-header">
+            <h5 class="ms-3 fw-bold">Solicitações Aceitas</h5>
+          </div>
+          <div class="posts-table">
+            <TablesTable>
+              <template v-slot:header>
+                <tr class="bg-light">
+                  <th class="col-title table-col fw-bold text-center py-2" scope="col">Nome</th>
+                  <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
+                  <th class="col-title table-col fw-bold text-center py-2" scope="col">Sipac</th>
+                  <th class="col-title table-col fw-bold text-center py-2" scope="col">Quantidade</th>
+                  <th class="col-title table-col fw-bold text-center py-2" scope="col">Data e horário</th>
+                </tr>
+              </template>
+              <template v-slot:content>
+                <tr v-if="acceptedRequests.length > 0" v-for="request in acceptedRequests" :key="request.id" class="text-center"> 
+                  <th class="table-cell mov-cell" scope="row">
+                    <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
+                      {{ request.item.name || 'Nome não disponível' }}
+                    </div>
+                  </th>
+                  <th class="table-cell mov-cell" scope="row">
+                    <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                      {{ request.item.type || 'Tipo não disponível' }}
+                    </div>
+                  </th>
+                  <th class="table-cell mov-cell" scope="row">
+                    <div class="d-flex table-text table-text align-items-end mt-1 justify-content-center">
+                      {{ request.item.sipacCode ? request.item.sipacCode : 'nenhum' }}
+                    </div>
+                  </th>
+                  <th class="table-cell mov-cell" scope="row">
+                    <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                      {{ request.quantityRequested }}
+                    </div>
+                  </th>
+                  <th class="table-cell mov-cell" scope="row">
+                    <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                      {{ request.creationDate.slice(0, 19) }}
+                    </div>
+                  </th>
+                </tr>
+                <tr v-else>
+                  <td colspan="5" class="text-center fw-bold text-dark-emphasis py-5 mt-5">Nenhuma solicitação encontrada</td>
+                </tr>
+                </template>
+              </TablesTable>
+          </div>
+        <p class="ms-2 pt-2 fw-bold posts-loader">{{acceptedRequests.length}} de {{reqsTotalElements.acceptedRequests}}</p>
+        </div>
+        </div>
+      </div>
+      
+  <div class="profile-main-content mt-2">
+    <div class="profile-container" >
+    <div class="profile-posts me-2 bg-light mb-4 mt-0 pb-0 pt-0 rounded-3">
+      <div class="history-title pt-2 bg-light-background-header">
+        <h5 class="ms-3 fw-bold">Solicitações Recusadas</h5>
+      </div>
+      <div class="posts-table">
+        <TablesTable>
+          <template v-slot:header>
+            <tr class="bg-light">
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Nome</th>
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Sipac</th>
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Quantidade</th>
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Data e horário</th>
+            </tr>
+          </template>
+          <template v-slot:content>
+            <tr v-if="rejectedRequests.length > 0" v-for="request in rejectedRequests" :key="request.id" class="text-center"> 
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
+                  {{ request.item.name || 'Nome não disponível' }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ request.item.type || 'Tipo não disponível' }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text table-text align-items-end mt-1 justify-content-center">
+                  {{ request.item.sipacCode ? request.item.sipacCode : 'nenhum' }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ request.quantityRequested }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ request.creationDate.slice(0, 19) }}
+                </div>
+              </th>
+            </tr>
+            <tr v-else>
+              <td colspan="5" class="text-center fw-bold text-dark-emphasis py-5 mt-5">Nenhuma solicitação encontrada</td>
+            </tr>
+            </template>
+          </TablesTable>
+      </div>
+    <p class="ms-2 pt-2 fw-bold posts-loader">{{rejectedRequests.length}} de {{reqsTotalElements.rejectedRequests}}</p>
+    </div>
+    <div class="profile-posts bg-light mb-4 mt-0 pb-0 pt-0 rounded-3">
+      <div class="history-title pt-2 bg-light-background-header">
+        <h5 class="ms-3 fw-bold">Solicitações Canceladas</h5>
+      </div>
+      <div class="posts-table">
+        <TablesTable>
+          <template v-slot:header>
+            <tr class="bg-light">
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Nome</th>
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Sipac</th>
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Quantidade</th>
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Data e horário</th>
+            </tr>
+          </template>
+          <template v-slot:content>
+            <tr v-if="canceledRequests.length > 0" v-for="request in canceledRequests" :key="request.id" class="text-center"> 
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
+                  {{ request.item.name || 'Nome não disponível' }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ request.item.type || 'Tipo não disponível' }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text table-text align-items-end mt-1 justify-content-center">
+                  {{ request.item.sipacCode ? request.item.sipacCode : 'nenhum' }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ request.quantityRequested }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ request.creationDate.slice(0, 19) }}
+                </div>
+              </th>
+            </tr>
+            <tr v-else>
+              <td colspan="5" class="text-center fw-bold text-dark-emphasis py-5 mt-5">Nenhuma solicitação encontrado</td>
+            </tr>
+            </template>
+          </TablesTable>
+      </div>
+      <p class="ms-2 pt-2 fw-bold posts-loader">{{canceledRequests.length}} de {{reqsTotalElements.canceledRequests}}</p>
+      </div>
+    </div>
+    <div v-if="userRecords.length > 0" class="overflow-x-scroll profile-posts bg-light mb-4 mt-0 pb-0 pt-0 rounded-3">
+        <div class="history-title pt-2 bg-light-background-header">
+          <h5 class="ms-3 fw-bold">Registros da conta</h5>
+        </div>
+        <div class="posts-table">
+          <TablesTable>
+            <template v-slot:header>
+              <tr class="bg-light">
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Nome</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Sipac</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Quantidade</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Data e horário</th>
+              </tr>
+            </template>
+            <template v-slot:content>
+              <tr v-if="userRecords.length > 0" v-for="post in userRecords" :key="post.id" class="text-center"> 
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
+                    {{ post.operation || 'Nome não disponível' }}
+                  </div>
+                </th>
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
+                    {{ post.item.name || 'Nome não disponível' }}
+                  </div>
+                </th>
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                    {{ post.item.type || 'Tipo não disponível' }}
+                  </div>
+                </th>
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text table-text align-items-end mt-1 justify-content-center">
+                    {{ post.item.sipacCode ? post.item.sipacCode : 'nenhum' }}
+                  </div>
+                </th>
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                    {{ post.quantity }}
+                  </div>
+                </th>
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                    {{ post.creationDate.slice(0, 19) }}
+                  </div>
+                </th>
+              </tr>
+              <tr v-else>
+                <td colspan="5" class="text-center text-center fw-bold text-dark-emphasis py-5 mt-5">Nenhuma solicitação encontrado</td>
+              </tr>
+              </template>
+            </TablesTable>
+        </div>
+        <p class="ms-2 pt-2 fw-bold posts-loader">{{userRecords.length}} de {{recordsTotalElements}}</p>
+        </div>
+    </div>
+  </div>
+  
+    <Modal id="updatePasswordModal" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
+      <template v-slot:header>
+        <h6 class="header-title d-flex fw-medium justify-content-start align-items-center fw-bold">Atualizar Senha</h6>
+        <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
+          <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
+        </button>
+      </template>
+      <template v-slot:body>
+        <div class="container-fluid">
+          <p class="fw-medium text-dark-emphasis">Digite sua senha atual para prosseguir:</p>
+          <label class="form-label fw-bold" for="currentPassword">Senha atual:</label>
+          <div class="d-flex justify-content-end">
+            <input id="currentPassword" :class="handleUpdateBtn && currentPassword ? 'bg-light-emphasis' : 'bg-light'" class="form-control mb-2" :type="showPassword[0] ? 'text' : 'password'" v-model="currentPassword">
+            <IconsOpenEye v-if="!showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
+            <IconsCloseEye v-if="showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
+          </div>
+          <label v-if="currentPassword" class="form-label fw-bold" for="newPassword">Nova senha:</label>
+          <div v-if="currentPassword" id="newPassword" class="d-flex justify-content-end">
+            <input :class="newPassword === currentPassword || newPassword && newPassword.length < 6 ? 'border-light-alert' : ''" class="form-control mb-2" :type="showPassword[1] ? 'text' : 'password'" v-model="newPassword">
+            <IconsOpenEye v-if="!showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
+            <IconsCloseEye v-if="showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
+          </div>
+          <p class="text-dark-alert fw-bold" v-if="newPassword && newPassword.length < 6">A senha deve possuir 6 caracteres ou mais.</p>
+          <p class="text-dark-alert fw-bold" v-if="newPassword && newPassword === currentPassword">A nova senha deve ser diferente da atual.</p>
+  
+          <label v-if="currentPassword && newPassword != currentPassword && newPassword.length >= 6" class="form-label fw-bold" for="confirmPassword">Confirmar senha:</label>
+          <div v-if="currentPassword && newPassword != currentPassword && newPassword.length >= 6" class="d-flex justify-content-end">
+            <input id="confirmPassword" :class="confirmPassword && newPassword != confirmPassword ? 'border-light-alert' : ''" class="form-control" :type="showPassword[2] ? 'text' : 'password'" v-model="confirmPassword">
+            <IconsOpenEye v-if="!showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
+            <IconsCloseEye v-if="showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
+          </div>
+          <p class="text-dark-alert fw-bold" v-if="newPassword.length >= 6 && newPassword && confirmPassword && newPassword != confirmPassword">Senhas não conferem.</p>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <div class="container-fluid d-flex align-items-center justify-content-end">
+          <button v-if="currentPassword && newPassword === confirmPassword && newPassword != currentPassword" @click="changePassword" data-bs-dismiss="modal" class="btn btn-dark-success me-2 text-light fw-bold px-1">Confirmar</button>
+          <button @click="resetModal" class="btn btn-light-alert text-light fw-bold px-1" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </template>
+    </Modal>
+  
+    <Modal id="deleteAccount" tabindex="-1" data-bs-backdrop="true" aria-labelledby="scrollableModalLabel" aria-hidden="true">
+      <template v-slot:header>
+        <h6 class="header-title d-flex fw-bold justify-content-start align-items-center">Confirmar exclusão de conta</h6>
+          <button class="btn btn-transparent text-light border-0 close-btn" type="button" data-bs-dismiss="modal">
+              <IconsClose class="close ms-5" width="1.3em" height="1.3em"/>
+          </button>
+      </template>
+      <template v-slot:body>
+        <p class="fw-medium text-dark-emphasis text-center">Ao excluir você não terá mais acesso ao sistema por meio dela, porém seus dados ainda ficarão
+           disponíveis para os administradores como históricos e registros.</p>
+           <p class="fw-bold text-center">Deseja realmente desativar a sua conta?</p>
+      </template>
+      <template v-slot:footer>
+        <div class="container-fluid d-flex justify-content-end align-items-center">
+                  <button type="button" @click="deleteAccount" class="btn btn-dark-success inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Confirmar</button>
+                  <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+              </div>
+      </template>
+    </Modal>
+  </template>
+  
+  <script setup>
+  import { ref, inject, onMounted } from 'vue';
+  import { useRoute } from 'vue-router';
+  import { useRouter } from 'vue-router';
+  import { getUserId } from '../services/users/userGET';
+  import { getRecordByEmail } from '../services/record/recordGET';
+  import { getRequestByStatusUserId, getRequestByUser } from '../services/requests/requestsGET';
+  import { useUser } from '../stores/user';
+  import { usePopupStore } from '../stores/popup';
+  import { updatePasswordPUT } from '../services/users/userPUT';
+  import { deleteUser } from '../services/users/userDELETE';
+  
+  definePageMeta({
+    layout: 'profile'
+  });
+  
+  const userStore = useUser();
+  const popUpStore = usePopupStore();
+  const route = useRouter();
+  const userData = await getUserId(userStore, route.currentRoute._rawValue.query.userId);
+  const userRequests = ref([]);
+  
+  const pendingRequests = ref([]);
+  const acceptedRequests = ref([]);
+  const rejectedRequests = ref([]);
+  const canceledRequests = ref([]);
+  const reqsTotalPages = {
+    pendingRequests:  0,
+    acceptedRequests: 0,
+    rejectedRequests: 0,
+    canceledRequests: 0,
+  }
+  const reqsTotalElements = {
+    pendingRequests:  0,
+    acceptedRequests: 0,
+    rejectedRequests: 0,
+    canceledRequests: 0,
+  }
+  
+  const userRecords = ref([]);
+  let currentPage = ref([0, 0, 0, 0, 0]);
+  
+  const requestsTotalPages = ref(0);
+  const requestsTotalElements = ref(0);
+  const recordTotalPages = ref(0);
+  const recordsTotalElements = ref(0);
+  
+  const fetchRecords = async (page) => {
+    if(userStore.role === 'USER'){
+      return 0;
+    }
+    const response = await getRecordByEmail(userStore, userData.email, page);
+  
+    recordTotalPages.value = response.totalPages;
+    recordsTotalElements.value = response.totalElements;  
+    userRecords.value = [...userRecords.value, ...response.content]
+  };
+  
+  
+  
+  const fetchPending = async (page) => {
+    const response = await getRequestByStatusUserId(userStore, 'pendente', page, userData.id);
+    pendingRequests.value = [...pendingRequests.value, ...response.content];
+    reqsTotalPages.pendingRequests = response.totalPages;
+    reqsTotalElements.pendingRequests = response.totalElements;
+  }
+  const fetchAccepted = async (page) => {  
+    const response1 = await getRequestByStatusUserId(userStore, 'aceito', page, userData.id);
+    acceptedRequests.value = [...acceptedRequests.value, ...response1.content];
+    reqsTotalPages.acceptedRequests = response1.totalPages;
+    reqsTotalElements.acceptedRequests = response1.totalElements;
+  }
+  const fetchRejected = async (page) => {
+    const response2 = await getRequestByStatusUserId(userStore, 'recusado', page, userData.id);
+    rejectedRequests.value = [...rejectedRequests.value, ...response2.content];
+    reqsTotalPages.rejectedRequests = response2.totalPages;
+    reqsTotalElements.rejectedRequests = response2.totalElements;
+  }
+  const fetchCanceled = async (page) => {
+    const response3 = await getRequestByStatusUserId(userStore, 'cancelado', page, userData.id);
+    canceledRequests.value = [...canceledRequests.value, ...response3.content];
+    reqsTotalPages.canceledRequests = response3.totalPages;
+    reqsTotalElements.canceledRequests = response3.totalElements;
+  }
+  
+  
+  await fetchPending(currentPage.value[0]);
+  await fetchAccepted(currentPage.value[1]);
+  await fetchRejected(currentPage.value[2]);
+  await fetchCanceled(currentPage.value[3]);
+  if(userStore.role === 'ADMIN'){
+    await fetchRecords(currentPage.value[4]);
+  }
+  
+  const currentPassword = ref('');
+  const newPassword = ref('');
+  const confirmPassword = ref('');
+  const handleUpdateBtn = ref(false);
+  const showPassword = ref([false, false, false]);
+  
+  const resetModal = () => {
+    currentPassword.value = '';
+    newPassword.value = '';
+    confirmPassword.value = '';
+    handleUpdateBtn.value = false;
+    showPassword.value = [false, false, false];
+  };
+  
+  const user = ref({
+    profilePicture: 'https://via.placeholder.com/150',
+  });
+  
+  const fileInput = ref(null);
+  
+  const selectProfilePicture = () => {
+    fileInput.value.click();
+  };
+  
+  const uploadProfilePicture = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        user.value.profilePicture = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  
+  const changePassword = async () => {
+    if (newPassword.value === confirmPassword.value) {
+      try {
+        const res = await updatePasswordPUT(userStore, userStore.id, currentPassword.value, newPassword.value, confirmPassword.value);
+        popUpStore.throwPopup("Senha atualizada com sucesso", "#0B3B69");
+        resetModal();
+      } catch (err) {
+        popUpStore.throwPopup("Erro: A senha atual digitada está incorreta", "#B71C1C");
+      }
+    } else {
+      popUpStore.throwPopup("Erro: Preencha os campos corretamente", "#B71C1C");
+    }
+  };
+  
+  const deleteAccount = async () => {
+    const res = await deleteUser(userStore, userStore.id);
+  }
+  // Define o título da página
+  const setpageTitle = inject('setpageTitle');
+  const sendDataToParent = () => {
+    const title = "Perfil";
+    const route = `${useRoute().fullPath.slice(0, 7)}`;
+    setpageTitle(title, route, 'profile');
+  };
+  sendDataToParent();
+  
+  onMounted(async () => {
+    const currentPassWordInput = document.getElementById('currentPassword');
+    currentPassWordInput.addEventListener('focusout', () => {
+      if (currentPassword.value) {
+        handleUpdateBtn.value = true;
+      }
+    });
+    const requestsTable = document.getElementsByClassName('posts-table')[0];
+    requestsTable.addEventListener('scroll', async () => {
+      if(pendingRequests.value.length < reqsTotalElements.pendingRequests){
+        const isBottom = requestsTable.scrollHeight - requestsTable.scrollTop === requestsTable.clientHeight;
+        if (isBottom && currentPage.value[0] < reqsTotalPages.pendingRequests - 1) {
+          currentPage.value[0]++;
+          await fetchPending(currentPage.value[0]);
+        }
+      }
+    });
+    const requestsTable1 = document.getElementsByClassName('posts-table')[1];
+    requestsTable1.addEventListener('scroll', async () => {
+      if(acceptedRequests.value.length < reqsTotalElements.acceptedRequests){
+        const isBottom = requestsTable1.scrollHeight - requestsTable1.scrollTop === requestsTable1.clientHeight;
+        if (isBottom && currentPage.value[1] < reqsTotalPages.acceptedRequests - 1) {
+          currentPage.value[1]++;
+          await fetchAccepted(currentPage.value[1]);
+        }
+      }
+    });
+    const requestsTable2 = document.getElementsByClassName('posts-table')[2];
+    requestsTable2.addEventListener('scroll', async () => {
+      if(rejectedRequests.value.length < reqsTotalElements.rejectedRequests){
+        const isBottom = requestsTable2.scrollHeight - requestsTable2.scrollTop === requestsTable2.clientHeight;
+        if (isBottom && currentPage.value[2] < reqsTotalPages.rejectedRequests - 1) {
+          currentPage.value[2]++;
+          await fetchRejected(currentPage.value[2]);
+        }
+      }
+    });
+    const requestsTable3 = document.getElementsByClassName('posts-table')[3];
+    requestsTable3.addEventListener('scroll', async () => {
+      if(canceledRequests.value.length < reqsTotalElements.canceledRequests){
+        const isBottom = requestsTable3.scrollHeight - requestsTable3.scrollTop === requestsTable3.clientHeight;
+        if (isBottom && currentPage.value[3] < reqsTotalPages.canceledRequests - 1) {
+          currentPage.value[3]++;
+          await fetchCanceled(currentPage.value[3]);
+        }
+      }
+    });
+    if(userData.role === 'ADMIN'){
+      const postsTable = document.getElementsByClassName('posts-table')[4];
+      postsTable.addEventListener('scroll', async () => {
+        if(userRecords.value.length < recordsTotalElements.value){
+          const isBottom = postsTable.scrollHeight - postsTable.scrollTop === postsTable.clientHeight;
+          if (isBottom && currentPage.value[4] < recordTotalPages.value - 1) {
+            currentPage.value[4]++;
+            await fetchRecords(currentPage.value[4]);
+          }
+        }
+      });
+    }
+  });
+  </script>
+  
+  <style scoped>
+  .profile-container {
+    display: flex;
+  }
+  
+  h3{
+    color: rgb(51,51,51, 0.9);
+  }
+  .profile-sidebar {
+    flex: 1;
+    margin-right: 10px;
+    margin-bottom: 23px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  .profile-details, .profile-actions{
+    padding: 0px 20px 0px 20px;
+  }
+  
+  .profile-main-content {
+    flex: 3;
+    margin-top: 0px !important;
+  }
+  
+  .profile-header {
     margin-bottom: 20px;
-}
-
-.novaSenha {
-    margin-bottom: 10px;
-}
-
-.confirmarNova {
-    margin-top: 10px;
-}
-
-.texto {
-	display: flex;
-	margin: 20px 10px 10px;
-	font-weight: 500;
-	font-size: 20px;
-	justify-content: space-around;
-}
-
-.header {
-	border: solid 1px #D9D9D9;
-	width: 100%;
-	height: 65px;
-	border-radius: 8px 8px 0px 0px;
-	background-color: #0B3B69;
-	color: #ffff;
-	margin-top: 0px;
-	padding: 0px;
-}
-
-.auth-form {
-    margin-bottom: 5px;
-    padding: 0 10px 10px 10px;
-}
-
-.auth-form input[type="password"] {
+  }
+  
+  .profile-actions {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-}
-
-.auth-form label {
-	display: block;
-	margin-bottom: 5px;
-}
-
-.auth-form input[type="text"] {
-	width: 100%;
-	padding: 8px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	margin-bottom: 10px;
-}
-.disabled-button {
-  opacity: 75%;
-  cursor: not-allowed !important;
-}
-
-.auth-form button {
-	width: 100%;
-	padding: 11px;
-	background-color: #71DD67;
-	color: #fff;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-}
-</style>
+  }
+  .posts-table{
+    height: 200px !important;
+    overflow-y: scroll;
+  }
+  .profile-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .col-title{
+    font-size: 14px;
+    color: rgb(51,51,51, 0.9);
+    opacity: 80%;
+    font-weight: 400;
+    margin-top: 0;
+  }
+  .table-cell{
+    font-size: 14px;
+    font-weight: 400;
+    color: rgb(51,51,51, 0.9);
+  }
+  .profile-history, .profile-posts{
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 0px;
+    padding-left: 0;
+    padding-right: 0;
+    border: 1px #D9D9D9 solid;
+    box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);
+  }
+  .profile-sidebar{
+    border: 1px #D9D9D9 solid;
+    box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);  
+  }
+  .close{
+      position: relative;
+      left: 20px;
+  }
+  .header-title{
+      font-weight: 300;
+      margin: -1px 0 -1px 0;
+      padding: 0;
+  }
+  .history-title{
+    border-radius: 8px 8px 0px 0px;
+    border-bottom: 1px solid rgb(0, 0, 0, 0.2);
+  }
+  h5{
+    font-weight: 300;
+    color: rgb(51,51,51, 0.8);
+  }
+  .list-group{
+    overflow-y: scroll;
+    height: 200px;
+  }
+  .profile-history, .profile-posts {
+    margin-top: 20px;
+  }
+  
+  .profile-history h3, .profile-posts h3 {
+    margin-bottom: 10px;
+  }
+  
+  .posts-loader{
+    color: rgba(51,51,51, 0.9)
+  }
+  .profile-picture {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    margin-bottom: 10px;
+  }
+  
+  .img-top {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .profile-picture button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+  }
+  .profile-picture button:hover {
+    background-color: #0056b3;
+  }
+  .profile-details label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  .list-group-item:hover{
+    color: black;
+    background-color: rgb(254, 213, 30, 0.4);
+  }
+  .header-title{
+    font-weight: semibold;
+    margin: -1px 0 -1px 0;
+    padding: 0;
+  }
+  .modal-btn{
+    border-radius: 10px;
+  }
+  @media screen and (max-width: 975px){
+    .profile-container{
+      display: block;
+    }
+    .profile-sidebar{
+      margin-right: 0px;
+    }
+  }
+  </style>
+  

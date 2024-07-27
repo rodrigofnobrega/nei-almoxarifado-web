@@ -24,8 +24,18 @@ export const getRequest = async (userStore) => {
     return data
 }
 //Listar Solicitações pelo status da solicitação
-export const getRequestByStatus = async (userStore, requestStatus, page) => {
+export const getRequestByStatus = async (userStore, requestStatus, page, userId) => {
     const { data } = await useApi().get(`/requests/status/${requestStatus}?page=${page}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userStore.token}`
+        }
+     }
+    )
+    return data
+}
+export const getRequestByStatusUserId = async (userStore, requestStatus, page, userId) => {
+    const { data } = await useApi().get(`/requests/status/${requestStatus}?userId=${userId}&page=${page}`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`

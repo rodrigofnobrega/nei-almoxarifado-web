@@ -140,7 +140,7 @@
             </th>
             <th class="table-cell mov-cell" scope="row">
               <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                {{ record.creationDate }}
+                {{ record.creationDate.slice(0, 19) }}
               </div>
             </th>
             <th class="table-cell mov-cell" scope="row">
@@ -186,21 +186,6 @@
         </div>
       </template>
     </Modal>
-
-    <div class="d-flex fw-bold justify-content-center my-5 pt-5 pb-4">
-        <a class="warning-box mx-5 text-decoration-none p-2 text-center bg-warning-op80 text-dark" type="button" href="/sobre">
-            <IconsInformation class="mb-1"/>
-            Dúvidas? Clique aqui para ver a documentação
-        </a>
-        <a class="warning-box mx-5 p-2 text-center bg-alert-op80 text-decoration-none text-light" type="button" href="mailto:almoxarifado957@gmail.com">
-            <IconsInformation class="mb-1"/>
-            Problemas? Clique aqui e relate o ocorrido
-        </a>
-        <a class="warning-box mx-5 p-2 text-center bg-secondary-op80 text-decoration-none text-light" type="button" href="mailto:almoxarifado957@gmail.com">
-            <IconsInformation class="mb-1"/>
-            Sugestões? Clique aqui e envie um email para equipe
-        </a>
-    </div>
   </div>
 </template>
 

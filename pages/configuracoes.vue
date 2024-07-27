@@ -43,8 +43,8 @@
         </div>
     </section>
 -->
-<section class="settings-section mb-5">
-        <h3 class="section-title mx-2 pb-2">Personalizar Temas e Layouts</h3>
+    <section class="settings-section mb-5">
+        <h3 class="section-title mx-2 pb-2">Temas e Layouts</h3>
         <p class="fs-6 mx-2">Escolha um dos temas visuais abaixos para que a estilização do aplicativo esteja de acordo com suas preferências estéticas. O tema escolhido ficará salvo como preferências do usuário, ao sair da aplicação o tema continuará salvo.  </p>
         <div class="dashboard-container container-fluid d-flex px-0 justify-content-center align-items-center">
             <div class="card themes-card mx-2 bg-primary rounded-4" @click="changeLayout(0)"  onclick="document.getElementById('themeRadio1').checked = true;">
@@ -80,6 +80,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+    <section class="settings-section mb-5">
+        <h3 class="section-title mx-2 pb-2">Tipografia</h3>
+        <p class="fs-6 mx-2">Escolha um dos temas visuais abaixos para que a estilização do aplicativo esteja de acordo com suas preferências estéticas. O tema escolhido ficará salvo como preferências do usuário, ao sair da aplicação o tema continuará salvo.  </p>
+        <div class="dashboard-container container-fluid d-flex px-0 justify-content-center align-items-center">
+           
         </div>
     </section>
     <!--

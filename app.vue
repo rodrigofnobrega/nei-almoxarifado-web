@@ -1,5 +1,14 @@
 <template>
-  <div :class="{layoutDefault: layoutBg === 0, darkLayout: layoutBg === 1, alternativeLayout: layoutBg === 2, lightLayout: layoutBg === 3}">
+  <div :class="
+  {
+    layoutDefault: layoutBg === 0, 
+    darkLayout: layoutBg === 1, 
+    alternativeLayout: layoutBg === 2, 
+    lightLayout: layoutBg === 3,
+    poppins: font === 0, 
+    inter: font === 1, 
+    montserrat: font === 2, 
+  }">
     <NuxtLayout>
       <Popup class="popUp" :isPopup="isPopup" :popupText="popupText" :popupBg="popupBg"/>
       <NuxtPage/>
@@ -32,6 +41,9 @@ const popupBg = computed(() => {
 const layoutBg = computed(() => {
   return settingsStore.layout
 })
+const font = computed(() => {
+  return settingsStore.tipography
+})
 
 onBeforeMount(() => {
   if(window.innerWidth <= 988){
@@ -51,6 +63,17 @@ function checkIfMobile() {
 </script>
 
 <style>
+.poppins{
+  font-family: 'Poppins', sans-serif;
+}
+.inter{
+  font-family: 'Inter', sans-serif !important;
+}
+.montserrat{
+  font-family: 'Montserrat', sans-serif;
+}
+
+
 .darkLayout [class*="primary"] {
   background-color: #2C3E50 !important; 
 }

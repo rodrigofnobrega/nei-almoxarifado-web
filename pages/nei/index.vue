@@ -23,7 +23,6 @@
             </div>
         </div>
     </div>
-    <ModalSearch />
 </template>
 
 <script setup>

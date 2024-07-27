@@ -33,8 +33,8 @@
         </div>
     </template>
     <template v-slot:buttons> 
-        <button data-bs-dismiss="modal" class="btn btn-light-alert text-light mx-2"> Cancelar </button>
-        <button @click="sendRequest()" data-bs-dismiss="modal" class="btn btn-secondary mx-2"> Enviar </button>
+        <button @click="sendRequest()" data-bs-dismiss="modal" class="btn btn-secondary fw-bold mx-2"> Enviar </button>
+        <button data-bs-dismiss="modal" class="btn btn-light-alert fw-bold text-light mx-2"> Cancelar </button>
     </template>
 </ModalActionConfirm>
 
@@ -57,10 +57,10 @@
     </div>
     <div class="table-box row d-block bg-light mx-2">
         <div class="table-actions d-flex justify-content-between aling-items-center">
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center" style="margin-top: 0px;">
                 <ButtonsFilter v-if="uploadReloader === 1"/>
             </div>
-            <span v-if="itemsLoad" class="position-sticky d-flex align-items-center table-searchbar">
+            <span v-if="itemsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 4px;">
                 <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
                 <IconsSearchGlass class="search-glass"/>
             </span>
@@ -107,8 +107,14 @@
                      </button>
                 </th>
             </tr>
-            <div v-else-if="itemsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)" class="search-empty position-absolute mt-5">
-                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado.</p>
+            <div v-else-if="itemsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)"
+             class="search-empty my-5">
+                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
+            </div>
+            <div v-else class="search-empty my-5" style="padding-bottom: 300px;">
+                <p style="margin-top: 50px;" class="text-dark-emphasis fs-4 opacity-75 bg-transparent">
+                    Nenhum item Encontrado
+                </p>
             </div>
         </template>
         </TablesTable>
@@ -463,8 +469,8 @@ onUpdated(async () => {
     display: block;
 }
 .table-container{
-    padding-top: 86px;
-    margin-bottom: 152px;
+    padding-top: 65px;
+    margin-bottom: 80px;
     width: 100%;
     display: block !important;
 }
@@ -522,8 +528,9 @@ th span{
     font-size: 12px;
 }
 .col-title{
-    font-size: 13px;
-    opacity: 80%;
+    font-size: 14px;
+    color: rgb(51,51,51, 0.9);
+    opacity: 90%;
     font-weight: 600;
     margin-top: 0;
 }
@@ -594,8 +601,7 @@ p{
     margin-top: 5%;
     display: flex;
     justify-content: center;
-    margin-left: 30%;    
-    margin-right: 40%;
+    margin-left: 125%;
     white-space: nowrap;
 }
 .pagination{
@@ -621,11 +627,7 @@ tr:hover p{
     opacity: 50%;
 }
 /*RESPONSIVIDADE*/
-@media screen and (max-width: 1030px) {
-    th p, .sub-catalog p{
-        font-size: 12px;
-    }
-}
+
 @media screen and (max-width: 900px){
     .actions-buttons{
         justify-content: center;
@@ -638,16 +640,22 @@ tr:hover p{
     }
 }
 @media screen and (max-width: 790px) {
-    .col-title{
-        font-size: 12px;
-        padding: 0px 5  px 0px 5px;
+    .res-action-btn{
+        margin-top: 9px !important;
     }
-    th span{
-        font-size: 10px;
+    .col-title{
+        padding: 0px 5px 0px 5px;
     }
     .table-footer{
         display: block !important;
         padding-right: 0px !important;
+    }
+    .searchbar{
+        font-size: 14px;
+    }
+    .table-searchbar{
+        min-width: 120px;
+        margin-top: -1px !important; 
     }
 }
 @media screen and (max-width: 600px){
@@ -657,8 +665,12 @@ tr:hover p{
     .page-link{
         font-size: 13px;
     }
+    .search-glass{
+        width: 25px;
+        height: 25px;
+    }
 } 
-@media screen and (max-width: 400px){
+@media screen and (max-width: 500px){
     .box-title-text{
         font-size: 18px;
     }

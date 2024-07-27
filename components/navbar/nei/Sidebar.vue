@@ -97,7 +97,7 @@ export default {
             useStorageStore().setRotated();
         },
         mobileMode(){
-            this.responsive = window.innerWidth <= 988;
+            this.responsive = window.innerWidth < 988;
             this.store.isMobileMenu = window.innerWidth >= 988;
         },
         hideSidebar(){

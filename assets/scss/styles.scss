@@ -19,7 +19,7 @@ $dropdown-link-hover-color: white;
 $list-group-hover-bg: map-get($theme-colors, "warning");
 $list-group-active-bg: map-get($theme-colors, "warning");
 
-$font-family-sans-serif: "Poppins", sans-serif;
+$font-family-sans-serif: "Poppins", "Segoe UI", Inter, Geneva, Verdana, sans-serif;
 $modal-backdrop-opacity: 0; 
 
 @import "bootstrap/scss/bootstrap";

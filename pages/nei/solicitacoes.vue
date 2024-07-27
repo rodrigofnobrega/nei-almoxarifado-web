@@ -17,7 +17,7 @@
                 </p>
             </div>
             <div class="d-flex justify-content-end aling-items-center me-4 actions" style="margin-top: 2px;">
-                <span v-if="!settingsStore.isMobile" @click="changeView = !changeView" type="button" style="color: rgb(0, 0, 0, 0.7);" class=" text-dark-emphasis box-title bg-light-emphasis px-2 table-searchbar me-2 position-sticky d-flex align-items-center">
+                <span v-if="!mobileView" @click="changeView = !changeView" type="button" style="color: rgb(0, 0, 0, 0.7);" class=" text-dark-emphasis box-title bg-light-emphasis px-2 table-searchbar me-2 position-sticky d-flex align-items-center">
                     <IconsMenu v-if="changeView" class="me-1"/>
                     <IconsGrid v-if="!changeView" class="me-1"/>
                     Vizualização
@@ -40,14 +40,14 @@
                                 <span>({{requestsCache.inProgressRequests.length}})</span>
                             </div>
                             <div class="dropdown">
-                                  <button title="Filtro" class="d-flex align-items-center btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <IconsBarFilter class="text-dark-emphasis me-1" width="25" height="25" />
-                                  </button>
-                                  <div class="dropdown-menu">
-                                        <li type=button class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'date', 'asc')">Data (Ascendente)</li>
-                                        <li type=button class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'date', 'desc')">Data (Descendente)</li>
-                                        <li type=button class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'name', 'asc')">Nome (Ascendente)</li>
-                                        <li type=button class="dropdown-item" @click="applyFilter(requestsCache.inProgressRequests,'name', 'desc')">Nome (Descendente)</li>
+                                <button title="Filtro" class="d-flex align-items-center btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
+                                  <IconsBarFilter class="text-dark-emphasis me-1" width="25" height="25" />
+                                </button>
+                                <div class="dropdown-menu p-0">
+                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.inProgressRequests,'date', 'asc')">Data <IconsUpArrow width="22" height="22"/></li>
+                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.inProgressRequests,'date', 'desc')">Data <IconsBottomArrow width="22" height="22"/></li>
+                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.inProgressRequests,'name', 'asc')">Nome <IconsUpArrow width="22" height="22"/></li>
+                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.inProgressRequests,'name', 'desc')">Nome <IconsBottomArrow width="22" height="22"/></li>
                                 </div>
                             </div>
                         </div>
@@ -109,7 +109,11 @@
                                     </div>
                                 </template>
                             </CardsCard>
-                            <p class="mt-5 pt-2 opacity-75" v-else>Nenhuma solicitação encontrada...</p>
+                            <div v-else :style="{'width': !changeView ? '300px' : '100%', 'justify-content': !changeView ? '' : 'center'}" class="d-flex empty-text mt-5 pt-2 opacity-75">
+                                <p>
+                                    Nenhuma solicitação encontrada...
+                                </p>
+                            </div>
                     </div>
                     <div :class="{'d-flex align-items-center ms-2': changeView}" v-if="requestsLoaded[0] < requestsCache.inProgressRequests.length">
                         <div class="d-flex justify-content-center">
@@ -135,11 +139,11 @@
                                   <button title="Filtro" class="btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
                                     <IconsBarFilter class="text-dark-emphasis me-1" width="25" height="25" />
                                   </button>
-                                  <div class="dropdown-menu">
-                                        <li type=button class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'date', 'asc')">Data (Ascendente)</li>
-                                        <li type=button class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'date', 'desc')">Data (Descendente)</li>
-                                        <li type=button class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'name', 'asc')">Nome (Ascendente)</li>
-                                        <li type=button class="dropdown-item" @click="applyFilter(requestsCache.acceptedRequests,'name', 'desc')">Nome (Descendente)</li>
+                                  <div class="dropdown-menu p-0">
+                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.acceptedRequests,'date', 'asc')">Data <IconsUpArrow width="22" height="22"/></li>
+                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.acceptedRequests,'date', 'desc')">Data <IconsBottomArrow width="22" height="22"/></li>
+                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.acceptedRequests,'name', 'asc')">Nome <IconsUpArrow width="22" height="22"/></li>
+                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.acceptedRequests,'name', 'desc')">Nome <IconsBottomArrow width="22" height="22"/></li>
                                 </div>
                             </div>
                         </div>
@@ -222,11 +226,11 @@
                                   <button class="btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
                                     <IconsBarFilter class="text-dark-emphasis me-1" title="Filtro" width="25" height="25" />
                                   </button>
-                                  <div class="dropdown-menu">
-                                        <li type=button class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'date', 'asc')">Data (Ascendente)</li>
-                                        <li type=button class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'date', 'desc')">Data (Descendente)</li>
-                                        <li type=button class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'name', 'asc')">Nome (Ascendente)</li>
-                                        <li type=button class="dropdown-item" @click="applyFilter(requestsCache.rejectedRequests,'name', 'desc')">Nome (Descendente)</li>
+                                  <div class="dropdown-menu p-0">
+                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.rejectedRequests,'date', 'asc')">Data <IconsUpArrow width="22" height="22"/></li>
+                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.rejectedRequests,'date', 'desc')">Data <IconsBottomArrow width="22" height="22"/></li>
+                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.rejectedRequests,'name', 'asc')">Nome <IconsUpArrow width="22" height="22"/></li>
+                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.rejectedRequests,'name', 'desc')">Nome <IconsBottomArrow width="22" height="22"/></li>
                                 </div>
                             </div>
                         </div>
@@ -482,8 +486,12 @@ const cancelRequest = async (requestId, index) => {
 settingsStore.isMobile ? changeView.value = true : null;
 const mobileView = ref(false);
 const teste = () => {
-    changeView.value = window.innerWidth <= 1000;
-    mobileView.value = changeView.value 
+    if(window.innerWidth <= 1115){
+        changeView.value = true;
+        mobileView.value = changeView.value;
+    }else{
+        mobileView.value = false;
+    }
 }
 onMounted(() => {   
     loadRequests.value = false;
@@ -534,7 +542,7 @@ onMounted(() => {
 }
 .response-container{
     box-shadow: 0px 0px 10px 1px rgb(0, 0, 0, 0.3);
-    border: so  lid 1px rgb(0, 0, 0, 0.3);
+    border: solid 1px rgb(0, 0, 0, 0.3);
     display: none;
     width: 0px;
     top: 342px;
@@ -606,6 +614,11 @@ p{
     color: rgb(0, 0, 0, 0.7); 
     transition: box-shadow 0.3s ease;
 }
+.empty-text{
+    width: 300px;
+    height: 100px;
+    margin-left: 60px;
+}
 .table-actions{
     width: 100%;
 }
@@ -631,10 +644,14 @@ p{
 .card-width-adjust{
     width: 30%;
 }
-@media screen and (max-width: 1000px){
+@media screen and (max-width: 1115px){
     .card-width-adjust{
         width: 48%;
     }   
+    .empty-text{
+        width: 100%;
+        justify-content: center !important;
+    }
 }
 @media screen and (max-width: 670px){
     .box-title-text{

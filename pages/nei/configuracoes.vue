@@ -44,7 +44,7 @@
         </section>
     -->
     <section class="settings-section mb-5">
-        <h3 class="section-title mx-2 pb-2">Personalizar Temas e Layouts</h3>
+        <h3 class="section-title mx-2 pb-2">Temas e Layouts</h3>
         <p class="fs-6 mx-2">Escolha um dos temas visuais abaixos para que a estilização do aplicativo esteja de acordo com suas preferências estéticas. O tema escolhido ficará salvo como preferências do usuário, ao sair da aplicação o tema continuará salvo.  </p>
         <div class="dashboard-container container-fluid d-flex px-0 justify-content-center align-items-center">
             <div class="card themes-card mx-2 bg-primary rounded-4" @click="changeLayout(0)"  onclick="document.getElementById('themeRadio1').checked = true;">
@@ -76,6 +76,45 @@
                       <input :checked="settingsStore.layout === 2" class="form-check-input" type="radio" id="themeRadio2" name="themeOptions" value="option2">
                       <label class="card-text fw-bold form-check-label fw-bold" for="themeRadio2">
                         Tema alternativo
+                      </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="settings-section mb-5">
+        <h3 class="section-title mx-2 pb-2">Tipografia</h3>
+        <p class="fs-6 mx-2">Escolha um dos temas visuais abaixos para que a estilização do aplicativo esteja de acordo com suas preferências estéticas. O tema escolhido ficará salvo como preferências do usuário, ao sair da aplicação o tema continuará salvo.  </p>
+        <div class="dashboard-container container-fluid d-flex px-0 justify-content-between align-items-center">
+            <div class="card themes-card mx-2 bg-primary rounded-4" @click="changeFont(0)"  onclick="document.getElementById('themeRadio4').checked = true;">
+                <img src="/defaultLayout.png" class="card-img-top" alt="...">
+                <div class="card-body p-3 text-dark-emphasis">
+                    <div class="form-check text-light">
+                      <input :checked="settingsStore.tipography === 0" class="form-check-input" type="radio" id="themeRadio4" name="themeOptions" value="option4">
+                      <label class="card-text fw-bold form-check-label fw-bold" for="themeRadio4">
+                        Poppins
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class="card themes-card mx-2 bg-primary rounded-4" @click="changeFont(1)"  onclick="document.getElementById('themeRadio5').checked = true;">
+                <img src="/darkLayout.png" class="card-img-top" alt="...">
+                <div class="card-body p-3 text-dark-emphasis">
+                    <div class="form-check text-light">
+                      <input :checked="settingsStore.tipography === 1" class="form-check-input" type="radio" id="themeRadio5" name="themeOptions" value="option5">
+                      <label class="card-text fw-bold form-check-label fw-bold" for="themeRadio5">
+                        Inter
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class="card themes-card mx-2 bg-primary rounded-4" @click="changeFont(2)"  onclick="document.getElementById('themeRadio6').checked = true;">
+                <img src="/alternativeLayout.png" class="card-img-top" alt="...">
+                <div class="card-body p-3 text-dark-emphasis">
+                    <div class="form-check text-light">
+                      <input :checked="settingsStore.tipography === 2" class="form-check-input" type="radio" id="themeRadio6" name="themeOptions" value="option6">
+                      <label class="card-text fw-bold form-check-label fw-bold" for="themeRadio6">
+                        Montserrat
                       </label>
                     </div>
                 </div>
@@ -167,6 +206,9 @@ layout: 'client'
 const settingsStore = useSettingsStore();
 const changeLayout = (index) => {
     settingsStore.layout = index
+}
+const changeFont = (index) => {
+    settingsStore.tipography = index;
 }
 const itemCategory = ref('');
 

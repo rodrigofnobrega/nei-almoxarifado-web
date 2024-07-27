@@ -22,7 +22,7 @@ const themeSwitch = () => {
 }
 .form-check{
     padding-top: 8px;
-    margin-bottom: -4px;
+    margin-bottom: -1px;
     height: 45px;
     transition: box-shadow 0.4s ease, border-bottom 0.4s ease-in-out;
 }

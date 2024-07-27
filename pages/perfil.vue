@@ -1,4 +1,305 @@
 <template>
+  <div class="container-fluid d-block">
+    <div class="profile-container">
+      <div class="profile-sidebar bg-light rounded-3  flex-column align-items-center">
+        <div class="d-flex justify-content-center mb-4 bg-light-background-header history-title">
+            <h5 class="text-center mt-2 fw-bold">Informações do perfil</h5>
+        </div>
+        <div class="profile-picture aspect-ratio">
+          <div class="img-container">
+            <!--<img :src="user.profilePicture" class="img-top" alt="Foto de Perfil">-->
+                <img src="/profile.png" class="img-top" alt="Foto de Perfil">
+          </div>
+          <input type="file" @change="uploadProfilePicture" ref="fileInput" hidden>
+          <!--<button @click="selectProfilePicture">Alterar Foto</button>-->
+        </div>
+        <div class="profile-details">
+          <div>
+            <h3 class="text-center mb-4">{{ userData.name }}</h3>
+            <p class="mt-5 users-info text-dark-emphasis"><strong>Email:</strong> {{ userData.email }}</p>
+            <p class="mt-3 users-info text-dark-emphasis"><strong>Encargo:</strong> {{ userData.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</p>
+            <p class="mt-3 users-info text-dark-emphasis"><strong>Status da conta:</strong> {{ userData.active ? 'Ativa' : 'Desativada' }}</p>
+          </div>
+        </div>
+        <div class="profile-actions mt-5">
+          <button v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#updatePasswordModal" data-bs-toggle="modal" class="btn fw-bold btn-secondary">Alterar Senha</button>
+          <button v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6  fw-bold btn-light-alert">Excluir Conta</button>
+          <button v-else-if="userStore.role === 'ADMIN' && userStore.id !== route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6  fw-bold btn-light-alert">Desativar Conta</button>
+        </div>
+      </div>
+    <div>
+      <div class="profile-posts bg-light mb-4 mt-0 pb-0 pt-0 rounded-3" style="margin-right: 190px !important;">
+        <div class="history-title pt-2 bg-light-background-header">
+          <h5 class="ms-3 fw-bold">Solicitações Pendentes</h5>
+        </div>
+        <div class="posts-table">
+          <TablesTable>
+            <template v-slot:header>
+              <tr class="bg-light">
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Nome</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Sipac</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Quantidade</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Data e horário</th>
+              </tr>
+            </template>
+            <template v-slot:content>
+              <tr v-if="pendingRequests.length > 0" v-for="request in pendingRequests" :key="request.id" class="text-center"> 
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
+                    {{ request.item.name || 'Nome não disponível' }}
+                  </div>
+                </th>
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                    {{ request.item.type || 'Tipo não disponível' }}
+                  </div>
+                </th>
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text table-text align-items-end mt-1 justify-content-center">
+                    {{ request.item.sipacCode ? request.item.sipacCode : 'nenhum' }}
+                  </div>
+                </th>
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                    {{ request.quantityRequested }}
+                  </div>
+                </th>
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                    {{ request.creationDate.slice(0, 19) }}
+                  </div>
+                </th>
+              </tr>
+              <tr v-else>
+                <th style="width: 100vh !important;" colspan="5" class="text-center fw-bold text-dark-emphasis py-5 mt-5">
+                  Nenhuma solicitação encontrada
+                </th>
+              </tr>
+              </template>
+            </TablesTable>
+        </div>
+      <p class="ms-2 pt-2 fw-bold posts-loader">{{reqsTotalElements.pendingRequests}} Solicitações</p>
+      </div>
+      <div class="profile-posts me-2 bg-light mb-4 mt-0 pb-0 pt-0 rounded-3" style="margin-right: 190px !important;">
+        <div class="history-title pt-2 bg-light-background-header">
+          <h5 class="ms-3 fw-bold">Solicitações Aceitas</h5>
+        </div>
+        <div class="posts-table">
+          <TablesTable>
+            <template v-slot:header>
+              <tr class="bg-light">
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Nome</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Sipac</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Quantidade</th>
+                <th class="col-title table-col fw-bold text-center py-2" scope="col">Data e horário</th>
+              </tr>
+            </template>
+            <template v-slot:content>
+              <tr v-if="acceptedRequests.length > 0" v-for="request in acceptedRequests" :key="request.id" class="text-center"> 
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
+                    {{ request.item.name || 'Nome não disponível' }}
+                  </div>
+                </th>
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                    {{ request.item.type || 'Tipo não disponível' }}
+                  </div>
+                </th>
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text table-text align-items-end mt-1 justify-content-center">
+                    {{ request.item.sipacCode ? request.item.sipacCode : 'nenhum' }}
+                  </div>
+                </th>
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                    {{ request.quantityRequested }}
+                  </div>
+                </th>
+                <th class="table-cell mov-cell" scope="row">
+                  <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                    {{ request.creationDate.slice(0, 19) }}
+                  </div>
+                </th>
+              </tr>
+              <tr v-else>
+                <td colspan="5" class="text-center fw-bold text-dark-emphasis py-5 mt-5">Nenhuma solicitação encontrada</td>
+              </tr>
+              </template>
+            </TablesTable>
+        </div>
+      <p class="ms-2 pt-2 fw-bold posts-loader">{{reqsTotalElements.acceptedRequests}} Solicitações</p>
+      </div>
+      </div>
+    </div>
+    
+<div class="profile-main-content mt-2">
+  <div class="profile-container" >
+  <div class="profile-posts me-2 bg-light mb-4 mt-0 pb-0 pt-0 rounded-3">
+    <div class="history-title pt-2 bg-light-background-header">
+      <h5 class="ms-3 fw-bold">Solicitações Recusadas</h5>
+    </div>
+    <div class="posts-table">
+      <TablesTable>
+        <template v-slot:header>
+          <tr class="bg-light">
+            <th class="col-title table-col fw-bold text-center py-2" scope="col">Nome</th>
+            <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
+            <th class="col-title table-col fw-bold text-center py-2" scope="col">Sipac</th>
+            <th class="col-title table-col fw-bold text-center py-2" scope="col">Quantidade</th>
+            <th class="col-title table-col fw-bold text-center py-2" scope="col">Data e horário</th>
+          </tr>
+        </template>
+        <template v-slot:content>
+          <tr v-if="rejectedRequests.length > 0" v-for="request in rejectedRequests" :key="request.id" class="text-center"> 
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
+                {{ request.item.name || 'Nome não disponível' }}
+              </div>
+            </th>
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                {{ request.item.type || 'Tipo não disponível' }}
+              </div>
+            </th>
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text table-text align-items-end mt-1 justify-content-center">
+                {{ request.item.sipacCode ? request.item.sipacCode : 'nenhum' }}
+              </div>
+            </th>
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                {{ request.quantityRequested }}
+              </div>
+            </th>
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                {{ request.creationDate.slice(0, 19) }}
+              </div>
+            </th>
+          </tr>
+          <tr v-else>
+            <td colspan="5" class="text-center fw-bold text-dark-emphasis py-5 mt-5">Nenhuma solicitação encontrada</td>
+          </tr>
+          </template>
+        </TablesTable>
+    </div>
+  <p class="ms-2 pt-2 fw-bold posts-loader">{{reqsTotalElements.rejectedRequests}} Solicitações</p>
+  </div>
+  <div class="profile-posts bg-light mb-4 mt-0 pb-0 pt-0 rounded-3">
+    <div class="history-title pt-2 bg-light-background-header">
+      <h5 class="ms-3 fw-bold">Solicitações Canceladas</h5>
+    </div>
+    <div class="posts-table">
+      <TablesTable>
+        <template v-slot:header>
+          <tr class="bg-light">
+            <th class="col-title table-col fw-bold text-center py-2" scope="col">Nome</th>
+            <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
+            <th class="col-title table-col fw-bold text-center py-2" scope="col">Sipac</th>
+            <th class="col-title table-col fw-bold text-center py-2" scope="col">Quantidade</th>
+            <th class="col-title table-col fw-bold text-center py-2" scope="col">Data e horário</th>
+          </tr>
+        </template>
+        <template v-slot:content>
+          <tr v-if="canceledRequests.length > 0" v-for="request in canceledRequests" :key="request.id" class="text-center"> 
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
+                {{ request.item.name || 'Nome não disponível' }}
+              </div>
+            </th>
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                {{ request.item.type || 'Tipo não disponível' }}
+              </div>
+            </th>
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text table-text align-items-end mt-1 justify-content-center">
+                {{ request.item.sipacCode ? request.item.sipacCode : 'nenhum' }}
+              </div>
+            </th>
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                {{ request.quantityRequested }}
+              </div>
+            </th>
+            <th class="table-cell mov-cell" scope="row">
+              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                {{ request.creationDate.slice(0, 19) }}
+              </div>
+            </th>
+          </tr>
+          <tr v-else>
+            <td colspan="5" class="text-center fw-bold text-dark-emphasis py-5 mt-5">Nenhuma solicitação encontrado</td>
+          </tr>
+          </template>
+        </TablesTable>
+    </div>
+    <p class="ms-2 pt-2 fw-bold posts-loader">{{reqsTotalElements.canceledRequests}} Solicitações</p>
+    </div>
+  </div>
+  <div v-if="userRecords.length > 0" class="overflow-x-scroll profile-posts bg-light mb-4 mt-0 pb-0 pt-0 rounded-3">
+      <div class="history-title pt-2 bg-light-background-header">
+        <h5 class="ms-3 fw-bold">Registros da conta</h5>
+      </div>
+      <div class="posts-table">
+        <TablesTable>
+          <template v-slot:header>
+            <tr class="bg-light">
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Nome</th>
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Sipac</th>
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Operação</th>
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Quantidade</th>
+              <th class="col-title table-col fw-bold text-center py-2" scope="col">Data e horário</th>
+            </tr>
+          </template>
+          <template v-slot:content>
+            <tr v-if="userRecords.length > 0" v-for="post in userRecords" :key="post.id" class="text-center"> 
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
+                  {{ post.item.name || 'Nome não disponível' }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ post.item.type || 'Tipo não disponível' }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text table-text align-items-end mt-1 justify-content-center">
+                  {{ post.item.sipacCode ? post.item.sipacCode : 'nenhum' }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
+                  {{ post.operation || 'Nome não disponível' }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ post.quantity }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ post.creationDate.slice(0, 19) }}
+                </div>
+              </th>
+            </tr>
+            <tr v-else>
+              <td colspan="5" class="text-center text-center fw-bold text-dark-emphasis py-5 mt-5">Nenhuma solicitação encontrado</td>
+            </tr>
+            </template>
+          </TablesTable>
+      </div>
+      <p class="ms-2 pt-2 fw-bold posts-loader">{{recordsTotalElements}} Registros</p>
+      </div>
+  </div>
+</div>
+
   <Modal id="updatePasswordModal" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
     <template v-slot:header>
       <h6 class="header-title d-flex fw-medium justify-content-start align-items-center fw-bold">Atualizar Senha</h6>
@@ -60,150 +361,6 @@
             </div>
     </template>
   </Modal>
-
-  <div class="container-fluid profile-container">
-    <div class="profile-sidebar bg-light rounded-3 flex-column align-items-center">
-      <div class="d-flex justify-content-center mb-4 bg-light-background-header history-title">
-          <h5 class="text-center mt-2 fw-bold">Informações do perfil</h5>
-      </div>
-      <div class="profile-picture aspect-ratio">
-        <div class="img-container">
-          <img :src="user.profilePicture" class="img-top" alt="Foto de Perfil">
-        </div>
-        <input type="file" @change="uploadProfilePicture" ref="fileInput" hidden>
-        <!--<button @click="selectProfilePicture">Alterar Foto</button>-->
-      </div>
-      <div class="profile-details">
-        <div>
-          <h3 class="text-center mb-4">{{ userData.name }}</h3>
-          <p class="mt-3"><strong>Email:</strong> {{ userData.email }}</p>
-          <p class="mt-3"><strong>Encargo:</strong> {{ userData.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</p>
-          <p class="mt-3"><strong>Status da conta:</strong> {{ userData.active ? 'Ativa' : 'Desativada' }}</p>
-        </div>
-      </div>
-      <div class="profile-actions mt-5">
-        <button v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#updatePasswordModal" data-bs-toggle="modal" class="btn fw-bold btn-secondary">Alterar Senha</button>
-        <button v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6  fw-bold btn-light-alert">Excluir Conta</button>
-      </div>
-    </div>
-    <div class="profile-main-content">
-      <div class="profile-posts me-2 bg-light mb-4 mt-0 pb-0 pt-0 rounded-3">
-        <div class="history-title pt-2 bg-light-background-header">
-          <h5 class="ms-3 fw-bold">Histórico de Solicitações</h5>
-        </div>
-        <div class="posts-table">
-          <TablesTable>
-            <template v-slot:header>
-              <tr class="bg-light">
-                <th class="col-title table-col fw-bold text-center py-2" scope="col">Nome</th>
-                <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
-                <th class="col-title table-col fw-bold text-center py-2" scope="col">Sipac</th>
-                <th class="col-title table-col fw-bold text-center py-2" scope="col">Quantidade</th>
-                <th class="col-title table-col fw-bold text-center py-2" scope="col">Status</th>
-                <th class="col-title table-col fw-bold text-center py-2" scope="col">Data e horário</th>
-              </tr>
-            </template>
-            <template v-slot:content>
-              <tr v-if="userRequests.length > 0" v-for="request in userRequests" :key="request.id" class="text-center"> 
-                <th class="table-cell mov-cell" scope="row">
-                  <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
-                    {{ request.item.name || 'Nome não disponível' }}
-                  </div>
-                </th>
-                <th class="table-cell mov-cell" scope="row">
-                  <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                    {{ request.item.type || 'Tipo não disponível' }}
-                  </div>
-                </th>
-                <th class="table-cell mov-cell" scope="row">
-                  <div class="d-flex table-text table-text align-items-end mt-1 justify-content-center">
-                    {{ request.item.sipacCode ? request.item.sipacCode : 'nenhum' }}
-                  </div>
-                </th>
-                <th class="table-cell mov-cell" scope="row">
-                  <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                    {{ request.quantityRequested }}
-                  </div>
-                </th>
-                <th class="table-cell mov-cell" scope="row">
-                  <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
-                    {{ request.status || 'Nome não disponível' }}
-                  </div>
-                </th>
-                <th class="table-cell mov-cell" scope="row">
-                  <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                    {{ request.creationDate.slice(0, 19) }}
-                  </div>
-                </th>
-              </tr>
-              <tr v-else>
-                <td colspan="5" class="text-center">Nenhum registro encontrado</td>
-              </tr>
-              </template>
-            </TablesTable>
-        </div>
-      <p class="ms-2 pt-2 fw-bold posts-loader">{{userRequests.length}} de {{requestsTotalElements}}</p>
-      </div>
-
-      <div v-if="userRecords.length > 0" class="overflow-x-scroll profile-posts me-2 bg-light mb-4 pb-0 pt-0 rounded-3">
-        <div class="history-title pt-2 bg-light-background-header">
-          <h5 class="ms-3 fw-bold">Registros da conta</h5>
-        </div>
-        <div class="posts-table">
-          <TablesTable>
-            <template v-slot:header>
-              <tr class="bg-light">
-                <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
-                <th class="col-title table-col fw-bold text-center py-2" scope="col">Nome</th>
-                <th class="col-title table-col fw-bold text-center py-2" scope="col">Tipo</th>
-                <th class="col-title table-col fw-bold text-center py-2" scope="col">Sipac</th>
-                <th class="col-title table-col fw-bold text-center py-2" scope="col">Quantidade</th>
-                <th class="col-title table-col fw-bold text-center py-2" scope="col">Data e horário</th>
-              </tr>
-            </template>
-            <template v-slot:content>
-              <tr v-if="userRecords.length > 0" v-for="post in userRecords" :key="post.id" class="text-center"> 
-                <th class="table-cell mov-cell" scope="row">
-                  <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
-                    {{ post.operation || 'Nome não disponível' }}
-                  </div>
-                </th>
-                <th class="table-cell mov-cell" scope="row">
-                  <div class="d-flex table-text align-items-center justify-content-center" style="padding-top: 0px;">
-                    {{ post.item.name || 'Nome não disponível' }}
-                  </div>
-                </th>
-                <th class="table-cell mov-cell" scope="row">
-                  <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                    {{ post.item.type || 'Tipo não disponível' }}
-                  </div>
-                </th>
-                <th class="table-cell mov-cell" scope="row">
-                  <div class="d-flex table-text table-text align-items-end mt-1 justify-content-center">
-                    {{ post.item.sipacCode ? post.item.sipacCode : 'nenhum' }}
-                  </div>
-                </th>
-                <th class="table-cell mov-cell" scope="row">
-                  <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                    {{ post.quantity }}
-                  </div>
-                </th>
-                <th class="table-cell mov-cell" scope="row">
-                  <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                    {{ post.creationDate.slice(0, 19) }}
-                  </div>
-                </th>
-              </tr>
-              <tr v-else>
-                <td colspan="5" class="text-center">Nenhum registro encontrado</td>
-              </tr>
-              </template>
-            </TablesTable>
-        </div>
-      <p class="ms-2 pt-2 fw-bold posts-loader">{{userRecords.length}} de {{recordsTotalElements}}</p>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script setup>
@@ -212,7 +369,7 @@ import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
 import { getUserId } from '../services/users/userGET';
 import { getRecordByEmail } from '../services/record/recordGET';
-import { getRequestByUser } from '../services/requests/requestsGET';
+import { getRequestByStatusUserId, getRequestByUser } from '../services/requests/requestsGET';
 import { useUser } from '../stores/user';
 import { usePopupStore } from '../stores/popup';
 import { updatePasswordPUT } from '../services/users/userPUT';
@@ -227,8 +384,26 @@ const popUpStore = usePopupStore();
 const route = useRouter();
 const userData = await getUserId(userStore, route.currentRoute._rawValue.query.userId);
 const userRequests = ref([]);
+
+const pendingRequests = ref([]);
+const acceptedRequests = ref([]);
+const rejectedRequests = ref([]);
+const canceledRequests = ref([]);
+const reqsTotalPages = {
+  pendingRequests:  0,
+  acceptedRequests: 0,
+  rejectedRequests: 0,
+  canceledRequests: 0,
+}
+const reqsTotalElements = {
+  pendingRequests:  0,
+  acceptedRequests: 0,
+  rejectedRequests: 0,
+  canceledRequests: 0,
+}
+
 const userRecords = ref([]);
-let currentPage = ref(0);
+let currentPage = ref([0, 0, 0, 0, 0]);
 
 const requestsTotalPages = ref(0);
 const requestsTotalElements = ref(0);
@@ -236,26 +411,49 @@ const recordTotalPages = ref(0);
 const recordsTotalElements = ref(0);
 
 const fetchRecords = async (page) => {
-  if(userData.role === 'USER'){
+  if(userStore.role === 'USER'){
     return 0;
   }
   const response = await getRecordByEmail(userStore, userData.email, page);
 
   recordTotalPages.value = response.totalPages;
-  recordsTotalElements.value = response.totalElements
-  userRecords.value = [...userRecords.value, ...response.content];
+  recordsTotalElements.value = response.totalElements;  
+  userRecords.value = [...userRecords.value, ...response.content]
 };
-const fetchRequests = async (page) => {
-  const response = await getRequestByUser(userStore, userData.id, page);
 
-  requestsTotalPages.value = response.totalPages;
-  requestsTotalElements.value = response.totalElements;
-  userRequests.value = [...userRequests.value, ...response.content]
+const fetchRequests = async (page) => {
+  let response = await getRequestByUser(userStore, userData.id, page);
+  for(let k = 1; k < response.totalPages; k++){
+    for(let i = 0; i < response.content.length; i++){
+      switch(response.content[i].status){
+        case 'PENDENTE':
+          pendingRequests.value.push(response.content[i]);
+          reqsTotalElements.pendingRequests++;
+          break;
+        case 'ACEITO':
+          acceptedRequests.value.push(response.content[i]);
+          reqsTotalElements.acceptedRequests++;
+          break;
+        case 'RECUSADO':
+          rejectedRequests.value.push(response.content[i]);
+          reqsTotalElements.rejectedRequests++;
+          break;
+        case 'CANCELADO':
+          canceledRequests.value.push(response.content[i]);
+          reqsTotalElements.canceledRequests++;
+          break;
+        default:
+          break;
+      }
+    }
+    response = await getRequestByUser(userStore, userData.id, k);
+  }
 }
 
-await fetchRequests(currentPage.value);
+
+
 if(userStore.role === 'ADMIN'){
-  await fetchRecords(currentPage.value);
+  await fetchRecords(currentPage.value[4]);
 }
 
 const currentPassword = ref('');
@@ -314,36 +512,28 @@ const deleteAccount = async () => {
 const setpageTitle = inject('setpageTitle');
 const sendDataToParent = () => {
   const title = "Perfil";
-  const route = `${useRoute().fullPath.slice(0, 7)}`;
+  const route = `${useRoute().fullPath.slice(0, 0)}`;
   setpageTitle(title, route, 'profile');
 };
 sendDataToParent();
 
 onMounted(async () => {
+  await fetchRequests(0);
   const currentPassWordInput = document.getElementById('currentPassword');
   currentPassWordInput.addEventListener('focusout', () => {
     if (currentPassword.value) {
       handleUpdateBtn.value = true;
     }
   });
-  const requestsTable = document.getElementsByClassName('posts-table')[0];
-  requestsTable.addEventListener('scroll', async () => {
-    if(userRequests.value.length < requestsTotalElements.value){
-      const isBottom = requestsTable.scrollHeight - requestsTable.scrollTop === requestsTable.clientHeight;
-      if (isBottom && currentPage.value < requestsTotalPages.value - 1) {
-        currentPage.value++;
-        await fetchRequests(currentPage.value);
-      }
-    }
-  });
+  
   if(userData.role === 'ADMIN'){
-    const postsTable = document.getElementsByClassName('posts-table')[1];
+    const postsTable = document.getElementsByClassName('posts-table')[4];
     postsTable.addEventListener('scroll', async () => {
       if(userRecords.value.length < recordsTotalElements.value){
         const isBottom = postsTable.scrollHeight - postsTable.scrollTop === postsTable.clientHeight;
-        if (isBottom && currentPage.value < recordTotalPages.value - 1) {
-          currentPage.value++;
-          await fetchRecords(currentPage.value);
+        if (isBottom && currentPage.value[4] < recordTotalPages.value - 1) {
+          currentPage.value[4]++;
+          await fetchRecords(currentPage.value[4]);
         }
       }
     });
@@ -360,6 +550,7 @@ h3{
 }
 .profile-sidebar {
   flex: 1;
+  margin-right: 10px;
   margin-bottom: 23px;
   background-color: #f9f9f9;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -367,17 +558,13 @@ h3{
 .profile-details, .profile-actions{
   padding: 0px 20px 0px 20px;
 }
-
 .profile-main-content {
   flex: 3;
-  padding: 0px 20px 0px 20px;
   margin-top: 0px !important;
 }
-
 .profile-header {
   margin-bottom: 20px;
 }
-
 .profile-actions {
   display: flex;
   flex-direction: column;
@@ -409,7 +596,7 @@ h3{
   color: rgb(51,51,51, 0.9);
 }
 .profile-history, .profile-posts{
-  width: 99%;
+  width: 100%;
   padding-top: 10px;
   padding-bottom: 0px;
   padding-left: 0;
@@ -420,6 +607,9 @@ h3{
 .profile-sidebar{
   border: 1px #D9D9D9 solid;
   box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.2);  
+}
+.users-info{
+  font-size: 18px;
 }
 .close{
     position: relative;
@@ -503,9 +693,12 @@ h5{
 .modal-btn{
   border-radius: 10px;
 }
-@media screen and (max-width: 834px){
+@media screen and (max-width: 975px){
   .profile-container{
     display: block;
+  }
+  .profile-sidebar{
+    margin-right: 0px;
   }
 }
 </style>

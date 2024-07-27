@@ -1,41 +1,41 @@
 <template>
     <div class="d-flex profile align-items-center me-3">
           <div class="me-2 nav-item dropdown">
-            <button title="Notificações" class="svg-button bg-primary px-0" data-bs-toggle="dropdown" data-bs-offset="20,15" aria-expanded="false">
+            <button  class="svg-button bg-primary px-0" data-bs-toggle="dropdown" data-bs-offset="20,1" aria-expanded="false" title="Notificações">
               <IconsBell with="16px" height="16px"/>
-              <span v-if="requests.length > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              <span v-if="requests.length > 0" class="position-absolute start-100 translate-middle badge rounded-pill bg-danger">
                 {{requests.length}}
                 <span class="visually-hidden">unread messages</span>
               </span>
             </button>
             <ul class="dropdown-menu notification-menu py-2">
-              <li v-for="(request, index) in requests" :key="index" @mouseenter="closeNot[index] = true" @mouseover="closeNot[index] = true" @mouseout="closeNot[index] = false" class="dropdown-item notification">
+              <li v-for="(request, index) in requests" :key="index" class="text-end dropdown-item notification">
                 <div class="text-dark-emphasis d-flex align-items-center">
                   <div>
                     <IconsClose v-if="request.status === 'RECUSADO'" width="20" height="20" class="me-2 text-dark-alert notification-text"/>
                     <IconsConfirm v-if="request.status === 'ACEITO'" width="20" height="20" class="me-2 text-light-success  notification-text"/>
                   </div>
-                  <p class="notification-text m-0 p-0">
+                  <p class="notification-text text-wrap m-0 p-0">
                     Solicitação de {{ request.quantityRequested }} "{{request.item.name}}"
                     {{ request.status === 'ACEITO' ? 'aceita' : 'recusada' }}
                   </p>
                  </div>
-                <span  v-if="passedDate.length > 0" class="notification-text ms-0 opacity-75 text-dark-emphasis">Há {{ passedDate[index].month }} {{ passedDate[index].day }} {{ passedDate[index].hour }} {{ passedDate[index].minute }}</span>
+                <span class="notification-text ms-0 opacity-75 text-dark-emphasis">Feita em {{request.updatedDate.slice(0, 19)}}</span>
                 <!--
                 <div v-if="closeNot[index] === true" class="d-flex justify-content-end align-items-end">
                   <IconsClose @mouseenter="closeNot[index] = true" @mouseover="closeNot[index] = true" @click="removeNot(index)" class="position-fixed mb-1" width="30" height="30"/>
                 </div>-->
               </li>
-                <li v-show="!isNotification || requests.length === 0" class="dropdown-item fs-6 text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
+              <li v-show="!isNotification || requests.length === 0" class="dropdown-item fs-6 text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
             </ul>
           </div>
           <div class="nav-item dropdown">
-            <button class="svg-button  d-flex bg-primary align-items-center" @click="rotate" data-bs-toggle="dropdown" data-bs-offset="10,10" data-bs-auto-close="inside" aria-expanded="false">
+            <button class="svg-button  d-flex bg-primary align-items-center" @click="rotate" data-bs-toggle="dropdown" data-bs-offset="10,0" data-bs-auto-close="inside" aria-expanded="false">
               <p class="profile-drop user-text text-light px-1 m-0 fw-light"> {{ user.username }} </p>
               <LoadersLoading class="small-loader text-light p-1"/>
                 <IconsDownArrow class="rotate-arrow" :style="{ transform: isRoted ? 'rotate(180deg)' : 'rotate(0deg)'}" width="24px" height="24px"/>
             </button>
-            <ul class="dropdown-menu py-0">
+            <ul class="dropdown-menu">
               <li>
                 <a class="dropdown-item py-1 ps-2 d-flex align-items-center justify-content-between" :href="`/nei/perfil?userId=${userStore.id}`">
                 Perfil 
@@ -73,7 +73,7 @@ const totalPages = ref(0);
 function toPositive(number) {
   return Math.abs(number);
 }
-
+/* 
 let passedDate = [];
 const adjustTime = () => {
   for (let i = 0; i < requests.value.length; i++) {
@@ -99,7 +99,7 @@ const adjustTime = () => {
 
     passedDate[i].minute = minuteDiff > 0 ? (minuteDiff === 1 ? `${minuteDiff} minuto` : `${minuteDiff} minutos`) : '';
   } 
-}
+}*/
 
 const loadNotifications = async () => {
   const res = await getRequestByUser(userStore, userStore.id, pagination.value);
@@ -134,7 +134,6 @@ const loadNotifications = async () => {
       })
     }
   }
-  adjustTime();
 }
 
 const isNotification = ref(true)
@@ -186,6 +185,7 @@ onMounted(async() => {
 }
 .notification-menu{
   max-height: 160px;
+  min-width: 300px;
   overflow-y: scroll;
 }
 .small-loader{
@@ -195,8 +195,14 @@ onMounted(async() => {
 .rotate-arrow{
   transition: transform 0.3s ease-in-out;
 }
-
+.dropdown-menu{
+  padding: 0;
+}
+.dropdown-item{
+  font-size: 14px;
+}
 .rounded-pill{
+  margin-top: -20px !important;
   align-items: center;
   justify-content: center;
   display: flex !important;
@@ -210,38 +216,27 @@ onMounted(async() => {
   font-weight: bold;
   font-size: 12px;
 }
+
 .svg-button{
+    height: 49px;
     border: none;
     padding: 0;
     margin: 0;
     background: none;
+    transition: box-shadow 0.4s ease, border-bottom 0.4s ease-in-out;
 }
 .user-text {
     font-size: 20px;
 }
-.dropdown-menu{
-  padding: 0;
-}
-.dropdown-item{
-  font-size: 14px;
-}
 .dropdown-item:hover .notification-text{
   font-weight: bold
 }
-.svg-button:hover img{
-  transition: filter 0.3s ease-in-out;
-  filter: drop-shadow(0px 0px 7px rgba(254, 213, 30, 1));
+.svg-button:hover{
+  border-bottom: solid 1px #FED51E;
+  box-shadow: inset 0px -12px 15px -13px rgb(254, 213, 30, 0.7);
 }
 .profile-drop:hover{
   transition: filter 0.3s ease-in;
   filter: drop-shadow(0px 0px 8px rgba(254, 213, 30, 1));
-}
-@media screen and (max-width: 540px){
-  .notification-menu{
-    width: 80vw;
-  }
-  .notification-text{
-    text-wrap: wrap;
-  }
 }
 </style>

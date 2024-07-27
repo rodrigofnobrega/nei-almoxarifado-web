@@ -16,19 +16,23 @@
             </ul>
           </div>
       </nav>
-      <div class="d-flex justify-content-end align-items-center">
-        <IconsSearchGlass :class="{'d-none': !smallSearch}" class="mobile-search text-light me-2 mt-1" type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal"/>
-        <SearchBar :class="{'d-none': smallSearch}"  class="pb-1"/>
+      <div class="d-flex justify-content-end align-items-center pb-0">
+        <div :class="{'d-none': !settingsStore.isMobile}" class="d-flex align-items-center text-light me-2" type="button" tabindex="-1" data-bs-target="#neiSearchModal" data-bs-toggle="modal">
+          <IconsSearchGlass class="mobile-search text-light"/>
+          Pesquisar
+        </div>
+        <SearchBar :class="{'d-none': settingsStore.isMobile}"  class="pb-1"/>
         <ThemeSwitch class="mt-1"/>
         <Profile />
       </div>     
     </div>
-  </template>
+    <UtilsSearch />
+</template>
   
 <script>
 import Brand from './Brand.vue'
 import Profile from './Profile.vue'
-import SearchBar from '../SearchBar.vue';
+import SearchBar from './SearchBar.vue';
 import { useStorageStore } from "../../../stores/storage";
 import { useRoute } from 'vue-router';
 import ThemeSwitch from '../ThemeSwitch.vue';

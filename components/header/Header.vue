@@ -6,8 +6,11 @@
     </div> 
     <div class="d-flex justify-content-end align-items-center">
         <SearchBar :class="{'d-none': settingsStore.isMobile}" class="pb-1"/>
-        <IconsSearchGlass :class="{'d-none': !settingsStore.isMobile}" class="mobile-search text-light " type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal"/>
-        <ThemeSwitch/>
+        <div :class="{'d-none': !settingsStore.isMobile}" class="d-flex align-items-center text-light me-2" type="button" tabindex="-1" data-bs-target="#scrollableModal" data-bs-toggle="modal">
+          <IconsSearchGlass class="mobile-search text-light"/>
+          Pesquisar
+        </div>
+        <ThemeSwitch class="mt-1"/>
         <ModalSearch/>
         <Profile />
       </div>     
