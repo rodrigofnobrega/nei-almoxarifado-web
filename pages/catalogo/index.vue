@@ -1,9 +1,9 @@
 <template>
-    <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="searchItem ? searchItem : currentItem" />
+    <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="searchItem ? searchItem : store.itemDetails" />
     <ModalItemHistory v-if="itemsCache.length > 0"/>
 <div class="table-container d-block mt-2">
     <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
-    <div class="sub-catalog bg-light my-1 ps-2 pe-2">
+    <div class="sub-catalog bg-light mt-2 ps-2 pe-2">
         <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
             Descrição da página
@@ -20,16 +20,16 @@
     </div>
     <div class="table-box row d-block bg-light mx-2">
         <div class="table-actions d-flex justify-content-between aling-items-center">
-            <div class="d-flex align-items-center">
-                <ButtonsNewItem v-if="uploadReloader === 1" />
-                <ButtonsFilter />
-                <ButtonsConfigure />
+            <div class="d-flex align-items-center actions-btns">
+                <ButtonsResponsiveNewItem class="res-action-btn mt-1" v-if="uploadReloader === 1" />
+                <ButtonsResponsiveFilter class="res-action-btn mt-1"/>
+                <ButtonsResponsiveConfigure class="res-action-btn mt-1"/>
             </div>
-            <span v-if="itemsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 0.8px;">
-                <IconsSearchGlass class="search-glass"/>
-                <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
-            </span>
-        </div>
+                <span v-if="itemsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 7px;">
+                    <IconsSearchGlass class="search-glass"/>
+                    <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
+                </span>   
+            </div>
         <TablesTable>
             <template v-slot:header>
                 <tr style="border: 1px #D9D9D9 solid;">
@@ -44,11 +44,13 @@
             <template v-slot:content>
             <tr v-if="itemsCache.length > 0" v-for="(item, index) in itemsCache[cacheIndex]" :key="index" :data-index="index">
                <th class="border" scope="row">
-                    <span>{{ item.name }}</span>
+                    <div class="cell-text">
+                        <span>{{ item.name }}</span>
+                    </div>
                </th>
                <th class="border">
-                   <span v-if="item.sipacCode">{{ item.sipacCode }}</span>
-                   <span v-else>nenhum</span>
+                    <span v-if="item.sipacCode">{{ item.sipacCode }}</span>
+                    <span v-else>nenhum</span>
                 </th>
                 <th class="border">
                     <span>{{ item.type }}</span>
@@ -57,54 +59,62 @@
                    <span>{{ item.quantity }}</span>
                 </th>
                <th class="border">
-                   <span>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</span>
+                    <div class="cell-text">
+                        <span>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</span>
+                    </div>
                </th>
                <th class="border" width="5%">
                    <TooltipsFastRectangular class="toolTip me-5 pe-5 mb-5" style="margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
                    <TooltipsFastRectangular class="toolTip me-5 pe-5" style="margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Histórico'"/>
-                    <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                    <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         <IconsSearchGlass width="18px" height="19px"/>
                     </button>
-                    <button @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false" class="my-0 position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}"  @click="showHistory(item.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                    <button @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false" class="my-0 position-sticky table-btn btn btn-secondary"   @click="showHistory(item.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
                         <IconsHistory width="18px" height="19px"/>
                     </button>
                </th>
             </tr>
-            <div v-else-if="itemsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)" class="search-empty position-absolute mt-5">
-                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado.</p>
+            <div v-else-if="itemsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)"
+             class="search-empty my-5">
+                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
+            </div>
+            <div v-else class="search-empty my-5" style="padding-bottom: 300px;">
+                <p style="margin-top: 50px;" class="text-dark-emphasis fs-4 opacity-75 bg-transparent">
+                    Nenhum item Encontrado
+                </p>
             </div>
         </template>
         </TablesTable>
-    <div class="d-flex justify-content-between align-items-center me-2 mt-2">
-        <div>
-            <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 px-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span>
-            <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 px-2 pages-info">Quantidade total de itens: {{ totalElements }}</span>
-        </div>
-        <nav v-if="itemsCache.length > 0 && finded.length === 0" aria-label="Page navigation" class="pagination">
-            <ul class="pagination mb-2 mt-2">
-                <li class="page-item">
-                    <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
-                </li>
-                <li v-if="totalPages > 4" class="page-item" :key="0">
-                    <button class="page-link text-light" @click="page(0)" :class="{'bg-primary': !pagesFocus[0], 'bg-secondary': pagesFocus[0]}">{{ 1 }}</button>
-                </li>
-                <li v-show="pagination >= 3 && totalPages > 5" class="page-item">
-                    <button class="page-link bg-primary text-light">...</button>
-                </li>
-                <li class="page-item" v-for="i in totalPages > 4 ? range(1+paginationRet, 3+paginationRet) : range(1,totalPages)" :key="i-1">
-                    <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
-                </li>
-                <li v-show="totalPages > 3 && paginationRet < totalPages-4" class="page-item">
-                    <button class="page-link bg-primary text-light">...</button>
-                </li>
-                <li v-if="totalPages > 4" class="page-item" :key="totalPages-1">
-                    <button class="page-link text-light" @click="page(totalPages-1)" :class="{'bg-primary': !pagesFocus[totalPages-1], 'bg-secondary': pagesFocus[totalPages-1]}">{{ totalPages }}</button>
-                </li>
-                <li class="page-item">
-                    <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1 || searchInput !== ''}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
-                </li>
-            </ul>
-        </nav>
+        <div class="table-footer d-flex justify-content-between align-items-center  mt-2">
+            <div class="d-flex justify-content-center me-3 ">
+                <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span>
+                <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de itens: {{ totalElements }}</span>
+            </div>
+            <nav v-if="itemsCache.length > 0 && finded.length === 0" aria-label="Page navigation" class="pagination">
+                <ul class="pagination mb-2 mt-2">
+                    <li class="page-item">
+                        <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
+                    </li>
+                    <li v-if="totalPages > 4" class="page-item" :key="0">
+                        <button class="page-link text-light" @click="page(0)" :class="{'bg-primary': !pagesFocus[0], 'bg-secondary': pagesFocus[0]}">{{ 1 }}</button>
+                    </li>
+                    <li v-show="pagination >= 3 && totalPages > 5" class="page-item">
+                        <button class="page-link bg-primary text-light">...</button>
+                    </li>
+                    <li class="page-item" v-for="i in totalPages > 4 ? range(1+paginationRet, 3+paginationRet) : range(1,totalPages)" :key="i-1">
+                        <button class="page-link text-light" @click="page(i-1)" :class="{'bg-primary': !pagesFocus[i-1], 'bg-secondary': pagesFocus[i-1]}">{{ i }}</button>
+                    </li>
+                    <li v-show="totalPages > 3 && paginationRet < totalPages-4" class="page-item">
+                        <button class="page-link bg-primary text-light">...</button>
+                    </li>
+                    <li v-if="totalPages > 4" class="page-item" :key="totalPages-1">
+                        <button class="page-link text-light" @click="page(totalPages-1)" :class="{'bg-primary': !pagesFocus[totalPages-1], 'bg-secondary': pagesFocus[totalPages-1]}">{{ totalPages }}</button>
+                    </li>
+                    <li class="page-item">
+                        <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == totalPages-1 || searchInput !== ''}" id="fowardPageBtn" @click="fowardPage"><span aria-hidden="true">&raquo;</span></button>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -118,10 +128,12 @@ import { getItem, getItems } from '../../services/items/itemsGET.ts';
 import { useUser } from '../../stores/user.ts'
 import { getRecordByItemId } from '../../services/record/recordGET.ts';
 import { useRoute, useRouter } from 'vue-router';
+import { useSettingsStore } from '../../stores/settings';
 /*SETANDO STORES*/
 const userStore = useUser()
 const store = useStorageStore();
 const searchStore = useSearch();
+const settingsStore = useSettingsStore();
 /*VARIÁVEIS ÚTEIS PARA REQUISITAR OS ITENS E FILTRÁ-LOS*/ 
 const paginationRet = ref(1)
 function range(start, end) {
@@ -144,10 +156,21 @@ const totalPages = ref(0);
 const totalElements = ref(0);
 const isSearching = ref(false);
 let finded = [];
-const itemsReq = async (sort, isInverted, pagination, loadRequest, paginationInverted) => {
-    if(searchInput.value != ''){
+const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationInverted) => {
+    if(searchInput.value !== ''){
+        cacheIndex.value = 0;
+        itemsCache.value = [];
+        reqsIndexCache = [0]
+        pagination.value = 0;
+        paginationRet.value = 1;
+        initialLoading.value = false
+
+        pagesFocus.value[count] = false;
+        count = 0;  
+        pagesFocus.value[0] = true;
+
+
         finded = [];
-        store.isReloadItems = true;
         if(searchCache.value.length >= totalPages.value){
             for(let i = 0; i < searchCache.value.length; i++){
                 for(let j = 0; j < searchCache.value[i].length; j++){
@@ -203,7 +226,7 @@ const itemsReq = async (sort, isInverted, pagination, loadRequest, paginationInv
         itemsCache.value.push(res.content);
         return res.totalPages
     } 
-    const res = await getItems(userStore, pagination, sort)
+    const res = await getItems(userStore, pagination_, sort)
     totalPages.value = res.totalPages;
     totalElements.value = res.totalElements;
     invertedPagination.value = totalPages-1;
@@ -223,22 +246,21 @@ const itemsLoad = computed(async() => {
         await itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
         return 0;
     }
-    if(searchInput.value != ''){
+    if(searchInput.value !== ''){
         clearTimeout(typingTimer);
         typingTimer = setTimeout(() => {
             itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted)
         }, debounceTime);
         isSearching.value = true;
+        return 0;
     }
-    if(searchInput.value === ''){
-        if(isSearching.value === true){
+    if(searchInput.value === '' && isSearching.value === true){
             clearTimeout(typingTimer);
             typingTimer = setTimeout(() => {
                 store.isReloadItems = true;
                 isSearching.value = false;
             }, debounceTime-500);
             finded = [];
-        }
     }
     for(let i = 0; i < reqsIndexCache.length; i++){
         if(pagination.value === reqsIndexCache[i]){
@@ -258,7 +280,6 @@ provide('setItemsFilter', (filter, inverted) => {
 });
 //Variáveis que o front vai pegar em si
 const itemIndex = ref(0);
-const currentItem = computed(() => itemsCache.value[cacheIndex.value][itemIndex.value]);
 
 const currentRoute = useRoute().fullPath.split('/')[2];
 
@@ -353,6 +374,7 @@ const backPage = (async () => {
 /*FUNÇÕES PARA OS BOTÕES DE DETALHE E HISTÓRICO*/
 const showDetails = (index) => {
     itemIndex.value = index;
+    store.itemDetails = itemsCache.value[cacheIndex.value][itemIndex.value];
 }
 
 const showHistory = async (itemId) => {
@@ -374,43 +396,6 @@ onMounted(async () => {
         showSearchingDetails(searchStore.itemSearch.itemId);
         searchStore.itemSearch.searching = false;
     }
-    if(store.isMobile){
-        const catalogTextElement = document.querySelector('.sub-catalog p')
-        const textElements = document.querySelectorAll('tr p');
-        const searchBar = document.querySelector('.searchbar');
-        const searchBox = document.querySelector('.table-searchbar');
-        const tableLines = document.querySelectorAll('tr');
-
-        searchBox.style.fontSize = '8px';
-        searchBar.style.width = '100%';
-        searchBar.style.fontSize = '8px';
-        catalogTextElement.style.fontSize = '8px';
-        tableLines.forEach(element => {
-            element.addEventListener('click', (() => {
-                element.children[4].children[1].children[0].click()
-            }))
-        });
-        textElements.forEach(element => element.style.fontSize = '7px');
-    }
-});
-onUpdated(async () => {  
-    if(store.isMobile){
-        const catalogTextElement = document.querySelector('.sub-catalog p')
-        const textElements = document.querySelectorAll('tr p');
-        const searchBar = document.querySelector('.searchbar');
-        const tableLines = document.querySelectorAll('tr');
-
-        tableLines.forEach((element, index) => {
-            element.addEventListener('click', (() => {
-                element.children[4].children[1].children[0].click()
-            }))
-        });
-
-        searchBar.style.width = '100%';
-        searchBar.style.fontSize = '8px';
-        catalogTextElement.style.fontSize = '8px';
-        textElements.forEach(element => element.style.fontSize = '7px');
-    }
 });
 </script>
 
@@ -420,20 +405,20 @@ onUpdated(async () => {
     display: block;
 }
 .table-container{
-    margin-bottom: 149px;
+    padding-top: 6px;
+    margin-bottom: 62px;
     width: 100%;
     display: block !important;
 }
 .table-box{
-    margin-top: 60px;
+    margin-top: 80px;
     border-radius: 0px 10px 10px 10px;
-    overflow-x: scroll;
     box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.5);
     border: 1px #D9D9D9 solid;
 }
 .table-box-title{
     margin-left: 8px;
-    margin-top: 18px;
+    margin-top: 32px;
     padding: 4px;
     font-weight: 400;
     color: rgb(51,51,51, 0.8);
@@ -448,6 +433,7 @@ onUpdated(async () => {
 .sub-catalog{
     border-radius: 10px;
     margin-top: -14px;
+    margin-bottom: 10px;
     padding-top: 10px;
     padding-bottom: 20px;
     margin-right: 10%;
@@ -478,8 +464,9 @@ th span{
     font-size: 12px;
 }
 .col-title{
-    font-size: 13px;
-    opacity: 80%;
+    font-size: 14px;
+    color: rgb(51,51,51, 0.9);
+    opacity: 90%;
     font-weight: 600;
     margin-top: 0;
 }
@@ -494,6 +481,7 @@ p{
     border-bottom: 1px ridge #1F69B1;
 }
 .table-searchbar{
+    height: 36px;
     border: none;
     border-bottom: solid 1px #1F69B1;
     border-radius: 10px 10px 0px 0px;
@@ -549,8 +537,7 @@ p{
     margin-top: 5%;
     display: flex;
     justify-content: center;
-    margin-left: 30%;    
-    margin-right: 40%;
+    margin-left: 125%;
     white-space: nowrap;
 }
 .pagination{
@@ -576,36 +563,72 @@ tr:hover p{
     opacity: 50%;
 }
 /*RESPONSIVIDADE*/
-@media screen and (max-width: 1030px) {
-    th p, .sub-catalog p{
-        font-size: 12px;
-    }
-}
+
 @media screen and (max-width: 900px){
     .actions-buttons{
         justify-content: center;
         align-content: center;
     }
+
+    .pages-info{
+        text-wrap: wrap;
+        text-align: center;
+    }
 }
-@media screen and (max-width: 851px) {
+@media screen and (max-width: 790px) {
+    .res-action-btn{
+        margin-top: 9px !important;
+    }
     .col-title{
-        font-size: 12px;
+        padding: 0px 5px 0px 5px;
     }
-    th p, .sub-catalog p{
-        font-size: 10px;
-    }
-    .table-searchbar, .searchbar{
-        display: flex;
-        font-size: 12px; 
+    .table-footer{
+        display: block !important;
+        padding-right: 0px !important;
     }
     .searchbar{
-        width: 120px;
+        font-size: 14px;
     }
     .table-searchbar{
-        width: 170px;
+        min-width: 120px;
+        margin-top: 8px !important; 
+        display: block;
     }
-    .sub-catalog-title, .search-empty p{
-        font-size: 14px;
+}
+@media screen and (max-width: 600px){
+    .pages-info{
+        font-size: 11px;
+    }
+    .page-link{
+        font-size: 13px;
+    }
+    .search-glass{
+        width: 25px;
+        height: 25px;
+    }
+    .table-actions{
+        width: 600px;
+        padding-left: 0px;
+    }
+} 
+@media screen and (max-width: 500px){
+    .box-title-text{
+        font-size: 18px;
+    }
+    .table-box-title{
+        margin-top: 35px;
+    }
+    .table-actions{
+        padding-right: 0px !important;
+        display: block !important;
+    }.actions-btns{
+        padding-bottom: 9px;
+        border-radius: 0px 10px 0px 0px;
+        background-color: #D9D9D9;
+        justify-content: center;
+    }
+    .table-searchbar{
+        margin: 0px 20px 0px 20px;
     }
 }
 </style>

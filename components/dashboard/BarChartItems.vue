@@ -1,28 +1,28 @@
 <template>
   <ModalAlmoReport :id="1" :data="datasets"/>
-  <div class="graph-header d-flex align-items-end justify-content-between section-title pt-2 mb-3 bg-light-background-header">
+  <div class="graph-header d-flex align-items-end justify-content-between section-title pt-2  bg-light-background-header">
         <h5 class="ps-2 fw-bold">Gráfico da quantidade de itens solicitados</h5>
           <div class="dropdown mb-1 mx-2 d-flex">
-            <button class="d-flex align-items-center graph-btn btn btn-transparent dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="d-flex align-items-center graph-btn btn btn-outline-secondary fw-bold px-2 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <IconsTimer class="me-1" width="20px" height="20px"/>
               Período
             </button>
-            <button class="d-flex align-items-center ms-2 graph-btn btn btn-transparent" type="button" data-bs-toggle="modal" data-bs-target="#almoReport1" ria-expanded="false">
+            <button class="d-flex align-items-center ms-2 graph-btn btn btn-outline-primary px-2 fw-bold" type="button" data-bs-toggle="modal" data-bs-target="#almoReport1" ria-expanded="false">
               <IconsRequest class="me-1" width="20px" height="20px"/>
               Relatório
             </button>
-            <ul class="dropdown-menu p-0">
-              <li @click="changeLabel('month')" type="button" class="dropdown-item">
-                Mensal
+            <ul class="dropdown-menu large-menu p-0">
+              <li @click="changeLabel('month')" type="button" class="dropdown-item fw-bold">
+                anual
               </li>
               <li>
                 <div class="vue-dropdown" @click="ClicktoggleDropdown" @mouseover="toggleDropdown" @mouseout="toggleDropdown">
-                    <div class="filter-btn dropdown-item large-menu-btn d-flex btn align-items-center border-0" type="button">
-                        Semanal   
+                    <div class="filter-btn dropdown-item large-menu-btn fw-bold d-flex btn align-items-center border-0" type="button">
+                        mensal   
                     </div>
                     <ul class="vue-dropdown-menu" v-show="dropdownState">
                         <li class="small-menu">
-                          <div v-for="(month, index) in labels.month" :key="index" @click="changeLabel('week', index)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
+                          <div v-for="(month, index) in labels.month" :key="index" @click="changeLabel('week', index)" class="filter-btn d-flex fw-bold justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                             {{ month.slice(0,3) }}
                           </div>
                         </li>
@@ -32,11 +32,17 @@
             </ul>
       </div>
   </div>
+  <div class="d-flex justify-content-end position-absolute me-3 fw-bold opacity-75" style="right: 2%;">
+    <p>Período: {{ monthSelected === -1 ? 'anual' : `${labels.month[monthSelected]}` }}</p>
+  </div>
   <div>
-    <div class="d-flex justify-content-center z-5">
-      <LoadersLoading class="position-absolute p-5 mt-5"/>
+    <div class="d-flex justify-content-center z-5 loader">
+      <LoadersLoading class="position-absolute graph-loader p-5 mt-5"/>
     </div>
-    <Bar class="chart-graph" :data="chartData" :options="chartOptions" />
+    <Bar v-if="chartData.datasets[0].data.reduce((acc, current) => acc+current) > 0" class="chart-graph " :data="chartData" :options="chartOptions" />
+    <div v-else class="d-flex justify-content-center mb-5">
+      <p class="fw-bold fs-5 opacity-75 py-5 mb-5">Nenhum dado encontrado</p>
+    </div>
   </div>
 </template>
 
@@ -232,9 +238,11 @@ const chartOptions = ref({
   },
 });
 
+let monthSelected = -1;
 const changeLabel = (labelType, index) => {
   currentLabel.value = labels[labelType]
   if(labelType === 'month'){
+    monthSelected = -1
     currentIndex.value = 0;
     chartData.value = {
       ...chartData.value,
@@ -275,6 +283,7 @@ const changeLabel = (labelType, index) => {
       ]
     }
   } else if(labelType === 'week'){
+    monthSelected = index
     currentIndex.value = 1;
     chartData.value = {
       ...chartData.value,
@@ -320,6 +329,7 @@ onMounted(() => {
 
 <style scoped>
 .graph-loader{
+  margin-top: 100 px !important;
   height: 100px;
 }
 h5{
@@ -333,17 +343,16 @@ h5{
 .graph-btn{
   color: rgb(0, 0, 0, 0.7);
   padding: 5px;
-  border-radius: 20px;
   font-size: 13px;
 }
 .chart-graph {
-  height: 300px;
+  height: 350px;
 }
 li{
     list-style-type: none;
 }
 .large-menu{
-    width: 136px;
+    width: 136px !important;
     min-width: 40px;
 }
 .small-menu{
@@ -365,14 +374,23 @@ li{
     border-radius: 10px 10px 0px 0px;
     border-bottom: 1px ridge #1F69B1;
 }
-.btn-transparent:hover{
-    color: white !important; 
-    background-color: #0B3B69 !important; 
+
+.dropdown-item{
+  font-size: 14px;
 }
+.btn-outline-secondary:hover{
+  color: white;
+}
+.btn-transparent:hover {
+  color: white !important; 
+  background-color: #0B3B69 !important; 
+}
+
 .btn-outline-ligth:hover {
   color: white !important; 
   background-color: #0B3B69 !important; 
 }
+
 @media screen and (max-width: 820px){
     .action-btn{
         font-size: 12px;

@@ -1,106 +1,159 @@
 <template>
     <div class="settings-container container mb-5">
-     <!--   
-    <section class="settings-section mb-5">
-        <h4 class="section-title">Níveis Limite de Estoque</h4>
-        <div class="section-content d-flex flex-column justify-content-center">
-          <div class="d-flex flex-wrap ms-5">
-            <div class="item-limit mx-5 mb-4" v-for="item in stockItems" :key="item.id">
-              <p><strong>{{ item.name }}</strong></p>
-                <label class="d-block me-3">
-                  Mínimo:
-                  </label>
-                <input type="number" v-model="item.min" />
-                <label class="d-block">
-                  Máximo:
-                  </label>
-                <input type="number" v-model="item.max" />
+        <!-- 
+        <section class="settings-section mb-5">
+            <h4 class="section-title">Níveis Limite de Estoque</h4>
+            <div class="section-content d-flex flex-column justify-content-center">
+              <div class="d-flex flex-wrap ms-5">
+                <div class="item-limit mx-5 mb-4" v-for="item in stockItems" :key="item.id">
+                  <p><strong>{{ item.name }}</strong></p>
+                    <label class="d-block me-3">
+                      Mínimo:
+                      </label>
+                    <input type="number" v-model="item.min" />
+                    <label class="d-block">
+                      Máximo:
+                      </label>
+                    <input type="number" v-model="item.max" />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-    </section>
-    <section class="settings-section mb-5">
-        <div class="section-title d-flex align-items-center justify-content-between ms-2">
-            <h4>Emails para receber alertas</h4>
-            <button :class="addOne ? 'disabled' : ''" class="btn btn-primary" @click="addAlertEmail">Adicionar</button>
-        </div>
-        <p class="ms-2">Os emails cadastrados nesta secção receberão mensagens de alerta configuradas para eventos selecionadas do sistema, como a de estoque abaixo do limite, itens faltando e afins.</p>
-        <div class="section-content d-flex flex-column align-items-center mb-3">
-            <div class="d-flex flex-wrap justify-content-start">
-                <div class="alert-email d-flex mx-2 my-2" v-for="(email, index) in alertEmails" :key="index">
-                    <div class="me-3">
-                        <input :class="email.valid ? 'bg-gray-light' : 'bg-light'" class="form-control" type="email" v-model="email.domain" placeholder="Email" />
-                        <p class="position-absolute d-flex align-items-center text-dark-alert mt-2"  v-if="!isValidEmail(email.domain) && email.domain !== ''"><IconsInformation class="me-1"/>Formato de email inválido</p>
-                    </div>
-                    <div>
-
-                        <button v-if="email.valid" class="btn btn-light-alert ms-3 text-light" @click="removeAlertEmail(index)">Remover</button>
-                        <button v-if="!email.valid" class="btn btn-light-success ms-3 text-light" @click="validateEmail(index)">Confirmar</button>
-                        <button v-if="!email.valid" class="btn btn-light-alert ms-3 text-light" @click="cancelValidation(index)">Cancelar</button>
+        </section>
+        <section class="settings-section mb-5">
+            <div class="section-title d-flex align-items-center justify-content-between ms-2">
+                <h4>Emails para receber alertas</h4>
+                <button :class="addOne ? 'disabled' : ''" class="btn btn-primary" @click="addAlertEmail">Adicionar</button>
+            </div>
+            <p class="ms-2">Os emails cadastrados nesta secção receberão mensagens de alerta configuradas para eventos selecionadas do sistema, como a de estoque abaixo do limite, itens faltando e afins.</p>
+            <div class="section-content d-flex flex-column align-items-center mb-3">
+                <div class="d-flex flex-wrap justify-content-start">
+                    <div class="alert-email d-flex mx-2 my-2" v-for="(email, index) in alertEmails" :key="index">
+                        <div class="me-3">
+                            <input :class="email.valid ? 'bg-gray-light' : 'bg-light'" class="form-control" type="email" v-model="email.domain" placeholder="Email" />
+                            <p class="position-absolute d-flex align-items-center text-dark-alert mt-2"  v-if="!isValidEmail(email.domain) && email.domain !== ''"><IconsInformation class="me-1"/>Formato de email inválido</p>
+                        </div>
+                        <div>
+    
+                            <button v-if="email.valid" class="btn btn-light-alert ms-3 text-light" @click="removeAlertEmail(index)">Remover</button>
+                            <button v-if="!email.valid" class="btn btn-light-success ms-3 text-light" @click="validateEmail(index)">Confirmar</button>
+                            <button v-if="!email.valid" class="btn btn-light-alert ms-3 text-light" @click="cancelValidation(index)">Cancelar</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    -->
     <section class="settings-section mb-5">
-        <h4 class="section-title">Personalizar Temas e Layouts</h4>
+        <h3 class="section-title mx-2 pb-2">Temas e Layouts</h3>
+        <p class="fs-6 mx-2">Escolha um dos temas visuais abaixos para que a estilização do aplicativo esteja de acordo com suas preferências estéticas. O tema escolhido ficará salvo como preferências do usuário, ao sair da aplicação o tema continuará salvo.  </p>
         <div class="dashboard-container container-fluid d-flex px-0 justify-content-center align-items-center">
-            <div class="card mx-2 bg-primary rounded-4" onclick="document.getElementById('themeRadio1').checked = true;">
-                <img src="/almo.png" class="card-img-top" alt="...">
+            <div class="card themes-card mx-2 bg-primary rounded-4" @click="changeLayout(0)"  onclick="document.getElementById('themeRadio1').checked = true;">
+                <img src="/defaultLayout.png" class="card-img-top" alt="...">
                 <div class="card-body p-3 text-dark-emphasis">
                     <div class="form-check text-light">
-                      <input class="form-check-input" type="radio" id="themeRadio1" name="themeOptions" value="option1">
+                      <input :checked="settingsStore.layout === 0" class="form-check-input" type="radio" id="themeRadio1" name="themeOptions" value="option1">
                       <label class="card-text fw-bold form-check-label fw-bold" for="themeRadio1">
                         Tema padrão
                       </label>
                     </div>
                 </div>
             </div>
-            <div class="card mx-2 bg-primary rounded-4" onclick="document.getElementById('themeRadio2').checked = true;">
-                <img src="/almo.png" class="card-img-top" alt="...">
+            <div class="card themes-card mx-2 bg-primary rounded-4" @click="changeLayout(1)"  onclick="document.getElementById('themeRadio3').checked = true;">
+                <img src="/darkLayout.png" class="card-img-top" alt="...">
                 <div class="card-body p-3 text-dark-emphasis">
                     <div class="form-check text-light">
-                      <input class="form-check-input" type="radio" id="themeRadio2" name="themeOptions" value="option2">
-                      <label class="card-text fw-bold form-check-label fw-bold" for="themeRadio2">
-                        Tema alternativo
-                      </label>
-                    </div>
-                </div>
-            </div>
-            <div class="card mx-2 bg-primary rounded-4" onclick="document.getElementById('themeRadio3').checked = true;">
-                <img src="/almo.png" class="card-img-top" alt="...">
-                <div class="card-body p-3 text-dark-emphasis">
-                    <div class="form-check text-light">
-                      <input class="form-check-input" type="radio" id="themeRadio3" name="themeOptions" value="option3">
+                      <input :checked="settingsStore.layout === 1" class="form-check-input" type="radio" id="themeRadio3" name="themeOptions" value="option3">
                       <label class="card-text fw-bold form-check-label fw-bold" for="themeRadio3">
                         Tema escuro
                       </label>
                     </div>
                 </div>
             </div>
+            <div class="card themes-card mx-2 bg-primary rounded-4" @click="changeLayout(2)"  onclick="document.getElementById('themeRadio2').checked = true;">
+                <img src="/alternativeLayout.png" class="card-img-top" alt="...">
+                <div class="card-body p-3 text-dark-emphasis">
+                    <div class="form-check text-light">
+                      <input :checked="settingsStore.layout === 2" class="form-check-input" type="radio" id="themeRadio2" name="themeOptions" value="option2">
+                      <label class="card-text fw-bold form-check-label fw-bold" for="themeRadio2">
+                        Tema alternativo
+                      </label>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
-    ---<div>
-                <label class="form-check-label fw-bold">
-                    <input class="form-check-input" type="checkbox" v-model="reportSettings.includeTaxes[2]" />
-                    Solicitações recusadas
-                </label>
-                <p class="position-absolute">Esta opção processará todas as solicitações de cada mês do ano.</p>
+    <section class="settings-section mb-5">
+    <h3 class="section-title mx-2 pb-2">Tipografia</h3>
+    <p class="fs-6 mx-2">Escolha uma das fontes visuais abaixo para que a estilização do aplicativo esteja de acordo com suas preferências estéticas. A fonte escolhida ficará salva como preferências do usuário, ao sair da aplicação a fonte continuará salva.</p>
+    <div class="dashboard-container container-fluid d-flex px-0 justify-content-between align-items-center">
+        <div class="card themes-card mx-2 bg-primary rounded-3 border-1" @click="changeFont(0)">
+            <img src="/poppins.png" class="card-img-top" alt="...">
+            <div class="card-body p-3 text-dark-emphasis">
+                <div class="form-check text-light">
+                    <input :checked="settingsStore.tipography === 0" class="form-check-input" type="radio" id="fontRadio1" name="fontOptions" value="option4">
+                    <label class="card-text fw-bold form-check-label fw-bold" for="fontRadio1">
+                        Poppins
+                    </label>
+                </div>
             </div>
-            <div>
-                <label class="form-check-label fw-bold">
-                    <input class="form-check-input" type="checkbox" v-model="reportSettings.includeTaxes[3]" />
-                    Itens mais solicitados
-                </label>
-                <p class="position-absolute">Esta opção processará todas as solicitações de cada mês do ano.</p>
+        </div>
+        <div class="card themes-card mx-2 bg-primary rounded-3 border-1" @click="changeFont(1)">
+            <img src="/inter.png" class="card-img-top" alt="...">
+            <div class="card-body p-3 text-dark-emphasis">
+                <div class="form-check text-light">
+                    <input :checked="settingsStore.tipography === 1" class="form-check-input" type="radio" id="fontRadio2" name="fontOptions" value="option5">
+                    <label class="card-text fw-bold form-check-label fw-bold" for="fontRadio2">
+                        Inter
+                    </label>
+                </div>
             </div>
-            <div>
-                <label class="form-check-label fw-bold">
-                    <input class="form-check-input" type="checkbox" v-model="reportSettings.includeTaxes[4]" />
-                    Usuários mais solicitantes
-                </label>
-                <p class="position-absolute">Esta opção processará todas as solicitações de cada mês do ano.</p>
+        </div>
+        <div class="card themes-card mx-2 bg-primary rounded-3 border-1" @click="changeFont(2)">
+            <img src="/montserrat.png" class="card-img-top" alt="...">
+            <div class="card-body p-3 text-dark-emphasis">
+                <div class="form-check text-light">
+                    <input :checked="settingsStore.tipography === 2" class="form-check-input" type="radio" id="fontRadio3" name="fontOptions" value="option6">
+                    <label class="card-text fw-bold form-check-label fw-bold" for="fontRadio3">
+                        Montserrat
+                    </label>
+                </div>
             </div>
+        </div>
+        <div class="card themes-card mx-2 bg-primary rounded-3 border-1" @click="changeFont(3)">
+            <img src="/lora.png" class="card-img-top" alt="...">
+            <div class="card-body p-3 text-dark-emphasis">
+                <div class="form-check text-light">
+                    <input :checked="settingsStore.tipography === 3" class="form-check-input" type="radio" id="fontRadio4" name="fontOptions" value="option7">
+                    <label class="card-text fw-bold form-check-label fw-bold" for="fontRadio4">
+                        Lora
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    <!--
+    <div>
+        <label class="form-check-label fw-bold">
+            <input class="form-check-input" type="checkbox" v-model="reportSettings.includeTaxes[2]" />
+            Solicitações recusadas
+        </label>
+        <p class="position-absolute">Esta opção processará todas as solicitações de cada mês do ano.</p>
+    </div>
+    <div>
+        <label class="form-check-label fw-bold">
+            <input class="form-check-input" type="checkbox" v-model="reportSettings.includeTaxes[3]" />
+            Itens mais solicitados
+        </label>
+        <p class="position-absolute">Esta opção processará todas as solicitações de cada mês do ano.</p>
+    </div>
+    <div>
+        <label class="form-check-label fw-bold">
+            <input class="form-check-input" type="checkbox" v-model="reportSettings.includeTaxes[4]" />
+            Usuários mais solicitantes
+        </label>
+        <p class="position-absolute">Esta opção processará todas as solicitações de cada mês do ano.</p>
+    </div>
     <section class="settings-section mb-5">
         <h4 class="section-title">Relatórios Automáticos Personalizados</h4>
         <div class="section-content">
@@ -149,32 +202,27 @@
                 Taxa Específica:
                 <input class="form-control" type="number" v-model="reportSettings.specificTax" />
             </label>
-    </section>
-    <section class="settings-section mb-5">
-        <div class="section-title d-flex align-items-center justify-content-between ms-2">
-            <h4>Personalizar Tipos e Categorias de Itens</h4>
-            <button class="btn btn-primary fw-bold" @click="addItemCategory">Adicionar</button>
-        </div>
-        <div class="section-content d-flex">
-            <div class="d-flex" v-for="(category, index) in itemCategories" :key="index">
-                <input class="form-control" type="text" v-model="itemCategories[index]" placeholder="Categoria de Item" />
-                <button class="btn mx-3 btn-light-alert text-light fw-bold" @click="removeItemCategory(index)">Remover</button>
-            </div>
-        </div>
-    </section>
-    <button class="btn btn-primary fw-bold" @click="saveSettings">Salvar Configurações</button>
-    -->
-</div>
+    </section>-->
+    </div>
 </template>
-
+    
 <script setup>
-import { inject } from 'vue';
+import { inject, onUpdated } from 'vue';
+import { useSettingsStore } from '../stores/settings';
 
 definePageMeta({
-    layout: 'client'
+layout: 'client'
 })
-
 // Dados de configuração inicial
+const settingsStore = useSettingsStore();
+const changeLayout = (index) => {
+    settingsStore.layout = index
+}
+const changeFont = (index) => {
+    settingsStore.tipography = index;
+}
+const itemCategory = ref('');
+
 const stockItems = ref([
 { id: 1, name: 'Item 1', min: 10, max: 100 },
 { id: 2, name: 'Item 2', min: 5, max: 50 },
@@ -191,7 +239,6 @@ const reportSettings = ref({
     includeTaxes: [],
     specificTax: 0,
 });
-const itemCategories = ref(['Categoria 1', 'Categoria 2']);
 // Funções para manipulação de eventuais dados
 const addOne = ref(false)
 const isValidEmail = (email) => {
@@ -214,10 +261,10 @@ const cancelValidation = (index) => {
     addOne.value = false;
 }
 const addItemCategory = () => {
-    itemCategories.value.push('');
+    settingsStore.categories.push(itemCategory.value)
 };
 const removeItemCategory = (index) => {
-    itemCategories.value.splice(index, 1);
+    settingsStore.categories.splice(index, 1);
 };
 const saveSettings = () => {
 // Função para salvar configurações, *integrar á API*
@@ -228,10 +275,14 @@ console.log('Salvando configurações...', {
     reportSettings: reportSettings.value,
     itemCategories: itemCategories.value,
 });
-    };
+};
 </script>
 
 <style scoped>
+.settings-container{
+    margin-top: 100px;
+    margin-bottom: 110px !important;
+}
 .settings-container h2 {
     text-align: center;
     margin-bottom: 20px;
@@ -242,7 +293,6 @@ section {
 .section-title{
     padding-bottom: 5px;
     margin-bottom: 20px;
-    margin-right: 5%;
     border-bottom: 1px solid rgb(0, 0, 0, 0.3);
 }
 .section-content{
@@ -251,7 +301,7 @@ section {
 .stock-item {
     margin-bottom: 10px;
 }
-.btn, .form-control, p{
+.btn, p{
     font-size: 13px;
 }
 .btn{
@@ -265,15 +315,24 @@ section {
 .card-text{
     font-size: 15px;
 }
-.form-control{
-    width: 110%;
-}
 .stretched-link{
   text-decoration: none;
 }
 .card-img-top{
   transition: opacity 0.5s ease-in-out;
   opacity: 85%;
+}
+.close{
+    position: relative;
+    left: 20px;
+}
+.header-title{
+    font-weight: 300;
+    margin: -1px 0 -1px 0;
+    padding: 0;
+}
+.trash:hover{
+    transform: scale(1.2)
 }
 .card:hover .stretched-link{
     color: white !important;
@@ -284,5 +343,16 @@ section {
 .form-check-input:checked {
     background-color: #1F69B1;
     box-shadow: none;
+}
+@media screen and (max-width: 750px){
+    .dashboard-container{
+        display: block !important;
+    }
+    .themes-card{
+        margin-bottom: 40px;
+    }
+    .section-title{
+        text-align: center;
+    }
 }
 </style>

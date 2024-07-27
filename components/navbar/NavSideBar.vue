@@ -1,25 +1,25 @@
 <template>
-    <div class="modal-backdrop" :style="{'display': responsive && isMobile ? 'block' : 'none' }"></div>
-    <div class="sidebar pt-0 nav bg-light d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed, 'hide': responsive && !isMobile, 'mobile-spacement': responsive && isMobile, 'mobile-fixed': responsive }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+    <div class="modal-backdrop" :style="{'display': (responsive && isMobile) ? 'block' : 'none' }"></div>
+    <div class="sidebar pt-0 nav bg-light d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed, 'hide': (responsive && !isMobile) || (settingsStore.isMobile && !responsive), 'mobile-spacement': responsive && isMobile, 'mobile-fixed': responsive }" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-body ps-0" :class="{'mobile-padding': responsive }">
             <div class="mobile-sidebar-header bg-primary m-0 p-0 text-light" :class="{'show': responsive && isMobile}" :style="{'width': responsive && isMobile ? '165px': '0px'}">
                 <IconsClose @click="hideSidebar()" class="exit-btn me-3" style="width: 25px; height: 25px;"/>
             </div>
             <ul class="list-group-flush container d-block" :class="{ 'collapsed': isCollapsed }">
                 <a class="text-decoration-none" href="/" aria-current="true">
-                    <div class="item-bg item-top mb-2" :class="{'active': $route.path === '/', 'text-dark-emphasis': $route.path !== '/'}">
+                    <div class="item-bg item-top mb-2" :class="{'bg-primary text-white active': $route.path === '/', 'text-dark-emphasis': $route.path !== '/'}">
                         <IconsHome class="nav-icon"/>
                         <span class="list-group-item">Início</span>
                     </div>
                 </a>
                 <a class="text-decoration-none" href="/controle-de-acesso" aria-current="true">
-                    <div class="item-bg" :class="{'active': $route.path === '/controle-de-acesso', 'text-dark-emphasis': $route.path !== '/controle-de-acesso' }">
+                    <div class="item-bg" :class="{'bg-primary text-white active': $route.path === '/controle-de-acesso', 'text-dark-emphasis': $route.path !== '/controle-de-acesso' }">
                         <IconsControl class="nav-icon"/>
                         <span class="list-group-item text-wrap">Controle de Acesso</span>
                     </div>
                 </a>
                 <a class="text-decoration-none" href="/catalogo" aria-current="true">
-                    <div class="item-bg" :class="{'active': $route.path === '/catalogo', 'text-dark-emphasis': $route.path !== '/catalogo' }">
+                    <div class="item-bg" :class="{'bg-primary text-white active': $route.path === '/catalogo', 'text-dark-emphasis': $route.path !== '/catalogo' }">
                         <IconsSpreadSheet class="nav-icon"/>
                         <span class="list-group-item">Catálogo</span>
                     </div>
@@ -36,25 +36,25 @@
                 -->
                 <div :class="{'hidden': !isRotated}">
                     <a class="text-decoration-none" v-for="sublink in dropdwonRoutes" :href="sublink.path" aria-current="true">
-                        <div class="item-bg" :class="{'active': $route.path === sublink.path, 'text-dark-emphasis': $route.path !== sublink.path }">
+                        <div class="item-bg" :class="{'bg-primary text-white active': $route.path === sublink.path, 'text-dark-emphasis': $route.path !== sublink.path }">
                             <span class="list-group-item">{{sublink.name}}</span>
                         </div>
                     </a>
                 </div>
                 <a class="text-decoration-none" href="/registro" aria-current="true">
-                    <div class="item-bg" :class="{'active': $route.path === '/registro', 'text-dark-emphasis': $route.path !== '/registro'}">
+                    <div class="item-bg" :class="{'bg-primary text-white active': $route.path === '/registro', 'text-dark-emphasis': $route.path !== '/registro'}">
                         <IconsDirectory class="nav-icon"/>
                         <span class="list-group-item">Registro</span>
                     </div>
                 </a>
                 <a class="text-decoration-none" href="/configuracoes" aria-current="true">
-                    <div class="item-bg" :class="{'active': $route.path === '/configuracoes', 'text-dark-emphasis': $route.path !== '/configuracoes'}">
+                    <div class="item-bg" :class="{'bg-primary text-white active': $route.path === '/configuracoes', 'text-dark-emphasis': $route.path !== '/configuracoes'}">
                         <IconsSettings class="nav-icon"/>
                         <span class="list-group-item">Configurações</span>
                     </div>
                 </a>
                 <a class="text-decoration-none" href="/sobre" aria-current="true">
-                    <div class="item-bg text-start" :class="{'active': $route.path === '/sobre', 'text-dark-emphasis': $route.path !== '/sobre'}">
+                    <div class="item-bg text-start" :class="{'bg-primary text-white active': $route.path === '/sobre', 'text-dark-emphasis': $route.path !== '/sobre'}">
                         <IconsInformation class="nav-icon"/>
                         <span class="d-inline-block list-group-item">Sobre</span>
                     </div>
@@ -70,6 +70,7 @@
 </template>
     
 <script >
+import { useSettingsStore } from '../../stores/settings';
 import { useStorageStore } from '../../stores/storage';
 import { ref } from 'vue';
 export default {
@@ -103,7 +104,7 @@ export default {
             useStorageStore().setRotated();
         },
         mobileMode(){
-            this.responsive = window.innerWidth <= 726;
+            this.responsive = window.innerWidth <= 988;
         },
         hideSidebar(){
             this.store.isMobileMenu = false;
@@ -124,8 +125,10 @@ export default {
     },
     setup(){
         const store = useStorageStore();
+        const settingsStore = useSettingsStore();
         return{
-            store
+            store,
+            settingsStore
         }
     }
 }
@@ -242,7 +245,7 @@ export default {
 .colapse-btn{
     width: 175px;
     border-radius: 0;
-    bottom: 0;
+    bottom: 0px;
     height: 40px;
     transition: width 0.6s ease-in-out;
     overflow: hidden;
@@ -272,8 +275,6 @@ export default {
     flex-shrink: 0; 
 }
 .active{
-    color: white;
-    background: #0B3B69;
     border-radius: 9px;
 }
 .hidden{
@@ -284,8 +285,4 @@ export default {
     color: #333333;
     border-radius: 9px;
 }
-.list-group-item:hover{
-    color: #333333;
-}
-
 </style>

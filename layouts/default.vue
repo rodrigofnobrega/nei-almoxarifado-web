@@ -10,12 +10,12 @@
           <TitlesTitle>
             <template v-slot:titulo>
                 <div class="d-flex align-items-center">
-                  <IconsSpreadSheet v-if="pageIcon === 'spreadsheet'" width="30px" height="30px"/>
-                  <IconsControl v-else-if="pageIcon === 'control'" width="30px" height="30px"/>
-                  <IconsDirectory v-else-if="pageIcon === 'directory'" width="30px" height="30px"/>
-                  <IconsSettings v-else-if="pageIcon === 'settings'" width="30px" height="30px"/>
-                  <IconsInformation v-else-if="pageIcon === 'information'" width="30px" height="30px"/>
-                  <IconsHome v-else-if="pageIcon === 'home'" width="30px" height="30px"/>
+                  <IconsSpreadSheet v-if="pageIcon === 'spreadsheet'" class="title-icon" width="30px" height="30px"/>
+                  <IconsControl v-else-if="pageIcon === 'control'" class="title-icon" width="30px" height="30px"/>
+                  <IconsDirectory v-else-if="pageIcon === 'directory'" class="title-icon" width="30px" height="30px"/>
+                  <IconsSettings v-else-if="pageIcon === 'settings'" class="title-icon" width="30px" height="30px"/>
+                  <IconsInformation v-else-if="pageIcon === 'information'" class="title-icon" width="30px" height="30px"/>
+                  <IconsHome v-else-if="pageIcon === 'home'" width="30px" class="title-icon" height="30px"/>
                   <span class="ms-2">
                     {{ pageTitle }}
                   </span>
@@ -29,7 +29,7 @@
           </TitlesTitle>
         </div>
         <div class="main-content d-flex justify-content-center">
-          <slot />
+          <slot  />
         </div>
       </div> 
     </div>
@@ -47,6 +47,14 @@ import { useStorageStore } from '../stores/storage';
 
 
 export default {
+  data(){
+    return{
+      loadContent: false
+    }
+  },
+  mounted(){
+    this.loadContent = true;
+  },
   setup() {
     const store = useStorageStore();
     const pageTitle = ref('');
@@ -109,6 +117,12 @@ export default {
 }
 .route-link:hover{
   color: rgba(51, 51, 51, 0.6)
+}
+@media screen and (max-width: 600px){
+  .title-icon{
+    width: 25px;
+    height: 25px;
+  }
 }
 /*
 @media screen and (max-width: 1199px){

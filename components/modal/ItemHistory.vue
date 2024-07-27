@@ -1,8 +1,7 @@
-<!-- Exemplo simples para testar se o itemId está sendo recebido corretamente -->
 <template>
 	<Modal id="itemHistory" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
 		<template v-slot:header>
-            <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Histórico</h6>
+            <p class="header-title d-flex fw-bold justify-content-start align-items-center">Histórico do item</p>
             <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
             </button>
@@ -11,10 +10,10 @@
 			<table class="table text-center"> 
 		<thead>
 			<tr>
-				<th scope="col"> Data </th> 
-				<th scope="col"> Operação </th> 
-				<th scope="col"> Quantidade </th> 
-				<th scope="col"> Autor </th> 
+				<th class="col-title" scope="col"> Data </th> 
+				<th class="col-title" scope="col"> Operação </th> 
+				<th class="col-title" scope="col"> Quantidade </th> 
+				<th class="col-title" scope="col"> Autor </th> 
 			</tr>
 		 </thead>
 		<tbody>
@@ -30,12 +29,11 @@
 		<template v-slot:footer>
 			<div class="container-fluid d-flex justify-content-center align-items-center my-3">
             </div>
-			<div data-bs-target="#itemDetailing" data-bs-toggle="modal" type="button" class=" btn btn-primary position-fixed bg-primary rounded-2 p-1 d-flex justify-content-end text-light">
+			<div @click="getItemDetails" title="Detalhes" data-bs-target="#itemDetailing" data-bs-toggle="modal" type="button" class=" btn btn-primary position-fixed bg-primary rounded-2 p-1 d-flex justify-content-end text-light">
                 <IconsInformation width="23px" height="23px"/>
             </div>
 		</template>
 	</Modal>
-	<ModalItemDetails v-if="toggleHistory" :item_index="1" :item_route="'/catalogo'" :item_details="item_history" />
 </template>
 
 <script setup lang="ts">
@@ -43,12 +41,17 @@ import { getRecordByItemId } from '../../services/record/recordGET';
 import { useUser } from '../../stores/user';
 import { useStorageStore } from '../../stores/storage';
 import { ref, computed, onUpdated, onMounted, defineProps } from 'vue';
+import { getItem } from '../../services/items/itemsGET';
 
 const store = useStorageStore();
 const userStore = useUser();
 const itemHistory = ref(store.itemRecord)
 
 const toggleHistory = ref(false);
+async function getItemDetails(){
+	const res = await getItem(userStore, store.itemRecord[0].item.id);
+	store.itemDetails = res;
+}
 
 function isCreate(operation){
 	if(operation.includes('CADASTRO')){
@@ -56,7 +59,7 @@ function isCreate(operation){
 	}
 }
 function isRequest(operation){
-	if(operation.includes('CONSUMIDO')){
+	if(operation.includes('CONSUMO')){
 		return true; 
 	}
 }

@@ -13,7 +13,7 @@ export const getRequests = async (userStore, page) => {
 //Listar Solicitações pelo id
 export const getRequest = async (userStore) => {
     const request_id = 1;
-    const { data } = await useApi().get(`http://localhost:8080/api/v1/requests/${request_id}`, {
+    const { data } = await useApi().get(`/requests/${request_id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -24,8 +24,18 @@ export const getRequest = async (userStore) => {
     return data
 }
 //Listar Solicitações pelo status da solicitação
-export const getRequestByStatus = async (userStore, requestStatus, page) => {
-    const { data } = await useApi().get(`http://localhost:8080/api/v1/requests/status/${requestStatus}?page=${page}`, {
+export const getRequestByStatus = async (userStore, requestStatus, page, userId) => {
+    const { data } = await useApi().get(`/requests/status/${requestStatus}?page=${page}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userStore.token}`
+        }
+     }
+    )
+    return data
+}
+export const getRequestByStatusUserId = async (userStore, requestStatus, page, userId) => {
+    const { data } = await useApi().get(`/requests/status/${requestStatus}?userId=${userId}&page=${page}`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`
@@ -36,7 +46,7 @@ export const getRequestByStatus = async (userStore, requestStatus, page) => {
 }
 //Listar Solicitações pelo id do usuário
 export const getRequestByUser = async (userStore, userId, pagination) => {
-    const { data } = await useApi().get(`http://localhost:8080/api/v1/requests/user?page=${pagination}&userId=${userId}&sort=id,asc`, {
+    const { data } = await useApi().get(`/requests/user?page=${pagination}&userId=${userId}&sort=id,desc`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`
@@ -47,7 +57,7 @@ export const getRequestByUser = async (userStore, userId, pagination) => {
 }
 //Listar Solicitações pelo id do item
 export const getRequestByItem = async (userStore, itemID) => {
-    const { data } = await useApi().get(`http://localhost:8080/api/v1/requests/item/${itemID}`, {
+    const { data } = await useApi().get(`/requests/item/${itemID}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

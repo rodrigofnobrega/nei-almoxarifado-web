@@ -10,7 +10,8 @@ export default defineNuxtConfig({
   ],
   modules: [
     '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt' 
+    '@pinia-plugin-persistedstate/nuxt',
+    '@nuxtjs/google-fonts'
   ],
   app: {
     head: {
@@ -24,4 +25,16 @@ export default defineNuxtConfig({
       ]
     }
   },
+  googleFonts: {
+    families: {
+      Inter: [400, 500, 600, 700, 800],
+      Montserrat: [400, 500, 600, 700, 800],
+      Lora: [400, 500, 600, 700, 800]
+    },
+    display: 'swap',
+    prefetch: true, 
+    preconnect: true, 
+    preload: true, 
+    download: false, 
+  }
 })

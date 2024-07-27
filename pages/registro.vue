@@ -13,15 +13,15 @@
   <div class="table-box-title position-absolute bg-light-emphasis d-flex align-items-center">
         <IconsHistory class="me-1" width="25" height="25"/>
         <p class="box-title-text">
-            Tabela dos registros do almoxarifado
+            Tabela de Registros
         </p>
     </div>
   <div class="table-box row d-block bg-light mx-2">
-      <div class="table-actions d-flex justify-content-between aling-items-center" style="margin-bottom: -1px !important;">
+      <div class="table-actions d-flex justify-content-between aling-items-center" style="margin-bottom: 0px !important;">
         <div class="d-flex me-1">
-            <ButtonsFilter v-if="uploadReloader === 1" style="margin-top: 3px;"/>
+            <ButtonsFilter class="action-sbtn" v-if="uploadReloader === 1" style="margin-top: 0px;"/>
         </div>
-        <span v-if="recordsLoad" class="position-sticky d-flex align-items-center table-searchbar">
+        <span v-if="recordsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 3px;">
             <IconsSearchGlass class="search-glass"/>
             <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
         </span>
@@ -29,9 +29,9 @@
       <TablesTable>
           <template v-slot:header>
               <tr>
+                  <th class="col-title py-2 border" scope="col">Item</th>
                   <th class="col-title py-2 border" scope="col">Autor</th>
                   <th class="col-title py-2 border" scope="col">Operação</th>
-                  <th class="col-title py-2 border" scope="col">Item</th>
                   <th class="col-title py-2 border" scope="col">Quantidade</th>
                   <th class="col-title py-2" scope="col">Data e horário </th>
                   <th class="col-title py-2" scope="col">Ações</th>
@@ -39,14 +39,14 @@
           </template>
           <template v-slot:content>
           <tr v-if="recordsCache.length > 0" v-for="(record, index) in recordsCache[cacheIndex]" :key="index" :data-index="index">
+             <th class="border">
+                 <span>{{ record.item.name }}</span>
+             </th>
              <th class="border" scope="row">
                   <span>{{ record.user.name }}</span>
              </th>
              <th class="border">
                  <span>{{ record.operation }}</span>
-              </th>
-              <th class="border">
-                  <span>{{ record.item.name }}</span>
               </th>
              <th class="border">
                  <span>{{ record.quantity }}</span>
@@ -57,23 +57,27 @@
              <th class="border" width="5%">
                     <TooltipsFastRectangular class="toolTip me-5 pe-5 mb-5" style="margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
                    <TooltipsFastRectangular class="toolTip me-5 pe-5" style="margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Perfil'"/>
-                   <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                   <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary"  @click="showDetails(index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         <IconsSearchGlass width="18px" height="19px"/>
                     </button>
-                    <NuxtLink  @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false"  :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`"  class="my-0 details-btn position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}">
+                    <NuxtLink  @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false"  :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`"  class="my-0 details-btn position-sticky table-btn btn btn-secondary">
                       <IconsLowProfile width="16px" height="16px"/>  
                     </NuxtLink>
                </th>
           </tr>
-          <div v-else-if="recordsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)" class="search-empty position-absolute mt-5">
-                <p class="text-dark-emphasis fs-5 bg-transparent opacity-75 mt-5">Nenhum item Encontrado.</p>
-          </div>
+          <div v-else-if="recordsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)"
+             class="search-empty my-5">
+                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado.</p>
+            </div>
+            <div v-else class="search-empty  my-5" style="padding-bottom: 300px;">
+                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent"></p>
+            </div>
       </template>
   </TablesTable>
-<div class="d-flex justify-content-between align-items-center me-2 mt-2">
-      <div>
-          <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 px-2 pages-info">Quantidade de registros da página: {{ recordsCache[cacheIndex].length }}</span>
-          <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 px-2 pages-info">Quantidade total de registros: {{ totalElements }}</span>
+    <div class="table-footer d-flex justify-content-between align-items-center me-2 mt-2">
+      <div class="d-flex justify-content-center me-3 ">
+          <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de registros da página: {{ recordsCache[cacheIndex].length }}</span>
+          <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de registros: {{ totalElements }}</span>
       </div>
       <nav v-if="recordsCache.length > 0 && finded.length === 0" aria-label="Page navigation" class="pagination">
             <ul class="pagination mb-2 mt-2">
@@ -100,7 +104,7 @@
                 </li>
             </ul>
         </nav>
-  </div>
+    </div>
   </div>
 </div>
 </template>
@@ -117,6 +121,7 @@ import { useRoute } from 'vue-router';
 const userStore = useUser()
 const store = useStorageStore();
 const searchStore = useSearch();
+
 const setpageTitle = inject('setpageTitle');
 const sendDataToParent = () => {
     const title = "Registro";
@@ -143,10 +148,20 @@ const totalPages = ref(0);
 const totalElements = ref(0);
 const isSearching = ref(false);
 let finded = [];
-const recordsReq = async (sort, isInverted, pagination, loadRequest, paginationInverted) => {
+const recordsReq = async (sort, isInverted, pagination_, loadRequest, paginationInverted) => {
     if(searchInput.value != ''){
+        cacheIndex.value = 0;
+        recordsCache.value = [];
+        reqsIndexCache = [0]
+        pagination.value = 0;
+        paginationRet.value = 1;
+        initialLoading.value = false
+
+        pagesFocus.value[count] = false;
+        count = 0;  
+        pagesFocus.value[0] = true;
+
         finded = [];
-        store.isReloadItems = true;
         if(searchCache.value.length >= totalPages.value){
             for(let i = 0; i < searchCache.value.length; i++){
                 for(let j = 0; j < searchCache.value[i].length; j++){
@@ -202,7 +217,7 @@ const recordsReq = async (sort, isInverted, pagination, loadRequest, paginationI
         recordsCache.value.push(res.content);
         return res.totalPages
     } 
-    const res = await getRecords(userStore, pagination, sort)
+    const res = await getRecords(userStore, pagination_, sort)
     totalPages.value = res.totalPages
     totalElements.value = res.totalElements;
     invertedPagination.value = totalPages-1;
@@ -228,16 +243,15 @@ const recordsLoad = computed(async() => {
         typingTimer = setTimeout(() => {
             recordsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted)
         }, debounceTime);
+        return 0;
     }
-    if(searchInput.value === ''){
-        if(isSearching.value === true){
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(() => {
-                store.isReloadItems = true;
-                isSearching.value = false;
-            }, debounceTime-500);
-            finded = [];
-        }
+    if(searchInput.value === '' && isSearching.value === true){
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => {
+            store.isReloadItems = true;
+            isSearching.value = false;
+        }, debounceTime-500);
+        finded = [];
     }
     for(let i = 0; i < reqsIndexCache.length; i++){
         if(pagination.value === reqsIndexCache[i]){
@@ -383,43 +397,6 @@ const toolTipState = ref([[], []]);
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     initialLoading.value = false;
-    if(store.isMobile){
-        const catalogTextElement = document.querySelector('.sub-catalog p')
-        const textElements = document.querySelectorAll('tr p');
-        const searchBar = document.querySelector('.searchbar');
-        const searchBox = document.querySelector('.table-searchbar');
-        const tableLines = document.querySelectorAll('tr');
-
-        searchBox.style.fontSize = '8px';
-        searchBar.style.width = '100%';
-        searchBar.style.fontSize = '8px';
-        catalogTextElement.style.fontSize = '8px';
-        tableLines.forEach(element => {
-            element.addEventListener('click', (() => {
-                element.children[4].children[1].children[0].click()
-            }))
-        });
-        textElements.forEach(element => element.style.fontSize = '7px');
-    }
-});
-onUpdated(async () => {  
-    if(store.isMobile){
-        const catalogTextElement = document.querySelector('.sub-catalog p')
-        const textElements = document.querySelectorAll('tr p');
-        const searchBar = document.querySelector('.searchbar');
-        const tableLines = document.querySelectorAll('tr');
-
-        tableLines.forEach((element, index) => {
-            element.addEventListener('click', (() => {
-                element.children[4].children[1].children[0].click()
-            }))
-        });
-
-        searchBar.style.width = '100%';
-        searchBar.style.fontSize = '8px';
-        catalogTextElement.style.fontSize = '8px';
-        textElements.forEach(element => element.style.fontSize = '7px');
-    }
 });
 </script>
 
@@ -429,21 +406,21 @@ onUpdated(async () => {
     display: block;
 }
 .table-container{
-    margin-bottom: 149px;
+    padding-top: 6px;
+    margin-bottom: 62px;
     width: 100%;
     display: block !important;
 }
 .table-box{
-    margin-top: 60px;
+    margin-top: 75px;
     border-radius: 0px 10px 10px 10px;
-    overflow-x: scroll;
     box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.5);
     border: 1px #D9D9D9 solid;
 }
 .table-box-title{
     margin-left: 8px;
-    margin-top: 18px;
-    padding: 4px;
+    margin-top: 33px !important;
+    padding: 4px 4px 4px 4px;
     font-weight: 400;
     color: rgb(51,51,51, 0.8);
     border-radius: 10px 10px 0px 0px;
@@ -457,6 +434,7 @@ onUpdated(async () => {
 .sub-catalog{
     border-radius: 10px;
     margin-top: -14px;
+    margin-bottom: 10px;
     padding-top: 10px;
     padding-bottom: 20px;
     margin-right: 10%;
@@ -487,8 +465,9 @@ th span{
     font-size: 12px;
 }
 .col-title{
-    font-size: 13px;
-    opacity: 80%;
+    font-size: 14px;
+    color: rgb(51,51,51, 0.9);
+    opacity: 90%;
     font-weight: 600;
     margin-top: 0;
 }
@@ -503,19 +482,20 @@ p{
     border-bottom: 1px ridge #1F69B1;
 }
 .table-searchbar{
+    height: 36px;
     border: none;
-    border-radius: 10px 10px 0px 0px;
     border-bottom: solid 1px #1F69B1;
-    box-shadow: inset 0px -12px 16px -18px rgb(11, 59, 105, 0.7);
+    border-radius: 10px 10px 0px 0px;
+    box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
     color: rgb(0, 0, 0, 0.7); 
     transition: box-shadow 0.3s ease;
 }
 .table-searchbar:hover {
-    box-shadow: inset 0px -12px 16px -18px rgba(11, 59, 105, 0.7), 0px 0px 7px 0px rgba(11, 59, 105, 0.7);
+    box-shadow: inset 0px -12px 15px -18px rgba(11, 59, 105, 0.7), 0px 0px 7px 0px rgba(11, 59, 105, 0.7);
 }
 .table-searchbar:hover,
 .table-searchbar:focus-within {
-    box-shadow: inset 0px -12px 16px -18px rgba(11, 59, 105, 0.7), 0px 0px 7px rgba(11, 59, 105, 0.7); /* Sombra interna na parte inferior e contorno ao redor */
+    box-shadow: inset 0px -12px 15px -18px rgba(11, 59, 105, 0.7), 0px 0px 7px rgba(11, 59, 105, 0.7); /* Sombra interna na parte inferior e contorno ao redor */
 }
 .searchbar{
     border: none;
@@ -558,8 +538,7 @@ p{
     margin-top: 5%;
     display: flex;
     justify-content: center;
-    margin-left: 30%;    
-    margin-right: 30%;
+    margin-left: 120%;
     white-space: nowrap;
 }
 .pagination{
@@ -585,36 +564,59 @@ tr:hover p{
     opacity: 50%;
 }
 /*RESPONSIVIDADE*/
-@media screen and (max-width: 1030px) {
-    th p, .sub-catalog p{
-        font-size: 12px;
-    }
-}
 @media screen and (max-width: 900px){
     .actions-buttons{
         justify-content: center;
         align-content: center;
     }
+    .action-sbtn{
+        margin-top: 4px !important;
+    }
+    .pages-info{
+        text-wrap: wrap;
+        text-align: center;
+    }
 }
-@media screen and (max-width: 851px) {
+@media screen and (max-width: 790px) {
     .col-title{
-        font-size: 12px;
+        padding: 0px 5px 0px 5px;
     }
-    th p, .sub-catalog p{
-        font-size: 10px;
+    .table-footer{
+        display: block !important;
+        padding-right: 0px !important;
     }
-    .table-searchbar, .searchbar{
-        display: flex;
-        font-size: 12px; 
-    }
+
     .searchbar{
-        width: 120px;
+        font-size: 14px;
     }
     .table-searchbar{
-        width: 170px;
+        min-width: 120px;
+        margin-top: 3px !important; 
+        display: block;
     }
-    .sub-catalog-title, .search-empty p{
-        font-size: 14px;
+}
+@media screen and (max-width: 600px){
+    .pages-info{
+        font-size: 11px;
+    }
+    .page-link{
+        font-size: 13px;
+    }
+    .search-glass{
+        width: 25px;
+        height: 25px;
+    }
+    .table-actions{
+        width: 600px;
+        padding-left: 0px;
+    }
+} 
+@media screen and (max-width: 500px){
+    .box-title-text{
+        font-size: 18px;
+    }
+    .table-box-title{
+        margin-top: 35px;
     }
 }
 </style>

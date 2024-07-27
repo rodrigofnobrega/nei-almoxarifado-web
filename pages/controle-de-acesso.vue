@@ -6,9 +6,10 @@
         	    <IconsInformation class="me-2"/>
         	    Descrição da página 
         	</h6>
-        	<p class="sub-catalog-text opacity-75 mb-0">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
-        	    Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
-        	<span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
+        	<p class="sub-catalog-text opacity-75 mb-0">
+				É por meio desta página que a administração irá controlar as solicitações de itens do almoxarifado, aceitando-as ou recusando-as. Ademais pode-se atrelar 
+				uma mensagem de notificação para a resposta da solicitação.
+			</p>
     	</div>
 		<div class="row mt-3 d-flex align-items-center justify-content-center">
 			<div v-if="solicitations.length > 0" v-for="req in solicitations" :key="req.id" :class="{'extra-large': solicitations.length == 1, 'col-xl-6': solicitations.length == 2}" class="p-0 col-xl-4 col-lg-6 col-md-6 col-sm-12 mb-3 mb-xl-0"> 
@@ -49,11 +50,34 @@ sendDataToParent();
 
 const userStore = useUser()
 const res = await getRequestByStatus(userStore, 'pendente');
-const solicitations = ref(res.content)
+const solicitations = ref([])
+res.content.map((request) => {
+	solicitations.value.push(request)
+})
+if(res.totalPages > 1){
+	for(let i = 1; i < res.totalPages; i++){
+		const res = await getRequestByStatus(userStore, 'pendente', i);
+		res.content.map((request) => {
+			solicitations.value.push(request);
+		})
+	}
+}
 
 provide('setSolicitations', async () => {
+	console.log("WHATAFICL")
+	solicitations.value = []
 	const res = await getRequestByStatus(userStore, 'pendente');
-	solicitations.value = res.content
+	res.content.map((request) => {
+		solicitations.value.push(request)
+	})
+	if(res.totalPages > 1){
+	for(let i = 1; i < res.totalPages; i++){
+		const res = await getRequestByStatus(userStore, 'pendente', i);
+		res.content.map((request) => {
+			solicitations.value.push(request);
+		})
+	}
+}
 })
 </script>
 
@@ -66,8 +90,8 @@ provide('setSolicitations', async () => {
 	padding-left: 30px;
 }
 .warning-text{
-	position: absolute;
 	margin-top: 5%;
+	margin-bottom: 25%;
 	width: 80%;
 }
 .sub-catalog{

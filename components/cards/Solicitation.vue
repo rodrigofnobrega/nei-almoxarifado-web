@@ -1,12 +1,11 @@
 <template>
 	<Card class="mb-5 cards-grid">
 		<template v-slot:header>
-			<TooltipsRectangular class="tooltipMargin" :toolTipState="toolTip" :toolTipText="'Data e Horário da Solicitação'"/>
 			<div class="d-flex justify-content-between align-items-center">
 				<h6 class="justify-content-start mb-3">
 					Solicitação
     		    </h6>
-    		    <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{requestedAt.slice(0, 19)}}<IconsClock class="clock ms-2"/></p>
+    		    <p class="resquest-time mb-3">{{requestedAt.slice(0, 19)}}<IconsClock class="clock ms-2"/></p>
     		</div>
 		</template>
 		<template v-slot:default> 
@@ -51,29 +50,29 @@
 			</template>
 		<template v-slot:footer>
 			<div class="row justify-content-evenly"> 
-				<button class="action-btn btn btn-danger col-2 mx-2" data-bs-toggle="modal" :data-bs-target="`#rejectModal${requestId}`"> Rejeitar </button>
-				<button class="action-btn btn btn-outline-success col-2 mx-2" data-bs-toggle="modal" :data-bs-target="`#acceptModal${requestId}`"> Aceitar </button>
+				<button class="action-btn text-light btn fw-bold btn-dark-alert col-2 mx-2" data-bs-toggle="modal" :data-bs-target="`#rejectModal${requestId}`"> Rejeitar </button>
+				<button class="action-btn text-light btn fw-bold btn-dark-success col-2 mx-2" data-bs-toggle="modal" :data-bs-target="`#acceptModal${requestId}`"> Aceitar </button>
 			</div>
 		</template>
 	</Card>
 	<ModalActionConfirm :id="`acceptModal${requestId}`">
 		<template v-slot:title> Confirmar aceitação</template>
 		<template v-slot:text> 
-			<h6> Mensagem para a notificação </h6>
+			<p class="fw-bold"> Mensagem para a notificação </p>
 			<textarea class="form-control"> </textarea>
 		 </template>
 		<template v-slot:buttons> 
-			<button @click="AcceptRequest()" data-bs-dismiss="modal" class="btn btn-secondary mx-2"> Enviar </button>
+			<button @click="AcceptRequest()" data-bs-dismiss="modal" class="btn btn-secondary fw-bold mx-2"> Enviar </button>
 		</template>
 	 </ModalActionConfirm>
 	<ModalActionConfirm :id="`rejectModal${requestId}`">
 		<template v-slot:title> Confirmar rejeição </template>
 		<template v-slot:text> 
-			<h6> Mensagem para a notificação </h6>
+			<p class="fw-bold"> Mensagem para a notificação </p>
 			<textarea class="form-control"> </textarea>
 		 </template>
 		<template v-slot:buttons> 
-			<button @click="RejectRequest()"  data-bs-dismiss="modal" class="btn btn-secondary mx-2"> Enviar </button>
+			<button @click="RejectRequest()"  data-bs-dismiss="modal" class="btn btn-secondary fw-bold mx-2"> Enviar </button>
 		</template>
 	 </ModalActionConfirm>
 </template>
@@ -110,6 +109,7 @@ export default {
 			this.popupStore.throwPopup('Erro: Quantidade solicitada maior que a disponível', '#B71C1C')
 		},
 		async RejectRequest(){
+			console.log(this.requestId)
 			const res = await requestDecline(this.userStore, this.requestId);
 			if(res){
 				this.popupStore.throwPopup('Solicitação rejeitada', '#0B3B69');
@@ -163,6 +163,7 @@ export default {
 	font-size: 15px;
 }
 .action-btn{
+	font-size: 15px !important;
 	width: 90px;
 	font-size: 17px;
 	white-space: nowrap;

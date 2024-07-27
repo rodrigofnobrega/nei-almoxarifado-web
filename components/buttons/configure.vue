@@ -1,16 +1,17 @@
 <template>
     <div class="dropdown">
-        <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-ligth mx-1 px-2 mt-1" data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
+        <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-ligth mx-1 px-2 mt-1 text-nowrap" 
+        data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
             Mais ações
             <IconsSettings class="mx-1" width="1.5em" height="1.5em"/>
         </button>
         <ul class="dropdown-menu large-menu py-0">
-            <li class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2 pe-0">
-                <label class="form-check-label" for="editCheck">habilitar edição</label>
-                <input v-model="store.isEditionMode" @click="store.isEditionMode = !store.isEditionMode" class="form-check-input me-2" value="" id="editCheck" type="checkbox">
-            </li>
             <li class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2 pe-0 mb-0" style="padding-bottom: 4px;">
                 <a type="button" class="text-decoration-none import-text" href="/catalogo/importar-tabelas">importar tabelas</a>
+            </li>
+            <li type="button" class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2">
+                <label type="button" class="form-check-label" for="editCheck">habilitar edição</label>
+                <input v-model="store.isEditionMode" @click="store.isEditionMode = !store.isEditionMode" class="ms-2 p-2 mb-1 form-check-input" value="" id="editCheck" type="checkbox">
             </li>
         </ul>   
     </div>  
@@ -69,24 +70,22 @@ const sendDataToParent = (filter, isInverted) => {
     setItemsFilter(filter, isInverted)
 }
 
-onMounted(() => {
-    if(store.isMobile){
-        const btnText = document.querySelectorAll('.filter-btn');
-        btnText.forEach(element => element.style.fontSize = '9px');
-    }
-})
+
 </script>
 
 <style scoped>
 .large-menu{
-    width: 140px;
+    width: 155px;
     min-width: 110px;
 }
 li{
     list-style-type: none;
 }
-.dropdown-item{
+.dropdown-item, .dropdown-item a{
     font-size: 14px;
+    color: rgb(51,51,51, 0.9);
+
+    font-weight: 600;
 }
 .form-check-input{
     border: 1px solid rgb(0, 0, 0, 0.3);
@@ -119,10 +118,7 @@ li{
 .form-check-input:checked{
     background-color: #1F69B1 !important;
 }
-.import-text{
-    color: rgb(0, 0, 0, 0.9);
-}
-.dropdown-item:hover .import-text{
+.dropdown-item:hover .import-text, .dropdown-item:hover{
     color: white !important;
 }
 .action-btn:hover{

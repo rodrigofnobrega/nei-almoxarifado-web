@@ -1,11 +1,19 @@
 <template>
     <div class="dropdown">
-        <button @click.stop @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="dropdown-principal filter-btn action-btn d-flex btn btn-outline-ligth mx-1 px-2 mt-1" data-bs-toggle="dropdown" data-bs-close="inside" data-bs-offset="0,2" aria-expanded="false">
-            Filtro
-            <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
-        </button>
+        <button v-if="settingsStore.isMobile" @click.stop @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" 
+        class="dropdown-principal mt-1 filter-btn action-btn d-flex btn btn-outline-ligth mx-1 px-2"  
+        data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
+        Filtro
+        <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
+    </button>
+    <button v-else @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" 
+        class="dropdown-principal mt-1 filter-btn action-btn d-flex btn btn-outline-ligth mx-1 px-2"  
+        data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
+        Filtro
+        <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
+    </button>
         <ul class="dropdown-menu large-menu">
-            <li>
+            <!--<li>
                 <div class="vue-dropdown" @click="ClicktoggleDropdown(0)" @mouseover="toggleDropdown(0)" @mouseout="toggleDropdown(0)">
                     <div class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
                         atualização
@@ -24,7 +32,7 @@
                         </li>
                     </ul>
                 </div>
-            </li>
+            </li>-->
             <li>
                 <div class="vue-dropdown" @click="ClicktoggleDropdown(1)"  @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
                     <div  class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
@@ -93,9 +101,10 @@
 import { inject, onMounted} from 'vue';
 import { useUser } from '../../stores/user';
 import { useStorageStore } from '../../stores/storage';
+import { useSettingsStore } from '../../stores/settings';
 
 
-
+const settingsStore = useSettingsStore();
 const toolTip = ref(false);
 const store = useStorageStore();
 
@@ -119,15 +128,6 @@ const sendDataToParent = (filter, isInverted) => {
     setItemsFilter(filter, isInverted)
 }
 
-onMounted(() => {
-    if(store.isMobile){
-        const btnText = document.querySelectorAll('.filter-btn');
-        const dropdownToggle = document.querySelector('.dropdown-principal');
-        dropdownToggle.removeAttribute('data-bs-auto-close')
-        dropdownToggle.setAttribute('data-bs-auto-close', 'outside')
-        btnText.forEach(element => element.style.fontSize = '9px');
-    }
-})
 </script>
 
 <style scoped>
@@ -149,7 +149,11 @@ li{
     height: 65px;
     min-width: 40px;
 }
-
+.filter-btn{
+    font-size: 14px;
+    color: rgb(51,51,51, 0.9);
+    font-weight: 600;
+}
 .dropdown-item{
     width: 130px;
     padding: 0px;
@@ -185,6 +189,12 @@ li{
 }
 @media screen and (max-width: 820px){
     .action-btn{
+        font-size:  12px;
+    }
+}
+/*
+@media screen and (max-width: 820px){
+    .action-btn{
         font-size: 12px;
     }
     .filter-btn{
@@ -209,5 +219,5 @@ li{
         width: 15px;
         height: 15px;
     }
-}
+} */
 </style>

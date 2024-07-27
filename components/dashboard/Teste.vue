@@ -149,6 +149,9 @@ const changeLabel = (index) => {
 </script>
 
 <style scoped>
+li{
+  color: #79b1e9
+}
 .chart-container {
   display: flex;
   flex-wrap: wrap;

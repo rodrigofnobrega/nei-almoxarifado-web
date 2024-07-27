@@ -5,8 +5,8 @@
 				<div class="modal-header">
             <div class="search-bar d-flex mx-1">
                 <form class="ms-0 NavigateToItem d-flex align-items-center" role="search">
-                  <label>
-                    <IconsSearchGlass class="search-icon p-1" width="40px" height="41px" style="border: 1px solid rgb(51, 51, 51, 0.2); border-right: 0;"/>
+                  <label class="search-label">
+                    <IconsSearchGlass class="search-icon p-1" width="40px" height="41px"/>
                   </label>
                   <input class="form-control outline-warning p-0" v-model="searchQuery" @input="handleSearch" type="search" placeholder="Pesquisar" autofocus>
                 </form>
@@ -133,10 +133,13 @@ export default {
 </script>
 
 <style scoped>
+.search-label{
+background-color: white;
+color: rgb(51,51,51, 0.9);
+}
 .search-icon{
-  border-right: 0;
-  color: #333333;
-  background-color: white;
+border: 1px solid rgb(51, 51, 51, 0.2); 
+border-right: 0;
 }
 .form-control{
   border: 1;

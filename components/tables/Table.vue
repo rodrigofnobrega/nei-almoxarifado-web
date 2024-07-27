@@ -1,6 +1,6 @@
 <template>
     <ModalItemRegister />
-    <div class="container-fluid mx-0 px-0 col-12 rounded">
+    <div style="overflow-x: scroll;" class="container-fluid mx-0 px-0 col-12 rounded">
         <table class="table table-hover border">
           <thead>
             <slot name="header" />
@@ -17,13 +17,6 @@ import { onMounted } from 'vue';
 import { useStorageStore } from '../../stores/storage';
 
 const store = useStorageStore();
-onMounted(() => {
-    if(store.isMobile){
-        const columnTitles = document.querySelectorAll('.col-title');
-        columnTitles.forEach(element => element.style.fontSize = '8px')
-    }
-
-})
 
 </script>
 
@@ -41,7 +34,10 @@ table{
     margin-bottom: 0px;
     width: 100%;
 }
-
+thead {
+    position: sticky !important;
+    top: -1px !important;
+}   
 .col-title{
     font-size: 18px;
     opacity: 80%;
@@ -83,7 +79,7 @@ tr:hover .table-btn{
 tr:hover p{
     opacity: 70%;
 }
-
+/*
 @media screen and (max-width: 1030px) {
     .col-title{
         font-size: 13px;
@@ -119,5 +115,5 @@ tr:hover p{
     .table-btn{
         font-size: 11px;
     }
-}
+}*/
 </style>

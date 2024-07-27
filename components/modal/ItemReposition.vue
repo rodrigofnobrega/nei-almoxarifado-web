@@ -1,7 +1,7 @@
 <template>
     <Modal id="itemReposition" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
-            <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Reposição do item</h6>
+            <p class="header-title d-flex fw-medium justify-content-start fw-bold align-items-center">Reposição de quantidade</p>
             <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
             </button>
@@ -17,8 +17,8 @@
         <template v-slot:footer>
             <div class="d-flex">
                 <div class="container-fluid d-flex justify-content-center align-items-center">
-                    <button @click="reposition" data-bs-dismiss="modal" type="button" class="btn mx-2 btn-light-success inset-shadow text-light">Confirmar</button>
-                    <button data-bs-dismiss="modal" type="button" class="btn btn-light-alert text-light inset-shadow">Cancelar</button>
+                    <button @click="reposition" data-bs-dismiss="modal" type="button" class="btn modal-btn mx-2 fw-bold btn-dark-success inset-shadow text-light">Confirmar</button>
+                    <button data-bs-dismiss="modal" type="button" class="btn modal-btn btn-light-alert fw-bold text-light inset-shadow">Cancelar</button>
                 </div>
             </div>
         </template>
@@ -70,8 +70,7 @@ const reposition = () => {
 
 <style scoped>
 .inset-shadow{
-    padding: 6px 10px 6px 10px;
-    box-shadow: inset 1px 1px 15px 1px rgb(0, 0, 0, 0.2);
+    padding: 5px;
 }
 .close{
     position: relative;
@@ -83,7 +82,7 @@ const reposition = () => {
     padding: 0;
 }
 .modal-btn{
-    border-radius: 10px;
+    border-radius: 5px;
 }
 @media screen and (max-width: 424px){
     .form-label{

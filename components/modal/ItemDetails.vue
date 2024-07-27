@@ -1,7 +1,7 @@
 <template>
     <Modal id="itemDetailing" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
         <template v-slot:header>
-            <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Detalhes do item</h6>
+            <p class="header-title d-flex fw-bold justify-content-start align-items-center">Detalhes do item</p>
             <button class="btn btn-transparent text-light close-btn" type="button" data-bs-dismiss="modal">
                 <IconsClose class="close ms-5 s-5" width="1.3em" height="1.3em"/>
             </button>
@@ -21,9 +21,9 @@
 						<label class="form-label fw-bold"> Tipo </label>
 						<input readonly class="form-control bg-light-emphasis" :value="item_details.type"> 
 					</div>
-                    <div v-if="item_details.lastRecord != undefined" class="mb-3" style="width: 212%">
+                    <div v-if="item_details.lastRecord != undefined" class="mb-3">
                         <label class="form-label fw-bold"> Última atualização </label>
-                        <input readonly class="form-control bg-light-emphasis" id="expansible-form" @mouseover="inputExpand" @mouseleave="inputContract" :value="`${item_details.lastRecord.operation} ${item_details.lastRecord.creationDate === undefined? item_details.lastRecord.data.slice(0, 16) : item_details.lastRecord.creationDate.slice(0, 16)} ${item_details.lastRecord.user.name}`">
+                        <input readonly class="form-control bg-light-emphasis" id="expansible-form" :value="`${item_details.lastRecord.operation} ${item_details.lastRecord.creationDate === undefined? item_details.lastRecord.data.slice(0, 19) : item_details.lastRecord.creationDate.slice(0, 19)} ${item_details.lastRecord.user.name}`">
                     </div>	
 				</div>
 				<div class="col-6">
@@ -45,24 +45,29 @@
 						<label class="form-label fw-bold"> Criador </label>
 						<input readonly class="form-control bg-light-emphasis" :value="item_details.createdBy.name"> 
 					</div>
+                    <div class="mb-3"> 
+                        <label class="form-label fw-bold"> Disponibilidade </label>
+						<input readonly class="form-control bg-light-emphasis" :value="item_details.available === true ? 'disponível' : 'esgotado'"> 
+					</div>	
 				</div>
 			</div>
         </template>
         <template v-slot:footer>
             <div class="d-flex">
-                <div v-if="userStore.role === 'ADMIN' && store.isEditionMode" class="container-fluid d-flex justify-content-center align-items-center">
-                    <!--<button class="btn mode-btn inset-shadow btn-dark-alert mx-1" :class="{'d-none': editionActive, 'd-block': !editionActive}" @click="deleteItem" id="itemDelete" data-bs-dismiss="modal">Excluir</button>-->
-                    <button type="button" class="btn inset-shadow btn-light-alert text-light mx-1" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="revertEdition" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn inset-shadow mode-btn btn-primary mx-1" @click="setEdition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>
-                    <button class="btn inset-shadow btn-light-success text-light mx-1" id="fetch-inputs" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="fetchNewData" data-bs-dismiss="modal">Confirmar</button>
-                </div>
-                <div v-if="userStore.role === 'ADMIN' && item_route !== 'registro'" class="d-flex align-items-center justify-content-center">
-                    <button class="btn inset-shadow mode-btn btn-secondary mx-1" data-bs-toggle="modal" data-bs-target="#itemReposition">
-                        Reposição</button>
+                <div v-if="userStore.role === 'ADMIN' && item_route !== 'registro'" class="d-flex align-items-center justify-content-start">
+                    <div v-if="userStore.role === 'ADMIN' && store.isEditionMode" class="container-fluid d-flex justify-content-center align-items-center px-0 mx-0">
+                        <!--<button class="btn mode-btn inset-shadow btn-dark-alert mx-1" :class="{'d-none': editionActive, 'd-block': !editionActive}" @click="deleteItem" id="itemDelete" data-bs-dismiss="modal">Excluir</button>-->
+                        <button type="button" class="btn modal-btn fw-bold inset-shadow mode-btn btn-light-alert text-light fw-bold mx-1" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="revertEdition" data-bs-dismiss="modal">Cancelar</button>
+                        <button class="btn modal-btn fw-bold inset-shadow mode-btn btn-primary fw-bold mx-1" @click="setEdition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>
+                        <button class="btn modal-btn fw-bold inset-shadow mode-btn btn-dark-success text-light fw-bold mx-1" id="fetch-inputs" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="fetchNewData" data-bs-dismiss="modal">Confirmar</button>
+                    </div>
+                    <button title="Reposição da quantidade do item" class="btn modal-btn fw-bold inset-shadow mode-btn btn-secondary fw-bold ms-1 me-2" data-bs-toggle="modal" data-bs-target="#itemReposition">
+                        Reposição
+                    </button>
                 </div>
                 <div v-if="userStore.role === 'USER'" class="d-flex align-items-center justify-content-center">
-                    <button class="btn btn-light-alert text-light mx-1" data-bs-dismiss="modal">Fechar</button>
-                    <button class="btn btn-secondary text-light mx-1" data-bs-toggle="modal" data-bs-target="#actionConfirm">Solicitar</button>
+                    <button class="btn btn-secondary fw-bold text-light mx-1" data-bs-toggle="modal" data-bs-target="#actionConfirm">Solicitar</button>
+                    <button class="btn btn-light-alert fw-bold text-light mx-1" data-bs-dismiss="modal">Fechar</button>
                 </div>
                 <div v-if="userStore.role === 'ADMIN'" @click="getRecord" data-bs-target="#itemHistory" data-bs-toggle="modal" title="Histórico" type="button" class="btn btn-primary  my-1 bg-primary rounded-2 p-1 d-flex justify-content-end text-light">
                     <IconsHistory width="25px" height="25px"/>
@@ -136,9 +141,8 @@ export default {
             }
         },
         fetchNewData(){
-            this.store.updateItemQtd(this.item_index, this.inputs[0].value, this.inputs[1].value,this.item_route);
+            this.store.updateItems(this.item_details.id, this.inputs[0].value, this.inputs[1].value);
             this.revertEdition();
-            this.store.isReloadItems = true;
         },
         async getRecord(){
             const res = await getRecordByItemId(this.userStore,this.item_details.id);
@@ -167,24 +171,22 @@ export default {
 </script>
 
 <style scoped>
+.btn{
+    padding: 6px;
+}
 .mode-btn{
     font-size: 15px;
-}
-.inset-shadow{
-    padding: 6px 10px 6px 10px;
-    box-shadow: inset 1px 1px 15px 1px rgb(0, 0, 0, 0.2);
 }
 .close{
     position: relative;
     left: 20px;
 }
 .header-title{
-    font-weight: semibold;
     margin: -1px 0 -1px 0;
     padding: 0;
 }
 .modal-btn{
-    border-radius: 10px;
+    border-radius: 5px;
 }
 @media screen and (max-width: 424px){
     .form-label{

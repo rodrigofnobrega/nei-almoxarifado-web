@@ -9,13 +9,17 @@
               </span>
             </button>
             <ul class="dropdown-menu notification-menu py-2">
-              <li v-for="(request, index) in requests" :key="index" class="dropdown-item notification">
+              <li v-for="(request, index) in requests" :key="index" class="text-end dropdown-item notification">
                 <div class="text-dark-emphasis d-flex align-items-center">
-                  <IconsWarning class="me-2 notification-text"/>
-                  <p class="notification-text m-0 p-0">{{request.user.name}} solicitou {{ request.quantityRequested }} "{{request.item.name}}"
+                  <div>
+                    <IconsWarning wdith="24px" height="26px" class="me-2 mt-0 notifications-text"/>
+                  </div>
+                  <p class="notification-text text-wrap m-0 p-0">{{request.user.name}} solicitou {{ request.quantityRequested }} "{{request.item.name}}"
                   </p>
                  </div>
-                <span class="notification-text ms-0 opacity-75 text-dark-emphasis">Há {{ passedDate[index].month }} {{ passedDate[index].day }} {{ passedDate[index].hour }} {{ passedDate[index].minute }}</span>
+                <span class="notification-text ms-0 opacity-75 text-dark-emphasis">
+                  Feita em {{ request.creationDate.slice(0, 19) }}
+                </span>
               </li>
               <li v-show="!isNotification || requests.length === 0" class=" dropdown-item fs-6 text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
             </ul>
@@ -37,7 +41,7 @@
                 Configurações
                 <IconsSettings />
               </a></li>  
-              <li><button @click="logout()" class="exit-options py-1 ps-2 dropdown-item d-flex align-items-center justify-content-between">
+              <li><button @click="logout()" class="btn exit-options py-1 ps-2 dropdown-item d-flex align-items-center justify-content-between">
                 Sair
                 <IconsExit />
               </button></li>
@@ -59,11 +63,6 @@ const userStore = useUser();
 const pagination = ref(0);
 const requests = ref([]);
 
-let passedDate = [];
-function toPositive(number) {
-  return Math.abs(number);
-}
-
 const loadNotifications = async () => {
   const res = await getRequestByStatus(userStore, 'pendente', pagination.value);
   res.content.map((request) => {
@@ -80,29 +79,6 @@ const loadNotifications = async () => {
     }
   }
 
-  for (let i = 0; i < requests.value.length; i++) {
-    passedDate[i] = {};
-
-    const creationDate = new Date(requests.value[i].creationDate);
-
-    let monthDiff = toPositive(actualDate.getMonth() - creationDate.getMonth());
-    passedDate[i].month = monthDiff > 0 ? (monthDiff === 1 ? `${monthDiff} mês` : `${monthDiff} meses`) : '';
-
-    let dayDiff = toPositive(actualDate.getDate() - creationDate.getDate());
-    passedDate[i].day = dayDiff > 0 ? (dayDiff === 1 ? `${dayDiff} dia` : `${dayDiff} dias`) : '';
-
-    let hourDiff = actualDate.getHours() - creationDate.getHours();
-    let minuteDiff = actualDate.getMinutes() - creationDate.getMinutes();
-
-    if (minuteDiff < 0) {
-      minuteDiff += 60;
-      hourDiff--; 
-    }
-
-    passedDate[i].hour = hourDiff > 0 ? (hourDiff === 1 ? `${hourDiff} hora` : `${hourDiff} horas`) : '';
-
-    passedDate[i].minute = minuteDiff > 0 ? (minuteDiff === 1 ? `${minuteDiff} minuto` : `${minuteDiff} minutos`) : '';
-  }
 }
 
 const isNotification = ref(true)
@@ -144,6 +120,7 @@ onMounted(async () => {
 }
 .notification-menu{
   max-height: 160px;
+  min-width: 300px;
   overflow-y: scroll;
 }
 .small-loader{

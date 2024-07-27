@@ -91,7 +91,7 @@ export default {
       while (this.searchResults.length < 20 && this.pagination < this.totalPages) {
         if (this.pagination < this.store.items.length) {
           this.store.items[this.pagination].map((item) => {
-            if (item.name.includes(this.searchQuery)) {
+            if (item.name.toLowerCase().includes(this.searchQuery.toLowerCase())) {
               this.searchResults.push(item);
             }
           });
@@ -100,7 +100,7 @@ export default {
           this.totalPages = res.totalPages;
           this.store.items.push(res.content);
           res.content.map((item) => {
-            if (item.name.includes(this.searchQuery)) {
+            if (item.name.toLowerCase().includes(this.searchQuery.toLowerCase())) {
               this.searchResults.push(item);
             }
           });
