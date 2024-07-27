@@ -59,7 +59,7 @@
         <div class="users-management-scroll">
           <TablesTable v-if="users.content && users.content.length">
             <template v-slot:header>
-              <tr>
+              <tr class="col-line">
                 <th class="col-title text-center py-2" scope="col">Usuário</th>
                 <th class="col-title text-center py-2" scope="col">Email</th>
                 <th class="col-title text-center py-2" scope="col">Encargo</th>
@@ -68,8 +68,8 @@
             </template>
             <template v-slot:content>
               <tr v-for="user in users.content" :key="user.id">
-                <th class="text-center table-cell text-start" scope="row">
-                  <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
+                <th class="text-center table-cell text-start justify-content-center" scope="row">
+                  <IconsPerfil class="me-3 opacity-70" width="30px" height="30px" />
                   {{ user.name }}
                 </th>
                 <th class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
@@ -100,7 +100,7 @@
       </div>
       <TablesTable v-if="records.content && records.content.length">
         <template v-slot:header>
-          <tr>
+          <tr class="col-line">
             <th class="col-title table-col text-center py-2" scope="col">Usuário</th>
             <th class="col-title table-col text-center py-2" scope="col">Movimentação</th>
             <th class="col-title table-col text-center py-2" scope="col">Item</th>
@@ -114,7 +114,7 @@
           <tr v-for="(record, index) in records.content" :key="record.id" class="text-center"> 
             <th class="table-cell mov-cell" scope="row">
               <div class="d-flex table-text align-items-center " style="padding-top: 0px;">
-                <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
+                <IconsPerfil class="me-3 mb-0 opacity-70" width="30px" height="30px" />
                 {{ record.user.name }}
               </div>
             </th>
@@ -356,9 +356,12 @@ h5{
 .col-title{
   font-size: 14px;
   color: rgb(51,51,51, 0.9);
-  opacity: 90%;
+  opacity: 99%;
   font-weight: bold;
   margin-top: 0;
+}
+.col-line {
+  border-bottom: 1px solid rgba(80, 76, 76, 0.174);
 }
 .table-cell{
   z-index: 1000 !important;

@@ -1,11 +1,11 @@
 <template>
     <ModalItemRegister />
-    <div style="overflow-x: scroll;" class="container-fluid mx-0 px-0 col-12 rounded">
+    <div class="container-fluid mx-0 px-0 col-12 rounded">
         <table class="table table-hover border">
           <thead>
             <slot name="header" />
           </thead>
-          <tbody>
+          <tbody style="overflow-x: scroll;">
            <slot name="content" />
           </tbody>
         </table>
@@ -21,6 +21,12 @@ const store = useStorageStore();
 </script>
 
 <style scoped>
+thead {
+    position: sticky;
+    top: 0px;
+    z-index: 1000;
+}
+
 .container{
     margin-left: -1px;
     width: 100%;
