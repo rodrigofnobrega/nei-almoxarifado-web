@@ -33,7 +33,7 @@
 					</div>	
 					<div class="mb-3"> 
 						<label class="form-label fw-semibold"> Código Sipac </label>
-						<input readonly class="form-control" :value="itemTag"> 
+						<input readonly class="form-control" :value="itemTag ? itemTag : 'nenhum'"> 
 					</div>	
 					<div class="mb-0"> 
 						<label class="form-label fw-semibold"> Tipo </label>

@@ -145,11 +145,6 @@ function checkIfMobile() {
 .darkLayout h6{
   color: rgb(255,255,255,0.8) !important;
 }
-.darkLayout li{
-  background-color: #1A1A1A !important;
-  border: solid 1px #333333 !important;
-  color: rgb(255,255,255,0.8) !important;
-}
 .darkLayout a{
   color: rgb(255,255,255,0.8) !important;
 }
