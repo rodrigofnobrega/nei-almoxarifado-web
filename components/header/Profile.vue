@@ -96,10 +96,11 @@ async function getUsername(){
   user.value.username = res.name;
 }
 const totalElements = ref(0);
+
 onMounted(async () => {
   const res = await getRequestByStatus(userStore, 'pendente', pagination.value);
   totalElements.value = res.totalElements;
-  if(JSON.parse(localStorage.getItem('notifications')).length > 0){
+  if(JSON.parse(localStorage.getItem('notifications'))){
     if(JSON.parse(localStorage.getItem('notifications-meta')).totalElements !== totalElements.value){
       await loadNotifications();
       return 1;

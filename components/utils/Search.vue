@@ -89,24 +89,17 @@ export default {
     },
     async fetchSearchResults() {
       while (this.searchResults.length < 20 && this.pagination < this.totalPages) {
-        if (this.pagination < this.store.items.length) {
-          this.store.items[this.pagination].map((item) => {
-            if (item.name.toLowerCase().includes(this.searchQuery.toLowerCase())) {
-              this.searchResults.push(item);
-            }
-          });
-        } else {
+
           const res = await getItems(this.userStore, this.pagination, 'id,desc');
           this.totalPages = res.totalPages;
           this.store.items.push(res.content);
           res.content.map((item) => {
-            if (item.name.toLowerCase().includes(this.searchQuery.toLowerCase())) {
+            if (item.name.includes(this.searchQuery)) {
               this.searchResults.push(item);
             }
           });
+          this.pagination++;
         }
-        this.pagination++;
-      }
     },
     async itemsReq() {
       const res = await getItems(this.userStore, this.pagination, 'id,desc');

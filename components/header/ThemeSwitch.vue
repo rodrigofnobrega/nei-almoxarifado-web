@@ -1,6 +1,6 @@
 <template>
-    <div class="form-check form-switch">
-        <input @click="themeSwitch" v-model="teste" class="form-check-input shadow-none" type="checkbox" role="switch" id="flexSwitchCheckDefault"> 
+    <div class="form-check mx-0 px-0 form-switch">
+        <input @click="themeSwitch" v-model="teste" class="form-check-input shadow-none mx-0" type="checkbox" role="switch" id="flexSwitchCheckDefault"> 
     </div>
 </template>
 
@@ -17,14 +17,16 @@ const themeSwitch = () => {
 </script>
 
 <style scoped>
-.form-check-input{
-    padding: 8px;
-}
 .form-check{
+    margin-right: -10px !important;
     padding-top: 8px;
     margin-bottom: -1px;
     height: 45px;
     transition: box-shadow 0.4s ease, border-bottom 0.4s ease-in-out;
+}
+.form-check-input{
+    padding: 8px;
+    margin-right: -10px;
 }
 .form-check:hover{
   border-bottom: solid 1px #FED51E;

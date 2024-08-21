@@ -12,7 +12,7 @@
         </div>
         <ThemeSwitch class="mt-1"/>
         <ModalSearch/>
-        <Profile />
+        <Profile class="ms-4"/>
       </div>     
     </div>
 </template>

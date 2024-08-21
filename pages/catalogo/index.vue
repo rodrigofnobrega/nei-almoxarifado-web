@@ -1,5 +1,6 @@
 <template>
-    <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="searchItem ? searchItem : store.itemDetails" />
+    <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" 
+        :item_details="searchStore.itemSearch.searching ? searchItem : store.itemDetails" />
     <ModalItemHistory v-if="itemsCache.length > 0"/>
 <div class="table-container d-block mt-2">
     <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
@@ -64,12 +65,10 @@
                     </div>
                </th>
                <th class="border" width="5%">
-                   <TooltipsFastRectangular class="toolTip me-5 pe-5 mb-5" style="margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
-                   <TooltipsFastRectangular class="toolTip me-5 pe-5" style="margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Histórico'"/>
-                    <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                   <button title="Detalhes" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
                         <IconsSearchGlass width="18px" height="19px"/>
                     </button>
-                    <button @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false" class="my-0 position-sticky table-btn btn btn-secondary"   @click="showHistory(item.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                    <button title="Histórico" class="my-0 position-sticky table-btn btn btn-secondary"   @click="showHistory(item.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
                         <IconsHistory width="18px" height="19px"/>
                     </button>
                </th>
@@ -86,9 +85,9 @@
         </template>
         </TablesTable>
         <div class="table-footer d-flex justify-content-between align-items-center  mt-2">
-            <div class="d-flex justify-content-center me-3 ">
+            <div class="d-flex justify-content-center py-2 me-3 ">
                 <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span>
-                <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de itens: {{ totalElements }}</span>
+                <span v-if="itemsCache.length > 0 && finded.length === 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de itens: {{ totalElements }}</span>
             </div>
             <nav v-if="itemsCache.length > 0 && finded.length === 0" aria-label="Page navigation" class="pagination">
                 <ul class="pagination mb-2 mt-2">
@@ -255,12 +254,12 @@ const itemsLoad = computed(async() => {
         return 0;
     }
     if(searchInput.value === '' && isSearching.value === true){
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(() => {
-                store.isReloadItems = true;
-                isSearching.value = false;
-            }, debounceTime-500);
-            finded = [];
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => {
+            store.isReloadItems = true;
+            isSearching.value = false;
+        }, debounceTime-500);
+        finded = [];
     }
     for(let i = 0; i < reqsIndexCache.length; i++){
         if(pagination.value === reqsIndexCache[i]){
@@ -373,6 +372,7 @@ const backPage = (async () => {
 });
 /*FUNÇÕES PARA OS BOTÕES DE DETALHE E HISTÓRICO*/
 const showDetails = (index) => {
+    searchStore.itemSearch.searching = false;
     itemIndex.value = index;
     store.itemDetails = itemsCache.value[cacheIndex.value][itemIndex.value];
 }
@@ -386,15 +386,13 @@ const showSearchingDetails = async (itemId) => {
     const res = await getItem(userStore, itemId);
     searchItem.value = res;
     const searching = document.getElementsByClassName('searching-btn'); 
-    searching[0].click()
+    searching[0].click();
 }
-const toolTipState = ref([[], []]);
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     initialLoading.value = false;
     if(searchStore.itemSearch.searching){
         showSearchingDetails(searchStore.itemSearch.itemId);
-        searchStore.itemSearch.searching = false;
     }
 });
 </script>

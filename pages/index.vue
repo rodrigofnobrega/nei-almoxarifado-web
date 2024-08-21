@@ -68,9 +68,11 @@
             </template>
             <template v-slot:content>
               <tr v-for="user in users.content" :key="user.id">
-                <th class="text-center table-cell text-start" scope="row">
-                  <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
-                  {{ user.name }}
+                <th class="table-cell" scope="row">
+                  <div class="d-flex justify-content-start align-items-center">
+                    <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
+                    {{ user.name }}
+                  </div>
                 </th>
                 <th class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
                   {{ user.email }}

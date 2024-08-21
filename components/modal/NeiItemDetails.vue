@@ -21,32 +21,18 @@
 						<label class="form-label fw-bold"> Tipo </label>
 						<input readonly class="form-control bg-light-emphasis" :value="item_details.type"> 
 					</div>
-                    <div v-if="item_details.lastRecord != undefined" class="mb-3">
-                        <label class="form-label fw-bold"> Última atualização </label>
-                        <input readonly class="form-control bg-light-emphasis" id="expansible-form" :value="`${item_details.lastRecord.operation} ${item_details.lastRecord.creationDate === undefined? item_details.lastRecord.data.slice(0, 19) : item_details.lastRecord.creationDate.slice(0, 19)} ${item_details.lastRecord.user.name}`">
-                    </div>	
 				</div>
 				<div class="col-6">
-                    <!--
                     <div class="mb-3"> 
                         <label class="form-label fw-bold"> Inventário </label>
 						<input readonly class="form-control bg-light-emphasis" :value="item_route"> 
 					</div>
-                    -->	
                     <div class="mb-3"> 
                         <label class="form-label fw-bold"> Quantidade </label>
 						<input readonly class="form-control bg-light-emphasis" :value="item_details.quantity"> 
 					</div>	
-					<div v-if="item_details.createdAt != undefined" class="mb-3"> 
-                        <label class="form-label fw-bold"> Data de Registro </label>
-						<input readonly class="form-control bg-light-emphasis" :value="item_details.createdAt.slice(0,19)"> 
-					</div>	
-                    <div v-if="item_details.createdBy != undefined" class="mb-3"> 
-						<label class="form-label fw-bold"> Criador </label>
-						<input readonly class="form-control bg-light-emphasis" :value="item_details.createdBy.name"> 
-					</div>
                     <div class="mb-3"> 
-                        <label class="form-label fw-bold"> Disponibilidade </label>
+                        <label class="form-label fw-bold"> Situação </label>
 						<input readonly class="form-control bg-light-emphasis" :value="item_details.available === true ? 'disponível' : 'esgotado'"> 
 					</div>	
 				</div>
@@ -75,45 +61,6 @@
             </div>
         </template> 
     </Modal>
-    <ModalItemHistory v-if="toggleHistory"/>
-    <ModalItemReposition v-if="item_details != undefined" :itemName="item_details.name" :itemSipac="item_details.sipacCode" :itemType="item_details.type" :itemIndex="item_index"/>
-    <ModalActionConfirm>
-        <template v-slot:title> Confirmar aceitação </template>
-        <template v-slot:text> 
-            <div class="d-block">
-                <div class="d-flex">
-                    <div class="d-block mb-2 pe-2">
-                        <label for="item-name">Nome do Item</label>
-                        <input readonly class="form-control bg-light-emphasis" :value="item_details.name">
-                    </div>
-                    <div class="d-block mb-2 ps-2">
-                        <label for="item-name">Quantidade Disponível</label>
-                        <input readonly class="form-control bg-light-emphasis" :value="item_details.quantity">
-                    </div>
-                </div>
-                <div class="d-flex">
-                    <div class="d-block mb-2 pe-2">
-                        <label for="item-name">Tipo unitário</label>
-                        <input readonly class="form-control bg-light-emphasis" :value="item_details.type">
-                    </div>
-                    <div class="d-block mb-2 ps-2">
-                        <label for="item-name">Situação</label>
-                        <input readonly class="form-control bg-light-emphasis" :value="item_details.available === true ? 'disponível' : 'indisponível'">
-                    </div>
-                </div>
-                <h6 class="text-dark"> Mensagem para a solicitação </h6>
-                <textarea v-model="description" class="form-control textarea"> </textarea>
-                <div class="d-block mt-2">
-                    <label for="item-qtd">Quantidade a ser solicitada</label> 
-                    <input class="form-control" style="width: 225px !important;" v-model="itemQtd" type="number" pattern="[0,9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-                </div>
-            </div>
-        </template>
-        <template v-slot:buttons> 
-            <button @click="sendRequest()" data-bs-dismiss="modal" class="btn btn-secondary fw-bold mx-2"> Enviar </button>
-            <button data-bs-dismiss="modal" class="btn btn-light-alert fw-bold text-light mx-2"> Cancelar </button>
-        </template>
-    </ModalActionConfirm>
 </template>
 
 <script>

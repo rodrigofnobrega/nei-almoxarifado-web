@@ -23,7 +23,7 @@
         </div>
         <SearchBar :class="{'d-none': settingsStore.isMobile}"  class="pb-1"/>
         <ThemeSwitch class="mt-1"/>
-        <Profile />
+        <Profile class="ms-4"/>
       </div>     
     </div>
     <UtilsSearch />

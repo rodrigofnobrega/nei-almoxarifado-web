@@ -88,6 +88,14 @@ function checkIfMobile() {
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
 }
+.darkLayout .card-body{
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout .card-footer{
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+}
 .darkLayout .modal-footer{
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
@@ -97,6 +105,12 @@ function checkIfMobile() {
   border: solid 1px #333333 !important;
 }
 .darkLayout input{
+  color: rgb(255,255,255,0.8) !important;
+  background-color: #1A1A1A;
+  border: solid 1px #333333;
+  border-left: none !important;
+}
+.darkLayout textarea{
   color: rgb(255,255,255,0.8) !important;
   background-color: #1A1A1A;
   border: solid 1px #333333;

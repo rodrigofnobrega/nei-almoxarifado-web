@@ -75,7 +75,7 @@
       </template>
   </TablesTable>
     <div class="table-footer d-flex justify-content-between align-items-center me-2 mt-2">
-      <div class="d-flex justify-content-center me-3 ">
+      <div class="d-flex justify-content-center py-2 me-3 ">
           <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de registros da página: {{ recordsCache[cacheIndex].length }}</span>
           <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de registros: {{ totalElements }}</span>
       </div>
@@ -141,6 +141,7 @@ let queryParams = ref({
     sort: 'id,desc', 
     isInverted: false
 });
+
 const recordsCache = ref([]);
 const searchCache = ref([])
 const cacheIndex = ref(0);
@@ -237,12 +238,12 @@ const recordsLoad = computed(async() => {
         await recordsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
         return 0;
     }
-    if(searchInput.value != ''){
-        isSearching.value = true;
+    if(searchInput.value !== ''){
         clearTimeout(typingTimer);
         typingTimer = setTimeout(() => {
             recordsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted)
         }, debounceTime);
+        isSearching.value = true;
         return 0;
     }
     if(searchInput.value === '' && isSearching.value === true){

@@ -1,5 +1,7 @@
 <template>
-<ModalNeiItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="searchItem ? searchItem : currentItem" />
+<ModalNeiItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" 
+    :item_details="searchStore.itemSearch.searching ? searchItem : store.itemDetails" />
+
 <ModalActionConfirm v-if="itemsCache.length > 0">
     <template v-slot:title> Confirmar aceitação </template>
     <template v-slot:text> 
@@ -119,7 +121,7 @@
         </template>
         </TablesTable>
     <div class="table-footer d-flex justify-content-between align-items-center  mt-2">
-        <div class="d-flex justify-content-center me-3 ">
+        <div class="d-flex justify-content-center py-2 me-3 ">
             <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span>
             <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de itens: {{ totalElements }}</span>
         </div>
@@ -161,6 +163,8 @@ import { getItem, getItems } from '../../services/items/itemsGET.ts';
 import { useUser } from '../../stores/user.ts';
 import { usePopupStore } from '../../stores/popup.ts';
 import { postRequest } from '../../services/requests/requestsPOST.ts';
+import { storeToRefs } from 'pinia';
+import Index from '../catalogo/index.vue';
 definePageMeta({
     layout: 'client'
 })
@@ -194,10 +198,21 @@ const totalPages = ref(0);
 const totalElements = ref(0);
 const isSearching = ref(false);
 let finded = [];
-const itemsReq = async (sort, isInverted, pagination, loadRequest, paginationInverted) => {
-    if(searchInput.value != ''){
+const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationInverted) => {
+    if(searchInput.value !== ''){
+        cacheIndex.value = 0;
+        itemsCache.value = [];
+        reqsIndexCache = [0]
+        pagination.value = 0;
+        paginationRet.value = 1;
+        initialLoading.value = false
+
+        pagesFocus.value[count] = false;
+        count = 0;  
+        pagesFocus.value[0] = true;
+
+
         finded = [];
-        store.isReloadItems = true;
         if(searchCache.value.length >= totalPages.value){
             for(let i = 0; i < searchCache.value.length; i++){
                 for(let j = 0; j < searchCache.value[i].length; j++){
@@ -253,7 +268,7 @@ const itemsReq = async (sort, isInverted, pagination, loadRequest, paginationInv
         itemsCache.value.push(res.content);
         return res.totalPages
     } 
-    const res = await getItems(userStore, pagination, sort)
+    const res = await getItems(userStore, pagination_, sort)
     totalPages.value = res.totalPages;
     totalElements.value = res.totalElements;
     invertedPagination.value = totalPages-1;
@@ -261,7 +276,6 @@ const itemsReq = async (sort, isInverted, pagination, loadRequest, paginationInv
     res.content.length === 0 ? null : itemsCache.value.push(res.content);
     return res.totalPages
 }; 
-
 
 const searchInput = ref("");
 const initialLoading = ref(true);
@@ -273,22 +287,21 @@ const itemsLoad = computed(async() => {
         await itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
         return 0;
     }
-    if(searchInput.value != ''){
+    if(searchInput.value !== ''){
         clearTimeout(typingTimer);
         typingTimer = setTimeout(() => {
             itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted)
         }, debounceTime);
         isSearching.value = true;
+        return 0;
     }
-    if(searchInput.value === ''){
-        if(isSearching.value === true){
+    if(searchInput.value === '' && isSearching.value === true){
             clearTimeout(typingTimer);
             typingTimer = setTimeout(() => {
                 store.isReloadItems = true;
                 isSearching.value = false;
             }, debounceTime-500);
             finded = [];
-        }
     }
     for(let i = 0; i < reqsIndexCache.length; i++){
         if(pagination.value === reqsIndexCache[i]){
@@ -308,8 +321,7 @@ provide('setItemsFilter', (filter, inverted) => {
 });
 //Variáveis que o front vai pegar em si
 const itemIndex = ref(0);
-const currentItem = computed(() => itemsCache.value[cacheIndex.value][itemIndex.value]);
-
+const currentItem = ref(undefined);
 const currentRoute = useRoute().fullPath.split('/')[2];
 
 
@@ -394,11 +406,13 @@ const backPage = (async () => {
 });
 /*FUNÇÕES PARA OS BOTÕES DE DETALHE E HISTÓRICO*/
 const showDetails = (index) => {
+    searchStore.itemSearch.searching = false;
     itemIndex.value = index;
+    store.itemDetails = itemsCache.value[cacheIndex.value][itemIndex.value];
 }
-
 const showConfirm = (index) => {
     itemIndex.value = index;
+    currentItem.value = itemsCache.value[cacheIndex.value][itemIndex.value];
 }
 const sendRequest = async () => {
     try{
@@ -413,52 +427,15 @@ const searchItem = ref(undefined)
 const showSearchingDetails = async (itemId) => {
     const res = await getItem(userStore, itemId);
     searchItem.value = res;
+    currentItem.value = res;
     const searching = document.getElementsByClassName('searching-btn'); 
-    searching[0].click()
+    searching[0].click();
 }
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     initialLoading.value = false;
     if(searchStore.itemSearch.searching){
         showSearchingDetails(searchStore.itemSearch.itemId);
-        searchStore.itemSearch.searching = false;
-    }
-    if(store.isMobile){
-        const catalogTextElement = document.querySelector('.sub-catalog p')
-        const textElements = document.querySelectorAll('tr p');
-        const searchBar = document.querySelector('.searchbar');
-        const searchBox = document.querySelector('.table-searchbar');
-        const tableLines = document.querySelectorAll('tr');
-
-        searchBox.style.fontSize = '8px';
-        searchBar.style.width = '100%';
-        searchBar.style.fontSize = '8px';
-        catalogTextElement.style.fontSize = '8px';
-        tableLines.forEach(element => {
-            element.addEventListener('click', (() => {
-                element.children[4].children[1].children[0].click()
-            }))
-        });
-        textElements.forEach(element => element.style.fontSize = '7px');
-    }
-});
-onUpdated(async () => {  
-    if(store.isMobile){
-        const catalogTextElement = document.querySelector('.sub-catalog p')
-        const textElements = document.querySelectorAll('tr p');
-        const searchBar = document.querySelector('.searchbar');
-        const tableLines = document.querySelectorAll('tr');
-
-        tableLines.forEach((element, index) => {
-            element.addEventListener('click', (() => {
-                element.children[4].children[1].children[0].click()
-            }))
-        });
-
-        searchBar.style.width = '100%';
-        searchBar.style.fontSize = '8px';
-        catalogTextElement.style.fontSize = '8px';
-        textElements.forEach(element => element.style.fontSize = '7px');
     }
 });
 </script>
@@ -469,8 +446,8 @@ onUpdated(async () => {
     display: block;
 }
 .table-container{
-    padding-top: 65px;
-    margin-bottom: 80px;
+    padding-top: 60px;
+    margin-bottom: 62px;
     width: 100%;
     display: block !important;
 }
@@ -655,7 +632,8 @@ tr:hover p{
     }
     .table-searchbar{
         min-width: 120px;
-        margin-top: -1px !important; 
+        margin-top: 8px !important; 
+        display: block;
     }
 }
 @media screen and (max-width: 600px){
@@ -669,6 +647,10 @@ tr:hover p{
         width: 25px;
         height: 25px;
     }
+    .table-actions{
+        width: 600px;
+        padding-left: 0px;
+    }
 } 
 @media screen and (max-width: 500px){
     .box-title-text{
@@ -676,6 +658,18 @@ tr:hover p{
     }
     .table-box-title{
         margin-top: 35px;
+    }
+    .table-actions{
+        padding-right: 0px !important;
+        display: block !important;
+    }.actions-btns{
+        padding-bottom: 9px;
+        border-radius: 0px 10px 0px 0px;
+        background-color: #D9D9D9;
+        justify-content: center;
+    }
+    .table-searchbar{
+        margin: 0px 20px 0px 20px;
     }
 }
 </style>
