@@ -1,7 +1,7 @@
 import axios from 'axios'
 //Atualiza um item
 export const putUpdateItem = async (userStore, item_id, item_name, item_sipac) => {
-    const { data } = await axios.put(`http://localhost:8080/api/v1/itens/${item_id}`, {
+    const { data } = await axios.put(`/itens/${item_id}`, {
         "name": item_name,
         "sipacCode": item_sipac
     },{
