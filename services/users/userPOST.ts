@@ -1,6 +1,6 @@
 import { useApi } from "../../composables/axios";
 export const postUser = async (name, email, password) => {
-    const { data } = await useApi().post("http://localhost:8080/api/v1/users", {
+    const { data } = await useApi().post("/users", {
         "name": name,
         "email": email,
         "password": password
