@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useApi } from '../../composables/axios';
 export const getRecords = async (userStore, page, sort) => {
     try{
@@ -24,8 +23,7 @@ export const getRecords = async (userStore, page, sort) => {
     }
 };
 export const getRecord = async (userStore, record_id) => {
-    const { data } = await axios(`/records/${record_id}`, {
-        method: 'GET',
+    const { data } = await useApi().get(`/records/${record_id}`, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${userStore.token}`
@@ -34,8 +32,7 @@ export const getRecord = async (userStore, record_id) => {
     return data
 };
 export const getRecordByEmail = async (userStore, email, page) => {
-    const { data } = await axios(`/records/query/users?email=${email}&page=${page}&sort=id,desc`, {
-        method: 'GET',
+    const { data } = await useApi().get(`/records/query/users?email=${email}&page=${page}&sort=id,desc`, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${userStore.token}`
@@ -44,8 +41,7 @@ export const getRecordByEmail = async (userStore, email, page) => {
     return data
 };
 export const getRecordByItemId = async (userStore, id) => {
-    const { data } = await axios(`/records/query/itens?id=${id}&sort=id,desc`, {
-        method: 'GET',
+    const { data } = await useApi().get(`/records/query/itens?id=${id}&sort=id,desc`, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${userStore.token}`
