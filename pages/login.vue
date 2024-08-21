@@ -188,10 +188,10 @@ const isValidSimpleEmail = (email) => {
       return emailRegex.test(email);
 };
 const isValidEmail = (email) => {
-	  const emailRegex = /^[^\s@]+@ufrn\.edu\.br$/;
+	  const emailRegex = /^[a-zA-Z0-9._%+-]+@nei\.ufrn\.br$/;
       return emailRegex.test(email);
 };
-
+	
 const loading = ref(false);
 const submitLogin = async () => {
 	const authData = await userStore.fetchData(password.value, email.value);
