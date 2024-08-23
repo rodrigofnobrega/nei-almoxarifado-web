@@ -2,7 +2,7 @@ import { useApi } from "../../composables/axios";
 //Aceitar Solicitação
 export const requestAccept = async (userStore, request_id) => {
     try{
-        const { data } = await useApi().patch(`http://localhost:8080/api/v1/requests/accept/${request_id}`, null, {
+        const { data } = await useApi().patch(`/requests/accept/${request_id}`, null, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userStore.token}`

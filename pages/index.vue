@@ -253,7 +253,7 @@ const fetchData = async () => {
     }
     
     items.value = await getItems(userStore, 0);
-    for (let i = 1; i < items.value.totalPages; i++) {
+    for (let i = 1; i <= items.value.totalPages; i++) {
       for (let j = 0; j < items.value.content.length; j++) {
         itemsQtd.value += items.value.content[j].quantity;
       }
