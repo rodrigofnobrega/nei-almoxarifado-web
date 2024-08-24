@@ -46,7 +46,7 @@
                 Configurações
                 <IconsSettings />
               </a></li>  
-              <li><button @click="logout()" class="exit-options py-1 ps-2 dropdown-item d-flex align-items-center justify-content-between">
+              <li><button @click="logout()" class="btn exit-options py-1 ps-2 dropdown-item d-flex align-items-center justify-content-between">
                 Sair
                 <IconsExit />
               </button></li>

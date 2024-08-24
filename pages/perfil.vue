@@ -72,7 +72,7 @@
                 </th>
               </tr>
               <tr v-else>
-                <th style="width: 100vh !important;" colspan="5" class="text-center fw-bold text-dark-emphasis py-5 mt-5">
+                <th style="width: 100vh !important; " colspan="5" class="text-center fw-bold text-dark-emphasis py-5 mt-5">
                   Nenhuma solicitação encontrada
                 </th>
               </tr>
@@ -395,12 +395,12 @@ const reqsTotalPages = {
   rejectedRequests: 0,
   canceledRequests: 0,
 }
-const reqsTotalElements = {
+const reqsTotalElements = ref({
   pendingRequests:  0,
   acceptedRequests: 0,
   rejectedRequests: 0,
   canceledRequests: 0,
-}
+});
 
 const userRecords = ref([]);
 let currentPage = ref([0, 0, 0, 0, 0]);
@@ -423,24 +423,24 @@ const fetchRecords = async (page) => {
 
 const fetchRequests = async (page) => {
   let response = await getRequestByUser(userStore, userData.id, page);
-  for(let k = 1; k < response.totalPages; k++){
+  for(let k = 1; k <= response.totalPages; k++){
     for(let i = 0; i < response.content.length; i++){
       switch(response.content[i].status){
         case 'PENDENTE':
           pendingRequests.value.push(response.content[i]);
-          reqsTotalElements.pendingRequests++;
+          reqsTotalElements.value.pendingRequests++;
           break;
         case 'ACEITO':
           acceptedRequests.value.push(response.content[i]);
-          reqsTotalElements.acceptedRequests++;
+          reqsTotalElements.value.acceptedRequests++;
           break;
         case 'RECUSADO':
           rejectedRequests.value.push(response.content[i]);
-          reqsTotalElements.rejectedRequests++;
+          reqsTotalElements.value.rejectedRequests++;
           break;
         case 'CANCELADO':
           canceledRequests.value.push(response.content[i]);
-          reqsTotalElements.canceledRequests++;
+          reqsTotalElements.value.canceledRequests++;
           break;
         default:
           break;
@@ -518,6 +518,7 @@ const sendDataToParent = () => {
 sendDataToParent();
 
 onMounted(async () => {
+  
   await fetchRequests(0);
   const currentPassWordInput = document.getElementById('currentPassword');
   currentPassWordInput.addEventListener('focusout', () => {

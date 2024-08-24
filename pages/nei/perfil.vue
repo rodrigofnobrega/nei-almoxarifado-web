@@ -352,7 +352,7 @@ const recordsTotalElements = ref(0);
 
 const fetchRequests = async (page) => {
   let response = await getRequestByUser(userStore, userData.id, page);
-  for(let k = 1; k < response.totalPages; k++){
+  for(let k = 1; k <= response.totalPages; k++){
     for(let i = 0; i < response.content.length; i++){
       switch(response.content[i].status){
         case 'PENDENTE':
