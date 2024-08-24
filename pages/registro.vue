@@ -17,9 +17,9 @@
         </p>
     </div>
   <div class="table-box row d-block bg-light mx-2">
-      <div class="table-actions d-flex justify-content-between aling-items-center" style="margin-bottom: 0px !important;">
+      <div class="table-actions d-flex justify-content-between aling-items-center">
         <div class="d-flex me-1">
-            <ButtonsFilter class="action-sbtn" v-if="uploadReloader === 1" style="margin-top: 0px;"/>
+            <ButtonsFilter v-if="uploadReloader === 1" />
         </div>
         <span v-if="recordsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 3px;">
             <IconsSearchGlass class="search-glass"/>
@@ -417,7 +417,7 @@ onMounted(async () => {
     display: block !important;
 }
 .table-box{
-    margin-top: 80px;
+    margin-top: 76px;
     border-radius: 0px 10px 10px 10px;
     box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.5);
     border: 1px #D9D9D9 solid;
@@ -491,7 +491,7 @@ p{
     border: none;
     border-bottom: solid 1px #1F69B1;
     border-radius: 10px 10px 0px 0px;
-    box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
+    box-shadow: inset 0px -12px 15px -15px rgb(18, 104, 184);
     color: rgb(0, 0, 0, 0.7); 
     transition: box-shadow 0.3s ease;
 }
@@ -543,7 +543,7 @@ p{
     margin-top: 5%;
     display: flex;
     justify-content: center;
-    margin-left: 120%;
+    margin-left: 150%;
     white-space: nowrap;
 }
 .pagination{
@@ -595,11 +595,6 @@ tr:hover p{
     .searchbar{
         font-size: 14px;
     }
-    .table-searchbar{
-        min-width: 120px;
-        margin-top: 8px !important; 
-        display: block;
-    }
 }
 @media screen and (max-width: 600px){
     .pages-info{
@@ -623,18 +618,6 @@ tr:hover p{
     }
     .table-box-title{
         margin-top: 35px;
-    }
-    .table-actions{
-        padding-right: 0px !important;
-        display: block !important;
-    }.actions-btns{
-        padding-bottom: 9px;
-        border-radius: 0px 10px 0px 0px;
-        background-color: #D9D9D9;
-        justify-content: center;
-    }
-    .table-searchbar{
-        margin: 0px 20px 0px 20px;
     }
 }
 </style>

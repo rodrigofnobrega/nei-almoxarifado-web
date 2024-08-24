@@ -72,9 +72,6 @@ function isDelete(operation){
 </script>
 
 <style scoped>
-.modal-header{
-    background-color: red;
-}
 .close{
     position: relative;
     left: 20px;

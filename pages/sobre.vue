@@ -112,7 +112,6 @@ sendDataToParent();
 .description-container {
   margin: 15px;
 }
-
 .card-hover-effect {
   border-radius: 20px;
   background: transparent;
@@ -130,6 +129,7 @@ sendDataToParent();
   margin-right: 10px;
 }
 .mailto-btn{
+  color: transparent !important;
   border-radius: 0;
   padding: 0px 10px 0 10px;
   height: 0;
@@ -137,6 +137,7 @@ sendDataToParent();
   position: absolute;
 }
 .card-hover-effect:hover .mailto-btn {
+  color: white !important;
   height: 37px;
   padding-top: 4px;
   transition: height 0.5s ease-in-out;

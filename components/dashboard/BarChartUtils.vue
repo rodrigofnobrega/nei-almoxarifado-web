@@ -46,7 +46,7 @@
             </button>
         </div>
   </div>
-  <div class="d-flex justify-content-end me-3 fw-bold opacity-75">
+  <div class="d-flex justify-content-end me-3 fw-bold mt-1 opacity-75">
     <p>Período: {{ monthSelected === -1 ? 'anual' : `${months[monthSelected-1]}` }}</p>
   </div>
   <div>

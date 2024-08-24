@@ -37,7 +37,7 @@ table{
 thead {
     position: sticky;
     top: 0px;
-    z-index: 1000;
+    z-index: 200;
 }
 .col-title{
     font-size: 18px;

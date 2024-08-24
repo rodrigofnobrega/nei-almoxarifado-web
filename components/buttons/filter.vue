@@ -1,18 +1,18 @@
 <template>
     <div class="dropdown">
         <button v-if="settingsStore.isMobile" @click.stop @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" 
-        class="dropdown-principal mt-1 filter-btn action-btn d-flex btn btn-outline-ligth mx-1 px-2"  
+        class="dropdown-principal mt-1 filter-btn action-btn d-flex btn btn-outline-primary mx-1 px-2"  
         data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
         Filtro
         <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
     </button>
     <button v-else @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" 
-        class="dropdown-principal mt-1 filter-btn action-btn d-flex btn btn-outline-ligth mx-1 px-2"  
+        class="dropdown-principal mt-1 filter-btn action-btn d-flex btn btn-outline-primary mx-1 px-2"  
         data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
         Filtro
         <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
     </button>
-        <ul class="dropdown-menu large-menu">
+        <ul class="dropdown-menu pt-0 large-menu">
             <!--<li>
                 <div class="vue-dropdown" @click="ClicktoggleDropdown(0)" @mouseover="toggleDropdown(0)" @mouseout="toggleDropdown(0)">
                     <div class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
@@ -172,13 +172,9 @@ li{
     border-radius: 10px 10px 0px 0px;
     border-bottom: 1px ridge #1F69B1;
 }
-.btn-outline-ligth{
-    box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
+.btn-outline-primary{
+    box-shadow: inset 0px -12px 15px -15px rgb(18, 104, 184);
     color: rgb(0, 0, 0, 0.7); 
-}
-.btn-outline-ligth:hover{
-    color: white; 
-    background-color: #0B3B69; 
 }
 .btn-transparent:hover{
     color: white;
@@ -187,37 +183,5 @@ li{
 .action-btn:hover{
     opacity: 90%;
 }
-@media screen and (max-width: 820px){
-    .action-btn{
-        font-size:  12px;
-    }
-}
-/*
-@media screen and (max-width: 820px){
-    .action-btn{
-        font-size: 12px;
-    }
-    .filter-btn{
-        font-size: 12px;
-    }
-    .large-menu{
-        padding: 0;
-        width: 100px !important;
-    }
-    .small-menu{
-        width: 60px;
-        margin-top: -40px;
-        height: 50px;
-        padding: 0;
-        left: 128px;
-    }
-    .small-menu .filter-btn{
-        margin-top: 0px;
-        margin-bottom: -4px;  
-    }
-    .action-icon{
-        width: 15px;
-        height: 15px;
-    }
-} */
+
 </style>

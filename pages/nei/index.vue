@@ -10,13 +10,13 @@
         </div>
         <div class="d-flex justify-content-center mb-5">
             <h4 class="homepage-title text-center fw-medium opacity-75">Para fazer as solicitações de itens navegue<br> para a página 
-                de <a class="text-decoration-none" href="/nei/catalogo">catálogo</a>, procure o item desejado e solicite. <br>Para acompanhar as suas solicitações basta navegar para a<br> página de <a class="text-decoration-none" href="/nei/solicitacoes">solicitações</a>.
+                de <a href="/nei/catalogo">catálogo</a>, procure o item desejado e solicite. <br>Para acompanhar as suas solicitações basta navegar para a<br> página de <a href="/nei/solicitacoes">solicitações</a>.
             </h4>
         </div>
         <div class="search-section d-flex justify-content-center">
             <UtilsSearch class="mb-5"/>
             <div class="search-bar d-flex mx-1">
-                <button class="d-flex btn btn-search align-items-center ps-1" type="button" tabindex="-1" data-bs-target="#neiSearchModal" data-bs-toggle="modal">
+                <button class="d-flex btn btn-light btn-search align-items-center ps-1" type="button" tabindex="-1" data-bs-target="#neiSearchModal" data-bs-toggle="modal">
                     <IconsSearchGlass class="mt-1" width="30" height="30"/>
                     <span class="ms-1 fs-5">Pesquisar</span>
               </button>
@@ -66,7 +66,7 @@ definePageMeta({
                 radial-gradient(ellipse at top left, rgba(11, 59, 105, 0.5), transparent 50%),
                 radial-gradient(ellipse at top right, rgba(11, 59, 105, 0.5), transparent 50%),
                 radial-gradient(ellipse at center right, rgba(254, 213, 30, 0.8), transparent 50%),
-                radial-gradient(ellipse at center left, rgba(254, 213, 30, 0.8), transparent 50%) !important;
+                radial-gradient(ellipse at center left, rgba(254, 213, 30, 0.8), transparent 50%);
 }
 @media screen and (max-width: 700px){
     .btn-search{

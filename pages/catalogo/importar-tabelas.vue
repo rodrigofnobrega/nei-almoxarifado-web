@@ -9,7 +9,7 @@
                 <p class="px-3">A tabela selecionada deve estar na formatação .xlsx, .xls ou .csv, com os seguintes dados dispostos: nome do produto,
                      tipo unitário e quantidade estoque atual. Caso tenha dúvidas sobre o formato da planilha temos o seguinte modelo padrão para se seguir: <a href="/planilha_padrao.xlsx">Planilha Padrão</a> </p>
                 <p class="px-3"></p>
-                <p class="message-alert d-flex align-items-center mx-5">
+                <p class="message-alert bg-warning d-flex align-items-center mx-5">
                    Aviso: Qualquer linha branca/vazia, com dados obstruídos ou qualquer item com estoque atual negativo não serão processados na importação, sendo necessário o cadastro manual.
                 </p>
                 <div class="d-block">
@@ -130,7 +130,6 @@ p{
 .message-alert {
   padding: 15px;
   margin: 20px 0;
-  background-color: #ffc107;
   color: #212529;
   border: 1px solid #ffca2c;
   border-radius: 5px;

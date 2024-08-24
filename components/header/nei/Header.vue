@@ -7,7 +7,7 @@
       </div> 
       <nav v-if="!settingsStore.isMobile" class="navbar navbar-expand py-0">
           <div class="container-fluid">
-            <ul class="navbar-nav d-flex">
+            <ul class="navbar-nav d-flex ms-5">
                 <a :class="{'navbar-active': currentRoute.fullPath === '/nei/'}" class="px-1 nav-item nav-link text-light" href="/nei/" type="button">Início</a>
                 <a :class="{'navbar-active': currentRoute.fullPath === '/nei/catalogo'}" class="px-1 nav-item nav-link text-light" href="/nei/catalogo" type="button">Catálogo</a>
                 <a :class="{'navbar-active': currentRoute.fullPath === '/nei/solicitacoes'}" class="px-1 nav-item nav-link text-light" href="/nei/solicitacoes" type="button">Solicitações</a>

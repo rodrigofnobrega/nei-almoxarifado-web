@@ -44,7 +44,7 @@
     </section>
 -->
     <section class="settings-section mb-5">
-        <h3 class="section-title mx-2 pb-2">Temas e Layouts</h3>
+        <h3 class="section-title border-bottom border-dark-emphasis mx-2 pb-2">Temas e Layouts</h3>
         <p class="fs-6 mx-2">Escolha um dos temas visuais abaixos para que a estilização do aplicativo esteja de acordo com suas preferências estéticas. O tema escolhido ficará salvo como preferências do usuário, ao sair da aplicação o tema continuará salvo.  </p>
         <div class="dashboard-container container-fluid d-flex px-0 justify-content-center align-items-center">
             <div class="card themes-card mx-2 bg-primary" @click="changeLayout(0)"  onclick="document.getElementById('themeRadio1').checked = true;">
@@ -70,7 +70,7 @@
                 </div>
             </div>
             <div class="card themes-card mx-2 bg-primary" @click="changeLayout(2)"  onclick="document.getElementById('themeRadio2').checked = true;">
-                <img src="/darkLayout.png" class="card-img-top" alt="...">
+                <img src="/alternativeLayout.png" class="card-img-top" alt="...">
                 <div class="card-body p-3 text-dark-emphasis">
                     <div class="form-check text-light rounded-2">
                       <input :checked="settingsStore.layout === 2" class="form-check-input" type="radio" id="themeRadio2" name="themeOptions" value="option2">
@@ -83,7 +83,7 @@
         </div>
     </section>
     <section class="settings-section mb-5">
-    <h3 class="section-title mx-2 pb-2">Tipografia</h3>
+    <h3 class="section-title border-bottom border-dark-emphasis mx-2 pb-2">Tipografia</h3>
     <p class="fs-6 mx-2">Escolha uma das fontes visuais abaixo para que a estilização do aplicativo esteja de acordo com suas preferências estéticas. A fonte escolhida ficará salva como preferências do usuário, ao sair da aplicação a fonte continuará salva.</p>
     <div class="dashboard-container container-fluid d-flex px-0 justify-content-between align-items-center">
         <div class="card themes-card mx-2 bg-primary rounded-3 border-1" @click="changeFont(0)">
@@ -204,7 +204,7 @@
             </label>
     </section>-->
     <section class="settings-section mb-5">
-        <div class="section-title d-flex align-items-center justify-content-between">
+        <div class="section-title border-bottom border-dark-emphasis d-flex align-items-center justify-content-between">
             <h3 class="mx-2">Configurar Tipos e Categorias</h3>
             <button class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#categoryRegister">Adicionar</button>
         </div>
@@ -329,7 +329,9 @@ section {
 .section-title{
     padding-bottom: 5px;
     margin-bottom: 20px;
-    border-bottom: 1px solid rgb(0, 0, 0, 0.3);
+}
+.border-dark-emphasis{
+    --bs-border-opacity: .5;
 }
 .section-content{
     font-size: 14px;

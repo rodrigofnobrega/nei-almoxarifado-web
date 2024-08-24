@@ -9,7 +9,7 @@
               </span>
             </button>
             <ul class="dropdown-menu notification-menu text-center">
-              <li v-for="(request, index) in requests" :key="index" class="text-end dropdown-item notification">
+              <li v-for="(request, index) in requests" :key="index" class="text-end bg-primary dropdown-item notification">
                 <div class="text-dark-emphasis d-flex align-items-center">
                   <div>
                     <IconsWarning wdith="24px" height="26px" class="me-2 mt-0 notifications-text"/>

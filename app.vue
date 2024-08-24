@@ -77,13 +77,59 @@ function checkIfMobile() {
   font-family: 'Lora', sans-serif;
 }
 
+.darkLayout .bg-fade{
+  background: #111318 !important;
+}
+.darkLayout .btn-outline-primary{
+  border-color: #0054a7;
+}
+.darkLayout .btn-outline-primary:hover{
+  background-color: #010e23 !important;
+}
 .darkLayout .bg-primary{
+  background-color: #000000 !important;
+}
+.darkLayout .btn-primary{
   background-color: #020b15 !important;
 }
 .darkLayout .bg-light{
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
 }
+.darkLayout .btn-outline-dark-success:hover{
+  background-color: #011e02 !important;
+}
+.darkLayout .btn-outline-warning:hover{
+  background-color: #786200 !important;
+}
+.darkLayout .bg-warning{
+  background-color: #786200 !important;
+}
+.darkLayout .btn-outline-secondary{
+  border-color: #2072c3 !important;
+}
+.darkLayout .btn-outline-secondary:hover{
+  background-color: #113a62 !important;
+}
+.darkLayout .btn-secondary{
+  background-color: #113a62 !important;
+}
+.darkLayout .bg-success{
+  background-color: #015603 !important;
+}
+.darkLayout .btn-light-success{
+  background-color: #015603 !important;
+}
+.darkLayout .btn-dark-success{
+  background-color: #011e02 !important;
+}
+.darkLayout .btn-dark-alert{
+  background-color: rgb(98, 17, 17) !important;
+}
+.darkLayout .btn-light-alert{
+  background-color: rgb(139, 16, 16) !important;
+}
+
 .darkLayout .modal-body{
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
@@ -127,6 +173,12 @@ function checkIfMobile() {
   background-color: #1A1A1A;
 }
 .darkLayout input:focus{
+  background-color: #1A1A1A;
+}
+.darkLayout input::placeholder{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout .NavigateToItem input:focus{
   color: rgb(255,255,255,0.8) !important;
   background-color: #1A1A1A;
   border: solid 1px #333333;
@@ -143,9 +195,6 @@ function checkIfMobile() {
   border: 1px solid rgb(51, 51, 51, 1) !important; 
   border-right: none !important; 
 }
-.darkLayout input::placeholder{
-  color: rgb(255,255,255,0.8) !important;
-}
 .darkLayout img{
   color: rgb(255,255,255,0.8) !important;
   background-color: #1A1A1A !important;
@@ -156,8 +205,8 @@ function checkIfMobile() {
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
 }
-.darkLayout [class*="border-"]{
-  border-color: #333333 !important;
+.darkLayout .border-2{
+  border-color: #333333;
 }
 .darkLayout td{
   color: rgb(255,255,255,0.8) !important;
@@ -176,6 +225,9 @@ function checkIfMobile() {
 .darkLayout h3{
   color: rgb(255,255,255,0.8) !important;
 }
+.darkLayout h4{
+  color: rgb(255,255,255,0.8) !important;
+}
 .darkLayout h5{
   color: rgb(255,255,255,0.8) !important;
 }
@@ -183,7 +235,10 @@ function checkIfMobile() {
   color: rgb(255,255,255,0.8) !important;
 }
 .darkLayout a{
-  color: rgb(255,255,255,0.8) !important;
+  color: rgba(255, 255, 255, 1) !important;
+}
+.darkLayout ol li:hover{
+  background: none !important;
 }
 .darkLayout nav li{
   color: rgb(255,255,255,0.8) !important;
@@ -195,21 +250,36 @@ function checkIfMobile() {
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
 }
+.darkLayout li:hover{
+  background-color: #786200 !important;
+}
 .darkLayout li::before{
   color: rgb(255,255,255,0.8) !important;
 }
-.darkLayout [class*="bg-warning"]{
-  background-color: #e0ba10 !important;
+.darkLayout .small-menu{
+  background: #1A1A1A !important;
 }
-.darkLayout ul{
-  background-color: #1A1A1A !important;
-  border-bottom: none !important;
+.darkLayout .small-menu:hover{
+  background: #1A1A1A !important;
+}
+
+.darkLayout .form-check-label{
+  background: none !important;
 }
 .darkLayout .form-check-input{
   background-color: #2f2e2e !important;
   border: solid 1px rgb(255,255,255,0.2) !important;
 }
+.darkLayout select{
+  color: rgb(255,255,255,0.8) !important;
+  background-color: #1A1A1A !important;
+  border: solid 1px rgb(255,255,255,0.2) !important;
+}
+.darkLayout select:focus{
+  box-shadow: none;
+}
 .darkLayout label{
+  background: #1A1A1A !important;
   color: rgb(255,255,255,0.8) !important;
 }
 .darkLayout span{
@@ -222,6 +292,10 @@ function checkIfMobile() {
   color: rgb(255,255,255,0.8) !important;
 }
 .darkLayout .light-background{
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout .btn-light{
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
 }
@@ -247,9 +321,10 @@ function checkIfMobile() {
 .darkLayout [class*='dark-emphasis']{
   color: rgb(255,255,255,0.8) !important;
 }
-.darkLayout .bg-fade {
-  background: black;
+.darkLayout li .disabled{
+  background-color: rgb(62, 58, 58) !important;
 }
+
 
 .alternativeLayout [class*="primary"] {
   background-color: #2C3E50 !important; 

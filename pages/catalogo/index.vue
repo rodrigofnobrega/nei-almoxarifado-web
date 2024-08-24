@@ -487,7 +487,7 @@ p{
     border: none;
     border-bottom: solid 1px #1F69B1;
     border-radius: 10px 10px 0px 0px;
-    box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
+    box-shadow: inset 0px -12px 15px -15px rgb(18, 104, 184);
     color: rgb(0, 0, 0, 0.7); 
     transition: box-shadow 0.3s ease;
 }
