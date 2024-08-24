@@ -8,7 +8,7 @@
                 <span class="visually-hidden">unread messages</span>
               </span>
             </button>
-            <ul class="dropdown-menu notification-menu py-2">
+            <ul class="dropdown-menu notification-menu text-center">
               <li v-for="(request, index) in requests" :key="index" class="text-end dropdown-item notification">
                 <div class="text-dark-emphasis d-flex align-items-center">
                   <div>
@@ -21,7 +21,7 @@
                   Feita em {{ request.creationDate.slice(0, 19) }}
                 </span>
               </li>
-              <li v-show="!isNotification || requests.length === 0" class=" dropdown-item fs-6 text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
+              <li v-show="!isNotification || requests.length === 0" class="p-2 dropdown-item fs-6 text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
             </ul>
           </div>
           <div class="nav-item dropdown">

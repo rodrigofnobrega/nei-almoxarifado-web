@@ -51,7 +51,7 @@
   </div>
   <div>
     <div class="d-flex justify-content-center z-5">
-      <LoadersLoading class="position-absolute p-5 mt-5"/>
+      <LoadersLoading class="position-absolute p-5 mt-5 mb-0"/>
     </div>
     <Chart v-if="chartData.labels.length > 0" :type="'pie'" class="chart-graph" :data="chartData" :options="chartOptions" />
     <div v-else class="d-flex justify-content-center mb-5">

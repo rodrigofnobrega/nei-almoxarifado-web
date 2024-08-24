@@ -142,7 +142,7 @@ export default {
 <style scoped>
 .cards-grid{
 	width: 95%;
-    border: 1px #c0c0c2 solid !important;
+    border: 0px #c0c0c2 solid !important;
 }
 .cards-row{
 	margin-right: -20px; 

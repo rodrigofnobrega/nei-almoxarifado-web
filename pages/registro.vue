@@ -28,7 +28,7 @@
       </div>
       <TablesTable>
           <template v-slot:header>
-              <tr>
+              <tr class="border-2">
                   <th class="col-title py-2 border" scope="col">Item</th>
                   <th class="col-title py-2 border" scope="col">Autor</th>
                   <th class="col-title py-2 border" scope="col">Operação</th>
@@ -65,15 +65,19 @@
                     </NuxtLink>
                </th>
           </tr>
-          <div v-else-if="recordsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)"
+          <div v-else-if="!initialLoading"
              class="search-empty my-5">
                 <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado.</p>
             </div>
+            <!--
             <div v-else class="search-empty  my-5" style="padding-bottom: 300px;">
                 <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent"></p>
-            </div>
+            </div>-->
       </template>
-  </TablesTable>
+    </TablesTable>
+    <div v-if="initialLoading" class="d-flex justify-content-center align-items-center my-5">
+        <LoadersLoading class="p-5 my-5"/>
+    </div>
     <div class="table-footer d-flex justify-content-between align-items-center me-2 mt-2">
       <div class="d-flex justify-content-center py-2 me-3 ">
           <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de registros da página: {{ recordsCache[cacheIndex].length }}</span>
@@ -413,15 +417,15 @@ onMounted(async () => {
     display: block !important;
 }
 .table-box{
-    margin-top: 75px;
+    margin-top: 80px;
     border-radius: 0px 10px 10px 10px;
     box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.5);
     border: 1px #D9D9D9 solid;
 }
 .table-box-title{
     margin-left: 8px;
-    margin-top: 33px !important;
-    padding: 4px 4px 4px 4px;
+    margin-top: 32px;
+    padding: 4px;
     font-weight: 400;
     color: rgb(51,51,51, 0.8);
     border-radius: 10px 10px 0px 0px;
@@ -565,20 +569,22 @@ tr:hover p{
     opacity: 50%;
 }
 /*RESPONSIVIDADE*/
+
 @media screen and (max-width: 900px){
     .actions-buttons{
         justify-content: center;
         align-content: center;
     }
-    .action-sbtn{
-        margin-top: 4px !important;
-    }
+
     .pages-info{
         text-wrap: wrap;
         text-align: center;
     }
 }
 @media screen and (max-width: 790px) {
+    .res-action-btn{
+        margin-top: 9px !important;
+    }
     .col-title{
         padding: 0px 5px 0px 5px;
     }
@@ -586,13 +592,12 @@ tr:hover p{
         display: block !important;
         padding-right: 0px !important;
     }
-
     .searchbar{
         font-size: 14px;
     }
     .table-searchbar{
         min-width: 120px;
-        margin-top: 3px !important; 
+        margin-top: 8px !important; 
         display: block;
     }
 }
@@ -618,6 +623,18 @@ tr:hover p{
     }
     .table-box-title{
         margin-top: 35px;
+    }
+    .table-actions{
+        padding-right: 0px !important;
+        display: block !important;
+    }.actions-btns{
+        padding-bottom: 9px;
+        border-radius: 0px 10px 0px 0px;
+        background-color: #D9D9D9;
+        justify-content: center;
+    }
+    .table-searchbar{
+        margin: 0px 20px 0px 20px;
     }
 }
 </style>

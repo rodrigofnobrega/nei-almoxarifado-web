@@ -59,7 +59,7 @@
         <div class="users-management-scroll">
           <TablesTable v-if="users.content && users.content.length">
             <template v-slot:header>
-              <tr>
+              <tr class="col-line">
                 <th class="col-title text-center py-2" scope="col">Usuário</th>
                 <th class="col-title text-center py-2" scope="col">Email</th>
                 <th class="col-title text-center py-2" scope="col">Encargo</th>
@@ -93,6 +93,9 @@
           <div v-if="loadContent && users.content.length === 0" class="search-empty d-flex justify-content-center">
             <p class="text-dark-emphasis fs-5 opacity-50">Nenhum usuário encontrado</p>
           </div>
+          <div class="d-flex justify-content-center mt-5" v-else>
+            <LoadersLoading class="p-5 mt-2"/>
+          </div>
         </div>
       </div>
     </div>
@@ -102,7 +105,7 @@
       </div>
       <TablesTable v-if="records.content && records.content.length">
         <template v-slot:header>
-          <tr>
+          <tr class="col-line">
             <th class="col-title table-col text-center py-2" scope="col">Usuário</th>
             <th class="col-title table-col text-center py-2" scope="col">Movimentação</th>
             <th class="col-title table-col text-center py-2" scope="col">Item</th>
@@ -147,7 +150,7 @@
             </th>
             <th class="table-cell mov-cell" scope="row">
               <div class="d-flex table-text justify-content-center">
-                <button @click="showDetails(index, record.item.id)" title="Detalhes" :route="`/registro/${record.id}`" class="table-btn d-flex align-items-center justify-content-center btn btn-secondary">
+                <button @click="showDetails(index, record.item.id)" title="Detalhes" class="table-btn d-flex align-items-center justify-content-center btn btn-secondary">
                   <IconsSearchGlass width="16px" height="16px"/>
                 </button>
                 <a title="Perfil" :href="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="m-0 table-btn d-flex align-items-center justify-content-center btn btn-primary">
@@ -161,6 +164,9 @@
       <div v-if="loadContent && records.content.length === 0" class="search-empty d-flex justify-content-center">
         <p class="text-dark-emphasis fs-5 opacity-50">Nenhuma movimentação</p>
       </div>
+      <div class="d-flex justify-content-center mt-5" v-else>
+        <LoadersLoading class="p-5 mt-4"/>
+      </div>
     </div>  
     <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
       <DashboardBarChartItems />
@@ -168,6 +174,7 @@
     <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
       <DashboardBarChartUtils />
     </div>
+
     <button id="modalToggle" data-bs-toggle="modal" data-bs-target="#itemDetailing" class="disabled d-none"></button>
     <ModalItemDetails v-if="currentItem" :item_index="itemIndex" :item_details="currentItem" />
     <Modal id="removeUser" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
@@ -277,9 +284,11 @@ const showDetails = async (index, itemId) => {
   itemIndex.value = index;
   try {
     currentItem.value = await getItem(userStore, itemId);
-    modalToggleDom.click();
+    setTimeout((() => modalToggleDom.click()), 200)
+
   } catch (err) {
     console.error(err);
+    return 0;
   }
 };
 
@@ -375,6 +384,9 @@ h5{
 .search-empty{
   margin-top: 7% !important;
   white-space: nowrap;
+}
+.col-line {
+  border-bottom: 1px solid rgba(80, 76, 76, 0.174);
 }
 .close{
     position: relative;

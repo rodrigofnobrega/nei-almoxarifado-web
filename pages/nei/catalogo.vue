@@ -109,17 +109,21 @@
                      </button>
                 </th>
             </tr>
-            <div v-else-if="itemsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)"
+            <div v-else-if="!initialLoading"
              class="search-empty my-5">
                 <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
             </div>
+            <!--
             <div v-else class="search-empty my-5" style="padding-bottom: 300px;">
                 <p style="margin-top: 50px;" class="text-dark-emphasis fs-4 opacity-75 bg-transparent">
                     Nenhum item Encontrado
                 </p>
-            </div>
+            </div>-->
         </template>
         </TablesTable>
+        <div v-if="initialLoading" class="d-flex justify-content-center align-items-center my-5">
+            <LoadersLoading class="p-5 my-5"/>
+        </div>
     <div class="table-footer d-flex justify-content-between align-items-center  mt-2">
         <div class="d-flex justify-content-center py-2 me-3 ">
             <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span>

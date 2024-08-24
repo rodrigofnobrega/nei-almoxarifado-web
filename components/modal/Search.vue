@@ -20,8 +20,16 @@
                     <span class="badge bg-primary rounded-pill" v-if="result"> {{ result.quantity }} </span>
                   </li>
                 </a>
-              </ul>
-            <p class="d-flex justify-content-center align-items-center pt-3" v-else>Nenhum Resultado Encontrado.</p>
+            </ul>
+            <div class="d-flex justify-content-center align-items-center py-3" v-else-if="!showResults && searchQuery !== ''">
+              <LoadersComponentLoading :isLoading="true" />
+            </div>
+            <p class="d-flex justify-content-center align-items-center pt-3" v-else-if="showResults && searchQuery !== '' && searchResults.length === 0">
+            Nenhum Resultado Encontrado
+            </p>
+            <p class="d-flex justify-content-center align-items-center pt-3" v-else>
+              Sem Pesquisas Recentes
+            </p>
 				</div>
 				<div class="modal-footer">
             <p class="fs-6"><IconsEnter class="bg-primary text-light" style="border-radius: 3px;"/> para selecionar <IconsBottomArrow class="bg-primary text-light" style="border-radius: 3px;"/> <IconsUpArrow class="bg-primary text-light" style="border-radius: 3px;"/> para navegar e <span class="bg-primary text-light" style="border-radius: 3px;">esc</span> para fechar</p>
@@ -82,10 +90,10 @@ export default {
       this.searchResults = [];
       this.pagination = 0;
       clearTimeout(this.typingTimeout);
-      this.typingTimeout = setTimeout(() => {
-        this.fetchSearchResults();
+      this.typingTimeout = setTimeout(async () => {
+        await this.fetchSearchResults();
+        this.showResults = true;
       }, 1000);
-      this.showResults = true;
     },
     async fetchSearchResults() {
       while (this.searchResults.length < 20 && this.pagination < this.totalPages) {

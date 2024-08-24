@@ -32,12 +32,12 @@
             </ul>
       </div>
   </div>
-  <div class="d-flex justify-content-end position-absolute me-3 fw-bold opacity-75" style="right: 2%;">
+  <div class="d-flex justify-content-end position-absolute me-3 mt-2 fw-bold opacity-75" style="right: 2%;">
     <p>Período: {{ monthSelected === -1 ? 'anual' : `${labels.month[monthSelected]}` }}</p>
   </div>
   <div>
     <div class="d-flex justify-content-center z-5 loader">
-      <LoadersLoading class="position-absolute graph-loader p-5 mt-5"/>
+      <LoadersLoading class="position-absolute graph-loader p-5"/>
     </div>
     <Bar v-if="chartData.datasets[0].data.reduce((acc, current) => acc+current) > 0" class="chart-graph " :data="chartData" :options="chartOptions" />
     <div v-else class="d-flex justify-content-center mb-5">
@@ -329,7 +329,7 @@ onMounted(() => {
 
 <style scoped>
 .graph-loader{
-  margin-top: 100 px !important;
+  margin-top: 100px !important;
   height: 100px;
 }
 h5{
