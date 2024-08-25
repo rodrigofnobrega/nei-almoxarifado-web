@@ -1,4 +1,10 @@
 <template>
+    <div>
+      <Head>
+        <Title>NEI Almoxarifado | Backup</Title>
+        <Meta name="backup" content="Página para realizar o backup"/>
+      </Head>
+    </div>
     <div class="container-fluid d-block">
       <div class="profile-container">
         <div class="profile-sidebar bg-light rounded-3  flex-column align-items-center">

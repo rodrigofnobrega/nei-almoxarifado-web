@@ -1,4 +1,10 @@
 <template>
+<div>
+    <Head>
+        <Title>NEI Almoxarifado | Registros</Title>
+        <Meta name="registros" content="Página para mostrar todos os registros"/>
+    </Head>
+</div>
 <ModalItemDetails v-if="recordsCache.length > 0" :item_index="recordIndex" :item_route="currentRoute" :item_details="currentItem"/>
 <div class="table-container d-block mt-2">
   <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>

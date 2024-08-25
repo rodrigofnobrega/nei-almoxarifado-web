@@ -1,4 +1,10 @@
 <template>
+	<div>
+		<Head>
+			<Title>NEI Almoxarifado | Recuperar Senha</Title>
+			<Meta name="recuperar senha" content="Página para recuperar senha"/>
+		</Head>
+	</div>
     <LoadersPageLoading :isLoading="loading" class="loader"/>
 	<div class="d-flex justify-content-center  bg-primary auth-container">
 		<div class="container-fluid login-container d-flex justify-content-center" :style="{'transform': switchState ? 'translateX(94.52%)' : '', 'border-radius': delayedSwitchState ? '0px 8px 8px 0px' : '8px 0px 0px 8px'}">

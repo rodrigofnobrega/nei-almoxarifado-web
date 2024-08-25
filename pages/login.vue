@@ -1,5 +1,11 @@
 <template>
-    <LoadersPageLoading :isLoading="loading" class="loader"/>
+	<div>
+		<Head>
+			<Title>NEI Almoxarifado | Login</Title>
+			<Meta name="login" content="Página para realizar o login/cadastro"/>
+		</Head>
+	</div>
+	<LoadersPageLoading :isLoading="loading" class="loader"/>
 	<div class="d-flex justify-content-center  bg-primary auth-container">
 		<div class="container-fluid login-container d-flex justify-content-center" :style="{'transform': switchState ? 'translateX(94.52%)' : '', 'border-radius': delayedSwitchState ? '0px 8px 8px 0px' : '8px 0px 0px 8px'}">
 			<div class="header d-flex justify-content-center align-items-center">

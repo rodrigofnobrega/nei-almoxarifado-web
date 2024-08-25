@@ -1,4 +1,10 @@
 <template>
+	<div>
+		<Head>
+			<Title>NEI Almoxarifado | Solicitações</Title>
+			<Meta name="solicitações" content="Página para mostrar todas as solicitações de itens dos usuários"/>
+		</Head>
+	</div>
     <div class="container">
 		<!-- TODO: transformar em tabela com linhas !-->
 		<div class="sub-catalog bg-light mb-4 mt-1 ps-2 pe-2">
