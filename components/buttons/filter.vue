@@ -12,7 +12,7 @@
         Filtro
         <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
     </button>
-        <ul class="dropdown-menu pt-0 large-menu">
+        <ul class="dropdown-menu py-0 large-menu">
             <!--<li>
                 <div class="vue-dropdown" @click="ClicktoggleDropdown(0)" @mouseover="toggleDropdown(0)" @mouseout="toggleDropdown(0)">
                     <div class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
@@ -183,5 +183,37 @@ li{
 .action-btn:hover{
     opacity: 90%;
 }
-
+@media screen and (max-width: 820px){
+    .action-btn{
+        font-size:  12px;
+    }
+}
+/*
+@media screen and (max-width: 820px){
+    .action-btn{
+        font-size: 12px;
+    }
+    .filter-btn{
+        font-size: 12px;
+    }
+    .large-menu{
+        padding: 0;
+        width: 100px !important;
+    }
+    .small-menu{
+        width: 60px;
+        margin-top: -40px;
+        height: 50px;
+        padding: 0;
+        left: 128px;
+    }
+    .small-menu .filter-btn{
+        margin-top: 0px;
+        margin-bottom: -4px;  
+    }
+    .action-icon{
+        width: 15px;
+        height: 15px;
+    }
+} */
 </style>

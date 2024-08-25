@@ -255,7 +255,7 @@ function checkIfMobile() {
 }
 .darkLayout li::before{
   color: rgb(255,255,255,0.8) !important;
-}
+}yyyyy
 .darkLayout .small-menu{
   background: #1A1A1A !important;
 }

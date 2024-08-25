@@ -12,7 +12,7 @@
         Filtro
         <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
     </button>
-        <ul class="dropdown-menu pt-0 large-menu">
+        <ul class="dropdown-menu py-0 large-menu">
             <!--
             <li>
                 <div class="vue-dropdown" @click="ClicktoggleDropdown(0)" @mouseover="toggleDropdown(0)" @mouseout="toggleDropdown(0)">

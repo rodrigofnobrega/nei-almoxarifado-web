@@ -7,7 +7,7 @@
       </div> 
       <nav v-if="!settingsStore.isMobile" class="navbar navbar-expand py-0">
           <div class="container-fluid">
-            <ul class="navbar-nav d-flex ms-5">
+            <ul class="navbar-nav d-flex ms-5 ps-4">
                 <a :class="{'navbar-active': currentRoute.fullPath === '/nei/'}" class="px-1 nav-item nav-link text-light" href="/nei/" type="button">Início</a>
                 <a :class="{'navbar-active': currentRoute.fullPath === '/nei/catalogo'}" class="px-1 nav-item nav-link text-light" href="/nei/catalogo" type="button">Catálogo</a>
                 <a :class="{'navbar-active': currentRoute.fullPath === '/nei/solicitacoes'}" class="px-1 nav-item nav-link text-light" href="/nei/solicitacoes" type="button">Solicitações</a>
@@ -109,8 +109,8 @@ export default{
   padding: 0px 0px 0px 0px;
 }
 .navbar-active{
-  border-bottom: solid 1px #FED51E;
-  box-shadow: inset 0px -12px 15px -13px rgb(254, 213, 30, 0.7);
+  border-bottom: solid 1px #D9D9D9;
+  box-shadow: inset 0px -12px 15px -13px rgb(217, 217, 217, 0.7);
 }
 .mobile-search{
   margin-top: 2.9px;

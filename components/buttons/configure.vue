@@ -85,6 +85,7 @@ li{
     font-size: 14px;
     color: rgb(51,51,51, 0.9);
     font-weight: 600;
+    margin: 0px;
 }
 .form-check-input{
     border: 1px solid rgb(0, 0, 0, 0.3);

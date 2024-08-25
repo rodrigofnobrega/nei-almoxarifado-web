@@ -1,6 +1,6 @@
 <template>
 <ModalNeiItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" 
-    :item_details="searchStore.itemSearch.searching ? searchItem : store.itemDetails" />
+    :item_details="showSearchItem ? searchItem : store.itemDetails" />
 
 <ModalActionConfirm v-if="itemsCache.length > 0">
     <template v-slot:title> Confirmar aceitação </template>
@@ -54,7 +54,7 @@
     <div class="table-box-title position-absolute bg-light-emphasis d-flex align-items-center">
         <IconsBox class="me-1" width="25" height="25"/>
         <p class="box-title-text">
-            Tabela dos itens do almoxarifado
+            Tabela dos itens do almoxarifado {{searchStore.itemSearch.searching}}
         </p>
     </div>
     <div class="table-box row d-block bg-light mx-2">
@@ -169,6 +169,7 @@ import { usePopupStore } from '../../stores/popup.ts';
 import { postRequest } from '../../services/requests/requestsPOST.ts';
 import { storeToRefs } from 'pinia';
 import Index from '../catalogo/index.vue';
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
 definePageMeta({
     layout: 'client'
 })
@@ -433,15 +434,25 @@ const showSearchingDetails = async (itemId) => {
     searchItem.value = res;
     currentItem.value = res;
     const searching = document.getElementsByClassName('searching-btn'); 
-    searching[0].click();
+    await searching[0].click();
 }
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     initialLoading.value = false;
+});
+
+const showSearchItem = computed(() => {
     if(searchStore.itemSearch.searching){
         showSearchingDetails(searchStore.itemSearch.itemId);
+        searchStore.itemSearch.searching = false;
+        return true;
     }
-});
+    return false;
+})
+
+onBeforeRouteLeave(() => {
+    searchStore.itemSearch.searching = false;
+})
 </script>
 
 <style scoped>

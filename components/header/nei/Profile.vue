@@ -8,7 +8,7 @@
                 <span class="visually-hidden">unread messages</span>
               </span>
             </button>
-            <ul class="dropdown-menu notification-menu py-2">
+            <ul class="dropdown-menu notification-menu text-center">
               <li v-for="(request, index) in requests" :key="index" class="text-end dropdown-item notification">
                 <div class="text-dark-emphasis d-flex align-items-center">
                   <div>

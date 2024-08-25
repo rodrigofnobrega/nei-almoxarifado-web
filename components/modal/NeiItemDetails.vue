@@ -70,6 +70,7 @@ import { inject } from 'vue';
 import { useUser } from '../../stores/user';
 import { getRecordByItemId } from '../../services/record/recordGET';
 import { postRequest } from '../../services/requests/requestsPOST';
+import { useSearch } from '../../stores/search';
 
 export default {
     data() {
