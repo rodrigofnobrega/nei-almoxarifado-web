@@ -40,23 +40,9 @@
         </template>
         <template v-slot:footer>
             <div class="d-flex">
-                <div v-if="userStore.role === 'ADMIN' && item_route !== 'registro'" class="d-flex align-items-center justify-content-start">
-                    <div v-if="userStore.role === 'ADMIN' && store.isEditionMode" class="container-fluid d-flex justify-content-center align-items-center px-0 mx-0">
-                        <!--<button class="btn mode-btn inset-shadow btn-dark-alert mx-1" :class="{'d-none': editionActive, 'd-block': !editionActive}" @click="deleteItem" id="itemDelete" data-bs-dismiss="modal">Excluir</button>-->
-                        <button type="button" class="btn modal-btn fw-bold inset-shadow mode-btn btn-light-alert text-light fw-bold mx-1" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="revertEdition" data-bs-dismiss="modal">Cancelar</button>
-                        <button class="btn modal-btn fw-bold inset-shadow mode-btn btn-primary fw-bold mx-1" @click="setEdition">{{ editionActive ? 'Voltar' : 'Editar' }}</button>
-                        <button class="btn modal-btn fw-bold inset-shadow mode-btn btn-dark-success text-light fw-bold mx-1" id="fetch-inputs" :class="{'d-none': !editionActive, 'd-block': editionActive}" @click="fetchNewData" data-bs-dismiss="modal">Confirmar</button>
-                    </div>
-                    <button title="Reposição da quantidade do item" class="btn modal-btn fw-bold inset-shadow mode-btn btn-secondary fw-bold ms-1 me-2" data-bs-toggle="modal" data-bs-target="#itemReposition">
-                        Reposição
-                    </button>
-                </div>
-                <div v-if="userStore.role === 'USER'" class="d-flex align-items-center justify-content-center">
-                    <button class="btn btn-secondary fw-bold text-light mx-1" data-bs-toggle="modal" data-bs-target="#actionConfirm">Solicitar</button>
+                <div class="d-flex align-items-center justify-content-center">
+                    <button class="btn btn-secondary fw-bold text-light mx-1" data-bs-toggle="modal" data-bs-target="#NeiItemRequest">Solicitar</button>
                     <button class="btn btn-light-alert fw-bold text-light mx-1" data-bs-dismiss="modal">Fechar</button>
-                </div>
-                <div v-if="userStore.role === 'ADMIN'" @click="getRecord" data-bs-target="#itemHistory" data-bs-toggle="modal" title="Histórico" type="button" class="btn btn-primary  my-1 bg-primary rounded-2 p-1 d-flex justify-content-end text-light">
-                    <IconsHistory width="25px" height="25px"/>
                 </div>
             </div>
         </template> 

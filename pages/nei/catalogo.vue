@@ -1,44 +1,8 @@
 <template>
 <ModalNeiItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" 
     :item_details="showSearchItem ? searchItem : store.itemDetails" />
-
-<ModalActionConfirm v-if="itemsCache.length > 0">
-    <template v-slot:title> Confirmar aceitação </template>
-    <template v-slot:text> 
-        <div v-if="!initialLoading && itemsCache.length && currentItem != undefined" class="d-block">
-            <div class="d-flex">
-                <div class="d-block mb-2 pe-2">
-                    <label for="item-name">Nome do Item</label>
-                    <input readonly class="form-control bg-light-emphasis" :value="currentItem.name">
-                </div>
-                <div class="d-block mb-2 ps-2">
-                    <label for="item-name">Quantidade Disponível</label>
-                    <input readonly class="form-control bg-light-emphasis" :value="currentItem.quantity">
-                </div>
-            </div>
-            <div class="d-flex">
-                <div class="d-block mb-2 pe-2">
-                    <label for="item-name">Tipo unitário</label>
-                    <input readonly class="form-control bg-light-emphasis" :value="currentItem.type">
-                </div>
-                <div class="d-block mb-2 ps-2">
-                    <label for="item-name">Situação</label>
-                    <input readonly class="form-control bg-light-emphasis" :value="currentItem.available === true ? 'disponível' : 'indisponível'">
-                </div>
-            </div>
-            <h6 class="text-dark"> Mensagem para a solicitação </h6>
-            <textarea v-model="description" class="form-control textarea"> </textarea>
-            <div class="d-block mt-2">
-                <label for="item-qtd">Quantidade a ser solicitada</label> 
-                <input class="form-control" style="width: 225px !important;" v-model="itemQtd" type="number" pattern="[0,9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-            </div>
-        </div>
-    </template>
-    <template v-slot:buttons> 
-        <button @click="sendRequest()" data-bs-dismiss="modal" class="btn btn-secondary fw-bold mx-2"> Enviar </button>
-        <button data-bs-dismiss="modal" class="btn btn-light-alert fw-bold text-light mx-2"> Cancelar </button>
-    </template>
-</ModalActionConfirm>
+<ModalNeiItemRequest v-if="itemsCache.length > 0" :item_index="itemIndex" 
+    :item_details="showSearchItem ? searchItem : store.itemDetails" />
 
 <div class="table-container d-block mt-2">
     <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#NeiItemDetailing"></button>
@@ -54,7 +18,7 @@
     <div class="table-box-title position-absolute bg-light-emphasis d-flex align-items-center">
         <IconsBox class="me-1" width="25" height="25"/>
         <p class="box-title-text">
-            Tabela dos itens do almoxarifado {{searchStore.itemSearch.searching}}
+            Tabela dos itens do almoxarifado
         </p>
     </div>
     <div class="table-box row d-block bg-light mx-2">
@@ -104,7 +68,7 @@
                     <button title="Detalhes" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#NeiItemDetailing">
                         <IconsSearchGlass class="action-icon" width="18px" height="19px"/>
                     </button>
-                    <button title="Solicitar" class="my-0 details-btn position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}"  @click="showConfirm(index)" data-bs-toggle="modal" data-bs-target="#actionConfirm">
+                    <button title="Solicitar" class="my-0 details-btn position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}"  @click="showConfirm(index)" data-bs-toggle="modal" data-bs-target="#NeiItemRequest">
                          <IconsSolicitation class="action-icon" width="16px" height="16px"/>
                      </button>
                 </th>
@@ -417,16 +381,7 @@ const showDetails = (index) => {
 }
 const showConfirm = (index) => {
     itemIndex.value = index;
-    currentItem.value = itemsCache.value[cacheIndex.value][itemIndex.value];
-}
-const sendRequest = async () => {
-    try{
-        const res = await postRequest(userStore, currentItem.value.id, itemQtd.value, description.value)
-    }catch(err){
-        console.log(err)
-        return popUpStore.throwPopup('Erro: digite uma mensagem de solicitação', '#B71C1C')
-    }
-    return popUpStore.throwPopup('Solicitação enviada', '#0B3B69')
+    store.itemDetails = itemsCache.value[cacheIndex.value][itemIndex.value];
 }
 const searchItem = ref(undefined)
 const showSearchingDetails = async (itemId) => {
@@ -461,7 +416,7 @@ onBeforeRouteLeave(() => {
     display: block;
 }
 .table-container{
-    padding-top: 60px;
+    padding-top: 70px;
     margin-bottom: 62px;
     width: 100%;
     display: block !important;
@@ -541,7 +496,7 @@ p{
     border: none;
     border-bottom: solid 1px #1F69B1;
     border-radius: 10px 10px 0px 0px;
-    box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
+    box-shadow: inset 0px -12px 15px -15px rgb(18, 104, 184);
     color: rgb(0, 0, 0, 0.7); 
     transition: box-shadow 0.3s ease;
 }
@@ -593,7 +548,7 @@ p{
     margin-top: 5%;
     display: flex;
     justify-content: center;
-    margin-left: 125%;
+    margin-left: 150%;
     white-space: nowrap;
 }
 .pagination{

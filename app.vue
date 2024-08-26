@@ -129,6 +129,9 @@ function checkIfMobile() {
 .darkLayout .btn-light-alert{
   background-color: rgb(139, 16, 16) !important;
 }
+.darkLayout .bg-degrade{
+  background: linear-gradient(to bottom, rgb(0, 0, 0, 0.9) 20%, rgb(255, 255, 255, 0.9) 150%) !important;
+}
 
 .darkLayout .modal-body{
   background-color: #1A1A1A !important;
@@ -136,15 +139,24 @@ function checkIfMobile() {
 }
 .darkLayout .card{
   border: none !important;
+  box-shadow: 0px 0px 10px 2px rgb(255, 255, 255, 0.4) !important;
+}
+.darkLayout .card:hover{
+  border: none !important;
+  box-shadow: 0px 0px 10px 2px rgb(254, 213, 30, 0.3) !important;
+}
+.darkLayout .card-header{
+  border: solid 1px #333333 !important;
 }
 .darkLayout .card-body{
-  background-color: #1A1A1A !important;
-}
-.darkLayout tbody{
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
 }
 .darkLayout .card-footer{
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout tbody{
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
 }
@@ -240,6 +252,10 @@ function checkIfMobile() {
 .darkLayout ol li:hover{
   background: none !important;
 }
+.darkLayout .page-item:hover{
+  background: none !important;
+}
+
 .darkLayout nav li{
   color: rgb(255,255,255,0.8) !important;
   background-color: #1A1A1A !important;
@@ -253,9 +269,12 @@ function checkIfMobile() {
 .darkLayout li:hover{
   background-color: #786200 !important;
 }
+.darkLayout .btn-search:hover{
+  background-color: #786200 !important;
+}
 .darkLayout li::before{
   color: rgb(255,255,255,0.8) !important;
-}yyyyy
+}
 .darkLayout .small-menu{
   background: #1A1A1A !important;
 }
@@ -286,7 +305,7 @@ function checkIfMobile() {
   color: rgb(255,255,255,0.8) !important;
 }
 .darkLayout svg{
-  color: rgb(255,255,255,0.8) !important;
+  color: rgb(255,255,255,0.8);
 }
 .darkLayout .btn{
   color: rgb(255,255,255,0.8) !important;
@@ -316,7 +335,7 @@ function checkIfMobile() {
   border: solid 1px #333333 !important;
 }
 .darkLayout [class*='dark']{
-  color: rgb(255,255,255,0.8) !important;
+  color: rgb(255,255,255,0.8) ;
 }
 .darkLayout [class*='dark-emphasis']{
   color: rgb(255,255,255,0.8) !important;

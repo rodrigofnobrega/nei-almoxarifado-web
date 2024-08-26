@@ -11,7 +11,7 @@
         </h6>
         <p class="sub-catalog-text opacity-75">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
             Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
-        <span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
+            <span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
     </div>
     <div class="table-box-title position-absolute bg-light-emphasis d-flex align-items-center">
         <IconsBox class="me-1" width="25" height="25"/>
@@ -395,10 +395,20 @@ const showSearchingDetails = async (itemId) => {
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     initialLoading.value = false;
+});
+
+const showSearchItem = computed(() => {
     if(searchStore.itemSearch.searching){
         showSearchingDetails(searchStore.itemSearch.itemId);
+        searchStore.itemSearch.searching = false;
+        return true;
     }
-});
+    return false;
+})
+
+onBeforeRouteLeave(() => {
+    searchStore.itemSearch.searching = false;
+})
 </script>
 
 <style scoped>
