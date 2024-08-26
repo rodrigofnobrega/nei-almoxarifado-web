@@ -1,4 +1,10 @@
 <template>
+  <div>
+		<Head>
+			<Title>NEI Almoxarifado | Início</Title>
+			<Meta name="início" content="Página inicial"/>
+		</Head>
+	</div>
   <div class="container-fluid" style="margin-left: 0px;">
     <div class="d-flex paralalel-section">
       <div class="dashboard-section me-2 bg-light mb-4 pb-0 pt-0 rounded-3">

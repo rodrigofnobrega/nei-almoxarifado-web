@@ -1,4 +1,10 @@
 <template>
+  <div>
+    <Head>
+        <Title>NEI Almoxarifado | Sobre</Title>
+        <Meta name="sobre" content="Página para mostrar informações adicionais sobre o sistema"/>
+    </Head>
+  </div>
   <div class="container-fluid">
     <div class="description-container">
       <h1 class="d-flex description-title justify-content-center ">Sistema de Gerenciamento de Almoxarifado NEI</h1>

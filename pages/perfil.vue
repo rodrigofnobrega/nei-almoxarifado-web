@@ -1,4 +1,10 @@
 <template>
+  <div>
+		<Head>
+			<Title>NEI Almoxarifado | Perfil</Title>
+			<Meta name="perfil" content="Página sobre as informações do usuário"/>
+		</Head>
+	</div>
   <div class="container-fluid d-block">
     <div class="profile-container">
       <div class="profile-sidebar bg-light rounded-3  flex-column align-items-center">

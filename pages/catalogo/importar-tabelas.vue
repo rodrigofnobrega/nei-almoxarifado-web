@@ -1,4 +1,10 @@
 <template>
+    <div>
+        <Head>
+            <Title>NEI Almoxarifado | Importar Tabela</Title>
+            <Meta name="importar tabela" content="Página para importar uma tabela de itens"/>
+        </Head>
+    </div>
     <LoadersPageLoading :isLoading="loading" class="loader"/>
     <div class="container-fluid mx-4">
         <div class="dashboard-section me-2 bg-light mb-4 pb-0 pt-0">

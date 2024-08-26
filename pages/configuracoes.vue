@@ -1,4 +1,10 @@
 <template>
+<div>
+    <Head>
+        <Title>NEI Almoxarifado | Configurações</Title>
+        <Meta name="configurações" content="Página para configurar o design do site"/>
+    </Head>
+</div>
 <div class="settings-container container mb-5 mt-3">
     <!-- 
     <section class="settings-section mb-5">

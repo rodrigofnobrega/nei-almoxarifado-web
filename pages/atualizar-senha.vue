@@ -1,4 +1,10 @@
 <template>
+	<div>
+		<Head>
+			<Title>NEI Almoxarifado | Atualizar Senha</Title>
+			<Meta name="atualizar senha" content="Página para atualizar senha"/>
+		</Head>
+	</div>
     <LoadersPageLoading :isLoading="loading" class="loader"/>
 	<div class="d-flex justify-content-center  bg-primary auth-container">
 		<div class="container-fluid login-container d-flex justify-content-center">
