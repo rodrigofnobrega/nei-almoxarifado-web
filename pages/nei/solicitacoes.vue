@@ -229,6 +229,7 @@
                                                 Solicitação
                                             </p>
                                             <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.creationDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
+                                            <button @click="isResponseCard = !isResponseCard" class="btn btn-secondary">teste</button>
                                         </div>
                                     </template>
                                     <template v-slot:default>
@@ -266,6 +267,7 @@
                                                 </div>
                                             </div>	
                                         </div>
+                                        <div v-if="isResponseCard" class="position-absolute bg-warning opacity-50" style="top: 0px;width: 400px; height: 600px;"></div>
                                     </template>
                                     <template v-slot:footer>
                                         <div class="d-flex align-items-center fw-bold text-dark-emphasis justify-content-end">
@@ -445,6 +447,7 @@ const popUpStore = usePopupStore();
 const store = useStorageStore();
 const settingsStore = useSettingsStore();
 
+const isResponseCard = ref(false);
 
 const dropdownStates = ref([false, false, false, false]);
 const toggleDropdown = (dropdown_id) => {

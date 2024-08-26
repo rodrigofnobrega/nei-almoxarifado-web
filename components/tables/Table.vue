@@ -1,11 +1,11 @@
 <template>
     <ModalItemRegister />
-    <div class="container-fluid mx-0 px-0 col-12 rounded">
+    <div style="overflow-x: scroll !important;" class="container-fluid mx-0 px-0 col-12 rounded">
         <table class="table table-hover">
           <thead>
             <slot name="header" />
           </thead>
-          <tbody style="overflow-x: scroll;">
+          <tbody >
            <slot name="content" />
           </tbody>
         </table>

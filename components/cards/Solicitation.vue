@@ -59,7 +59,7 @@
 		<template v-slot:title> Confirmar aceitação</template>
 		<template v-slot:text> 
 			<p class="fw-bold"> Mensagem para a notificação </p>
-			<textarea class="form-control"> </textarea>
+			<textarea v-model="responseMessage" class="form-control textarea"> </textarea>
 		 </template>
 		<template v-slot:buttons> 
 			<button @click="AcceptRequest()" data-bs-dismiss="modal" class="btn btn-secondary fw-bold mx-2"> Enviar </button>
@@ -68,8 +68,8 @@
 	<ModalActionConfirm :id="`rejectModal${requestId}`">
 		<template v-slot:title> Confirmar rejeição </template>
 		<template v-slot:text> 
-			<p class="fw-bold"> Mensagem para a notificação </p>
-			<textarea class="form-control"> </textarea>
+			<p class="fw-bold"> Mensagem para a notificação</p>
+			<textarea v-model="responseMessage" class="form-control textarea"> </textarea>
 		 </template>
 		<template v-slot:buttons> 
 			<button @click="RejectRequest()"  data-bs-dismiss="modal" class="btn btn-secondary fw-bold mx-2"> Enviar </button>
@@ -86,6 +86,11 @@ import { inject, ref } from 'vue';
 
 export default {
 	components: { Card },
+	data() {
+        return {
+            responseMessage: ''
+        }
+    },
 	props: {
 		requestId: { type: Number, required: true, },
 		person: { type: String, required: true },
@@ -99,8 +104,7 @@ export default {
 	},
 	methods:{
 		async AcceptRequest(){
-			console.log(this.requestId)
-			const res = await requestAccept(this.userStore, this.requestId);
+			const res = await requestAccept(this.userStore, this.requestId, this.responseMessage);
 			if(res){
 				this.popupStore.throwPopup('Solicitação aceita', '#0B3B69')
 				this.sendDatatoParent()
@@ -109,8 +113,7 @@ export default {
 			this.popupStore.throwPopup('Erro: Quantidade solicitada maior que a disponível', '#B71C1C')
 		},
 		async RejectRequest(){
-			console.log(this.requestId)
-			const res = await requestDecline(this.userStore, this.requestId);
+			const res = await requestDecline(this.userStore, this.requestId, this.responseMessage);
 			if(res){
 				this.popupStore.throwPopup('Solicitação rejeitada', '#0B3B69');
 				this.sendDatatoParent()

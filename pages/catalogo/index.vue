@@ -21,7 +21,7 @@
     </div>
     <div class="table-box row d-block bg-light mx-2">
         <div class="table-actions d-flex justify-content-between aling-items-center">
-            <div class="d-flex align-items-center actions-btns">
+            <div class="d-flex align-items-center actions-btns bg-emphasis">
                 <ButtonsResponsiveNewItem class="res-action-btn mt-1" v-if="uploadReloader === 1" />
                 <ButtonsResponsiveFilter class="res-action-btn mt-1"/>
                 <ButtonsResponsiveConfigure class="res-action-btn mt-1"/>
@@ -636,7 +636,7 @@ tr:hover p{
     }.actions-btns{
         padding-bottom: 9px;
         border-radius: 0px 10px 0px 0px;
-        background-color: #D9D9D9;
+        background-color: #d6d8dc;
         justify-content: center;
     }
     .table-searchbar{

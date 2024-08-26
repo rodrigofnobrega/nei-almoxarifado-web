@@ -135,6 +135,11 @@ function checkIfMobile() {
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
 }
+@media screen and (max-width: 500px){
+  .actions-btns{
+        background-color: #010e23 !important;
+    }
+}
 .darkLayout .card{
   border: none !important;
   box-shadow: 0px 0px 10px 1px rgb(255, 255, 255, 0.4) !important;
