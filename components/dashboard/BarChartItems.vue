@@ -41,7 +41,7 @@
     </div>
     <Bar v-if="chartData.datasets[0].data.reduce((acc, current) => acc+current) > 0" class="chart-graph " :data="chartData" :options="chartOptions" />
     <div v-else class="d-flex justify-content-center mb-5">
-      <p class="fw-bold fs-5 opacity-75 py-5 mb-5">Nenhum dado encontrado</p>
+      <p class="fw-bold fs-5 opacity-75 py-5 my-5">Nenhum dado encontrado</p>
     </div>
   </div>
 </template>

@@ -26,7 +26,7 @@
                   <IconsClose @mouseenter="closeNot[index] = true" @mouseover="closeNot[index] = true" @click="removeNot(index)" class="position-fixed mb-1" width="30" height="30"/>
                 </div>-->
               </li>
-              <li v-show="!isNotification || requests.length === 0" class="dropdown-item fs-6 text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
+              <li v-show="!isNotification || requests.length === 0" class="dropdown-item fs-6 text-dark-emphasis py-2" style="background-color: white;">Nenhuma notificação enviada.</li>
             </ul>
           </div>
           <div class="nav-item dropdown">

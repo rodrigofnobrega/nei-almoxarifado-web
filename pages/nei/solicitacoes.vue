@@ -5,9 +5,7 @@
                 <IconsInformation class="me-2"/>
                 Descrição da página
             </h6>
-            <p class="sub-catalog-text opacity-75">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
-                Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
-            <span class="border-bottom border-dark-success pb-1">Adicionar <IconsThinPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
+            <p class="sub-catalog-text opacity-75"></p>
         </div>
         <div class="table-box-title  d-flex justify-content-between align-items-center text">
             <div class="d-flex box-title align-items-center px-1 text bg-light-emphasis" style="padding-top: 5px; padding-bottom: 5px;">
@@ -19,7 +17,7 @@
             <div class="d-flex justify-content-end aling-items-center me-4 actions" style="margin-top: 2px;">
                 <span v-if="!mobileView" @click="changeView = !changeView" type="button" style="color: rgb(0, 0, 0, 0.7);" class=" text-dark-emphasis box-title bg-light-emphasis px-2 table-searchbar me-2 position-sticky d-flex align-items-center">
                     <IconsMenu v-if="changeView" class="me-1"/>
-                    <IconsGrid v-if="!changeView" class="me-1"/>
+                    <IconsVerticalBars v-if="!changeView" class="me-1"/>
                     Vizualização
                 </span>
                 <span v-if="requestsLoad" class="box-title bg-light-emphasis position-sticky d-flex align-items-center table-searchbar" style="margin-top: 0.8px;">
@@ -33,21 +31,55 @@
                 <div class="request-container mx-2 text-dark-emphasis mt-3 rounded-2">
                     <div class="requests-box mt-0 pt-0 z-0">
                         <div class="d-flex box-title align-items-center justify-content-between mx-3" >
-                            <div class="d-flex align-items-center">
+                            <div :class="{'border-warning border-bottom': requestsCache.inProgressRequests.length > 0}" class="d-flex align-items-center pb-2">
                                 <IconsClock class="me-2 text-dark-warning" width="30" height="30"/>
                                 <h5 class="m-0 p-0">Em Progresso
                                 </h5>
                                 <span>({{requestsCache.inProgressRequests.length}})</span>
                             </div>
-                            <div class="dropdown">
+                            <div class="dropdown" @click.stop>
                                 <button title="Filtro" class="d-flex align-items-center btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
                                   <IconsBarFilter class="text-dark-emphasis me-1" width="25" height="25" />
                                 </button>
                                 <div class="dropdown-menu p-0">
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.inProgressRequests,'date', 'asc')">Data <IconsUpArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.inProgressRequests,'date', 'desc')">Data <IconsBottomArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.inProgressRequests,'name', 'asc')">Nome <IconsUpArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.inProgressRequests,'name', 'desc')">Nome <IconsBottomArrow width="22" height="22"/></li>
+                                    <li type=button class="dropdown-item fw-bold text-dark-emphasis" 
+                                         @click="ClicktoggleDropdown(1)"  @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
+                                        <div class="d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" type="button">
+                                            <span>Data</span>
+                                            <IconsClock class="action-icon"/>
+                                        </div>
+                                        <div v-show="dropdownStates[1]" class="sub-dropdown bg-light position-absolute">
+                                            <ul class="list-group">
+                                                <li @click="applyFilter(requestsCache.inProgressRequests,'date', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">asc</span>
+                                                    <IconsUpArrow width="18" height="18"/>
+                                                </li>
+                                                <li @click="applyFilter(requestsCache.inProgressRequests,'date', 'desc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">dec</span>
+                                                    <IconsBottomArrow width="18" height="18"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li type=button class="dropdown-item fw-bold text-dark-emphasis" 
+                                         @click="ClicktoggleDropdown(2)"  @mouseover="toggleDropdown(2)" @mouseout="toggleDropdown(2)">
+                                        <div class="d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" type="button">
+                                            <span>Nome</span>
+                                            <IconsNameSort class="action-icon"/>
+                                        </div>
+                                        <div v-show="dropdownStates[2]" class="sub-dropdown bg-light position-absolute mb-5">
+                                            <ul class="list-group">
+                                                <li @click="applyFilter(requestsCache.inProgressRequests,'name', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">asc</span>
+                                                    <IconsUpArrow width="18" height="18"/>
+                                                </li>
+                                                <li @click="applyFilter(requestsCache.inProgressRequests,'name', 'desc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">dec</span>
+                                                    <IconsBottomArrow width="18" height="18"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +112,7 @@
                                                     </div>		
                                                     <div class="mb-3"> 
                                                         <label class="form-label fw-semibold"> Código Sipac </label>
-                                                        <input readonly class="form-control" :value="request.item.sipacCode"> 
+                                                        <input readonly class="form-control" :value="request.item.sipacCode ? request.item.sipacCode : 'nenhum'"> 
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
@@ -111,7 +143,6 @@
                                         </template>
                                     </CardsCard>
                             </div>
-                                
                             <div :class="{'d-flex align-items-center ms-2': changeView}" v-if="requestsLoaded[0] < requestsCache.inProgressRequests.length">
                                 <div class="d-flex justify-content-center">
                                     <button title="Carregar Mais" @click="requestsLoaded[0] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold" style="padding: 3px;">
@@ -134,21 +165,55 @@
                 <div class="request-container text-dark-emphasis rounded-2 mx-2" :class="{'mt-4': changeView}">
                     <div class="requests-box pt-0 mt-3">
                         <div class="d-flex align-items-center justify-content-between mx-3">
-                            <div class="d-flex align-items-center">
+                            <div :class="{'border-dark-success border-bottom': requestsCache.acceptedRequests.length > 0}" class="d-flex align-items-center pb-2">
                                 <IconsConfirm class="text-light-success me-2" width="30" height="30"/>
                                 <h5 class="m-0 p-0">Aceitos
                                 </h5>
                                 <span>({{requestsCache.acceptedRequests.length}})</span>
                             </div>
-                            <div class="dropdown">
+                            <div class="dropdown" @click.stop>
                                   <button title="Filtro" class="btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
                                     <IconsBarFilter class="text-dark-emphasis me-1" width="25" height="25" />
                                   </button>
                                   <div class="dropdown-menu p-0">
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.acceptedRequests,'date', 'asc')">Data <IconsUpArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.acceptedRequests,'date', 'desc')">Data <IconsBottomArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.acceptedRequests,'name', 'asc')">Nome <IconsUpArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.acceptedRequests,'name', 'desc')">Nome <IconsBottomArrow width="22" height="22"/></li>
+                                    <li type=button class="dropdown-item fw-bold text-dark-emphasis" 
+                                         @click="ClicktoggleDropdown(1)"  @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
+                                        <div class="d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" type="button">
+                                            <span>Data</span>
+                                            <IconsClock class="action-icon"/>
+                                        </div>
+                                        <div v-show="dropdownStates[1]" class="sub-dropdown bg-light position-absolute">
+                                            <ul class="list-group">
+                                                <li @click="applyFilter(requestsCache.acceptedRequests,'date', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">asc</span>
+                                                    <IconsUpArrow width="18" height="18"/>
+                                                </li>
+                                                <li @click="applyFilter(requestsCache.acceptedRequests,'date', 'desc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">dec</span>
+                                                    <IconsBottomArrow width="18" height="18"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li type=button class="dropdown-item fw-bold text-dark-emphasis" 
+                                         @click="ClicktoggleDropdown(2)"  @mouseover="toggleDropdown(2)" @mouseout="toggleDropdown(2)">
+                                        <div class="d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" type="button">
+                                            <span>Nome</span>
+                                            <IconsNameSort class="action-icon"/>
+                                        </div>
+                                        <div v-show="dropdownStates[2]" class="sub-dropdown bg-light position-absolute mb-5">
+                                            <ul class="list-group">
+                                                <li @click="applyFilter(requestsCache.acceptedRequests,'name', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">asc</span>
+                                                    <IconsUpArrow width="18" height="18"/>
+                                                </li>
+                                                <li @click="applyFilter(requestsCache.acceptedRequests,'name', 'desc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">dec</span>
+                                                    <IconsBottomArrow width="18" height="18"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
                                 </div>
                             </div>
                         </div>
@@ -181,7 +246,7 @@
                                                 </div>		
                                                 <div class="mb-3"> 
                                                     <label class="form-label fw-semibold"> Código Sipac </label>
-                                                    <input readonly class="form-control" :value="request.item.sipacCode"> 
+                                                    <input readonly class="form-control" :value="request.item.sipacCode ? request.item.sipacCode : 'nenhum'">
                                                 </div>
                                             </div>
                                             <div class="col-6">
@@ -230,21 +295,55 @@
                 <div class="request-container text-dark-emphasis me-0 rounded-2 me-2 ms-2" :class="{'mt-4 ': changeView}">
                     <div class="requests-box mt-3 pt-0">
                         <div class="d-flex align-items-center justify-content-between mx-3">
-                            <div class="d-flex align-items-center">
+                            <div :class="{'border-dark-alert border-bottom': requestsCache.rejectedRequests.length > 0}" class="d-flex align-items-center pb-2">
                                 <IconsClose class="text-dark-alert me-2" width="30" height="30"/>
                                 <h5 class="m-0 p-0">Recusados
                                 </h5>
                                 <span>({{ requestsCache.rejectedRequests.length }})</span>
                             </div>
-                            <div class="dropdown">
+                            <div class="dropdown" @click.stop>
                                   <button class="btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
                                     <IconsBarFilter class="text-dark-emphasis me-1" title="Filtro" width="25" height="25" />
                                   </button>
                                   <div class="dropdown-menu p-0">
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.rejectedRequests,'date', 'asc')">Data <IconsUpArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.rejectedRequests,'date', 'desc')">Data <IconsBottomArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.rejectedRequests,'name', 'asc')">Nome <IconsUpArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.rejectedRequests,'name', 'desc')">Nome <IconsBottomArrow width="22" height="22"/></li>
+                                    <li type=button class="dropdown-item fw-bold text-dark-emphasis"
+                                         @click="ClicktoggleDropdown(1)"  @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
+                                        <div class="d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" type="button">
+                                            <span>Data</span>
+                                            <IconsClock class="action-icon"/>
+                                        </div>
+                                        <div v-show="dropdownStates[1]" class="sub-dropdown bg-light position-absolute">
+                                            <ul class="list-group">
+                                                <li @click="applyFilter(requestsCache.rejectedRequests,'date', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">asc</span>
+                                                    <IconsUpArrow width="18" height="18"/>
+                                                </li>
+                                                <li @click="applyFilter(requestsCache.rejectedRequests,'date', 'desc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">dec</span>
+                                                    <IconsBottomArrow width="18" height="18"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li type=button class="dropdown-item fw-bold text-dark-emphasis" 
+                                         @click="ClicktoggleDropdown(2)"  @mouseover="toggleDropdown(2)" @mouseout="toggleDropdown(2)">
+                                        <div class="d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" type="button">
+                                            <span>Nome</span>
+                                            <IconsNameSort class="action-icon"/>
+                                        </div>
+                                        <div v-show="dropdownStates[2]" class="sub-dropdown bg-light position-absolute mb-5">
+                                            <ul class="list-group">
+                                                <li @click="applyFilter(requestsCache.rejectedRequests,'name', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">asc</span>
+                                                    <IconsUpArrow width="18" height="18"/>
+                                                </li>
+                                                <li @click="applyFilter(requestsCache.rejectedRequests,'name', 'desc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">dec</span>
+                                                    <IconsBottomArrow width="18" height="18"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
                                 </div>
                             </div>
                         </div>
@@ -277,7 +376,7 @@
                                                 </div>		
                                                 <div class="mb-3"> 
                                                     <label class="form-label fw-semibold"> Código Sipac </label>
-                                                    <input readonly class="form-control" :value="request.item.sipacCode"> 
+                                                    <input readonly class="form-control" :value="request.item.sipacCode ? request.item.sipacCode : 'nenhum'">
                                                 </div>
                                             </div>
                                             <div class="col-6">
@@ -345,6 +444,23 @@ const userStore = useUser();
 const popUpStore = usePopupStore();
 const store = useStorageStore();
 const settingsStore = useSettingsStore();
+
+
+const dropdownStates = ref([false, false, false, false]);
+const toggleDropdown = (dropdown_id) => {
+    dropdownStates.value[dropdown_id-1] = false
+    dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
+    dropdownStates.value[dropdown_id+1] = false
+}
+const ClicktoggleDropdown = (dropdown_id) => {
+    if(!settingsStore.isMobile){
+        return 0
+    }
+    dropdownStates.value[dropdown_id-1] = false
+    dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
+    dropdownStates.value[dropdown_id+1] = false
+}
+
 
 const requestsCache = ref({
     acceptedRequests: [],
@@ -539,7 +655,7 @@ onMounted(() => {
 }
 .card-container{
     overflow-x: scroll;
-    margin-top: 10px;
+    margin-top: 4px;
     border-radius: 10px;
     width: 96%;
     transition: box-shadow 0.2s ease-in-out, transform 0.1s ease-in-out;
@@ -562,6 +678,39 @@ onMounted(() => {
 }
 .box-title-text{
     font-size: 20px;
+}
+.border-warning{
+    border-color: rgb(181, 147, 0) !important;
+    box-shadow: inset 0px -12px 15px -10px rgb(181, 147, 0);
+}
+.border-dark-alert{
+    border-color: rgb(183, 28, 28, 1) !important;
+    box-shadow: inset 0px -12px 15px -10px rgb(183, 28, 28, 1);
+}
+.border-dark-success{
+    border-color: rgb(51, 158, 56, 1) !important;
+    box-shadow: inset 0px -12px 15px -10px rgb(51, 158, 56, 1);
+}
+.dropdown-menu{
+    min-width: 130px;
+    width: 60px !important;
+    margin-left: -100px !important;
+}
+.list-group-item{
+    color: #494b50;
+    height: 34px;
+}
+.list-group-item:hover{
+    background-color: rgb(214, 175, 0);
+}
+.sub-dropdown{
+    border-radius: 12px;
+    border: 1px #D9D9D9 solid;
+    position: absolute;
+    left: -54px !important;
+    width: 65px;
+    margin-top: -45px;
+    min-width: 40px;
 }
 .response-container{
     box-shadow: 0px 0px 10px 1px rgb(0, 0, 0, 0.3);

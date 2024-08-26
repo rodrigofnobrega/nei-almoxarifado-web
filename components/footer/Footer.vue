@@ -5,7 +5,7 @@
   <section id="info">
     <div class="container text-center text-md-start mt-5">
        <div class="row"> 
-        <div class="col-md-7 col-lg-7 col-xl-8 d-flex flex-column "> 
+        <div class="col-md-8 col-lg-8 col-xl-8 d-flex flex-column "> 
           <h5 class="fw-bold"> Núcleo de Educação da Infânica - CAp/UFRN </h5>
 	        <p> Sistema de Gerenciamento de Almoxarifado </p>
           <p> Encargo Administrativo </p>

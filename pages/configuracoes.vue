@@ -58,24 +58,24 @@
                     </div>
                 </div>
             </div>
-            <div class="card themes-card mx-2 bg-primary" @click="changeLayout(1)"  onclick="document.getElementById('themeRadio3').checked = true;">
-                <img src="/darkLayout.png" class="card-img-top" alt="...">
+            <div class="card themes-card mx-2 bg-primary" @click="changeLayout(1)"  onclick="document.getElementById('themeRadio2').checked = true;">
+                <img src="/alternativeLayout.png" class="card-img-top" alt="...">
                 <div class="card-body p-3 text-dark-emphasis">
                     <div class="form-check text-light rounded-2">
-                      <input :checked="settingsStore.layout === 1" class="form-check-input" type="radio" id="themeRadio3" name="themeOptions" value="option3">
-                      <label class="card-text fw-bold form-check-label fw-bold" for="themeRadio3">
-                        Tema escuro
+                      <input :checked="settingsStore.layout === 1" class="form-check-input" type="radio" id="themeRadio2" name="themeOptions" value="option2">
+                      <label class="card-text fw-bold form-check-label fw-bold" for="themeRadio2">
+                        Tema alternativo
                       </label>
                     </div>
                 </div>
             </div>
-            <div class="card themes-card mx-2 bg-primary" @click="changeLayout(2)"  onclick="document.getElementById('themeRadio2').checked = true;">
-                <img src="/alternativeLayout.png" class="card-img-top" alt="...">
+            <div class="card themes-card mx-2 bg-primary" @click="changeLayout(2)"  onclick="document.getElementById('themeRadio3').checked = true;">
+                <img src="/darkLayout.png" class="card-img-top" alt="...">
                 <div class="card-body p-3 text-dark-emphasis">
                     <div class="form-check text-light rounded-2">
-                      <input :checked="settingsStore.layout === 2" class="form-check-input" type="radio" id="themeRadio2" name="themeOptions" value="option2">
-                      <label class="card-text fw-bold form-check-label fw-bold" for="themeRadio2">
-                        Tema alternativo
+                      <input :checked="settingsStore.layout === 2" class="form-check-input" type="radio" id="themeRadio3" name="themeOptions" value="option3">
+                      <label class="card-text fw-bold form-check-label fw-bold" for="themeRadio3">
+                        Tema escuro
                       </label>
                     </div>
                 </div>

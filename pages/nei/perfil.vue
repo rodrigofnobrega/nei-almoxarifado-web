@@ -319,7 +319,7 @@ import { getRequestByStatusUserId, getRequestByUser } from '../../services/reque
 
 
 definePageMeta({
-  layout: 'profile'
+  layout: 'client'
 });
 const userStore = useUser();
 const popUpStore = usePopupStore();
@@ -432,13 +432,7 @@ const deleteAccount = async () => {
   const res = await deleteUser(userStore, userStore.id);
 }
 // Define o título da página
-const setpageTitle = inject('setpageTitle');
-const sendDataToParent = () => {
-  const title = "Perfil";
-  const route = `${useRoute().fullPath.slice(0, 0)}`;
-  setpageTitle(title, route, 'profile');
-};
-sendDataToParent();
+
 
 onMounted(async () => {
   await fetchRequests(0);
@@ -453,6 +447,10 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.container-fluid{
+  padding-top: 100px;
+  padding-bottom: 50px;
+}
 .profile-container {
   display: flex;
 }

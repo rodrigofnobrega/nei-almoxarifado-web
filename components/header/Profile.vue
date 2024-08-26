@@ -21,7 +21,7 @@
                   Feita em {{ request.creationDate.slice(0, 19) }}
                 </span>
               </li>
-              <li v-show="!isNotification || requests.length === 0" class="p-2 dropdown-item fs-6 text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
+              <li v-show="!isNotification || requests.length === 0" class="p-2 dropdown-item fs-6 text-dark-emphasis py-2" style="background-color: white;">Nenhuma notificação enviada.</li>
             </ul>
           </div>
           <div class="nav-item dropdown">

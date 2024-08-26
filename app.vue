@@ -2,9 +2,8 @@
   <div :class="
   {
     layoutDefault: layoutBg === 0, 
-    darkLayout: layoutBg === 1, 
-    alternativeLayout: layoutBg === 2, 
-    lightLayout: layoutBg === 3,
+    alternativeLayout: layoutBg === 1, 
+    darkLayout: layoutBg === 2, 
     poppins: font === 0, 
     inter: font === 1, 
     montserrat: font === 2, 
@@ -132,14 +131,13 @@ function checkIfMobile() {
 .darkLayout .bg-degrade{
   background: linear-gradient(to bottom, rgb(0, 0, 0, 0.9) 20%, rgb(255, 255, 255, 0.9) 150%) !important;
 }
-
 .darkLayout .modal-body{
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
 }
 .darkLayout .card{
   border: none !important;
-  box-shadow: 0px 0px 10px 2px rgb(255, 255, 255, 0.4) !important;
+  box-shadow: 0px 0px 10px 1px rgb(255, 255, 255, 0.4) !important;
 }
 .darkLayout .card:hover{
   border: none !important;
@@ -219,6 +217,9 @@ function checkIfMobile() {
 }
 .darkLayout .border-2{
   border-color: #333333;
+}
+.darkLayout .section-title{
+  border-bottom: 1px solid #333333 !important;
 }
 .darkLayout td{
   color: rgb(255,255,255,0.8) !important;

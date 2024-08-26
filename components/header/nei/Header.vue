@@ -5,7 +5,7 @@
         <Brand class="ms-3"/>
         <TooltipsRectangular class="ms-5 ps-5 pt-2" :toolTipState="toolTip" :toolTipText="'Página Inicial'"/>
       </div> 
-      <nav v-if="!settingsStore.isMobile" class="navbar navbar-expand py-0">
+      <nav v-if="!settingsStore.isMobile" class="navbar navbar-expand py-0 ps-5">
           <div class="container-fluid">
             <ul class="navbar-nav d-flex ms-0">
                 <a :class="{'navbar-active': currentRoute.fullPath === '/nei/'}" class="px-1 nav-item nav-link text-light" href="/nei/" type="button">Início</a>

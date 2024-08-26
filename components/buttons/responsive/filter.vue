@@ -1,6 +1,6 @@
 <template>
-    <div class="dropdown">
-    <button v-if="settingsStore.isMobile" @click.stop @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" 
+    <div class="dropdown" @click.stop>
+    <button v-if="settingsStore.isMobile" @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" 
         class="dropdown-principal mt-1 filter-btn action-btn d-flex btn btn-outline-primary mx-1 px-2"  
         data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
         Filtro
@@ -35,7 +35,7 @@
                 </div>
             </li>-->
             <li>
-                <div class="vue-dropdown" @click="ClicktoggleDropdown(1)"  @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
+                <div class="vue-dropdown" @click="ClicktoggleDropdown(1)"  @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)" >
                     <div  class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
                         criação
                         <IconsClock class="action-icon"/>
@@ -116,7 +116,7 @@ const toggleDropdown = (dropdown_id) => {
     dropdownStates.value[dropdown_id+1] = false
 }
 const ClicktoggleDropdown = (dropdown_id) => {
-    if(!store.isMobile){
+    if(!settingsStore.isMobile){
         return 0
     }
     dropdownStates.value[dropdown_id-1] = false
@@ -137,7 +137,7 @@ li{
     list-style-type: none;
 }
 .large-menu{
-    width: 136px;
+    width: 146px;
     min-width: 40px;
 }
 .small-menu{

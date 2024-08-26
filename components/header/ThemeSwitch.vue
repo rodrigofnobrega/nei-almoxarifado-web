@@ -1,18 +1,20 @@
 <template>
     <div class="form-check mx-0 px-0 form-switch">
-        <input @click="themeSwitch" v-model="teste" class="form-check-input shadow-none mx-0" type="checkbox" role="switch" id="flexSwitchCheckDefault"> 
+        <input @click="themeSwitch" v-model="isDark" class="form-check-input shadow-none mx-0" type="checkbox" role="switch" id="flexSwitchCheckDefault"> 
     </div>
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import { useSettingsStore } from '../../stores/settings.ts';
 
 const settingsStore = useSettingsStore();
 
-const teste = ref(settingsStore.layout === 1 ? true : false);
+const isDark = computed(() => {
+    return settingsStore.layout == 2 ? true : false;
+})
 const themeSwitch = () => {
-    teste.value === false ? settingsStore.layout = 1 : settingsStore.layout = 0;
+    isDark.value === false ? settingsStore.layout = 2 : settingsStore.layout = 0;
 }
 </script>
 
