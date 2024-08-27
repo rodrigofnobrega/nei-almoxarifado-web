@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <div class="sub-catalog bg-light mt-1 ps-2 pe-2">
+        <div class="sub-catalog bg-light mt-1 px-2">
             <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
                 <IconsInformation class="me-2"/>
                 Descrição da página
@@ -29,9 +29,9 @@
         <div class="requests-container mx-2 bg-light">
             <div :class="{'d-flex': !changeView, 'd-block': changeView}" class="justify-content-between mb-5">
                 <div class="request-container mx-2 text-dark-emphasis mt-3 rounded-2">
-                    <div class="requests-box mt-0 pt-0 z-0">
-                        <div class="d-flex box-title align-items-center justify-content-between mx-3" >
-                            <div :class="{'border-warning border-bottom': requestsCache.inProgressRequests.length > 0}" class="d-flex align-items-center pb-2">
+                    <div :class="{'box-bg-warning': requestsCache.inProgressRequests.length > 0}" class="requests-box mt-0 pt-0 z-0">
+                        <div :class="{'border-warning border-bottom': requestsCache.inProgressRequests.length > 0}" class="d-flex box-title align-items-center justify-content-between px-2" >
+                            <div class="d-flex align-items-center py-2">
                                 <IconsClock class="me-2 text-dark-warning" width="30" height="30"/>
                                 <h5 class="m-0 p-0">Em Progresso
                                 </h5>
@@ -94,8 +94,11 @@
                                                 <p class="justify-content-start mb-3 fw-bold">
                                                     Solicitação
                                                 </p>
-                                                <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.creationDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
                                             </div>
+                                            <button type="button" @click="cancelRequest(request.id, index)" class="position-absolute response-toggle btn btn-dark-alert fw-bold px-2 pb-2 rounded-0 d-flex align-items-center">
+                                                Cancelar
+                                                <IconsClose height="21" width="22"/>
+                                            </button>
                                         </template>
                                         <template v-slot:default>
                                             <div class="row cards-row">
@@ -134,18 +137,15 @@
                                             </div>
                                         </template>
                                         <template v-slot:footer>
-                                            <div class="d-flex align-items-center justify-content-end">
-                                                <span type="button" @click="cancelRequest(request.id, index)" class="btn btn-outline-dark-alert fw-bold px-2 py-1 d-flex align-items-center">
-                                                    Cancelar
-                                                    <IconsClose height="21" width="22"/>
-                                                </span>
+                                            <div class="d-flex align-items-center fw-bold text-dark-emphasis justify-content-end">
+                                                Solicitação feita em: {{ request.creationDate.slice(0,19) }}
                                             </div>
                                         </template>
                                     </CardsCard>
                             </div>
-                            <div :class="{'d-flex align-items-center ms-2': changeView}" v-if="requestsLoaded[0] < requestsCache.inProgressRequests.length">
+                            <div :class="{'d-flex align-items-center m-2': changeView}" v-if="requestsLoaded[0] < requestsCache.inProgressRequests.length">
                                 <div class="d-flex justify-content-center">
-                                    <button title="Carregar Mais" @click="requestsLoaded[0] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold" style="padding: 3px;">
+                                    <button title="Carregar Mais" @click="requestsLoaded[0] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold m-2" style="padding: 3px;">
                                         <IconsThinPlus width="30" height="30"/>
                                     </button>
                                 </div>
@@ -163,9 +163,9 @@
                     </div>
                 </div>
                 <div class="request-container text-dark-emphasis rounded-2 mx-2" :class="{'mt-4': changeView}">
-                    <div class="requests-box pt-0 mt-3">
-                        <div class="d-flex align-items-center justify-content-between mx-3">
-                            <div :class="{'border-dark-success border-bottom': requestsCache.acceptedRequests.length > 0}" class="d-flex align-items-center pb-2">
+                    <div :class="{'box-bg-success': requestsCache.acceptedRequests.length > 0}" class="requests-box pt-0 mt-3">
+                        <div  :class="{'border-dark-success border-bottom': requestsCache.acceptedRequests.length > 0}"  class="d-flex align-items-center justify-content-between px-2">
+                            <div class="d-flex align-items-center py-2">
                                 <IconsConfirm class="text-light-success me-2" width="30" height="30"/>
                                 <h5 class="m-0 p-0">Aceitos
                                 </h5>
@@ -227,9 +227,8 @@
                                         <div class="d-flex justify-content-between align-items-center">
                                             <p class="justify-content-start mb-3 fw-bold">
                                                 Solicitação
-                                            </p>
-                                            <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.creationDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
-                                            <button @click="isResponseCard = !isResponseCard" class="btn btn-secondary">teste</button>
+                                            </p> 
+                                            <button @click="isResponseCard = !isResponseCard" class="response-toggle position-absolute btn text-light pb-2 rounded-0 text-nowrap">Ver {{ isResponseCard ? 'Solicitação': 'Resposta' }}</button>
                                         </div>
                                     </template>
                                     <template v-slot:default>
@@ -267,18 +266,42 @@
                                                 </div>
                                             </div>	
                                         </div>
-                                        <div v-if="isResponseCard" class="position-absolute bg-warning opacity-50" style="top: 0px;width: 400px; height: 600px;"></div>
+                                        <div :style="{width: isResponseCard ? '100%' : '0px'}"  class="response-card position-absolute bg-light">
+                                            <div :style="{opacity: isResponseCard ? '100%' : '0', transition: isResponseCard ? 'opacity 1s ease-in' : 'opacity 0.1s ease-in'}"  class="row cards-row mx-0">
+                                                <div class="d-flex bg-secondary text-light justify-content-between align-items-center">
+                                                    <p class="justify-content-start my-2 fw-bold">
+                                                        Resposta da Solicitação
+                                                    </p>
+                                                </div>
+                                                <div class="mb-3 mt-3"> 
+                                                    <label class="form-label fw-semibold"> Horário da Resposta </label>
+                                                    <div class="overflow-x-auto">
+                                                        <input readonly class="form-control overflow-x-auto" :value="request.updatedDate.slice(0, 19)"> 
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"> 
+                                                    <label class="form-label fw-semibold"> Resposta a Solicitação </label>
+                                                    <input readonly class="form-control" :value="request.status"> 
+                                                </div>	
+                                                <div class="mb-0"> 
+                                                    <label class="form-label fw-semibold"> Mensagem da Administração </label>
+                                                    <div class="d-flex">
+                                                        <textarea readonly class="form-control"> {{ request.adminComment ? request.adminComment : 'nenhuma' }} </textarea>
+                                                    </div>
+                                                </div>	
+                                            </div>
+                                        </div>
                                     </template>
                                     <template v-slot:footer>
                                         <div class="d-flex align-items-center fw-bold text-dark-emphasis justify-content-end">
-                                            Resposta feita em: {{ request.updatedDate.slice(0,19) }}
+                                            Solicitação feita em: {{ request.creationDate.slice(0,19) }}
                                             <!--<button class="btn btn-secondary fw-bold px-2 py-1">Ver resposta</button>-->
                                         </div>
                                     </template>
                                 </CardsCard>
-                                <div :class="{'d-flex align-items-center ms-2': changeView}" v-if="requestsLoaded[1] < requestsCache.acceptedRequests.length">
+                                <div :class="{'d-flex align-items-center m-2': changeView}" v-if="requestsLoaded[1] < requestsCache.acceptedRequests.length">
                                     <div class="d-flex justify-content-center">
-                                        <button title="Carregar Mais" @click="requestsLoaded[1] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold" style="padding: 3px;">
+                                        <button title="Carregar Mais" @click="requestsLoaded[1] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold m-2" style="padding: 3px;">
                                             <IconsThinPlus width="30" height="30"/>
                                         </button>
                                     </div>
@@ -294,10 +317,10 @@
                         </div>
                     </div>    
                 </div>
-                <div class="request-container text-dark-emphasis me-0 rounded-2 me-2 ms-2" :class="{'mt-4 ': changeView}">
-                    <div class="requests-box mt-3 pt-0">
-                        <div class="d-flex align-items-center justify-content-between mx-3">
-                            <div :class="{'border-dark-alert border-bottom': requestsCache.rejectedRequests.length > 0}" class="d-flex align-items-center pb-2">
+                <div class="request-container text-dark-emphasis rounded-2 mx-2" :class="{'mt-4 ': changeView}">
+                <div :class="{'box-bg-alert': requestsCache.rejectedRequests.length > 0}" class="requests-box mt-3 pt-0">
+                        <div :class="{'border-dark-alert border-bottom': requestsCache.rejectedRequests.length > 0}"  class="d-flex align-items-center justify-content-between px-2">
+                            <div class="d-flex align-items-center py-2">
                                 <IconsClose class="text-dark-alert me-2" width="30" height="30"/>
                                 <h5 class="m-0 p-0">Recusados
                                 </h5>
@@ -350,7 +373,6 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center cards-box">
-
                             <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}">
                                 <CardsCard :class="{'card-width-adjust': changeView}" v-if="requestsCache.rejectedRequests.length > 0" 
                                     v-for="(request, index) in requestsCache.rejectedRequests.slice(0, requestsLoaded[2])" :key="index" 
@@ -360,7 +382,6 @@
                                             <p class="justify-content-start mb-3 fw-bold">
                                                 Solicitação
                                             </p>
-                                            <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.creationDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
                                         </div>
                                     </template>
                                     <template v-slot:default>
@@ -401,14 +422,14 @@
                                     </template>
                                     <template v-slot:footer>
                                         <div class="d-flex align-items-center justify-content-center fw-bold text-dark-emphasis ">
-                                            Resposta feita em: {{ request.updatedDate.slice(0,19) }}
+                                            Solicitação feita em: {{ request.creationDate.slice(0,19) }}
                                             <!--<button class="btn btn-secondary fw-bold px-2 py-1">Ver resposta</button>-->
                                         </div>
                                     </template>
                                 </CardsCard>
-                            <div :class="{'d-flex align-items-center ms-2': changeView}" v-if="requestsLoaded[2] < requestsCache.rejectedRequests.length">
+                            <div :class="{'d-flex align-items-center m-2': changeView}" v-if="requestsLoaded[2] < requestsCache.rejectedRequests.length">
                                 <div class="d-flex justify-content-center">
-                                    <button title="Carregar Mais" @click="requestsLoaded[2] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold" style="padding: 3px;">
+                                    <button title="Carregar Mais" @click="requestsLoaded[2] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold m-2" style="padding: 3px;">
                                         <IconsThinPlus width="30" height="30"/>
                                     </button>
                                 </div>
@@ -647,14 +668,13 @@ onMounted(() => {
     padding: 80px 0 100px 0;
 }
 .requests-container{
-    padding-right: 15px;
     box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.5);
     border: 1px #D9D9D9 solid;
     border-radius: 0px 10px 10px 10px;
     border-top: solid 1px #ccc;
 }
 .request-container{
-    width: 100%; 
+    width: 99%; 
 }
 .card-container{
     overflow-x: scroll;
@@ -664,7 +684,9 @@ onMounted(() => {
     transition: box-shadow 0.2s ease-in-out, transform 0.1s ease-in-out;
 }
 .requests-box{
-    z-index: 10000 !important;
+    border: 1px solid rgb(0, 0, 0, 0.2);
+    border-radius: 10px;
+    z-index: 1000 !important;
 }
 .cards-box{
     overflow-x: scroll;
@@ -684,15 +706,24 @@ onMounted(() => {
 }
 .border-warning{
     border-color: rgb(181, 147, 0) !important;
-    box-shadow: inset 0px -12px 15px -10px rgb(181, 147, 0);
+    box-shadow: inset 0px -12px 15px -10px rgb(181, 147, 0, 0.5);
 }
 .border-dark-alert{
     border-color: rgb(183, 28, 28, 1) !important;
-    box-shadow: inset 0px -12px 15px -10px rgb(183, 28, 28, 1);
+    box-shadow: inset 0px -12px 15px -10px rgb(183, 28, 28, 0.5);
 }
 .border-dark-success{
     border-color: rgb(51, 158, 56, 1) !important;
-    box-shadow: inset 0px -12px 15px -10px rgb(51, 158, 56, 1);
+    box-shadow: inset 0px -12px 15px -10px rgb(51, 158, 56, 0.5);
+}
+.box-bg-warning{
+    background-color: rgba(254, 213, 30, 0.2);
+}
+.box-bg-success{
+    background-color: rgba(51, 158, 56, 0.2)
+}
+.box-bg-alert{
+    background-color: rgba(183, 28, 28, 0.2);
 }
 .dropdown-menu{
     min-width: 130px;
@@ -730,6 +761,9 @@ onMounted(() => {
     background-color: rgb(242, 242, 242);
     border: solid 1px rgb(0, 0, 0, 0.2);
 }
+.cards-row{
+    transition: opacity 1s ease-in;
+}
 .resquest-time{
 	font-size: 15px;
 	opacity: 80%;
@@ -748,6 +782,20 @@ onMounted(() => {
 .sub-catalog-text{
     padding: 0px 10px 0px 10px;
     font-size: 15px;
+}
+.response-card{
+    overflow: hidden;
+    left: 0px;
+    top: 0px;
+    height: 475px;
+    transition: width 0.5s ease-in-out;
+    box-shadow: inset 0px 0px 100px 1px rgba(0, 0, 0, 0.1)
+}
+.response-toggle{
+    background-color: rgb(31, 105, 177, 0.6);
+    right: 0px;
+    top: 0px;
+    z-index: 10000;
 }
 h6{
     font-weight: 400;

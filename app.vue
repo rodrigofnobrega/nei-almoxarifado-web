@@ -210,6 +210,9 @@ function checkIfMobile() {
   border: 1px solid rgb(51, 51, 51, 1) !important; 
   border-right: none !important; 
 }
+.darkLayout .requests-box{
+  border: 1px solid rgb(255, 255, 255, 0.2) !important;
+}
 .darkLayout img{
   color: rgb(255,255,255,0.8) !important;
   background-color: #1A1A1A !important;
