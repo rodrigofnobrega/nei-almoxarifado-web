@@ -1,4 +1,18 @@
 <template>
+    <ModalActionConfirm>
+        <template v-slot:text>
+            <div class="d-flex align-items-center justify-content-center">
+                <p class="fw-bold fs-5 my-3">Deseja cancelar a solicitação?</p>
+            </div>
+        </template>
+
+        <template v-slot:buttons>
+            <div class="d-flex align-items-center justify-content-end">
+                <button data-bs-dismiss="modal" class="btn btn-dark-alert fw-bold py-2 px-1 me-2 text-light">Cancelar</button>
+                <button data-bs-dismiss="modal" @click="cancelRequest(requestToCancel.id, requestToCancel.index)" class="btn btn-dark-success py-2 px-1 ms-2 fw-bold text-light">Confirmar</button>
+            </div>
+        </template>
+    </ModalActionConfirm>
     <div class="container-fluid">
         <div class="sub-catalog bg-light mt-1 px-2">
             <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
@@ -16,9 +30,9 @@
             </div>
             <div class="d-flex justify-content-end aling-items-center me-4 actions" style="margin-top: 2px;">
                 <span v-if="!mobileView" @click="changeView = !changeView" type="button" style="color: rgb(0, 0, 0, 0.7);" class=" text-dark-emphasis box-title bg-light-emphasis px-2 table-searchbar me-2 position-sticky d-flex align-items-center">
-                    <IconsMenu v-if="changeView" class="me-1"/>
-                    <IconsVerticalBars v-if="!changeView" class="me-1"/>
                     Vizualização
+                    <IconsMenu v-if="changeView" class="ms-1"/>
+                    <IconsVerticalBars v-if="!changeView" class="ms-1"/>
                 </span>
                 <span v-if="requestsLoad" class="box-title bg-light-emphasis position-sticky d-flex align-items-center table-searchbar" style="margin-top: 0.8px;">
                     <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
@@ -95,7 +109,7 @@
                                                     Solicitação
                                                 </p>
                                             </div>
-                                            <button type="button" @click="cancelRequest(request.id, index)" class="position-absolute response-toggle btn btn-dark-alert fw-bold px-2 pb-2 rounded-0 d-flex align-items-center">
+                                            <button type="button" data-bs-toggle="modal" data-bs-target="#actionConfirm" @click="requestToCancel = {id: request.id, index: index}" class="position-absolute response-toggle btn btn-dark-alert fw-bold px-2 pb-2 rounded-0 d-flex align-items-center">
                                                 Cancelar
                                                 <IconsClose height="21" width="22"/>
                                             </button>
@@ -148,8 +162,6 @@
                                     <button title="Carregar Mais" @click="requestsLoaded[0] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold m-2" style="padding: 3px;">
                                         <IconsThinPlus width="30" height="30"/>
                                     </button>
-                                </div>
-                                <div class="d-flex justify-content-center">
                                 </div>
                             </div>
                         </div>
@@ -222,16 +234,17 @@
                             <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}">
                                 <CardsCard :class="{'card-width-adjust': changeView}" 
                                 v-if="requestsCache.acceptedRequests.length > 0"
-                                 v-for="(request, index) in requestsCache.acceptedRequests.slice(0, requestsLoaded[1])" :key="index" class="col-6 card-container mb-3 mx-2 bg-light-background">
+                                 v-for="(request, index) in requestsCache.acceptedRequests.slice(0, requestsLoaded[1])" 
+                                 :key="index" class="col-6 card-container mb-3 mx-2 bg-light-background"
+                                 >
                                     <template v-slot:header>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <p class="justify-content-start mb-3 fw-bold">
                                                 Solicitação
-                                            </p> 
-                                            <button @click="isResponseCard = !isResponseCard" class="d-flex align-items-center justify-content-center response-toggle position-absolute text-light btn btn-secondary  pb-2 rounded-0 text-nowrap fw-bold">
-                                                <span>Ver {{ isResponseCard ? 'Solicitação': 'Resposta' }}</span>
-                                                <IconsExit v-if="!isResponseCard" class="ms-1" width="20" height="20" />
-                                                <IconsRequest v-else class="ms-1" width="20" height="20" />
+                                            </p>
+                                            <button :title="isResponseCard[0][index] ? 'Ver Solicitação' : 'Ver resposta da solicitação'"   @click="isResponseCard[0][index] = !isResponseCard[0][index]" class="d-flex align-items-center justify-content-center pb-2 response-toggle hide-toggle position-absolute text-light btn btn-secondary rounded-0 text-nowrap fw-bold">
+                                                <IconsExit v-if="!isResponseCard[0][index]" class="mt-1" width="20" height="20" />
+                                                <IconsRequest v-else class="mt-1" width="20" height="20" />
                                             </button>
                                         </div>
                                     </template>
@@ -270,26 +283,26 @@
                                                 </div>
                                             </div>	
                                         </div>
-                                        <div :style="{width: isResponseCard ? '100%' : '0px'}"  class="response-card position-absolute bg-light">
-                                            <div :style="{opacity: isResponseCard ? '100%' : '0', transition: isResponseCard ? 'opacity 1s ease-in' : 'opacity 0.1s ease-in'}"  class="row cards-row mx-0">
+                                        <div  :style="{left: isResponseCard[0][index] ? '0px' : '100%', transition: 'left 0.9s ease-in-out'}" class="response-card position-absolute bg-light">
+                                            <div  class="row cards-row mx-0 text-nowrap">
                                                 <div class="d-flex bg-dark-emphasis text-light justify-content-between align-items-center">
                                                     <p class="justify-content-start my-2 fw-bold">
                                                         Resposta da Solicitação
                                                     </p>
                                                 </div>
-                                                <div class="mb-3 mt-3"> 
+                                                <div class="my-3"> 
+                                                    <label class="form-label fw-semibold"> Resposta a Solicitação </label>
+                                                    <input readonly class="form-control" :value="request.status"> 
+                                                </div>	
+                                                <div class="mb-3"> 
                                                     <label class="form-label fw-semibold"> Horário da Resposta </label>
                                                     <div class="overflow-x-auto">
                                                         <input readonly class="form-control overflow-x-auto" :value="request.updatedDate.slice(0, 19)"> 
                                                     </div>
                                                 </div>
-                                                <div class="mb-3"> 
-                                                    <label class="form-label fw-semibold"> Resposta a Solicitação </label>
-                                                    <input readonly class="form-control" :value="request.status"> 
-                                                </div>	
                                                 <div class="mb-0"> 
                                                     <label class="form-label fw-semibold"> Mensagem da Administração </label>
-                                                    <div class="d-flex">
+                                                    <div class="d-flex ">
                                                         <textarea readonly class="form-control"> {{ request.adminComment ? request.adminComment : 'nenhuma' }} </textarea>
                                                     </div>
                                                 </div>	
@@ -386,6 +399,10 @@
                                             <p class="justify-content-start mb-3 fw-bold">
                                                 Solicitação
                                             </p>
+                                        <button :title="isResponseCard[1][index] ? 'Ver Solicitação' : 'Ver resposta da solicitação'"   @click="isResponseCard[1][index] = !isResponseCard[1][index]" class="d-flex align-items-center justify-content-center pb-2 response-toggle hide-toggle position-absolute text-light btn btn-secondary rounded-0 text-nowrap fw-bold">
+                                                <IconsExit v-if="!isResponseCard[1][index]" class="mt-1" width="20" height="20" />
+                                                <IconsRequest v-else class="mt-1" width="20" height="20" />
+                                           </button>
                                         </div>
                                     </template>
                                     <template v-slot:default>
@@ -422,6 +439,31 @@
                                                     <textarea readonly class="form-control"> {{ request.description }} </textarea>
                                                 </div>
                                             </div>	
+                                        </div>
+                                        <div  :style="{left: isResponseCard[1][index] ? '0px' : '100%', transition: 'left 0.9s ease-in-out'}" class="response-card position-absolute bg-light">
+                                            <div  class="row cards-row mx-0 text-nowrap">
+                                                <div class="d-flex bg-dark-emphasis text-light justify-content-between align-items-center">
+                                                    <p class="justify-content-start my-2 fw-bold">
+                                                        Resposta da Solicitação
+                                                    </p>
+                                                </div>
+                                                <div class="mb-3 mt-3"> 
+                                                    <label class="form-label fw-semibold"> Horário da Resposta </label>
+                                                    <div class="overflow-x-auto">
+                                                        <input readonly class="form-control overflow-x-auto" :value="request.updatedDate.slice(0, 19)"> 
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"> 
+                                                    <label class="form-label fw-semibold"> Resposta a Solicitação </label>
+                                                    <input readonly class="form-control" :value="request.status"> 
+                                                </div>	
+                                                <div class="mb-0"> 
+                                                    <label class="form-label fw-semibold"> Mensagem da Administração </label>
+                                                    <div class="d-flex ">
+                                                        <textarea readonly class="form-control"> {{ request.adminComment ? request.adminComment : 'nenhuma' }} </textarea>
+                                                    </div>
+                                                </div>	
+                                            </div>
                                         </div>
                                     </template>
                                     <template v-slot:footer>
@@ -472,7 +514,11 @@ const popUpStore = usePopupStore();
 const store = useStorageStore();
 const settingsStore = useSettingsStore();
 
-const isResponseCard = ref(false);
+const isResponseCard = ref([[], []]);
+const requestToCancel = ref({
+    id: null,
+    index: null
+});
 
 const dropdownStates = ref([false, false, false, false]);
 const toggleDropdown = (dropdown_id) => {
@@ -765,9 +811,6 @@ onMounted(() => {
     background-color: rgb(242, 242, 242);
     border: solid 1px rgb(0, 0, 0, 0.2);
 }
-.cards-row{
-    transition: opacity 1s ease-in;
-}
 .resquest-time{
 	font-size: 15px;
 	opacity: 80%;
@@ -796,9 +839,11 @@ onMounted(() => {
     box-shadow: inset 0px 0px 100px 1px rgba(0, 0, 0, 0.1)
 }
 .response-toggle{
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
     right: 0px;
     top: 0px;
-    z-index: 10000;
+    z-index: 100;
+    transition: top 0.3s ease-in-out;
 }
 h6{
     font-weight: 400;

@@ -93,7 +93,7 @@ function checkIfMobile() {
 }
 .darkLayout .bg-light{
   background-color: #1A1A1A !important;
-  border: solid 1px #333333 !important;
+  border-color: #333333 !important;
 }
 .darkLayout .btn-outline-dark-success:hover{
   background-color: #011e02 !important;
@@ -142,11 +142,6 @@ function checkIfMobile() {
 }
 .darkLayout .card{
   border: none !important;
-  box-shadow: 0px 0px 10px 1px rgb(255, 255, 255, 0.4) !important;
-}
-.darkLayout .card:hover{
-  border: none !important;
-  box-shadow: 0px 0px 10px 2px rgb(254, 213, 30, 0.3) !important;
 }
 .darkLayout .card-header{
   border: solid 1px #333333 !important;
