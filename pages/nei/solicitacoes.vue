@@ -167,7 +167,7 @@
                         <div  :class="{'border-dark-success border-bottom': requestsCache.acceptedRequests.length > 0}"  class="d-flex align-items-center justify-content-between px-2">
                             <div class="d-flex align-items-center py-2">
                                 <IconsConfirm class="text-light-success me-2" width="30" height="30"/>
-                                <h5 class="m-0 p-0">Aceitos
+                                <h5 class="m-0 p-0">Aceitas
                                 </h5>
                                 <span>({{requestsCache.acceptedRequests.length}})</span>
                             </div>
@@ -228,7 +228,11 @@
                                             <p class="justify-content-start mb-3 fw-bold">
                                                 Solicitação
                                             </p> 
-                                            <button @click="isResponseCard = !isResponseCard" class="response-toggle position-absolute btn text-light pb-2 rounded-0 text-nowrap">Ver {{ isResponseCard ? 'Solicitação': 'Resposta' }}</button>
+                                            <button @click="isResponseCard = !isResponseCard" class="d-flex align-items-center justify-content-center response-toggle position-absolute text-light btn btn-secondary  pb-2 rounded-0 text-nowrap fw-bold">
+                                                <span>Ver {{ isResponseCard ? 'Solicitação': 'Resposta' }}</span>
+                                                <IconsExit v-if="!isResponseCard" class="ms-1" width="20" height="20" />
+                                                <IconsRequest v-else class="ms-1" width="20" height="20" />
+                                            </button>
                                         </div>
                                     </template>
                                     <template v-slot:default>
@@ -268,7 +272,7 @@
                                         </div>
                                         <div :style="{width: isResponseCard ? '100%' : '0px'}"  class="response-card position-absolute bg-light">
                                             <div :style="{opacity: isResponseCard ? '100%' : '0', transition: isResponseCard ? 'opacity 1s ease-in' : 'opacity 0.1s ease-in'}"  class="row cards-row mx-0">
-                                                <div class="d-flex bg-secondary text-light justify-content-between align-items-center">
+                                                <div class="d-flex bg-dark-emphasis text-light justify-content-between align-items-center">
                                                     <p class="justify-content-start my-2 fw-bold">
                                                         Resposta da Solicitação
                                                     </p>
@@ -785,14 +789,13 @@ onMounted(() => {
 }
 .response-card{
     overflow: hidden;
-    left: 0px;
+    right: 0px;
     top: 0px;
     height: 475px;
     transition: width 0.5s ease-in-out;
     box-shadow: inset 0px 0px 100px 1px rgba(0, 0, 0, 0.1)
 }
 .response-toggle{
-    background-color: rgb(31, 105, 177, 0.6);
     right: 0px;
     top: 0px;
     z-index: 10000;
