@@ -82,8 +82,14 @@
                 </th>
                 <th class="text-center table-cell user-actions pt-2" scope="row" width="5%">
                   <div class="position-sticky d-flex justify-content-center">
+                    <button title="Alterar Encargo" @click="modalBindUser.email = user.email" data-bs-toggle="modal" data-bs-target="#actionConfirm" class="ms-1 me-0 table-btn d-flex align-items-center justify-content-center btn btn-secondary">
+                      <IconsBarFilter width="16px" height="16px"/> 
+                    </button>
                     <a title="Perfil" :href="`/perfil?userId=${user.id}`" :route="`/perfil/${user.id}`" class="ms-1 me-0 table-btn d-flex align-items-center justify-content-center btn btn-primary">
                       <IconsLowProfile width="16px" height="16px"/>
+                    </a>
+                    <a title="Perfil" class="ms-1 me-0 table-btn d-flex align-items-center justify-content-center btn btn-primary">
+                      <IconsReject width="16px" height="16px"/>
                     </a>
                   </div>
                 </th>
@@ -179,7 +185,7 @@
     <ModalItemDetails v-if="currentItem" :item_index="itemIndex" :item_details="currentItem" />
     <Modal id="removeUser" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
       <template v-slot:header>
-        <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Invalidar usuário</h6>
+        <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Desativar conta</h6>
         <button class="btn btn-transparent text-light border-0 close-btn" type="button" data-bs-dismiss="modal">
           <IconsClose class="close ms-5" width="1.3em" height="1.3em"/>
         </button>
@@ -195,6 +201,24 @@
         </div>
       </template>
     </Modal>
+    <ModalActionConfirm>
+      <template v-slot:text>
+        <div class="d-flex align-items-center justify-content-center">
+          <p>Para alterar o Encargo do usuário você deve selecionar o seu novo encargo e confirmar a ação. </p>
+        </div>
+        <select v-model="modalBindUser.role" class="form-select" aria-label="Default select">
+          <option disabled selected>Selecione o Encargo</option>
+          <option value="ADMIN">Administrador</option>
+          <option value="USER">Usuário</option>
+        </select>
+      </template>
+      <template v-slot:buttons>
+        <div class="d-flex align-items-center justify-content-center">
+          <button data-bs-dismiss="modal" class="btn btn-dark-alert px-1 me-3 py-2 fw-bold">Cancelar</button>
+          <button data-bs-dismiss="modal" @click="patchAccountRole()" class="btn btn-dark-success text-light px-1 py-2 fw-bold">Confirmar</button>
+        </div>
+      </template>
+    </ModalActionConfirm>
   </div>
 </template>
 
@@ -209,6 +233,7 @@ import { useUser } from '../stores/user';
 import { useSearch } from '../stores/search.ts';
 import { deleteUser } from '../services/users/userDELETE';
 import { usePopupStore } from '../stores/popup.ts';
+import { patchUSER } from '../services/users/userPATCH.ts';
 
 const setpageTitle = inject('setpageTitle');
 const sendDataToParent = () => {
@@ -223,13 +248,18 @@ const searchStore = useSearch();
 const route = useRouter();
 const popUpStore = usePopupStore();
 
-const userRejectId = ref(0);
-const users = ref({ content: [] }); // Inicializa com um objeto com array vazio
-const records = ref({ content: [] }); // Inicializa com um objeto com array vazio
+const modalBindUser = ref({
+  id: null,
+  email: null,
+  role: null
+});
+
+const users = ref({ content: [] }); 
+const records = ref({ content: [] });
 const requestsByStatus = ref({ totalElements: 0 });
 const acceptedRequests = ref(0);
 const rejectedRequests = ref(0);
-const items = ref({ content: [] }); // Inicializa com um objeto com array vazio
+const items = ref({ content: [] }); 
 const itemsQtd = ref(0);
 
 const currentItem = ref(undefined);
@@ -238,16 +268,27 @@ const isShowDetails = ref(false);
 
 const loadContent = ref(false);
 
+const fetchUsers = async () => {
+  users.value = await getUsers(userStore, 0);
+    if(users.value.totalPages > 1){
+      for(let i = 1; i <= users.value.totalPages; i++){
+        const res = await getUsers(userStore, i);
+        for(let j = 0; j < res.pageElements; j++){
+          users.value.content.push(res.content[j]);
+        }
+      }
+    }
+}
 const fetchData = async () => {
   try {
-    users.value = await getUsers(userStore, 0);
+    fetchUsers();
     records.value = await getRecords(userStore, 0, 'id,desc');
     requestsByStatus.value = await getRequestByStatus(userStore, 'pendente');
     
     let data = new Date();
     let actualMonth = data.getMonth() + 1;
     let requestsData = await getRequests(userStore, 0);
-    for (let i = 1; i < requestsData.totalPages; i++) {
+    for (let i = 1; i <= requestsData.totalPages; i++) {
       for (let j = 0; j < requestsData.content.length; j++) {
         if (requestsData.content[j].updatedDate.slice(5, 7) == actualMonth) {
           if (requestsData.content[j].status == 'ACEITO') {
@@ -262,7 +303,7 @@ const fetchData = async () => {
     }
     
     items.value = await getItems(userStore, 0);
-    for (let i = 1; i < items.value.totalPages; i++) {
+    for (let i = 1; i <= items.value.totalPages; i++) {
       for (let j = 0; j < items.value.content.length; j++) {
         itemsQtd.value += items.value.content[j].quantity;
       }
@@ -272,6 +313,7 @@ const fetchData = async () => {
     console.error('Failed to fetch data:', error);
   }
 };
+
 
 onMounted(() => {
   fetchData().finally(() => {
@@ -292,12 +334,21 @@ const showDetails = async (index, itemId) => {
   }
 };
 
+const patchAccountRole = async() => {
+    const res = await patchUSER(userStore, modalBindUser.value.email, modalBindUser.value.role);
+    if(res === true){
+      popUpStore.throwPopup('Encargo alterado com sucesso', 'blue');
+      fetchUsers();
+    } else if(res === false){
+      popUpStore.throwPopup('ERRO: Algum problema interno do sistema ocorreu, contate o suporte', 'red')
+    }
+}
 const deleteAccount = async () => {
   try {
-    await deleteUser(userStore, userRejectId.value);
+    await deleteUser(userStore, modalBindUser.value.id);
     popUpStore.throwPopup('Conta desativada com sucesso, atualize a página', 'blue');
   } catch (err) {
-    popUpStore.throwPopup('ERRO: Algum problema interno do servidor ocorreu, contate o suporte', 'red');
+    popUpStore.throwPopup('ERRO: Algum problema interno do sistema ocorreu, contate o suporte', 'red');
   }
 };
 </script>

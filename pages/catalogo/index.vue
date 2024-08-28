@@ -18,6 +18,7 @@
         <p class="box-title-text">
             Tabela dos itens do almoxarifado
         </p>
+        <button @click="teste">teste</button>
     </div>
     <div class="table-box row d-block bg-light mx-2">
         <div class="table-actions d-flex justify-content-between aling-items-center">
@@ -46,7 +47,7 @@
             <tr v-if="itemsCache.length > 0" v-for="(item, index) in itemsCache[cacheIndex]" :key="index" :data-index="index">
                <th class="border" scope="row">
                     <div class="cell-text">
-                        <span>{{ item.name }}</span>
+                        <span>{{ item.minimumStockLevel }}</span>
                     </div>
                </th>
                <th class="border">
@@ -132,6 +133,7 @@ import { useUser } from '../../stores/user.ts'
 import { getRecordByItemId } from '../../services/record/recordGET.ts';
 import { useRoute, useRouter } from 'vue-router';
 import { useSettingsStore } from '../../stores/settings';
+import { patchItem } from '../../services/items/itemsPATCH.ts';
 /*SETANDO STORES*/
 const userStore = useUser()
 const store = useStorageStore();
@@ -142,7 +144,9 @@ const paginationRet = ref(1)
 function range(start, end) {
   return Array.from({ length: end - start + 1 }, (_, index) => start + index);
 }
-
+const teste = async () => {
+    const res = await patchItem(userStore, 56, 100);
+}
 
 let pagination = ref(0); //paginação padrão
 let invertedPagination = ref(0); //paginação invertida para filtro
