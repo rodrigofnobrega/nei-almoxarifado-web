@@ -298,7 +298,7 @@
          <p class="fw-bold text-center">Deseja realmente desativar a sua conta?</p>
     </template>
     <template v-slot:footer>
-      <div class="container-fluid d-flex justify-content-end align-items-center">
+      <div class="container-fluid p-0 d-flex justify-content-end align-items-center">
                 <button type="button" @click="deleteAccount" class="btn btn-dark-success inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Confirmar</button>
                 <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Cancelar</button>
             </div>
@@ -429,7 +429,13 @@ const changePassword = async () => {
 };
 
 const deleteAccount = async () => {
-  const res = await deleteUser(userStore, userStore.id);
+  try {
+    await deleteUser(userStore, userStore.id);
+    popUpStore.throwPopup('Conta excluída com sucesso', 'blue');
+    userStore.logout();
+  } catch (err) {
+    popUpStore.throwPopup('ERRO: Algum problema interno do sistema ocorreu, contate o suporte', 'red');
+  }
 }
 // Define o título da página
 

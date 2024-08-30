@@ -1,5 +1,5 @@
 <template>
-    <div class="dropdown">
+    <div @click.stop class="dropdown">
         <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-primary mx-1 px-2 mt-1 text-nowrap" 
         data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2=" aria-expanded="false">
             Mais ações
@@ -10,7 +10,7 @@
                 <a type="button" class="text-decoration-none import-text" href="/catalogo/importar-tabelas">importar tabelas</a>
             </li>
             <li type="button" class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center">
-                <label type="button" class="form-check-label" for="editCheck">habilitar edição</label>
+                <label type="button" class="form-check-label" for="editCheck">habilitar correções</label>
                 <input v-model="store.isEditionMode" @click="store.isEditionMode = !store.isEditionMode" class="ms-2 p-2 mb-1 form-check-input" value="" id="editCheck" type="checkbox">
             </li>
         </ul>   
@@ -75,7 +75,7 @@ const sendDataToParent = (filter, isInverted) => {
 
 <style scoped>
 .large-menu{
-    width: 175px;
+    width: 200px;
     min-width: 110px;
 }
 li{

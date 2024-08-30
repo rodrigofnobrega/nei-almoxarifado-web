@@ -60,9 +60,9 @@
               <IconsSettingsDots width="30" height="30"/>
             </button>
             <ul class="dropdown-menu py-0">
-              <li @click="toggleAccounts()" class="dropdown-item py-2 d-flex align-items-center justify-content-center">
-                <label>Mostrar contas desativas</label>
-                <input type="checkbox" class="form-check-input mb-1 ms-1 border-1 border-new-gray" v-model="showDisabledAccounts">
+              <li @click="toggleAccounts()" type="button" class="dropdown-item py-2 d-flex align-items-center justify-content-center">
+                <span>Mostrar contas desativas</span>
+                <input type="checkbox" style="margin-bottom: 3px" class="form-check-input ms-2 border-1 border-new-gray" v-model="showDisabledAccounts">
               </li>
             </ul>
           </div>
@@ -207,8 +207,8 @@
       </template>
       <template v-slot:footer>
         <div class="container-fluid d-flex justify-content-end align-items-center">
-          <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Cancelar</button>
           <button type="button" @click="deleteAccount()" class="btn btn-secondary inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Desativar</button>
+          <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Cancelar</button>
         </div>
       </template>
     </Modal>
@@ -225,8 +225,8 @@
       </template>
       <template v-slot:buttons>
         <div class="d-flex align-items-center justify-content-center">
-          <button data-bs-dismiss="modal" class="btn btn-dark-alert px-1 me-3 py-2 fw-bold">Cancelar</button>
-          <button data-bs-dismiss="modal" @click="patchAccountRole()" class="btn btn-dark-success text-light px-1 py-2 fw-bold">Confirmar</button>
+          <button data-bs-dismiss="modal" @click="patchAccountRole()" class="btn btn-dark-success text-light me-3  fw-bold">Confirmar</button>
+          <button data-bs-dismiss="modal" class="btn text-light btn-light-alert fw-bold">Cancelar</button>
         </div>
       </template>
     </ModalActionConfirm>
@@ -364,7 +364,7 @@ const patchAccountRole = async() => {
 const deleteAccount = async () => {
   try {
     await deleteUser(userStore, BindUser.value.id);
-    popUpStore.throwPopup('Conta desativada com sucesso, atualize a página', 'blue');
+    popUpStore.throwPopup('Conta desativada com sucesso', 'blue');
     fetchUsers();
   } catch (err) {
     popUpStore.throwPopup('ERRO: Algum problema interno do sistema ocorreu, contate o suporte', 'red');
@@ -468,7 +468,7 @@ h5{
     padding: 0;
 }
 .user-disabled{
-  background-color: rgb(229, 57, 53, 0.3);
+  background-color: rgb(229, 57, 53, 0.3) !important;
 }
 .bg-warning-op80{
     opacity: 80%;

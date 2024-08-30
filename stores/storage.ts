@@ -4,6 +4,7 @@ import { putUpdateItem } from "../services/items/itemsPUT";
 import { postRecord } from '../services/record/recordPOST.ts'
 import { useUser } from './user.ts';
 import { usePopupStore } from '~/stores/popup';
+import { deleteItem } from "../services/items/itemDELETE.ts";
 
 export const useStorageStore = defineStore('storage', {
     state: () => ({
@@ -23,7 +24,7 @@ export const useStorageStore = defineStore('storage', {
       recoveryToken: "",
     }),
     actions: {
-      async sendItems(item) {
+      async sendItem(item) {
         const userStore = useUser();
         const popupStore = usePopupStore();
         if(item){
@@ -38,34 +39,42 @@ export const useStorageStore = defineStore('storage', {
         }
         this.isReloadItems = true;
       },
-      async updateItems(item_id, item_name, item_sipac){
+      addItem(item: object){
+        this.sendItem(item);
+        this.isReloadItems = false;
+      },
+      async updateItems(item_id, item_name, item_sipac, item_type, item_qtd){
+        const userStore = useUser();
+        const popupStore = usePopupStore();
         if(item_id){
           try{
-            const userStore = useUser();
-            const res = await putUpdateItem(userStore, item_id, item_name, item_sipac);
+            const res = await putUpdateItem(userStore, item_id, item_name, item_sipac, item_type, item_qtd);
+            if(!res){
+              popupStore.throwPopup("Erro: Algum erro interno do sistema ocorreu, contante o suporte", 'red');
+            }
+            else{ popupStore.throwPopup("Item deletado com sucesso", 'blue'); }
           }catch(error){
             console.log(error);
+            popupStore.throwPopup("Erro: Algum erro interno do sistema ocorreu, contante o suporte", 'red');
           }
         }
         this.isReloadItems = true;
       },
-      addItem(item: object){
-        this.sendItems(item);
-        this.isReloadItems = false;
-      },
-      deleteItem(index: number, almoxarifado: string){
-        let count = 0;
-        for(let i = 0; i < this.items.length; i++){
-          if(this.items[i].storage.includes(almoxarifado)){
-            if(index == count){
-              this.items.splice(i, 1);
-              this.sendItems(this.items);
-              return 0;
-            };
-          };
-          count++;
-        };
-        this.sendItems(this.items);
+      async deleteItem(item_id){
+        const userStore = useUser();
+        const popupStore = usePopupStore();
+        if(item_id){
+          try{
+            const res = await deleteItem(userStore, item_id);
+            if(!res){
+              popupStore.throwPopup("Erro: Algum erro interno do sistema ocorreu, contante o suporte", 'red');
+            }
+            else{ popupStore.throwPopup("Item deletado com sucesso", 'blue'); }
+          } catch(err){
+            popupStore.throwPopup("Erro: Algum erro interno do sistema ocorreu, contante o suporte", 'red');
+          }
+        }
+        this.isReloadItems = true;
       },
       setSublink(sublinks: string[]) {
           this.sidebarSublinks = sublinks;

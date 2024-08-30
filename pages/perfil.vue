@@ -34,8 +34,9 @@
           </div>
           <div class="profile-actions mt-5">
             <button :class="{'mx-5': userData.role === 'ADMIN'}" v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#updatePasswordModal" data-bs-toggle="modal" class="btn fw-bold btn-secondary">Alterar Senha</button>
+            <button v-else-if="userStore.role === 'ADMIN' && userStore.id !== route.currentRoute._rawValue.query.userId" data-bs-target="#updateRole" data-bs-toggle="modal" class="btn fs-6 fw-bold btn-secondary">Alterar Encargo</button>
             <button :class="{'mx-5': userData.role === 'ADMIN'}" v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6  fw-bold btn-light-alert">Excluir Conta</button>
-            <button v-else-if="userStore.role === 'ADMIN' && userStore.id !== route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6  fw-bold btn-light-alert">Desativar Conta</button>
+            <button v-else-if="userStore.role === 'ADMIN' && userStore.id !== route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6 fw-bold btn-light-alert">Desativar Conta</button>
           </div>
         </div>
       </div>
@@ -353,7 +354,30 @@
       </div>
     </template>
   </Modal>
-
+  <Modal id="updateRole" tabindex="-1" data-bs-backdrop="true" aria-labelledby="scrollableModalLabel" aria-hidden="true">
+    <template v-slot:header>
+      <h6 class="header-title d-flex fw-bold justify-content-start align-items-center">Alterar Encargo</h6>
+        <button class="btn btn-transparent text-light border-0 close-btn" type="button" data-bs-dismiss="modal">
+            <IconsClose class="close ms-5" width="1.3em" height="1.3em"/>
+        </button>
+    </template>
+    <template v-slot:body>
+        <div class="d-flex align-items-center justify-content-center">
+          <p>Para alterar o Encargo do usuário você deve selecionar o seu novo encargo e confirmar a ação. </p>
+        </div>
+        <select v-model="newRole" class="form-select" aria-label="Default select">
+          <option disabled selected>Selecione o Encargo</option>
+          <option value="ADMIN">Administrador</option>
+          <option value="USER">Usuário</option>
+        </select>
+    </template>
+    <template v-slot:footer>
+      <div class="container-fluid d-flex justify-content-end align-items-center">
+              <button type="button" @click="patchAccountRole()" class="btn btn-dark-success inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Confirmar</button>
+              <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+    </template>
+  </Modal>
   <Modal id="deleteAccount" tabindex="-1" data-bs-backdrop="true" aria-labelledby="scrollableModalLabel" aria-hidden="true">
     <template v-slot:header>
       <h6 class="header-title d-flex fw-bold justify-content-start align-items-center">Confirmar exclusão de conta</h6>
@@ -364,13 +388,13 @@
     <template v-slot:body>
       <p class="fw-medium text-dark-emphasis text-center">Ao excluir você não terá mais acesso ao sistema por meio dela, porém seus dados ainda ficarão
          disponíveis para os administradores como históricos e registros.</p>
-         <p class="fw-bold text-center">Deseja realmente desativar a sua conta?</p>
+      <p class="fw-bold text-center">Deseja realmente desativar a sua conta?</p>
     </template>
     <template v-slot:footer>
       <div class="container-fluid d-flex justify-content-end align-items-center">
                 <button type="button" @click="deleteAccount" class="btn btn-dark-success inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Confirmar</button>
                 <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Cancelar</button>
-            </div>
+          </div>
     </template>
   </Modal>
 </template>
@@ -387,6 +411,7 @@ import { usePopupStore } from '../stores/popup';
 import { updatePasswordPUT } from '../services/users/userPUT';
 import { deleteUser } from '../services/users/userDELETE';
 import { useCookie } from 'nuxt/app';
+import { patchUSER } from '../services/users/userPATCH';
 
 definePageMeta({
   layout: 'profile'
@@ -397,7 +422,7 @@ const popUpStore = usePopupStore();
 const route = useRouter();
 const userData = await getUserId(userStore, route.currentRoute._rawValue.query.userId);
 const userRequests = ref([]);
-
+const newRole = ref();
 const pendingRequests = ref([]);
 const acceptedRequests = ref([]);
 const rejectedRequests = ref([]);
@@ -517,9 +542,21 @@ const changePassword = async () => {
     popUpStore.throwPopup("Erro: Preencha os campos corretamente", "#B71C1C");
   }
 };
-
+const patchAccountRole = async() => {
+    const res = await patchUSER(userStore, userData.email, newRole.value);
+    if(res === true){
+      popUpStore.throwPopup('Encargo alterado com sucesso, atualize a página', 'blue');
+    } else if(res === false){
+      popUpStore.throwPopup('ERRO: Algum problema interno do sistema ocorreu, contate o suporte', 'red')
+    }
+}
 const deleteAccount = async () => {
-  const res = await deleteUser(userStore, userStore.id);
+  try {
+    await deleteUser(userStore, userStore.id);
+    popUpStore.throwPopup('Conta excluída com sucesso', 'blue');
+  } catch (err) {
+    popUpStore.throwPopup('ERRO: Algum problema interno do sistema ocorreu, contate o suporte', 'red');
+  }
 }
 // Define o título da página
 const setpageTitle = inject('setpageTitle');

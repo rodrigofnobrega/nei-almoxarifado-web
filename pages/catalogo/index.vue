@@ -47,7 +47,7 @@
             <tr v-if="itemsCache.length > 0" v-for="(item, index) in itemsCache[cacheIndex]" :key="index" :data-index="index">
                <th class="border" scope="row">
                     <div class="cell-text">
-                        <span>{{ item.minimumStockLevel }}</span>
+                        <span>{{ item.name }}</span>
                     </div>
                </th>
                <th class="border">
