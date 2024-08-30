@@ -5,7 +5,7 @@
           <thead>
             <slot name="header" />
           </thead>
-          <tbody >
+          <tbody>
            <slot name="content" />
           </tbody>
         </table>

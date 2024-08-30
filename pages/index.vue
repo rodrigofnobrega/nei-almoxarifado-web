@@ -53,8 +53,19 @@
         </div>
       </div>    
       <div class="dashboard-section users-management me-3 bg-light mb-4 pb-0 pt-0 rounded-3">
-        <div class="section-title pt-2 bg-light-background-header">
-          <h5 class="header ps-2 fw-bold">Gestão de Usuários</h5>
+        <div class="section-title d-flex align-items-center justify-content-between bg-light-background-header">
+          <h5 class="header ps-2 pt-2 fw-bold">Gestão de Usuários</h5>
+          <div @click.stop class="dropdown decoration-none">
+            <button class="btn btn-transparent border-0 m-0 p-0" data-bs-toggle="dropdown" aria-expanded="false">
+              <IconsSettingsDots width="30" height="30"/>
+            </button>
+            <ul class="dropdown-menu py-0">
+              <li @click="toggleAccounts()" class="dropdown-item py-2 d-flex align-items-center justify-content-center">
+                <label>Mostrar contas desativas</label>
+                <input type="checkbox" class="form-check-input mb-1 ms-1 border-1 border-new-gray" v-model="showDisabledAccounts">
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="users-management-scroll">
           <TablesTable v-if="users.content && users.content.length">
@@ -66,31 +77,31 @@
                 <th class="col-title text-center py-2 justify-content-center" scope="col">Ações</th>
               </tr>
             </template>
-            <template v-slot:content>
+            <template v-slot:content> 
               <tr v-for="user in users.content" :key="user.id">
-                <th class="table-cell" scope="row">
-                  <div class="d-flex justify-content-start align-items-center">
+                <th :class="{'user-disabled': !user.active}" class="table-cell" scope="row">
+                  <div class="d-flex justify-content-start align-items-center text-nowrap">
                     <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
                     {{ user.name }}
                   </div>
                 </th>
-                <th class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
+                <th :class="{'user-disabled': !user.active}" class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
                   {{ user.email }}
                 </th>
-                <th class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
+                <th :class="{'user-disabled': !user.active}" class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
                   {{ user.role === 'USER' ? 'USUÁRIO' : 'ADMIN'}}
                 </th>
-                <th class="text-center table-cell user-actions pt-2" scope="row" width="5%">
+                <th :class="{'user-disabled': !user.active}" class="text-center table-cell user-actions pt-2" scope="row" width="5%">
                   <div class="position-sticky d-flex justify-content-center">
-                    <button title="Alterar Encargo" @click="modalBindUser.email = user.email" data-bs-toggle="modal" data-bs-target="#actionConfirm" class="ms-1 me-0 table-btn d-flex align-items-center justify-content-center btn btn-secondary">
+                    <button v-if="user.active === true" title="Alterar Encargo" @click="BindUser.email = user.email" data-bs-toggle="modal" data-bs-target="#actionConfirm" class="ms-1 me-0 table-btn d-flex align-items-center justify-content-center btn btn-secondary">
                       <IconsBarFilter width="16px" height="16px"/> 
                     </button>
                     <a title="Perfil" :href="`/perfil?userId=${user.id}`" :route="`/perfil/${user.id}`" class="ms-1 me-0 table-btn d-flex align-items-center justify-content-center btn btn-primary">
                       <IconsLowProfile width="16px" height="16px"/>
                     </a>
-                    <a title="Perfil" class="ms-1 me-0 table-btn d-flex align-items-center justify-content-center btn btn-primary">
+                    <button v-if="user.active === true" title="Anular Conta" @click="BindUser.id = user.id" data-bs-toggle="modal" data-bs-target="#removeUser" class="ms-1 me-0 table-btn d-flex align-items-center justify-content-center btn btn-dark-alert">
                       <IconsReject width="16px" height="16px"/>
-                    </a>
+                    </button>
                   </div>
                 </th>
               </tr>
@@ -197,7 +208,7 @@
       <template v-slot:footer>
         <div class="container-fluid d-flex justify-content-end align-items-center">
           <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" @click="deleteAccount" class="btn btn-secondary inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Desativar</button>
+          <button type="button" @click="deleteAccount()" class="btn btn-secondary inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Desativar</button>
         </div>
       </template>
     </Modal>
@@ -206,7 +217,7 @@
         <div class="d-flex align-items-center justify-content-center">
           <p>Para alterar o Encargo do usuário você deve selecionar o seu novo encargo e confirmar a ação. </p>
         </div>
-        <select v-model="modalBindUser.role" class="form-select" aria-label="Default select">
+        <select v-model="BindUser.role" class="form-select" aria-label="Default select">
           <option disabled selected>Selecione o Encargo</option>
           <option value="ADMIN">Administrador</option>
           <option value="USER">Usuário</option>
@@ -248,13 +259,14 @@ const searchStore = useSearch();
 const route = useRouter();
 const popUpStore = usePopupStore();
 
-const modalBindUser = ref({
+const BindUser = ref({
   id: null,
   email: null,
   role: null
 });
+const showDisabledAccounts = ref(false);
 
-const users = ref({ content: [] }); 
+const users = ref({ content: [], totalElements: 0}); 
 const records = ref({ content: [] });
 const requestsByStatus = ref({ totalElements: 0 });
 const acceptedRequests = ref(0);
@@ -267,16 +279,22 @@ const itemIndex = ref(0);
 const isShowDetails = ref(false);
 
 const loadContent = ref(false);
+const toggleAccounts = async () => {
+  showDisabledAccounts.value = !showDisabledAccounts.value;
+  fetchUsers();
+}
 
 const fetchUsers = async () => {
-  users.value = await getUsers(userStore, 0);
-    if(users.value.totalPages > 1){
-      for(let i = 1; i <= users.value.totalPages; i++){
-        const res = await getUsers(userStore, i);
+    users.value.content = [];
+    let res = await getUsers(userStore, 0);
+    users.value.totalElements = res.totalElements;
+      for(let i = 1; i <= res.totalPages; i++){
         for(let j = 0; j < res.pageElements; j++){
-          users.value.content.push(res.content[j]);
+          if(res.content[j].id != userStore.id && (showDisabledAccounts.value || res.content[j].active)){
+            users.value.content.push(res.content[j]);
+          }
         }
-      }
+        res = await getUsers(userStore, i);
     }
 }
 const fetchData = async () => {
@@ -335,7 +353,7 @@ const showDetails = async (index, itemId) => {
 };
 
 const patchAccountRole = async() => {
-    const res = await patchUSER(userStore, modalBindUser.value.email, modalBindUser.value.role);
+    const res = await patchUSER(userStore, BindUser.value.email, BindUser.value.role);
     if(res === true){
       popUpStore.throwPopup('Encargo alterado com sucesso', 'blue');
       fetchUsers();
@@ -345,8 +363,9 @@ const patchAccountRole = async() => {
 }
 const deleteAccount = async () => {
   try {
-    await deleteUser(userStore, modalBindUser.value.id);
+    await deleteUser(userStore, BindUser.value.id);
     popUpStore.throwPopup('Conta desativada com sucesso, atualize a página', 'blue');
+    fetchUsers();
   } catch (err) {
     popUpStore.throwPopup('ERRO: Algum problema interno do sistema ocorreu, contate o suporte', 'red');
   }
@@ -494,12 +513,6 @@ h5{
 }
 .card:hover .card-img-top{
     opacity: 100%;
-}
-tr:hover .disabled-account{
-  display: none;
-}
-tr:hover .user-invalided{
-  filter: blur(0px);
 }
 @media screen and (max-width: 1253px) {
   .summary-text-re{

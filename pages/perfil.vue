@@ -5,29 +5,41 @@
         <div class="d-flex justify-content-center mb-4 bg-light-background-header history-title">
             <h5 class="text-center mt-2 fw-bold">Informações do perfil</h5>
         </div>
-        <div class="profile-picture aspect-ratio">
-          <div class="img-container">
-            <!--<img :src="user.profilePicture" class="img-top" alt="Foto de Perfil">-->
-                <img src="/profile.png" class="img-top" alt="Foto de Perfil">
+        <div>
+          <div :class="{'d-flex justify-content-center rounded-1 mx-5 pt-3 bg-light-background-header':userData.role === 'ADMIN'}" :style="{border: userData.role === 'ADMIN' ? '1px solid rgba(0, 0, 0, 0.2)' : ''}">
+            <div class="profile-picture aspect-ratio" :class="{'me-5 pe-5 mt-2':userData.role === 'ADMIN'}"> 
+              <div class="img-container">
+                <!--<img :src="user.profilePicture" class="img-top" alt="Foto de Perfil">-->
+                    <img src="/profile.png" class="img-top" alt="Foto de Perfil">
+              </div>
+              <input type="file" @change="uploadProfilePicture" ref="fileInput" hidden>
+              <!--<button @click="selectProfilePicture">Alterar Foto</button>-->
+              <h3 class="text-center mt-4">{{ userData.name }}</h3>
+            </div>
+            <div v-if="userData.role === 'USER'" class="profile-details">
+                <p class="mt-5 users-info text-dark-emphasis"><strong>Email:</strong> {{ userData.email }}</p>
+                <p class="mt-3 users-info text-dark-emphasis"><strong>Encargo:</strong> {{ userData.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</p>
+                <p class="mt-3 users-info text-dark-emphasis"><strong>Status da conta:</strong> {{ userData.active ? 'Ativa' : 'Desativada' }}</p>
+            </div>
+            <div v-else class="d-flex align-items-center">
+              <div class="d-block">
+                <p class="fs-5 me-5 users-info text-dark-emphasis"><strong>Email</strong><br> {{ userData.email }}</p>
+                <p class="fs-5 me-5 users-info text-dark-emphasis"><strong>Encargo</strong><br> {{ userData.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</p>
+              </div>
+              <div class="d-block">
+                <p class="fs-5 me-5 users-info text-dark-emphasis"><strong>Status da conta</strong><br> {{ userData.active ? 'Ativa' : 'Desativada' }}</p>
+                <p class="fs-5 me-5 users-info text-dark-emphasis"><strong>Status dos registros</strong><br> {{ userData.existRecord ? 'Ativo' : 'Desativado' }}</p>
+              </div>
+            </div>
           </div>
-          <input type="file" @change="uploadProfilePicture" ref="fileInput" hidden>
-          <!--<button @click="selectProfilePicture">Alterar Foto</button>-->
-        </div>
-        <div class="profile-details">
-          <div>
-            <h3 class="text-center mb-4">{{ userData.name }}</h3>
-            <p class="mt-5 users-info text-dark-emphasis"><strong>Email:</strong> {{ userData.email }}</p>
-            <p class="mt-3 users-info text-dark-emphasis"><strong>Encargo:</strong> {{ userData.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</p>
-            <p class="mt-3 users-info text-dark-emphasis"><strong>Status da conta:</strong> {{ userData.active ? 'Ativa' : 'Desativada' }}</p>
+          <div class="profile-actions mt-5">
+            <button :class="{'mx-5': userData.role === 'ADMIN'}" v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#updatePasswordModal" data-bs-toggle="modal" class="btn fw-bold btn-secondary">Alterar Senha</button>
+            <button :class="{'mx-5': userData.role === 'ADMIN'}" v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6  fw-bold btn-light-alert">Excluir Conta</button>
+            <button v-else-if="userStore.role === 'ADMIN' && userStore.id !== route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6  fw-bold btn-light-alert">Desativar Conta</button>
           </div>
-        </div>
-        <div class="profile-actions mt-5">
-          <button v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#updatePasswordModal" data-bs-toggle="modal" class="btn fw-bold btn-secondary">Alterar Senha</button>
-          <button v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6  fw-bold btn-light-alert">Excluir Conta</button>
-          <button v-else-if="userStore.role === 'ADMIN' && userStore.id !== route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6  fw-bold btn-light-alert">Desativar Conta</button>
         </div>
       </div>
-    <div>
+    <div v-if="userData.role === 'USER'" >
       <div class="profile-posts bg-light mb-4 mt-0 pb-0 pt-0 rounded-3" style="margin-right: 190px !important;">
         <div class="history-title pt-2 bg-light-background-header">
           <h5 class="ms-3 fw-bold">Solicitações Pendentes</h5>
@@ -136,7 +148,7 @@
     </div>
     
 <div class="profile-main-content mt-2">
-  <div class="profile-container" >
+  <div v-if="userData.role === 'USER'"  class="profile-container" >
   <div class="profile-posts me-2 bg-light mb-4 mt-0 pb-0 pt-0 rounded-3">
     <div class="history-title pt-2 bg-light-background-header">
       <h5 class="ms-3 fw-bold">Solicitações Recusadas</h5>
@@ -244,7 +256,7 @@
       <div class="history-title pt-2 bg-light-background-header">
         <h5 class="ms-3 fw-bold">Registros da conta</h5>
       </div>
-      <div class="posts-table">
+      <div class="posts-table" id="recordsTable">
         <TablesTable>
           <template v-slot:header>
             <tr class="bg-light">
@@ -374,6 +386,7 @@ import { useUser } from '../stores/user';
 import { usePopupStore } from '../stores/popup';
 import { updatePasswordPUT } from '../services/users/userPUT';
 import { deleteUser } from '../services/users/userDELETE';
+import { useCookie } from 'nuxt/app';
 
 definePageMeta({
   layout: 'profile'
@@ -518,8 +531,10 @@ const sendDataToParent = () => {
 sendDataToParent();
 
 onMounted(async () => {
-  
-  await fetchRequests(0);
+  if(userData.role === 'USER'){
+    await fetchRequests(0);
+  }
+
   const currentPassWordInput = document.getElementById('currentPassword');
   currentPassWordInput.addEventListener('focusout', () => {
     if (currentPassword.value) {
@@ -527,8 +542,8 @@ onMounted(async () => {
     }
   });
   
-  if(userData.role === 'ADMIN'){
-    const postsTable = document.getElementsByClassName('posts-table')[4];
+  if(userStore.role === 'ADMIN'){
+    const postsTable = document.getElementById('recordsTable');
     postsTable.addEventListener('scroll', async () => {
       if(userRecords.value.length < recordsTotalElements.value){
         const isBottom = postsTable.scrollHeight - postsTable.scrollTop === postsTable.clientHeight;

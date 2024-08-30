@@ -156,13 +156,13 @@
                                             </div>
                                         </template>
                                     </CardsCard>
-                            </div>
-                            <div :class="{'d-flex align-items-center m-2': changeView}" v-if="requestsLoaded[0] < requestsCache.inProgressRequests.length">
-                                <div class="d-flex justify-content-center">
-                                    <button title="Carregar Mais" @click="requestsLoaded[0] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold m-2" style="padding: 3px;">
-                                        <IconsThinPlus width="30" height="30"/>
-                                    </button>
-                                </div>
+                                    <div :class="{'d-flex align-items-center m-2': changeView}" v-if="requestsLoaded[0] < requestsCache.inProgressRequests.length">
+                                            <div class="d-flex justify-content-center">
+                                                <button title="Carregar Mais" @click="requestsLoaded[0] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold m-2" style="padding: 3px;">
+                                                    <IconsThinPlus width="30" height="30"/>
+                                                </button>
+                                            </div>
+                                    </div>
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-center">
@@ -229,7 +229,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="d-flex align-items-center cards-box">
                             <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}">
                                 <CardsCard :class="{'card-width-adjust': changeView}" 
