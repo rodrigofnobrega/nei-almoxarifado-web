@@ -4,7 +4,7 @@ import { getItems } from "../services/items/itemsGET";
 import { getRoles } from "../services/roles/rolesGET";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-    if(to.path === '/login' || to.path === '/error/pagina-nao-encontrada' || to.path === '/cadastro' || to.path === '/recuperar-senha' || to.path === '/atualizar-senha'){
+    if(to.path === '/login' || to.path === '/cadastro' || to.path === '/recuperar-senha' || to.path === '/atualizar-senha'){
         return
     }
     const userStore = useUser();
