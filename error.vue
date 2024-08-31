@@ -38,7 +38,7 @@ switch(props.error.statusCode){
     case 500:
         errorTitle.value = 'Sistema Fora do Ar';
         errorFlag.value = true;
-        errorDescription.value = 'Algo deu errado no nosso servidor. Por favor, tente novamente mais tarde.';
+        errorDescription.value = 'Ajustes estão sendo feitos no servidor. Por favor, tente novamente mais tarde.';
         break;
     case 503:
         errorTitle.value = 'Serviço Indisponível';

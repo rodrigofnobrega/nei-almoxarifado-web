@@ -1,8 +1,10 @@
 <template>
     <div class="authentication">
-        <div class="block">
-            <slot />
-            <div class="d-flex align-items-center brand-box justify-content-center">
+        <div class="d-block bg-dark-transparent">
+            <div class="d-flex justify-content-center align-items-center">
+                <slot />
+            </div>
+            <div class="d-flex align-items-center justify-content-center brand-box">
                 <svg class="brand d-flex align-items-center mt-1 ms-1" width="60" height="60">
                     <image class="custom-logo" xlink:href="/logo.svg" width="55" height="55"/>
                 </svg>
@@ -31,9 +33,12 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
     z-index: -1;
   }
+}
+.bg-dark-transparent{
+    background-color: rgba(0, 0, 0, 0.6);
+    height: 100%;
 }
 .block {
     margin: 20px auto 0px auto;
@@ -49,5 +54,12 @@
     border-radius: 10px 10px 10px 10px;
     background: linear-gradient(to bottom, rgb(11, 59, 105, 0.9) 10%, rgb(254, 213, 30, 0.9) 150%)
    
+}
+@media screen and (max-width: 680px){
+    .brand-box{
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
 }
 </style>
