@@ -3,7 +3,7 @@
 	<div class="d-flex justify-content-center  bg-primary auth-container">
 		<div class="container-fluid login-container d-flex justify-content-center" :class="{'login-movement': switchState}" :style="{ 'border-radius': delayedSwitchState ? '0px 8px 8px 0px' : '8px 0px 0px 8px'}">
 			<div :style="{height: switchState ? '100%' : '0%', width: switchState ? '100%' : '0%'}" class="bg-dark-emphasis position-absolute mobile-form"></div>
-			<div class="login-content" :class="switchState ? 'leave-text' : 'return-text'">
+			<div class="login-content" :class="switchState ? 'leave-text' :'return-text'">
 				<div class="header d-flex justify-content-center align-items-center">
 					<p v-if="delayedSwitchState === false" class="texto mb-0 text-light">Entrar</p>
 					<p v-else class="texto mb-0 text-light">Cadastrar</p>
@@ -156,9 +156,9 @@ definePageMeta({
   layout: 'authentication'
 });
 
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useUser } from '../stores/user.ts';
-import { onBeforeRouteLeave } from 'vue-router';
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
 import { postUser } from '../services/users/userPOST.ts';
 import { navigateTo } from 'nuxt/app';
 import { usePopupStore } from '../stores/popup.ts';
@@ -233,6 +233,11 @@ const resetPassForm = () => {
   rePassword.value = '';
 };
 
+const initialLoading = ref(false);
+
+onMounted(() => {
+	initialLoading.value = true;
+})
 
 </script>
 
@@ -440,12 +445,12 @@ const resetPassForm = () => {
 	}
 	@keyframes leaveText {
 		0% { transform: translateX(0%); }		
-		50% { transform: translateX(-120%); }	
+		50% { transform: translateX(140%); }	
 		100% { transform: translateX(0%); }
 	}
 	@keyframes returnText {
 		0% { transform: translateX(0%); }		
-		50% { transform: translateX(-120%); }
+		50% { transform: translateX(-140%); }
 		100% { transform: translateX(0%); }
 	}
 	.leave-op{

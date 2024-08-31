@@ -60,7 +60,7 @@ h3{
 .route-link:hover{
   color: rgba(51, 51, 51, 0.6)
 }
-@media screen and (max-width: 650px){
+/* @media screen and (max-width: 650px){
     .title-text{
         padding-top: 10px;
         margin: 0px;
@@ -82,5 +82,5 @@ h3{
         padding-right: 2px;
         padding-left: 2px;
     }
-}
+} */
 </style>
