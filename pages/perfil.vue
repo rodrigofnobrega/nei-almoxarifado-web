@@ -248,7 +248,7 @@
   </div>
   <div v-if="userRecords.length > 0" class="overflow-x-scroll profile-posts bg-light mb-4 mt-0 pb-0 pt-0 rounded-3">
       <div class="history-title pt-2 bg-light-background-header">
-        <h5 class="ms-3 fw-bold">Registros da conta</h5>
+        <h5 class="ms-3 fw-bold">Histórico de Movimentações</h5>
       </div>
       <div class="posts-table">
         <TablesTable>
