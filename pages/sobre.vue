@@ -9,26 +9,67 @@
     <div class="description-container">
       <h1 class="d-flex description-title justify-content-center ">Sistema de Gerenciamento de Almoxarifado NEI</h1>
       <br>
-      <p>Este sistema foi projetado para a gestão e organização eficiente dos itens do almoxarifado do 
+      <p>
+        Este sistema foi projetado para fornecer uma solução abrangente e eficiente para a gestão e organização dos itens do almoxarifado do 
         Núcleo de Educação da Infância (NEI) - CAp/UFRN, garantindo o controle preciso da entrada e saída de materiais. 
-        Desenvolvido por estudantes do curso de 
-        <a href="https://www.metropoledigital.ufrn.br/portal/">Bacharelado em Tecnologia da Informação</a>
-        da Universidade Federal do Rio Grande do Norte 
-        <a href="https://www.ufrn.br/">UFRN</a>, de forma totalmente voluntária e de acordo com as normas da instituição
-        . O sistema reflete um compromisso com a inovação e a excelência acadêmica, 
-        oferecendo uma solução robusta e prática para as necessidades de gerenciamento do NEI.</p>
+        Desenvolvido por estudantes do curso de <a href="https://www.metropoledigital.ufrn.br/portal/">Bacharelado em Tecnologia da Informação</a>
+        da Universidade Federal do Rio Grande do Norte <a href="https://www.ufrn.br/">UFRN</a>,
+        de forma totalmente voluntária e de acordo com as normas da instituição. 
+        O sistema reflete um compromisso com a inovação e a excelência acadêmica, 
+        oferecendo uma solução robusta e prática para as necessidades de gerenciamento do NEI.
+      </p>
 
       <br>
     </div>
     <div class="my-5 description-container">
       <h1 class="d-flex description-title justify-content-center ">Documentação e Guia de Uso</h1>
       <br>
-      <p>O sistema consiste em 4 funções principais: organização e cadastro dos itens do almoxarifado, 
-        controle do acesso a estes itens por meio das solicitações feitas pelo sistema, registros das operações pertinentes realizadas para fins de auditoria 
-      e funcionalidades de análise gráfica, geração de relatórios e outras por meio dos dados obtidos pelo uso do sistema.  </p>
+      <p>
+        O sistema é estruturado em torno de quatro funções principais,
+        cada uma desempenhando um papel crucial na operação e gestão do almoxarifado, são elas:
+      </p>
+      <ol>
+        <li>
+          <b>Organização e Cadastro de Itens</b>:
+          <p>
+            Esta função permite o cadastro detalhado de todos os itens do almoxarifado, 
+            incluindo informações como código sipac, tipo unitário, quantidade disponível e outras características pertinentes. 
+            A organização eficiente dos itens facilita o acesso rápido e preciso, otimizando o espaço físico e o tempo de busca.
+          </p>
+        </li>
+        <li>
+          <b>Controle de Acesso e Solicitações</b>:
+          <p>
+            O sistema inclui um mecanismo para gerenciar o acesso aos itens do almoxarifado, 
+            registrando todas as solicitações feitas pelos usuários. 
+            As autorizações de retirada de materiais são registradas e monitoradas, 
+            garantindo que apenas pessoal autorizado possa acessar determinados itens. 
+            Esse controle rigoroso ajuda a prevenir perdas, 
+            usos não autorizados e analisar os itens que estão sendo mais requisitados.
+          </p>
+        </li>
+        <li>
+          <b>Registros e Auditoria</b>
+          <p>
+            Todas as operações realizadas no sistema, como entradas, saídas e movimentações internas de materiais, 
+            são registradas em um banco de dados seguro para fins de auditoria. 
+            Isso permite que a administração acompanhe o histórico completo de movimentações, 
+            facilitando a identificação de inconsistências e a realização de auditorias internas ou externas.
+          </p>
+        </li>
+        <li>
+          <b>Análise de Dados e Relatórios</b>
+          <p>
+            O sistema também oferece ferramentas avançadas para a análise gráfica e a geração de relatórios detalhados com base nos dados coletados. 
+            Esses relatórios podem incluir informações sobre o consumo de materiais e a frequência de solicitações.
+            As funcionalidades de análise permitem que os gestores tomem decisões informadas, 
+            planejem reposições de estoque e identifiquem oportunidades para otimizar os processos operacionais.
+          </p>
+        </li>
+      </ol>
       <br>
     </div>
-    <h2 class="d-flex mb-5 justify-content-center">Desenvolvedores</h2>
+    <h1 class="d-flex mb-5 justify-content-center">Desenvolvedores</h1>
     <div class="row d-flex justify-content-center">
       <div class="col-12 col-sm-6 col-md-4 mb-4" v-for="(card, index) in cards" :key="index">
         <div class="card bg-light card-hover-effect fixed-height-card d-flex align-items-center flex-column" style="width: 100%;">
