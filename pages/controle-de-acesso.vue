@@ -12,9 +12,9 @@
         	    <IconsInformation class="me-2"/>
         	    Descrição da página 
         	</h6>
-        	<p class="sub-catalog-text opacity-75 mb-0">
-				É por meio desta página que a administração irá controlar as solicitações de itens do almoxarifado, aceitando-as ou recusando-as. Ademais pode-se atrelar 
-				uma mensagem de notificação para a resposta da solicitação.
+			<p class="sub-catalog-text opacity-75 mb-0">
+				Nesta página, a administração tem o controle sobre as solicitações que foram feitas para poder consumir os itens. 
+				As solicitações podem ser aceitas ou recusadas, e ao responder, é possível incluir uma mensagem explicando a decisão tomada.
 			</p>
     	</div>
 		<div class="row mt-3 d-flex align-items-center justify-content-center">
