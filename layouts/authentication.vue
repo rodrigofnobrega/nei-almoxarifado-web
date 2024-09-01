@@ -1,5 +1,5 @@
 <template>
-    <div class="authentication">
+    <div id="authentication">
         <div class="d-block bg-dark-transparent">
             <div class="d-flex justify-content-center align-items-center">
                 <slot />
@@ -14,18 +14,34 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { onMounted } from 'vue';
+
+onMounted(() => {
+    const authContainer = document.getElementById("authentication");
+    if(window.innerHeight <= 450){
+        authContainer.style.height = '200%';
+    }
+    window.addEventListener('resize', () => {
+        if(window.innerHeight <= 450){
+            authContainer.style.height = '200%';
+        } else{
+            authContainer.style.height = '108%';
+        }
+    })
+})
+
+
 </script>
 
 <style scoped>
-.authentication {
+#authentication {
   width: 100%;
   height: 100%;
   background: url('../assets/img/nei.png') no-repeat center center;
   background-size: cover;
   position: absolute;
   z-index: 1;
-
   &::before {
     content: "";
     position: absolute;
@@ -48,7 +64,7 @@
 .brand-box{
     bottom: 0;
     left: 0;
-    position: fixed;
+    position: absolute;
 }
 .bg-degrade{
     border-radius: 10px 10px 10px 10px;
@@ -57,9 +73,7 @@
 }
 @media screen and (max-width: 680px){
     .brand-box{
-        position: absolute;
         right: 0;
-        bottom: 0;
     }
 }
 </style>

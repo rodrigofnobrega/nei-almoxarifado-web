@@ -25,7 +25,7 @@
 					:class="!isValidSimpleEmail(email)  ? 'disabled-button' : ''" 
 					:disabled="!isValidSimpleEmail(email)" 
 					id="forgetPassword" 
-					class="fw-bold mt-4 disabled" 
+					class="fw-bold mt-4 disabled auth-btn" 
 					type="submit"
 					>
 					Enviar
@@ -49,7 +49,7 @@
 					:class="!token ? 'disabled-button' : ''" 
 					:disabled="!token" 
 					id="validateToken" 
-					class="fw-bold mt-3 disabled" 
+					class="fw-bold mt-3 disabled auth-btn" 
 					type="submit">
 					Verificar
 				</button>
@@ -57,7 +57,10 @@
 			<div class="info">
 				<a class="text-light text-decoration-underline" href="/login">Voltar para o login.</a>
 				<br class="mb-2">
-				<a class="text-light text-decoration-underline" href="mailto:almoxarifado957@gmail.com">Dúvidas? Clique aqui para contato.</a>
+				<div>
+
+					<a class="text-light text-decoration-underline" href="mailto:almoxarifado957@gmail.com">Dúvidas? Clique aqui para contato.</a>
+				</div>
 			</div>
 		</div>
 
@@ -138,6 +141,7 @@ const validateToken = async () => {
 	} catch(err){
 		popUpStore.throwPopup('ERRO: Código de verificação inválido', 'red');
 		resetSubmit();
+		return 0;
 	}
 	store.recoveryToken = token.value;
 	userStore.email = email.value
@@ -379,7 +383,8 @@ onBeforeRouteLeave(() => {
 		overflow: hidden !important;
 	}
 	.auth-btn{
-		margin-top: 15px !important;
+		margin-bottom: 30px;
+		margin-top: 12px !important;
 	}
 	.login-form{
 		margin-left: 10px;

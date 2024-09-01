@@ -8,7 +8,7 @@
     inter: font === 1, 
     montserrat: font === 2, 
     lora: font === 3, 
-  }">
+  }" id="aplication">
     <NuxtLayout>
       <Popup class="popUp" :isPopup="isPopup" :popupText="popupText" :popupBg="popupBg"/>
       <NuxtPage/>

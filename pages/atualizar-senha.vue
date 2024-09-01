@@ -283,6 +283,7 @@ onBeforeRouteLeave(() => {
 	50% { opacity: 0%; }
 	100% { opacity: 100%; }
 }
+
 @media screen and (max-width: 680px){
 	.auth-container{
 		width: 90%;

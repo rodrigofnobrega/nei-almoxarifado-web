@@ -118,7 +118,7 @@
 					<button 
 						:class="!isValidEmail(email) || rePassword !== password || password.length < 6 ? 'disabled-button' : ''" 
 						:disabled="!isValidEmail(email) || rePassword !== password || password.length < 6" 
-						id="submitLogin" 
+						id="submitRegister" 
 						class="fw-bold auth-btn mt-4 disabled" 
 						type="submit">
 						Cadastrar
@@ -432,6 +432,10 @@ onMounted(() => {
 		transition: height 1s ease-in-out, width 1s ease-in-out;
 		z-index: -1;
 	}
+	#submitLogin{
+		margin-bottom: 20px;
+		margin-top: 22px !important;
+	}
 	.mobile-btn{
 		border-radius: 10px 10px 0px 0px;
 		display: block;
@@ -469,7 +473,7 @@ onMounted(() => {
 		overflow: hidden !important;
 	}
 	.auth-btn{
-		margin-top: 15px !important;
+		margin-top: 12px !important;
 	}
 	.login-form{
 		margin-left: 10px;
