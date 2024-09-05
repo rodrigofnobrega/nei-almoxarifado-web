@@ -17,13 +17,12 @@
           </div>
       </nav>
       <div class="d-flex justify-content-end align-items-center pb-0">
-        <div :class="{'d-none': !settingsStore.isMobile}" class="d-flex align-items-center text-light me-2" type="button" tabindex="-1" data-bs-target="#neiSearchModal" data-bs-toggle="modal">
-          <IconsSearchGlass class="mobile-search text-light"/>
-          Pesquisar
-        </div>
         <SearchBar :class="{'d-none': settingsStore.isMobile}"  class="pb-1"/>
-        <ThemeSwitch class="mt-1"/>
-        <Profile class="ms-4"/>
+        <div :class="{'d-none': !settingsStore.isMobile}" class="d-flex align-items-center text-light me-1" type="button" tabindex="-1" data-bs-target="#neiSearchModal" data-bs-toggle="modal">
+          <IconsSearchGlass class="mobile-search text-light" height="26px" style="margin-bottom: 2px;"/>
+        </div>
+        <ThemeSwitch v-if="!settingsStore.isMobile" class="mt-1"/>
+        <Profile />
       </div>     
     </div>
     <UtilsSearch />

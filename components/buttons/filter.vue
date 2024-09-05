@@ -1,13 +1,7 @@
 <template>
     <div class="dropdown" @click.stop>
-        <button v-if="settingsStore.isMobile" @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" 
-        class="dropdown-principal mt-1 filter-btn action-btn d-flex btn btn-outline-primary mx-1 px-2"  
-        data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
-        Filtro
-        <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
-    </button>
-    <button v-else @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" 
-        class="dropdown-principal mt-1 filter-btn action-btn d-flex btn btn-outline-primary mx-1 px-2"  
+    <button @focusin="clearDropdown()" @focusout="clearDropdown()" 
+        class="dropdown-principal mt-1  action-btn d-flex btn btn-outline-primary mx-1 px-2"  
         data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
         Filtro
         <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
@@ -34,13 +28,13 @@
                 </div>
             </li>-->
             <li>
-                <div class="vue-dropdown" @click="ClicktoggleDropdown(1)"  @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
+                <div class="vue-dropdown" @click="ClicktoggleDropdown(0)"  @mouseover="toggleDropdown(0)" @mouseout="toggleDropdown(0)">
                     <div  class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
                         criação
                         <IconsClock class="action-icon"/>
                     </div>
-                    <ul class="vue-dropdown-menu" v-show="dropdownStates[1]">
-                        <li class="small-menu">
+                    <ul class="vue-dropdown-menu" v-show="dropdownStates[0]">
+                        <li @click.stop class="small-menu">
                             <div @click="sendDataToParent('id,asc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" style="border-radius: 10px 10px 0px 0px;" type="button">
                                 asc
                                 <IconsUpArrow class="action-icon"/>
@@ -54,13 +48,13 @@
                 </div>
             </li>
             <li>
-                <div class="vue-dropdown"  @click="ClicktoggleDropdown(2)"  @mouseover="toggleDropdown(2)" @mouseout="toggleDropdown(2)">
+                <div class="vue-dropdown"  @click="ClicktoggleDropdown(1)"  @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
                     <div class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
                         nome
                         <IconsNameSort class="action-icon"/>
                     </div>
-                    <ul class="vue-dropdown-menu" v-show="dropdownStates[2]">
-                        <li class="small-menu">
+                    <ul class="vue-dropdown-menu" v-show="dropdownStates[1]">
+                        <li @click.stop class="small-menu">
                             <div @click="sendDataToParent('name,asc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" style="border-radius: 10px 10px 0px 0px;" type="button">
                                 asc
                                 <IconsUpArrow class="action-icon"/>
@@ -74,13 +68,13 @@
                 </div>
             </li>
             <li>
-                <div class="vue-dropdown" @click="ClicktoggleDropdown(3)"  @mouseover="toggleDropdown(3)" @mouseout="toggleDropdown(3)">
+                <div class="vue-dropdown" @click="ClicktoggleDropdown(2)"  @mouseover="toggleDropdown(2)" @mouseout="toggleDropdown(2)">
                     <div class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
                         quantidade
                         <IconsQuantitySort class="action-icon"/>
                     </div>
-                    <ul class="vue-dropdown-menu" v-show="dropdownStates[3]">
-                        <li class="small-menu">
+                    <ul class="vue-dropdown-menu" v-show="dropdownStates[2]">
+                        <li @click.stop class="small-menu">
                             <div @click="sendDataToParent('quantity,asc', false)" class="filter-btn d-flex justify-content-between text-align-center align-items-center btn btn-transparent border-0" style="border-radius: 10px 10px 0px 0px;" type="button">
                                 asc
                                 <IconsUpArrow class="action-icon"/>
@@ -110,21 +104,29 @@ const store = useStorageStore();
 
 const dropdownStates = ref([false, false, false, false]);
 const toggleDropdown = (dropdown_id) => {
-    dropdownStates.value[dropdown_id-1] = false
-    dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
-    dropdownStates.value[dropdown_id+1] = false
+    if(!settingsStore.isMobile){
+        dropdownStates.value[dropdown_id-1] = false
+        dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
+        dropdownStates.value[dropdown_id+1] = false
+    }
 }
 const ClicktoggleDropdown = (dropdown_id) => {
-    if(!settingsStore.isMobile){
-        return 0
+    if(settingsStore.isMobile){
+        if(dropdown_id >= 2){
+
+        }
+        clearDropdown();
+        dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
     }
-    dropdownStates.value[dropdown_id-1] = false
-    dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
-    dropdownStates.value[dropdown_id+1] = false
 }
+const clearDropdown = () => {
+    dropdownStates.value = [false, false, false, false]
+}
+
 
 const setItemsFilter = inject('setItemsFilter')
 const sendDataToParent = (filter, isInverted) => {
+    clearDropdown()
     setItemsFilter(filter, isInverted)
 }
 
@@ -174,7 +176,6 @@ li{
 }
 .btn-outline-primary{
     box-shadow: inset 0px -12px 15px -15px rgb(18, 104, 184);
-    color: rgb(0, 0, 0, 0.7); 
 }
 .btn-transparent:hover{
     color: white;
@@ -185,35 +186,9 @@ li{
 }
 @media screen and (max-width: 820px){
     .action-btn{
-        font-size:  12px;
+        margin-top: 6px !important;
+        font-size: 14px;
     }
 }
-/*
-@media screen and (max-width: 820px){
-    .action-btn{
-        font-size: 12px;
-    }
-    .filter-btn{
-        font-size: 12px;
-    }
-    .large-menu{
-        padding: 0;
-        width: 100px !important;
-    }
-    .small-menu{
-        width: 60px;
-        margin-top: -40px;
-        height: 50px;
-        padding: 0;
-        left: 128px;
-    }
-    .small-menu .filter-btn{
-        margin-top: 0px;
-        margin-bottom: -4px;  
-    }
-    .action-icon{
-        width: 15px;
-        height: 15px;
-    }
-} */
+
 </style>

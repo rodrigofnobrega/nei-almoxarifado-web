@@ -27,7 +27,7 @@
                 <ButtonsFilter v-if="uploadReloader === 1"/>
             </div>
             <span v-if="itemsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 4px;">
-                <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
+                <input id="tableSearch" v-model="searchInput" @input="searchInput = $event.target.value" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
                 <IconsSearchGlass class="search-glass"/>
             </span>
         </div>
@@ -65,10 +65,10 @@
                     </div>
                </th>
                <th class="border" width="5%">
-                    <button title="Detalhes" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#NeiItemDetailing">
+                    <button title="Detalhes" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#NeiItemDetailing">
                         <IconsSearchGlass class="action-icon" width="18px" height="19px"/>
                     </button>
-                    <button title="Solicitar" class="my-0 details-btn position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}"  @click="showConfirm(index)" data-bs-toggle="modal" data-bs-target="#NeiItemRequest">
+                    <button title="Solicitar" class="my-0 details-btn position-sticky table-btn btn btn-secondary" @click="showConfirm(index)" data-bs-toggle="modal" data-bs-target="#NeiItemRequest">
                          <IconsSolicitation class="action-icon" width="16px" height="16px"/>
                      </button>
                 </th>
@@ -600,11 +600,6 @@ tr:hover p{
     .searchbar{
         font-size: 14px;
     }
-    .table-searchbar{
-        min-width: 120px;
-        margin-top: 8px !important; 
-        display: block;
-    }
 }
 @media screen and (max-width: 600px){
     .pages-info{
@@ -617,10 +612,6 @@ tr:hover p{
         width: 25px;
         height: 25px;
     }
-    .table-actions{
-        width: 600px;
-        padding-left: 0px;
-    }
 } 
 @media screen and (max-width: 500px){
     .box-title-text{
@@ -628,18 +619,6 @@ tr:hover p{
     }
     .table-box-title{
         margin-top: 35px;
-    }
-    .table-actions{
-        padding-right: 0px !important;
-        display: block !important;
-    }.actions-btns{
-        padding-bottom: 9px;
-        border-radius: 0px 10px 0px 0px;
-        background-color: #D9D9D9;
-        justify-content: center;
-    }
-    .table-searchbar{
-        margin: 0px 20px 0px 20px;
     }
 }
 </style>

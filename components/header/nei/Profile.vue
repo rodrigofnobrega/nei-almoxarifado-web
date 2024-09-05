@@ -31,7 +31,7 @@
           </div>
           <div class="nav-item dropdown">
             <button class="svg-button  d-flex bg-primary align-items-center" @click="rotate" data-bs-toggle="dropdown" data-bs-offset="10,0" data-bs-auto-close="inside" aria-expanded="false">
-              <p class="profile-drop user-text text-light px-1 m-0 fw-light"> {{ user.username }} </p>
+              <p class="profile-drop user-text text-light px-1 m-0 fw-light text-nowrap"> {{ user.username }} </p>
               <LoadersLoading class="small-loader text-light p-1"/>
                 <IconsDownArrow class="rotate-arrow" :style="{ transform: isRoted ? 'rotate(180deg)' : 'rotate(0deg)'}" width="24px" height="24px"/>
             </button>
@@ -185,7 +185,6 @@ onMounted(async() => {
 }
 .notification-menu{
   max-height: 160px;
-  min-width: 300px;
   overflow-y: scroll;
 }
 .small-loader{
@@ -218,7 +217,7 @@ onMounted(async() => {
 }
 
 .svg-button{
-    height: 49px;
+    height: 50px;
     border: none;
     padding: 0;
     margin: 0;

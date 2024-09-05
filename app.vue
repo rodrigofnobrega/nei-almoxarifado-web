@@ -76,6 +76,7 @@ function checkIfMobile() {
   font-family: 'Lora', sans-serif;
 }
 
+
 .darkLayout .bg-fade{
   background: #111318 !important;
 }

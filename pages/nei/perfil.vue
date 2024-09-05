@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid d-block">
+  <div class="container-fluid profile d-block">
     <div class="profile-container">
       <div class="profile-sidebar bg-light rounded-3  flex-column align-items-center">
         <div class="d-flex justify-content-center mb-4 bg-light-background-header history-title">
@@ -252,7 +252,7 @@
     </template>
     <template v-slot:body>
       <div class="container-fluid">
-        <p class="fw-medium text-dark-emphasis">Digite sua senha atual para prosseguir:</p>
+        <p class="fw-medium text-dark-emphasis text-nowrap">Digite sua senha atual para prosseguir:</p>
         <label class="form-label fw-bold" for="currentPassword">Senha atual:</label>
         <div class="d-flex justify-content-end">
           <input id="currentPassword" :class="handleUpdateBtn && currentPassword ? 'bg-light-emphasis' : 'bg-light'" class="form-control mb-2" :type="showPassword[0] ? 'text' : 'password'" v-model="currentPassword">
@@ -453,9 +453,9 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.container-fluid{
-  padding-top: 100px;
-  padding-bottom: 50px;
+.profile{
+  padding-top: 80px;
+  padding-bottom: 40px;
 }
 .profile-container {
   display: flex;
@@ -499,6 +499,7 @@ h3{
 }
 
 .col-title{
+  text-wrap: nowrap;
   font-size: 14px;
   color: rgb(51,51,51, 0.9);
   opacity: 80%;

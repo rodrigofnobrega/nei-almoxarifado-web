@@ -124,36 +124,5 @@ export default {
     height: 25px;
   }
 }
-/*
-@media screen and (max-width: 1199px){
-  .main-content{  
-      width: 82vw;
-      margin-left: 1.1%;
-    }
-}
-@media screen and (max-width: 1159px){
-  .main-content{  
-      width: 84vw;
-      margin-left: -1%;
-    }
-}
-@media screen and (max-width: 1050px){
-  .main-content{
-      width: 82vw;
-      margin-left: -1%;
-  }
-}
-@media screen and (max-width: 990px){
-  .main-content{
-    width: calc(80vw*0.99);
-    margin-left: -0.6%;
-  }
-}
 
-@media screen and (max-width: 818px){
-  .main-content{
-    width: calc(74vw*0.98);
-    margin-left: 0.2%;
-  }
-}*/
 </style>

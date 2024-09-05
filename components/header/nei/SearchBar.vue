@@ -11,7 +11,7 @@
 <style scoped>
 .search-bar{
   outline: none;
-  height: 45px;
+  height: 46px;
   transition: box-shadow 0.4s ease, border-bottom 0.4s ease-in-out;
 }
 .search-bar:hover{

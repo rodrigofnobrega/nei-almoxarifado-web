@@ -31,7 +31,7 @@
               Sem Pesquisas Recentes
             </p>
 				</div>
-				<div class="modal-footer">
+				<div v-if="!settingsStore.isMobile" class="modal-footer">
             <p class="fs-6"><IconsEnter class="bg-primary text-light" style="border-radius: 3px;"/> para selecionar <IconsBottomArrow class="bg-primary text-light" style="border-radius: 3px;"/> <IconsUpArrow class="bg-primary text-light" style="border-radius: 3px;"/> para navegar e <span class="bg-primary text-light" style="border-radius: 3px;">esc</span> para fechar</p>
 				</div>
 			</div>
@@ -45,6 +45,7 @@ import { useSearch } from '../../stores/search.ts';
 import { useStorageStore } from '../../stores/storage.ts';
 import { getItems } from '../../services/items/itemsGET.ts';
 import { useUser } from '../../stores/user.ts';
+import { useSettingsStore } from '../../stores/settings.ts';
 
 export default {
   data() {
@@ -85,7 +86,8 @@ export default {
       let searchResult = document.getElementsByClassName("searchResult");
       searchResult[this.searchCount - 1].click();
     },
-    async handleSearch() {
+    async handleSearch(e) {
+      this.searchQuery = e.target.value;
       this.showResults = false;
       this.searchResults = [];
       this.pagination = 0;
@@ -120,6 +122,7 @@ export default {
     this.itemsReq();
   },
   async setup() {
+    const settingsStore = useSettingsStore();
     const userStore = useUser();
     const searchStore = useSearch();
     const store = useStorageStore();
@@ -127,7 +130,8 @@ export default {
     return {
       store,
       searchStore,
-      userStore
+      userStore,
+      settingsStore
     }
   },
 }

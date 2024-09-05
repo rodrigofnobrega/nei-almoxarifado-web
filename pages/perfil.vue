@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid d-block">
+  <div class="container-fluid profile d-block">
     <div class="profile-container">
       <div class="profile-sidebar bg-light rounded-3  flex-column align-items-center">
         <div class="d-flex justify-content-center mb-4 bg-light-background-header history-title">
@@ -595,6 +595,10 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.profile{
+  padding-top: 80px;
+  padding-bottom: 40px;
+}
 .profile-container {
   display: flex;
 }

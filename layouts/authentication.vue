@@ -16,19 +16,23 @@
 
 <script setup>
 import { onMounted } from 'vue';
-
+import { useSettingsStore } from '../stores/settings.ts'
 onMounted(() => {
-    const authContainer = document.getElementById("authentication");
-    if(window.innerHeight <= 450){
-        authContainer.style.height = '200%';
-    }
-    window.addEventListener('resize', () => {
-        if(window.innerHeight <= 450){
-            authContainer.style.height = '200%';
-        } else{
-            authContainer.style.height = '108%';
+    const settingsStore = useSettingsStore();
+    if(settingsStore.isMobile){
+        const handleSize = () => {
+            const authContainer = document.getElementById("authentication");
+            if(window.innerHeight <= 450){
+                authContainer.style.height = '200%';
+            } else{
+                authContainer.style.height = '108%';
+            }
         }
-    })
+        handleSize()
+        window.addEventListener('resize', () => {
+            handleSize()
+        })
+    }
 })
 
 
@@ -73,6 +77,7 @@ onMounted(() => {
 }
 @media screen and (max-width: 680px){
     .brand-box{
+        bottom: 60px;
         right: 0;
     }
 }
