@@ -14,7 +14,7 @@
         <h5 class="ps-2 fw-bold">Gráfico dos mais solicitados</h5>
         <div class="dropdown mb-1 mx-2 d-flex">
             <button class="d-flex align-items-center graph-btn btn btn-outline-warning px-2 fw-bold " @click="toggleDataType">
-              <IconsLoop class="me-1" width="20" height="20"/>
+              <IconsLoop class="me-1" width="20px" height="20px"/>
               {{ currentDataTypeLabel }}
             </button>
             <button class="d-flex align-items-center graph-btn btn btn-outline-secondary px-2 fw-bold dropdown-toggle mx-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -234,7 +234,7 @@ do{
 const currentIndex = ref(0);
 const currentLabelName = ref('Itens mais solicitados');
 const currentDataType = ref('mostItems'); 
-const currentDataTypeLabel = ref('Usuários com mais solicitações');
+const currentDataTypeLabel = ref('Usuários mais solicitadores');
 
 const chartData = ref({
   labels: labels[currentDataType.value][0].slice(0, 15),
@@ -292,8 +292,8 @@ const changeLabel = (monthIndex) => {
 
 const toggleDataType = () => {
   currentDataType.value = currentDataType.value === 'mostItems' ? 'mostRequesters' : 'mostItems';
-  currentLabelName.value = currentDataType.value === 'mostItems' ? 'Itens mais solicitados' : 'Usuários com mais solicitações';
-  currentDataTypeLabel.value = currentDataType.value === 'mostItems' ? 'Usuários com mais solicitações' : 'Itens mais solicitados';
+  currentLabelName.value = currentDataType.value === 'mostItems' ? 'Itens mais solicitados' : 'Usuários mais solicitadores';
+  currentDataTypeLabel.value = currentDataType.value === 'mostItems' ? 'Usuários mais solicitadores' : 'Itens mais solicitados';
   changeLabel(monthSelected);
 };
 
@@ -392,6 +392,10 @@ li{
 @media screen and (max-width: 500px){
   .graph-header{
     display: block !important;
+  }
+  .graph-btn{
+    padding: 0px;
+    font-size: 11px;
   }
 }
 </style>

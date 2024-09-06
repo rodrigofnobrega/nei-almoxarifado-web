@@ -189,12 +189,8 @@ export default {
     border-radius: 5px;
 }
 @media screen and (max-width: 424px){
-    .form-label{
-        font-size: 14px !important;
-        font-weight: normal !important;
-    }   
-    .form-control{
-        font-size: 12px !important;
+    #itemDetailing{
+        margin: 0;
     }
 }
 @media screen and (max-width: 360px){

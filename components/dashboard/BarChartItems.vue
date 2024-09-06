@@ -1,7 +1,7 @@
 <template>
   <ModalAlmoReport :id="1" :data="datasets"/>
   <div class="graph-header d-flex align-items-end justify-content-between section-title pt-2  bg-light-background-header">
-        <h5 class="ps-2 fw-bold">Gráfico da quantidade de itens solicitados</h5>
+        <h5 class="ps-2 fw-bold">Gráfico dos itens solicitados</h5>
           <div class="dropdown mb-1 mx-2 d-flex">
             <button class="d-flex align-items-center graph-btn btn btn-outline-secondary fw-bold px-2 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <IconsTimer class="me-1" width="20px" height="20px"/>

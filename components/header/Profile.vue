@@ -167,6 +167,12 @@ onMounted(async () => {
 .dropdown-item:hover .notification-text{
   font-weight: bold
 }
+p{
+  white-space: nowrap;     
+  overflow: hidden;        
+  text-overflow: ellipsis; 
+  max-width: 120px;   
+}
 .svg-button:hover{
   border-bottom: solid 1px #FED51E;
   box-shadow: inset 0px -12px 15px -13px rgb(254, 213, 30, 0.7);

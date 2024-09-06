@@ -503,6 +503,9 @@ h5{
   width: 290px;
   box-shadow: 0px 0px 15px 2px rgb(111, 7, 7);
 }
+.table-cell{
+  text-wrap: nowrap;
+}
 .align-cell{
   padding-top: 12px !important;
 }
