@@ -29,19 +29,19 @@
                 </p>
             </div>
             <div class="d-flex justify-content-end aling-items-center me-4 actions" style="margin-top: 2px;">
-                <span v-if="!mobileView" @click="changeView = !changeView" type="button" style="color: rgb(0, 0, 0, 0.7);" class=" text-dark-emphasis box-title bg-light-emphasis px-2 table-searchbar me-2 position-sticky d-flex align-items-center">
+                <span v-if="!mobileView && !loadRequests" @click="changeView = !changeView" type="button" style="color: rgb(0, 0, 0, 0.7);" class=" text-dark-emphasis box-title bg-light-emphasis px-2 table-searchbar me-2 position-sticky d-flex align-items-center">
                     Vizualização
                     <IconsMenu v-if="changeView" class="ms-1"/>
                     <IconsVerticalBars v-if="!changeView" class="ms-1"/>
                 </span>
                 <span v-if="requestsLoad" class="box-title bg-light-emphasis position-sticky d-flex align-items-center table-searchbar" style="margin-top: 0.8px;">
-                    <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
+                    <input id="tableSearch" v-model="searchInput" @input="searchInput = $event.target.value" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
                     <IconsSearchGlass class="search-glass"/>
                 </span>
             </div>
         </div>
         <div class="requests-container mx-2 bg-light">
-            <div :class="{'d-flex': !changeView, 'd-block': changeView}" class="justify-content-between mb-5">
+            <div :class="{'d-flex': !changeView, 'd-block': changeView}" class="justify-content-between mb-5 requests-view">
                 <div class="request-container mx-2 text-dark-emphasis mt-3 rounded-2">
                     <div :class="{'box-bg-warning': requestsCache.inProgressRequests.length > 0}" class="requests-box mt-0 pt-0 z-0">
                         <div :class="{'border-warning border-bottom': requestsCache.inProgressRequests.length > 0}" class="d-flex box-title align-items-center justify-content-between px-2" >
@@ -63,7 +63,7 @@
                                             <IconsClock class="action-icon"/>
                                         </div>
                                         <div v-show="dropdownStates[1]" class="sub-dropdown bg-light position-absolute">
-                                            <ul class="list-group">
+                                            <ul @click.stop class="list-group">
                                                 <li @click="applyFilter(requestsCache.inProgressRequests,'date', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
                                                     <span class="ps-1">asc</span>
                                                     <IconsUpArrow width="18" height="18"/>
@@ -82,7 +82,7 @@
                                             <IconsNameSort class="action-icon"/>
                                         </div>
                                         <div v-show="dropdownStates[2]" class="sub-dropdown bg-light position-absolute mb-5">
-                                            <ul class="list-group">
+                                            <ul @click.stop class="list-group">
                                                 <li @click="applyFilter(requestsCache.inProgressRequests,'name', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
                                                     <span class="ps-1">asc</span>
                                                     <IconsUpArrow width="18" height="18"/>
@@ -102,7 +102,7 @@
                                     <CardsCard :class="{'card-width-adjust': changeView}" 
                                     v-if="requestsCache.inProgressRequests.length > 0" 
                                     v-for="(request, index) in requestsCache.inProgressRequests.slice(0, requestsLoaded[0])" 
-                                    :key="index" class="col-6 card-container mb-3 mx-2 bg-light-background">
+                                    :key="index" class="col-6 card-container mb-3 mx-1 bg-light-background">
                                         <template v-slot:header>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <p class="justify-content-start mb-3 fw-bold">
@@ -166,7 +166,7 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-center">
-                            <div v-if="requestsCache.inProgressRequests.length === 0" class="empty-text mt-5 pt-2 opacity-75 me-5 ms-0">
+                            <div v-if="requestsCache.inProgressRequests.length === 0" class="d-flex justify-content-center empty-text mt-5 pt-2 opacity-75 mx-0">
                                 <h5 class="fw-bold text-nowrap">
                                     Nenhuma solicitação encontrada
                                 </h5>
@@ -195,7 +195,7 @@
                                             <IconsClock class="action-icon"/>
                                         </div>
                                         <div v-show="dropdownStates[1]" class="sub-dropdown bg-light position-absolute">
-                                            <ul class="list-group">
+                                            <ul @click.stop class="list-group">
                                                 <li @click="applyFilter(requestsCache.acceptedRequests,'date', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
                                                     <span class="ps-1">asc</span>
                                                     <IconsUpArrow width="18" height="18"/>
@@ -214,7 +214,7 @@
                                             <IconsNameSort class="action-icon"/>
                                         </div>
                                         <div v-show="dropdownStates[2]" class="sub-dropdown bg-light position-absolute mb-5">
-                                            <ul class="list-group">
+                                            <ul @click.stop class="list-group">
                                                 <li @click="applyFilter(requestsCache.acceptedRequests,'name', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
                                                     <span class="ps-1">asc</span>
                                                     <IconsUpArrow width="18" height="18"/>
@@ -230,11 +230,11 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center cards-box">
-                            <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}">
+                            <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}" class="requests-view">
                                 <CardsCard :class="{'card-width-adjust': changeView}" 
                                 v-if="requestsCache.acceptedRequests.length > 0"
                                  v-for="(request, index) in requestsCache.acceptedRequests.slice(0, requestsLoaded[1])" 
-                                 :key="index" class="col-6 card-container mb-3 mx-2 bg-light-background"
+                                 :key="index" class="col-6 card-container mb-3 mx-1 bg-light-background"
                                  >
                                     <template v-slot:header>
                                         <div class="d-flex justify-content-between align-items-center">
@@ -302,7 +302,7 @@
                                                 <div class="mb-0"> 
                                                     <label class="form-label fw-semibold"> Mensagem da Administração </label>
                                                     <div class="d-flex ">
-                                                        <textarea readonly class="form-control"> {{ request.adminComment ? request.adminComment : 'nenhuma' }} </textarea>
+                                                        <textarea readonly class="form-control response-textarea"> {{ request.adminComment ? request.adminComment : 'nenhuma' }} </textarea>
                                                     </div>
                                                 </div>	
                                             </div>
@@ -325,7 +325,7 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-center">
-                            <div v-if="requestsCache.acceptedRequests.length === 0" class="empty-text mt-5 pt-2 opacity-75 me-5 ms-0">
+                            <div v-if="requestsCache.acceptedRequests.length === 0" class="d-flex justify-content-center empty-text mt-5 pt-2 opacity-75 mx-0">
                                 <h5 class="fw-bold text-nowrap">
                                     Nenhuma solicitação encontrada
                                 </h5>
@@ -354,7 +354,7 @@
                                             <IconsClock class="action-icon"/>
                                         </div>
                                         <div v-show="dropdownStates[1]" class="sub-dropdown bg-light position-absolute">
-                                            <ul class="list-group">
+                                            <ul @click.stop class="list-group">
                                                 <li @click="applyFilter(requestsCache.rejectedRequests,'date', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
                                                     <span class="ps-1">asc</span>
                                                     <IconsUpArrow width="18" height="18"/>
@@ -373,7 +373,7 @@
                                             <IconsNameSort class="action-icon"/>
                                         </div>
                                         <div v-show="dropdownStates[2]" class="sub-dropdown bg-light position-absolute mb-5">
-                                            <ul class="list-group">
+                                            <ul @click.stop class="list-group">
                                                 <li @click="applyFilter(requestsCache.rejectedRequests,'name', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
                                                     <span class="ps-1">asc</span>
                                                     <IconsUpArrow width="18" height="18"/>
@@ -389,10 +389,10 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center cards-box">
-                            <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}">
+                            <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}" class="requests-view">
                                 <CardsCard :class="{'card-width-adjust': changeView}" v-if="requestsCache.rejectedRequests.length > 0" 
                                     v-for="(request, index) in requestsCache.rejectedRequests.slice(0, requestsLoaded[2])" :key="index" 
-                                    class="col-6 card-container mb-3 mx-2 bg-light-background">
+                                    class="col-6 card-container mb-3 mx-1 bg-light-background">
                                     <template v-slot:header>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <p class="justify-content-start mb-3 fw-bold">
@@ -459,7 +459,7 @@
                                                 <div class="mb-0"> 
                                                     <label class="form-label fw-semibold"> Mensagem da Administração </label>
                                                     <div class="d-flex ">
-                                                        <textarea readonly class="form-control"> {{ request.adminComment ? request.adminComment : 'nenhuma' }} </textarea>
+                                                        <textarea readonly class="form-control response-textarea"> {{ request.adminComment ? request.adminComment : 'nenhuma' }} </textarea>
                                                     </div>
                                                 </div>	
                                             </div>
@@ -482,7 +482,7 @@
                         </div>
                     </div>
                     <div class="d-flex align-items-center justify-content-center">
-                        <div v-if="requestsCache.rejectedRequests.length === 0" class="empty-text mt-5 pt-2 opacity-75 me-5 ms-0">
+                        <div v-if="requestsCache.rejectedRequests.length === 0" class="d-flex justify-content-center empty-text mt-5 pt-2 opacity-75 mx-0">
                             <h5 class="fw-bold text-nowrap">
                                 Nenhuma solicitação encontrada
                             </h5>
@@ -521,17 +521,20 @@ const requestToCancel = ref({
 
 const dropdownStates = ref([false, false, false, false]);
 const toggleDropdown = (dropdown_id) => {
-    dropdownStates.value[dropdown_id-1] = false
-    dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
-    dropdownStates.value[dropdown_id+1] = false
+    if(!settingsStore.isMobile){
+        dropdownStates.value[dropdown_id-1] = false
+        dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
+        dropdownStates.value[dropdown_id+1] = false
+    }
 }
 const ClicktoggleDropdown = (dropdown_id) => {
-    if(!settingsStore.isMobile){
-        return 0
+    if(settingsStore.isMobile){
+        clearDropdown();
+        dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
     }
-    dropdownStates.value[dropdown_id-1] = false
-    dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
-    dropdownStates.value[dropdown_id+1] = false
+}
+const clearDropdown = () => {
+    dropdownStates.value = [false, false, false, false]
 }
 
 
@@ -551,6 +554,7 @@ const filter = ref({ type: '', order: '' });
 const changeView = ref(false);
 
 const applyFilter = (requests, type, order) => {
+    clearDropdown();
     filter.value.type = type;
     filter.value.order = order;
     sortRequests(requests, filter.value.type, filter.value.order);
@@ -704,8 +708,12 @@ const resizeBox = () => {
     }
 }
 onMounted(() => {   
+    if(store.isMobile){
+        changeView.value = true;
+        mobileView.value = changeView.value;
+    }
     loadRequests.value = false;
-    window.addEventListener('resize', resizeBox)
+    window.addEventListener('resize', resizeBox);
 })
 </script>
 
@@ -729,7 +737,7 @@ onMounted(() => {
     overflow-x: scroll;
     margin-top: 4px;
     border-radius: 10px;
-    width: 96%;
+    width: 98.4%;
     transition: box-shadow 0.2s ease-in-out, transform 0.1s ease-in-out;
 }
 .requests-box{
@@ -914,16 +922,24 @@ p{
 .card-width-adjust{
     width: 30%;
 }
+.response-textarea{
+    padding-bottom: 30%;
+}
 @media screen and (max-width: 1115px){
     .card-width-adjust{
         width: 48%;
     }   
     .empty-text{
-        width: 100%;
         justify-content: center !important;
     }
 }
 @media screen and (max-width: 670px){
+    .requests-view{
+        margin-right: 10px;
+    }
+    .cards-box{
+        margin-right: 5px;
+    }
     .box-title-text{
         font-size: 18px;
     }
@@ -939,14 +955,14 @@ p{
 }
 @media screen and (max-width: 450px){
     .box-title-text{
-        font-size: 16px;
+        font-size: 14px;
     }
     .actions{
         margin-top: -1px !important;
     }
     .table-searchbar{
         margin-top: 2px !important;  
-        width: 115px;
+        width: 135px;
     }
     .searchbar{
         font-size: 14px;
@@ -957,7 +973,7 @@ p{
 }
 @media screen and (max-width: 370px){
     .box-title-text{
-        font-size: 15px;
+        font-size: 14px;
     }
     .actions{
         margin-top: -1px !important;

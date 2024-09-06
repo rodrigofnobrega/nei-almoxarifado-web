@@ -112,9 +112,6 @@ const toggleDropdown = (dropdown_id) => {
 }
 const ClicktoggleDropdown = (dropdown_id) => {
     if(settingsStore.isMobile){
-        if(dropdown_id >= 2){
-
-        }
         clearDropdown();
         dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
     }
