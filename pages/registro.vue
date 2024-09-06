@@ -13,8 +13,16 @@
             <IconsInformation class="me-2"/>
             Descrição da página
         </h6>
-      <p class="sub-catalog-text opacity-75">Nesta página temos todos os registros das operações feitas no sistema, sendo estas operações de dois tipos: CADASTRO e CONSUMO. 
-        Registrando também o usuário e item da operação.</p>
+        <p class="sub-catalog-text opacity-75">
+            Nesta página temos todos os registros das operações feitas no sistema, sendo estas operações de dois tipos: CADASTRO, CONSUMO e EXCLUSÃO. 
+            Registrando também o usuário, item e horário da operação.
+        </p>
+        <br>
+        <ul class="opacity-75">
+            <li>CADASTRO: Quando um item é adicionado ao estoque.</li>
+            <li>CONSUMO: Quando um item é retirado do estoque por um usuário.</li>
+            <li>EXCLUSÃO: Quando um item é removido do almoxarifado sem ter sido consumido.</li>
+        </ul>
   </div>
   <div class="table-box-title position-absolute bg-light-emphasis d-flex align-items-center">
         <IconsHistory class="me-1" width="25" height="25"/>
