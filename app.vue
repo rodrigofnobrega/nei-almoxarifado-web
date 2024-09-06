@@ -63,6 +63,26 @@ function checkIfMobile() {
 </script>
 
 <style>
+::-webkit-scrollbar {
+    width: 6px; 
+    height: 6px; 
+}
+
+::-webkit-scrollbar-track {
+    background: transparent; 
+    margin: 5px; 
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2); 
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3); 
+}
+
+
 .poppins{
   font-family: 'Poppins', sans-serif;
 }

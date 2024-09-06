@@ -196,7 +196,7 @@
     <ModalItemDetails v-if="currentItem" :item_index="itemIndex" :item_details="currentItem" />
     <Modal id="removeUser" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
       <template v-slot:header>
-        <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Desativar conta</h6>
+        <h6 class="header-title d-flex fw-medium justify-content-start align-items-center fw-bold fs-5">Desativar conta</h6>
         <button class="btn btn-transparent text-light border-0 close-btn" type="button" data-bs-dismiss="modal">
           <IconsClose class="close ms-5" width="1.3em" height="1.3em"/>
         </button>

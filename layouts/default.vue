@@ -1,7 +1,7 @@
 <template>
   <div id="content">
     <Header />
-    <div class="d-flex bg-fade"> 
+    <div class="d-flex bg-fade">  
       <div class="fluid-container"> 
         <NavbarNavSideBar />
       </div>
@@ -87,7 +87,7 @@ export default {
 .main{
   width: 100%;
   max-width: 100%;
-  min-width: 82.8%;
+  min-width: 82%;
   height: 100%;
 }
 .main-title{
