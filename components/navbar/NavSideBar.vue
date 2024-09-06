@@ -1,6 +1,6 @@
 <template>
     <div class="modal-backdrop" :style="{'display': (responsive && isMobile) ? 'block' : 'none' }"></div>
-    <div class="sidebar pt-0 nav bg-light d-flex offcanvas show showing" :class="{ 'collapsed': isCollapsed, 'hide': (responsive && !isMobile) || (settingsStore.isMobile && !responsive), 'mobile-spacement': responsive && isMobile, 'mobile-fixed': responsive }" 
+    <div class="sidebar pt-0 nav bg-light d-flex offcanvas  showing" :class="{ 'collapsed': isCollapsed, 'hide': (responsive && !isMobile) || (settingsStore.isMobile && !responsive), 'mobile-spacement': responsive && isMobile, 'mobile-fixed': responsive }" 
      tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-body ps-0" :class="{'mobile-padding': responsive }">
             <div class="mobile-sidebar-header bg-primary m-0 p-0 text-light" :class="{'show': responsive && isMobile}" :style="{'width': responsive && isMobile ? '165px': '0px'}">

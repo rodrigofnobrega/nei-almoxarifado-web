@@ -383,7 +383,7 @@ const changeLabel = (labelType, index) => {
     }
   }
 };
-onMounted(() => {console.log(projectedData)
+onMounted(() => {
   /*
   if(store.isMobile){
       const btnText = document.querySelectorAll('.filter-btn');

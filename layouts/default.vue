@@ -81,8 +81,13 @@ export default {
 #content{
   background-color: #f3f4f7;
 }
+.main-content{
+  min-width: 83%;
+}
 .main{
   width: 100%;
+  max-width: 100%;
+  min-width: 82.8%;
   height: 100%;
 }
 .main-title{

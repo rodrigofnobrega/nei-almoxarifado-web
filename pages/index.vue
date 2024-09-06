@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>    
-      <div class="dashboard-section users-management me-3 bg-light mb-4 pb-0 pt-0 rounded-3">
+      <div class="dashboard-section users-management bg-light mb-4 pb-0 pt-0 rounded-3">
         <div class="section-title d-flex align-items-center justify-content-between bg-light-background-header">
           <h5 class="header ps-2 pt-2 fw-bold">Gestão de Usuários</h5>
           <div @click.stop class="dropdown decoration-none">
@@ -376,7 +376,6 @@ const deleteAccount = async () => {
 .users-management-scroll{
   position: static !important;
   text-wrap: nowrap !important;
-  overflow-y: scroll !important;
   max-height: 227px !important;
 }
 .users-management{
@@ -397,8 +396,11 @@ const deleteAccount = async () => {
 .record-btn{
   text-wrap: nowrap;
 }
+.container-fluid{
+  margin: 0;
+  min-width: 83%;
+}
 .dashboard-section{   
-  width: 99%;
   padding-top: 10px;
   padding-bottom: 0px;
   padding-left: 0;
@@ -532,6 +534,9 @@ h5{
 @media screen and (max-width: 1040px){
   .paralalel-section{
     display: block !important;
+  }
+  .dashboard-section{
+    margin-right: 0 !important;
   }
   /* .summary-text{
     font-size: 15px !important;
