@@ -7,7 +7,7 @@
             </button>
         </template> 
         <template v-slot:body>
-            <div v-if="item_details != undefined" class="d-block">
+        <div v-if="item_details != undefined" class="d-block modal-labels">
             <div class="d-flex">
                 <div class="d-block mb-2 pe-2">
                     <label for="item-name">Nome do Item</label>
@@ -38,8 +38,8 @@
         </template>
         <template v-slot:footer>
             <div class="container-fluid d-flex justify-content-end align-items-center">
-                <button @click="sendRequest()" data-bs-dismiss="modal" class="btn btn-secondary fw-bold mx-2"> Enviar </button>
-                <button data-bs-dismiss="modal" class="btn btn-light-alert fw-bold text-light mx-2"> Cancelar </button>
+                <button @click="sendRequest()" data-bs-dismiss="modal" class="btn btn-secondary fw-bold mx-1"> Enviar </button>
+                <button data-bs-dismiss="modal" class="btn btn-light-alert fw-bold text-light mx-1"> Cancelar </button>
             </div>
         </template> 
     </Modal>
@@ -95,6 +95,10 @@ export default {
 .btn{
     padding: 6px;
 }
+label{
+    font-weight: bold;
+    text-wrap: nowrap;
+}
 .mode-btn{
     font-size: 15px;
 }
@@ -110,12 +114,11 @@ export default {
     border-radius: 5px;
 }
 @media screen and (max-width: 424px){
-    .form-label{
-        font-size: 14px !important;
-        font-weight: normal !important;
-    }   
-    .form-control{
-        font-size: 12px !important;
+    .modal-labels{
+        margin: -5px;
+    }
+    label{
+        font-size: 14px;
     }
 }
 @media screen and (max-width: 360px){

@@ -31,7 +31,7 @@
                 <IconsSearchGlass class="search-glass"/>
             </span>
         </div>
-        <TablesTable>
+        <TablesTable v-if="itemsCache.length > 0">
             <template v-slot:header>
                 <tr style="border: 1px #D9D9D9 solid;">
                     <th class="col-title py-2 border" scope="col">Nome</th>
@@ -43,7 +43,7 @@
                 </tr>
             </template>
             <template v-slot:content>
-            <tr v-if="itemsCache.length > 0" v-for="(item, index) in itemsCache[cacheIndex]" :key="index" :data-index="index">
+            <tr v-for="(item, index) in itemsCache[cacheIndex]" :key="index" :data-index="index">
                <th class="border" scope="row">
                     <div class="cell-text">
                         <span>{{ item.name }}</span>
@@ -73,10 +73,6 @@
                      </button>
                 </th>
             </tr>
-            <div v-else-if="!initialLoading"
-             class="search-empty my-5">
-                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
-            </div>
             <!--
             <div v-else class="search-empty my-5" style="padding-bottom: 300px;">
                 <p style="margin-top: 50px;" class="text-dark-emphasis fs-4 opacity-75 bg-transparent">
@@ -85,6 +81,10 @@
             </div>-->
         </template>
         </TablesTable>
+        <div v-else-if="!initialLoading"
+         class="search-empty my-5">
+            <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
+        </div>
         <div v-if="initialLoading" class="d-flex justify-content-center align-items-center my-5">
             <LoadersLoading class="p-5 my-5"/>
         </div>
@@ -439,6 +439,7 @@ onBeforeRouteLeave(() => {
     font-size: 20px;
 }
 .table-actions{
+    border-bottom: 1px solid rgba(51,51,51,0.2);
     width: 100%;
 }
 .sub-catalog{
@@ -545,10 +546,10 @@ p{
     margin-left: 35%;
 }
 .search-empty{
-    margin-top: 5%;
+    margin-top: 80px !important;
+    margin-bottom: 100px !important;
     display: flex;
     justify-content: center;
-    margin-left: 150%;
     white-space: nowrap;
 }
 .pagination{

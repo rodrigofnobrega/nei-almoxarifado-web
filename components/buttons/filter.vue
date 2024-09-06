@@ -173,6 +173,12 @@ li{
     border: none;
     border-radius: 10px 10px 0px 0px;
     border-bottom: 1px ridge #1F69B1;
+    color: rgb(51,51,51, 0.9);
+    background-color: transparent;
+}
+.action-btn:hover{
+    color: white;
+    background-color: #0B3B69;
 }
 .btn-outline-primary{
     box-shadow: inset 0px -12px 15px -15px rgb(18, 104, 184);
