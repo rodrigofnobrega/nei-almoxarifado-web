@@ -28,7 +28,7 @@
                     <input readonly class="form-control bg-light-emphasis" :value="item_details.available === true ? 'disponível' : 'indisponível'">
                 </div>
             </div>
-            <h6 class="text-dark"> Mensagem para a solicitação </h6>
+            <h6 class="text-dark fw-bold"> Mensagem para a solicitação </h6>
             <textarea v-model="description" class="form-control textarea"> </textarea>
             <div class="d-block mt-2">
                 <label for="item-qtd">Quantidade a ser solicitada</label> 

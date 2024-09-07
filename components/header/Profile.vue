@@ -9,12 +9,17 @@
               </span>
             </button>
             <ul class="dropdown-menu notification-menu text-center">
-              <li v-for="(request, index) in requests" :key="index" class="text-end bg-primary dropdown-item notification">
+              <li v-for="(request, index) in requests" :key="index" class="text-end dropdown-item notification">
                 <div class="text-dark-emphasis d-flex align-items-center">
                   <div>
                     <IconsWarning wdith="24px" height="26px" class="me-2 mt-0 notifications-text"/>
                   </div>
-                  <p class="notification-text text-wrap m-0 p-0">{{request.user.name}} solicitou {{ request.quantityRequested }} "{{request.item.name}}"
+                  <p class="notification-text m-0 p-0" style="max-width: 100px;">
+                    {{request.user.name}}
+                  </p>
+                  <p class="notification-text m-0 p-0" style="max-width: 200px;">
+                    &nbsp;
+                    solicitou {{ request.quantityRequested }} "{{request.item.name}}"
                   </p>
                  </div>
                 <span class="notification-text ms-0 opacity-75 text-dark-emphasis">
@@ -170,8 +175,7 @@ onMounted(async () => {
 p{
   white-space: nowrap;     
   overflow: hidden;        
-  text-overflow: ellipsis; 
-  max-width: 120px;   
+  text-overflow: ellipsis;    
 }
 .svg-button:hover{
   border-bottom: solid 1px #FED51E;
@@ -180,5 +184,10 @@ p{
 .profile-drop:hover{
   transition: filter 0.3s ease-in;
   filter: drop-shadow(0px 0px 8px rgba(254, 213, 30, 1));
+}
+@media screen and (max-width: 600px){
+  .notification-menu{
+    min-width: 200px;
+  }
 }
 </style>

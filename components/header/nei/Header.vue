@@ -90,7 +90,7 @@ export default{
   z-index: 1050;
 }
 .navbar{
-  margin-left: 16%;
+  margin-left: 18%;
 }
 .nav-link{
   font-weight: bold;

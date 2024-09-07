@@ -63,32 +63,15 @@ function checkIfMobile() {
 </script>
 
 <style>
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
 
-::-webkit-scrollbar-track {
-    background: transparent;
-    margin: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
+/* Para Firefox */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) white; /* Fundo branco no Firefox */
 }
 
 *::-moz-scrollbar-thumb:hover {
-  background-color: rgba(0, 0, 0, 0.3); 
+    background-color: rgba(0, 0, 0, 0.3); 
 }
 
 
@@ -105,7 +88,9 @@ function checkIfMobile() {
   font-family: 'Lora', sans-serif;
 }
 
-
+.darkLayout *{
+  scrollbar-color: rgba(255, 255, 255, 0.3) #1A1A1A  !important;  
+}
 .darkLayout .bg-fade{
   background: #111318 !important;
 }
@@ -136,6 +121,7 @@ function checkIfMobile() {
 }
 .darkLayout .btn-outline-secondary{
   border-color: #2072c3 !important;
+  color: white !important;
 }
 .darkLayout .btn-outline-secondary:hover{
   background-color: #113a62 !important;

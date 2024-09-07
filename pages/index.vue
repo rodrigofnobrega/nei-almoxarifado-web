@@ -56,18 +56,18 @@
         <div class="section-title d-flex align-items-center justify-content-between bg-light-background-header">
           <h5 class="header ps-2 pt-2 fw-bold">Gestão de Usuários</h5>
           <div @click.stop class="dropdown decoration-none">
-            <button class="btn btn-transparent border-0 m-0 p-0" data-bs-toggle="dropdown" aria-expanded="false">
-              <IconsSettingsDots width="30" height="30"/>
+            <button class="btn btn-transparent border-0 m-0 p-0 text-dark-emphasis" data-bs-toggle="dropdown" aria-expanded="false">
+              <IconsSettingsDots class="me-1 opacity-75" width="28" height="28"/>
             </button>
             <ul class="dropdown-menu py-0">
-              <li @click="toggleAccounts()" type="button" class="dropdown-item py-2 d-flex align-items-center justify-content-center">
-                <span>Mostrar contas desativas</span>
-                <input type="checkbox" style="margin-bottom: 3px" class="form-check-input ms-2 border-1 border-new-gray" v-model="showDisabledAccounts">
+              <li @click="toggleAccounts()" type="button" class="dropdown-item py-2 d-flex align-items-center justify-content-center text-dark-emphasis">
+                <span class="fw-bold">Mostrar contas desativas</span>
+                <input type="checkbox" style="margin-bottom: 4px" class="form-check-input ms-2 border-1" v-model="showDisabledAccounts">
               </li>
             </ul>
           </div>
         </div>
-        <div class="dashboard-scroll pb-4">
+        <div class="dashboard-scroll">
           <TablesTable v-if="users.content && users.content.length">
             <template v-slot:header>
               <tr class="col-line">
@@ -378,7 +378,7 @@ const deleteAccount = async () => {
 .dashboard-scroll{
   position: static !important;
   text-wrap: nowrap !important;
-  max-height: 277px !important;
+  max-height: 247px !important;
   overflow-x: scroll;
 }
 .users-management{
@@ -495,6 +495,15 @@ h5{
     border-radius: 7px;
     width: 280px;
     transition: width 0.3s ease-in-out, box-shadow 0.4s ease-in-out;
+}
+.form-check-input{
+    border: 1px solid rgb(0, 0, 0, 0.3);
+}
+.form-check-input:active{
+    background-color: #1F69B1 !important;
+}
+.form-check-input:checked{
+    background-color: #1F69B1 !important;
 }
 .bg-warning-op80:hover{
     box-shadow: 0px 0px 15px 4px rgb(160, 152, 2);

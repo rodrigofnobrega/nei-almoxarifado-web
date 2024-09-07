@@ -52,7 +52,7 @@ export const useStorageStore = defineStore('storage', {
             if(!res){
               popupStore.throwPopup("Erro: Algum erro interno do sistema ocorreu, contante o suporte", 'red');
             }
-            else{ popupStore.throwPopup("Item deletado com sucesso", 'blue'); }
+            else{ popupStore.throwPopup("Item atualizado com sucesso", 'blue'); }
           }catch(error){
             console.log(error);
             popupStore.throwPopup("Erro: Algum erro interno do sistema ocorreu, contante o suporte", 'red');

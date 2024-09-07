@@ -99,7 +99,6 @@ import { useSettingsStore } from '../../stores/settings';
 
 
 const settingsStore = useSettingsStore();
-const toolTip = ref(false);
 const store = useStorageStore();
 
 const dropdownStates = ref([false, false, false, false]);

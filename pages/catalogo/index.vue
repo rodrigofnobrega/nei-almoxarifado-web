@@ -641,7 +641,7 @@ tr:hover p{
     }.actions-btns{
         padding-bottom: 9px;
         border-radius: 0px 10px 0px 0px;
-        box-shadow: 0px 10px 10px -10px rgba(51, 51, 51, 0.8);
+        box-shadow: 0px 10px 10px -13px rgba(51, 51, 51, 0.7);
         justify-content: center;
         margin-right: -5px;
         margin-left: -5px;

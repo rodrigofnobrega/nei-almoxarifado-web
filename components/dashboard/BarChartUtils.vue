@@ -367,7 +367,7 @@ li{
     border-bottom: 1px ridge #1F69B1;
 }
 .btn-outline-secondary{
-  color: rgb(51,51,51, 0.9) !important;
+  color: rgb(51,51,51, 0.9);
   background-color: transparent !important;
 }
 .btn-outline-secondary:hover{

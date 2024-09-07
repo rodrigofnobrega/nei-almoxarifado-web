@@ -20,7 +20,6 @@
 
 <script setup>
 import { onBeforeMount, ref } from 'vue';
-const toolTip = ref(false);
 const textLoading = ref(false);
 onBeforeMount(() => {
     textLoading.value = true;

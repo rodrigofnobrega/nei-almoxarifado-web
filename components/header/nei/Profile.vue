@@ -185,6 +185,7 @@ onMounted(async() => {
 }
 .notification-menu{
   max-height: 160px;
+  min-width: 300px;
   overflow-y: scroll;
 }
 .small-loader{
@@ -217,7 +218,7 @@ onMounted(async() => {
 }
 
 .svg-button{
-    height: 50px;
+    height: 49px;
     border: none;
     padding: 0;
     margin: 0;
@@ -230,18 +231,23 @@ onMounted(async() => {
 .dropdown-item:hover .notification-text{
   font-weight: bold
 }
-.svg-button:hover{
-  border-bottom: solid 1px #FED51E;
-  box-shadow: inset 0px -12px 15px -13px rgb(254, 213, 30, 0.7);
-}
 p{
   white-space: nowrap;     
   overflow: hidden;        
   text-overflow: ellipsis; 
   max-width: 120px;   
 }
+.svg-button:hover{
+  border-bottom: solid 1px #FED51E;
+  box-shadow: inset 0px -12px 15px -13px rgb(254, 213, 30, 0.7);
+}
 .profile-drop:hover{
   transition: filter 0.3s ease-in;
   filter: drop-shadow(0px 0px 8px rgba(254, 213, 30, 1));
+}
+@media screen and (max-width: 600px){
+  .notification-menu{
+    min-width: 200px;
+  }
 }
 </style>

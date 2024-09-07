@@ -9,7 +9,7 @@
         <template v-slot:body>
             <div class="row">
                 <div class="mb-3"> 
-                        <label class="form-label fw-bold">Quantidade a ser reposta </label>
+                        <label class="mb-2 fw-bold">Quantidade a ser reposta </label>
 						<input v-model="repositionQtd" class="form-control edit-control" type="number" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
 				</div>
             </div>   

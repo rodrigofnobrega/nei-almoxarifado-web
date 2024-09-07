@@ -26,15 +26,10 @@
 @media screen and (max-width: 676px) {
 	.modal-dialog{
 		margin-top: 10% !important;
-		margin-left: 10% !important;
-		margin-right: 5% !important;
+		margin-left: 10px;
+		margin-right: 10px;	
 	}
 }
-@media screen and (max-width: 412px) {
-	.modal-dialog{
-		margin-left: 7% !important;
-		margin-right: 7% !important;
-	}
-}
+
 </style>
 

@@ -9,9 +9,9 @@
             <li class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center mb-0" style="padding-bottom: 4px;">
                 <a type="button" class="text-decoration-none import-text" href="/catalogo/importar-tabelas">importar tabelas</a>
             </li>
-            <li type="button" class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center">
-                <label type="button" class="form-check-label" for="editCheck">habilitar correções</label>
-                <input v-model="store.isEditionMode" @click="store.isEditionMode = !store.isEditionMode" class="ms-2 p-2 mb-1 form-check-input" value="" id="editCheck" type="checkbox">
+            <li type="button" @click="store.isEditionMode = !store.isEditionMode" class="dropdown-item form-check d-flex py-2 mb-0 align-items-center">
+                <span class="me-4 pe-2">habilitar correções</span>
+                <input v-model="store.isEditionMode" class="p-2 mb-1 form-check-input" value="" id="editCheck" type="checkbox">
             </li>
         </ul>   
     </div>  
@@ -75,13 +75,13 @@ const sendDataToParent = (filter, isInverted) => {
 
 <style scoped>
 .large-menu{
-    width: 200px;
+    width: 180px;
     min-width: 110px;
 }
 li{
     list-style-type: none;
 }
-.dropdown-item, .dropdown-item a{
+.dropdown-item span, .dropdown-item a{
     font-size: 14px;
     color: rgb(51,51,51, 0.9);
     font-weight: 600;
@@ -107,8 +107,13 @@ li{
     border: none;
     border-radius: 10px 10px 0px 0px;
     border-bottom: 1px ridge #1F69B1;
+    color: rgb(51,51,51, 0.9);
+    background-color: transparent;
 }
-
+.action-btn:hover{
+    color: white;
+    background-color: #0B3B69;
+}
 .btn-outline-primary{
     box-shadow: inset 0px -12px 15px -15px rgb(18, 104, 184);
 }
@@ -125,6 +130,15 @@ li{
     opacity: 90%;
 }
 @media screen and (max-width: 820px){
+    .large-menu{
+        width: 170px;
+    }
+    .large-menu span{
+        padding-right: 2px !important;
+    }
+    .form-check-input{
+        margin-bottom: 2px !important;
+    }
     .action-btn{
         font-size: 12px;
     }
