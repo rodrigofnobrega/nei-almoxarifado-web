@@ -188,9 +188,10 @@ export default {
 .modal-btn{
     border-radius: 5px;
 }
-@media screen and (max-width: 424px){
+@media screen and (max-width: 500px){
     #itemDetailing{
-        margin: 0;
+        padding: 0px !important;
+        margin: 0px !important;
     }
 }
 @media screen and (max-width: 360px){

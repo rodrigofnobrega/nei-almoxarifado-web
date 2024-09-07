@@ -1,8 +1,8 @@
 <template>
   <ModalAlmoReport :id="1" :data="datasets"/>
   <div class="graph-header d-flex align-items-end justify-content-between section-title pt-2  bg-light-background-header">
-        <h5 class="ps-2 fw-bold">Gráfico dos itens solicitados</h5>
-          <div class="dropdown mb-1 mx-2 d-flex">
+        <h5 class="ps-2 fw-bold">Gráfico das solicitações de itens</h5>
+          <div class="dropdown mb-1 mx-2 d-flex" @click.stop>
             <button class="d-flex align-items-center graph-btn btn btn-outline-secondary fw-bold px-2 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <IconsTimer class="me-1" width="20px" height="20px"/>
               Período
@@ -21,7 +21,7 @@
                         mensal   
                     </div>
                     <ul class="vue-dropdown-menu" v-show="dropdownState">
-                        <li class="small-menu">
+                        <li class="small-menu" :class="{'mobile-small-menu': store.isMobile}">
                           <div v-for="(month, index) in labels.month" :key="index" @click="changeLabel('week', index)" class="filter-btn d-flex fw-bold justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                             {{ month.slice(0,3) }}
                           </div>
@@ -77,15 +77,16 @@ const userStore = useUser();
 const store = useStorageStore();
 
 const dropdownState = ref(false);
-const toggleDropdown = (dropdown_id) => {
-    dropdownState.value = !dropdownState.value
+const toggleDropdown = () => {
+    if(!store.isMobile){
+      dropdownState.value = !dropdownState.value
+    }
 }
 
-const ClicktoggleDropdown = (dropdown_id) => {
-    if(!store.isMobile){
-        return 0
+const ClicktoggleDropdown = () => {
+    if(store.isMobile){
+        dropdownState.value = !dropdownState.value
     }
-    dropdownState.value = !dropdownState.value
 }
 
 const qtdRequestedByMonths = [];
@@ -260,25 +261,25 @@ const chartData = ref({
   datasets: [
     {
       type: 'bar',
-      label: 'Itens solicitados',
+      label: 'Quantidade de itens solicitados',
       backgroundColor: '#0B3B69',
       data: datasets.requests[currentIndex.value]
     },
     {
       type: 'bar',
-      label: 'Itens consumidos',
+      label: 'Quantidade de itens consumidos',
       backgroundColor: '#388E3C',
       data: datasets.requestsAccepted[currentIndex.value]
     },
     {
       type: 'bar',
-      label: 'Itens recusados ao consumo',
+      label: 'Quantidade de itens recusados',
       backgroundColor: '#B71C1C',
       data: datasets.requestsRejected[currentIndex.value]
     },
     {
       type: 'line',
-      label: 'Projeção',
+      label: 'Projeção das quantidades',
       backgroundColor: '#1F69B1',
       borderColor: '#1F69B1',
       pointBackgroundColor: '#1F69B1',
@@ -299,7 +300,8 @@ const chartOptions = ref({
           size: (context) => {
             const width = context.chart.width;
             if (width > 1000) return 14;
-            if (width > 600) return 12;
+             if (600 < width && width < 1000) return 12;
+            else if (width < 500) return 9;
             return 10;
           }
         }
@@ -361,21 +363,21 @@ const changeLabel = (labelType, index) => {
         {
           ...chartData.value.datasets[0], 
           type: 'bar',
-          label: 'Itens solicitados',
+          label: 'Quantidade de itens solicitados',
           backgroundColor: '#0B3B69',
           data: datasets.requests[currentIndex.value][index]
         },
         {
           ...chartData.value.datasets[1],
           type: 'bar',
-          label: 'Solicitações aceitas',
+          label: 'Quantidade de itens consumidos',
           backgroundColor: '#388E3C',
           data: datasets.requestsAccepted[currentIndex.value][index]
         },
         {
           ...chartData.value.datasets[2],
           type: 'bar',
-          label: 'Solicitações recusadas',
+          label: 'Quantidade de itens recusados',
           backgroundColor: '#B71C1C',
           data: datasets.requestsRejected[currentIndex.value][index]
         },
@@ -435,6 +437,9 @@ li{
     height: 400px;
     min-width: 40px;
 }
+.mobile-small-menu{
+  left: 100px;
+}
 .btn-transparent{
     font-size: 14px;
 }
@@ -474,6 +479,10 @@ li{
     }
 }
 @media screen and (max-width: 500px){
+  .chart-graph {
+    height: 350px !important;
+    
+  }
   .graph-header{
     display: block !important;
   }

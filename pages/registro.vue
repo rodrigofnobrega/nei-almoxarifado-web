@@ -23,7 +23,7 @@
         </div>
         <span v-if="recordsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 3px;">
             <IconsSearchGlass class="search-glass"/>
-            <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
+            <input id="tableSearch" v-model="searchInput" @input="searchInput = $event.target.value" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
         </span>
       </div>
     <div class="overflow-x-scroll p-0">

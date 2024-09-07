@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>    
-      <div class="dashboard-section users-management bg-light mb-4 pb-0 pt-0 rounded-3 overflow-x-hidden overflow-hidden">
+      <div class="dashboard-section users-management me-0 bg-light mb-4 pb-0 pt-0 rounded-3">
         <div class="section-title d-flex align-items-center justify-content-between bg-light-background-header">
           <h5 class="header ps-2 pt-2 fw-bold">Gestão de Usuários</h5>
           <div @click.stop class="dropdown decoration-none">
@@ -67,7 +67,7 @@
             </ul>
           </div>
         </div>
-        <div class="users-management-scroll pb-4">
+        <div class="dashboard-scroll pb-4">
           <TablesTable v-if="users.content && users.content.length">
             <template v-slot:header>
               <tr class="col-line">
@@ -107,12 +107,12 @@
               </tr>
             </template>
           </TablesTable>
-          <div v-if="loadContent && users.content.length === 0" class="search-empty d-flex justify-content-center">
-            <p class="text-dark-emphasis fs-5 opacity-50">Nenhum usuário encontrado</p>
-          </div>
-          <div class="d-flex justify-content-center mt-5" v-else>
-            <LoadersLoading class="p-5 mt-2"/>
-          </div>
+        </div>
+        <div v-if="loadContent && users.content.length === 0" class="search-empty d-flex justify-content-center">
+          <p class="text-dark-emphasis fs-5 opacity-50">Nenhum usuário encontrado</p>
+        </div>
+        <div v-if="!loadContent" class="d-flex justify-content-center mt-5">
+          <LoadersLoading class="p-5 m-5 mt-2"/>
         </div>
       </div>
     </div>
@@ -120,7 +120,7 @@
       <div class="section-title pt-2  bg-light-background-header">
         <h5 class="header ps-2  fw-bold">Movimentações mais recentes</h5>
       </div>
-      <div class="users-management-scroll">
+      <div class="dashboard-scroll">
         <TablesTable v-if="records.content && records.content.length">
           <template v-slot:header>
             <tr class="col-line">
@@ -375,16 +375,16 @@ const deleteAccount = async () => {
 </script>
 
 <style scoped>
-.users-management-scroll{
+.dashboard-scroll{
   position: static !important;
   text-wrap: nowrap !important;
-  max-height: 227px !important;
+  max-height: 277px !important;
   overflow-x: scroll;
 }
 .users-management{
   position: static !important;
   text-wrap: nowrap !important;
-  overflow-y: scroll !important;
+  width: 60%;
 }
 .recent-records{
   height: 290px;
@@ -530,13 +530,22 @@ h5{
   .summary-text{
     height: 100px;
   }
-  .users-management-scroll{
+  .dashboard-scroll{
     max-height: 250px !important;
   }
 } */
+@media screen and (max-width: 1098px) {
+  .users-management{
+    width: 57%;
+  }
+  
+}
 @media screen and (max-width: 1040px){
   .paralalel-section{
     display: block !important;
+  }
+  .users-management{
+    width: 100%;
   }
   .dashboard-section{
     margin-right: 0 !important;
@@ -544,7 +553,7 @@ h5{
   /* .summary-text{
     font-size: 15px !important;
   }
-  .users-management-scroll{
+  .dashboard-scroll{
     max-height: 270px !important;
   }
   th{
