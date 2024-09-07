@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>    
-      <div class="dashboard-section users-management bg-light mb-4 pb-0 pt-0 rounded-3">
+      <div class="dashboard-section users-management bg-light mb-4 pb-0 pt-0 rounded-3 overflow-x-hidden overflow-hidden">
         <div class="section-title d-flex align-items-center justify-content-between bg-light-background-header">
           <h5 class="header ps-2 pt-2 fw-bold">Gestão de Usuários</h5>
           <div @click.stop class="dropdown decoration-none">
@@ -67,7 +67,7 @@
             </ul>
           </div>
         </div>
-        <div class="users-management-scroll">
+        <div class="users-management-scroll pb-4">
           <TablesTable v-if="users.content && users.content.length">
             <template v-slot:header>
               <tr class="col-line">
@@ -82,7 +82,7 @@
                 <th :class="{'user-disabled': !user.active}" class="table-cell" scope="row">
                   <div class="d-flex justify-content-start align-items-center text-nowrap">
                     <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
-                    {{ user.name }}
+                    <span style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width: 150px;">{{ user.name }}</span>
                   </div>
                 </th>
                 <th :class="{'user-disabled': !user.active}" class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
@@ -116,68 +116,70 @@
         </div>
       </div>
     </div>
-    <div class="dashboard-section  overflow-x-visible recent-records bg-light mb-4 pb-0 pt-0 rounded-3">
+    <div class="dashboard-section recent-records bg-light mb-4 pb-0 pt-0 rounded-3 overflow-hidden">
       <div class="section-title pt-2  bg-light-background-header">
         <h5 class="header ps-2  fw-bold">Movimentações mais recentes</h5>
       </div>
-      <TablesTable v-if="records.content && records.content.length">
-        <template v-slot:header>
-          <tr class="col-line">
-            <th class="col-title table-col text-center py-2" scope="col">Usuário</th>
-            <th class="col-title table-col text-center py-2" scope="col">Movimentação</th>
-            <th class="col-title table-col text-center py-2" scope="col">Item</th>
-            <th class="col-title table-col text-center py-2" scope="col">Tipo unitário</th>
-            <th class="col-title table-col text-center py-2" scope="col">Quantidade</th>
-            <th class="col-title table-col text-center py-2" scope="col">Data e horário</th>
-            <th class="col-title table-col text-center py-2" scope="col">Ações</th>
-          </tr>
-        </template>
-        <template v-slot:content>
-          <tr v-for="(record, index) in records.content" :key="record.id" class="text-center"> 
-            <th class="table-cell mov-cell" scope="row">
-              <div class="d-flex table-text align-items-center " style="padding-top: 0px;">
-                <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
-                {{ record.user.name }}
-              </div>
-            </th>
-            <th class="table-cell mov-cell" scope="row">
-              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                {{ record.operation }}
-              </div>
-            </th>
-            <th class="table-cell mov-cell" scope="row">
-              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                {{ record.item.name }}
-              </div>
-            </th>
-            <th class="table-cell mov-cell" scope="row">
-              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                {{ record.item.type }}
-              </div>
-            </th>
-            <th class="table-cell mov-cell" scope="row">
-              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                {{ record.quantity }}
-              </div>
-            </th>
-            <th class="table-cell mov-cell" scope="row">
-              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                {{ record.creationDate.slice(0, 19) }}
-              </div>
-            </th>
-            <th class="table-cell mov-cell" scope="row">
-              <div class="d-flex table-text justify-content-center">
-                <button @click="showDetails(index, record.item.id)" title="Detalhes" class="table-btn d-flex align-items-center justify-content-center btn btn-secondary">
-                  <IconsSearchGlass width="16px" height="16px"/>
-                </button>
-                <a title="Perfil" :href="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="m-0 table-btn d-flex align-items-center justify-content-center btn btn-primary">
-                  <IconsLowProfile width="16px" height="16px"/>
-                </a>
-              </div>
-            </th>
-          </tr>
-        </template>
-      </TablesTable>
+      <div class="users-management-scroll">
+        <TablesTable v-if="records.content && records.content.length">
+          <template v-slot:header>
+            <tr class="col-line">
+              <th class="col-title table-col text-center py-2" scope="col">Usuário</th>
+              <th class="col-title table-col text-center py-2" scope="col">Movimentação</th>
+              <th class="col-title table-col text-center py-2" scope="col">Item</th>
+              <th class="col-title table-col text-center py-2" scope="col">Tipo unitário</th>
+              <th class="col-title table-col text-center py-2" scope="col">Quantidade</th>
+              <th class="col-title table-col text-center py-2" scope="col">Data e horário</th>
+              <th class="col-title table-col text-center py-2" scope="col">Ações</th>
+            </tr>
+          </template>
+          <template v-slot:content>
+            <tr v-for="(record, index) in records.content" :key="record.id" class="text-center"> 
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-center " style="padding-top: 0px;">
+                  <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
+                  {{ record.user.name }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ record.operation }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ record.item.name }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ record.item.type }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ record.quantity }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ record.creationDate.slice(0, 19) }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text justify-content-center">
+                  <button @click="showDetails(index, record.item.id)" title="Detalhes" class="table-btn d-flex align-items-center justify-content-center btn btn-secondary">
+                    <IconsSearchGlass width="16px" height="16px"/>
+                  </button>
+                  <a title="Perfil" :href="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="m-0 table-btn d-flex align-items-center justify-content-center btn btn-primary">
+                    <IconsLowProfile width="16px" height="16px"/>
+                  </a>
+                </div>
+              </th>
+            </tr>
+          </template>
+        </TablesTable>
+      </div>
       <div v-if="loadContent && records.content.length === 0" class="search-empty d-flex justify-content-center">
         <p class="text-dark-emphasis fs-5 opacity-50">Nenhuma movimentação</p>
       </div>
@@ -377,6 +379,7 @@ const deleteAccount = async () => {
   position: static !important;
   text-wrap: nowrap !important;
   max-height: 227px !important;
+  overflow-x: scroll;
 }
 .users-management{
   position: static !important;
@@ -384,7 +387,7 @@ const deleteAccount = async () => {
   overflow-y: scroll !important;
 }
 .recent-records{
-  height: 317px;
+  height: 290px;
   overflow-y: scroll;
 }
 .container{

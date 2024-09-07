@@ -26,55 +26,55 @@
             <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
         </span>
       </div>
-      <TablesTable>
-          <template v-slot:header>
-              <tr class="border-2">
-                  <th class="col-title py-2 border" scope="col">Item</th>
-                  <th class="col-title py-2 border" scope="col">Autor</th>
-                  <th class="col-title py-2 border" scope="col">Operação</th>
-                  <th class="col-title py-2 border" scope="col">Quantidade</th>
-                  <th class="col-title py-2" scope="col">Data e horário </th>
-                  <th class="col-title py-2" scope="col">Ações</th>
-              </tr>
-          </template>
-          <template v-slot:content>
-          <tr v-if="recordsCache.length > 0" v-for="(record, index) in recordsCache[cacheIndex]" :key="index" :data-index="index">
-             <th class="border">
-                 <span>{{ record.item.name }}</span>
-             </th>
-             <th class="border" scope="row">
-                  <span>{{ record.user.name }}</span>
-             </th>
-             <th class="border">
-                 <span>{{ record.operation }}</span>
-              </th>
-             <th class="border">
-                 <span>{{ record.quantity }}</span>
-              </th>
-             <th class="border">
-                 <span>{{ record.creationDate.slice(0, 19) }}</span>
-             </th>
-             <th class="border" width="5%">
-                    <TooltipsFastRectangular class="toolTip me-5 pe-5 mb-5" style="margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
-                   <TooltipsFastRectangular class="toolTip me-5 pe-5" style="margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Perfil'"/>
-                   <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary"  @click="showDetails(index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
-                        <IconsSearchGlass width="18px" height="19px"/>
-                    </button>
-                    <NuxtLink  @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false"  :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`"  class="my-0 details-btn position-sticky table-btn btn btn-secondary">
-                      <IconsLowProfile width="16px" height="16px"/>  
-                    </NuxtLink>
+    <div class="overflow-x-scroll p-0">
+        <TablesTable>
+            <template v-slot:header>
+                <tr>
+                    <th class="col-title py-2 border" scope="col">Item</th>
+                    <th class="col-title py-2 border" scope="col">Autor</th>
+                    <th class="col-title py-2 border" scope="col">Operação</th>
+                    <th class="col-title py-2 border" scope="col">Quantidade</th>
+                    <th class="col-title py-2 border" scope="col">Data e horário </th>
+                    <th class="col-title py-2 border" scope="col">Ações</th>
+                </tr>
+            </template>
+            <template v-slot:content>
+            <tr v-if="recordsCache.length > 0" v-for="(record, index) in recordsCache[cacheIndex]" :key="index" :data-index="index">
+               <th class="border">
+                   <span>{{ record.item.name }}</span>
                </th>
-          </tr>
-          <div v-else-if="!initialLoading"
-             class="search-empty my-5">
-                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado.</p>
-            </div>
-            <!--
-            <div v-else class="search-empty  my-5" style="padding-bottom: 300px;">
-                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent"></p>
-            </div>-->
-      </template>
-    </TablesTable>
+               <th class="border" scope="row">
+                    <span>{{ record.user.name }}</span>
+               </th>
+               <th class="border">
+                   <span>{{ record.operation }}</span>
+                </th>
+               <th class="border">
+                   <span>{{ record.quantity }}</span>
+                </th>
+               <th class="border">
+                   <span>{{ record.creationDate.slice(0, 19) }}</span>
+               </th>
+               <th class="border" width="5%">
+                     <button class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary"  @click="showDetails(index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                          <IconsSearchGlass width="18px" height="19px"/>
+                      </button>
+                      <NuxtLink :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`"  class="my-0 details-btn position-sticky table-btn btn btn-secondary">
+                        <IconsLowProfile width="16px" height="16px"/>  
+                      </NuxtLink>
+                 </th>
+            </tr>
+            <div v-else-if="!initialLoading"
+               class="search-empty my-5">
+                  <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado.</p>
+              </div>
+              <!--
+              <div v-else class="search-empty  my-5" style="padding-bottom: 300px;">
+                  <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent"></p>
+              </div>-->
+        </template>
+      </TablesTable>
+    </div>
     <div v-if="initialLoading" class="d-flex justify-content-center align-items-center my-5">
         <LoadersLoading class="p-5 my-5"/>
     </div>
@@ -417,7 +417,7 @@ onMounted(async () => {
     display: block !important;
 }
 .table-box{
-    margin-top: 76px;
+    margin-top: 74px;
     border-radius: 0px 10px 10px 10px;
     box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.5);
     border: 1px #D9D9D9 solid;

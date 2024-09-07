@@ -67,7 +67,6 @@
     
 <script >
 import { useStorageStore } from '../../../stores/storage';
-import { useSettingsStore } from '../../stores/settings';
 import { ref } from 'vue';
 export default {
     data() {

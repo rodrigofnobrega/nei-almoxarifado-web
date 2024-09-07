@@ -64,22 +64,31 @@ function checkIfMobile() {
 
 <style>
 ::-webkit-scrollbar {
-    width: 6px; 
-    height: 6px; 
+    width: 6px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent; 
-    margin: 5px; 
+    background: transparent;
+    margin: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2); 
+    background-color: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.3); 
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+*::-moz-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3); 
 }
 
 
@@ -155,11 +164,6 @@ function checkIfMobile() {
 .darkLayout .modal-body{
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
-}
-@media screen and (max-width: 500px){
-  .actions-btns{
-        background-color: #010e23 !important;
-    }
 }
 .darkLayout .card{
   border: none !important;
