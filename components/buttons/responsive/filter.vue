@@ -125,8 +125,7 @@ const clearDropdown = () => {
 }
 
 const setItemsFilter = inject('setItemsFilter')
-const sendDataToParent = (filter, isInverted) => {
-    clearDropdown();
+const sendDataToParent = async (filter, isInverted) => {
     setItemsFilter(filter, isInverted)
 }
 

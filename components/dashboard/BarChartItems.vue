@@ -478,7 +478,7 @@ li{
         height: 15px;
     }
 }
-@media screen and (max-width: 500px){
+@media screen and (max-width: 583px){
   .chart-graph {
     height: 350px !important;
     

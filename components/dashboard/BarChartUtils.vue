@@ -403,7 +403,7 @@ li{
         height: 15px;
     }
 }
-@media screen and (max-width: 500px){
+@media screen and (max-width: 706px){
   .graph-header{
     display: block !important;
   }

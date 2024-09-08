@@ -6,9 +6,11 @@
             <IconsSettings class="mx-1" width="1.5em" height="1.5em"/>
         </button>
         <ul class="dropdown-menu large-menu py-0">
-            <li class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center mb-0" style="padding-bottom: 4px;">
-                <a type="button" class="text-decoration-none import-text" href="/catalogo/importar-tabelas">importar tabelas</a>
-            </li>
+            <a class="text-decoration-none" href="/catalogo/importar-tabelas">
+                <li type="button" class="dropdown-item d-flex py-2 justify-content-between align-items-center mb-0 fw-bold text-dark-emphasis" style="padding-bottom: 4px;">
+                    importar tabelas
+                </li>
+            </a>
             <li type="button" @click="store.isEditionMode = !store.isEditionMode" class="dropdown-item form-check d-flex py-2 mb-0 align-items-center">
                 <span class="me-4 pe-2">habilitar correções</span>
                 <input v-model="store.isEditionMode" class="p-2 mb-1 form-check-input" value="" id="editCheck" type="checkbox">
@@ -81,7 +83,7 @@ const sendDataToParent = (filter, isInverted) => {
 li{
     list-style-type: none;
 }
-.dropdown-item span, .dropdown-item a{
+.dropdown-item , .dropdown-item a{
     font-size: 14px;
     color: rgb(51,51,51, 0.9);
     font-weight: 600;
