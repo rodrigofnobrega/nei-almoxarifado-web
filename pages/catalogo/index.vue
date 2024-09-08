@@ -313,6 +313,7 @@ const uploadReloader = computed(() => {
         pagination.value = 0;
         cacheIndex.value = 0;
         itemsCache.value = [];
+        searchCache.value = [];
         reqsIndexCache = [0]
 
         itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);

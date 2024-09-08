@@ -1,6 +1,6 @@
 <template>
     <LoadersPageLoading :isLoading="loading" class="loader"/>
-	<div class="d-flex justify-content-center  bg-primary auth-container">
+	<div class="d-flex justify-content-center  bg-primary auth-container overflow-hidden">
 		<div class="container-fluid login-container d-flex justify-content-center" :class="{'login-movement': switchState}"  :style="{'border-radius': delayedSwitchState ? '0px 8px 8px 0px' : '8px 0px 0px 8px'}">
 			<div class="header d-flex justify-content-center align-items-center">
 				<p v-if="delayedSwitchState === false" class="texto text-light">Recuperar Senha</p>

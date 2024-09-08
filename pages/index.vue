@@ -111,8 +111,8 @@
         <div v-if="loadContent && users.content.length === 0" class="search-empty d-flex justify-content-center">
           <p class="text-dark-emphasis fs-5 opacity-50">Nenhum usuário encontrado</p>
         </div>
-        <div v-if="!loadContent" class="d-flex justify-content-center mt-5">
-          <LoadersLoading class="p-5 m-5 mt-2"/>
+        <div v-if="!loadContent"class="d-flex justify-content-center">
+          <LoadersLoading class="p-5 m-5" style="margin-top: 30px;"/>
         </div>
       </div>
     </div>
@@ -299,36 +299,42 @@ const fetchUsers = async () => {
         res = await getUsers(userStore, i);
     }
 }
-const fetchData = async () => {
-  try {
-    fetchUsers();
-    records.value = await getRecords(userStore, 0, 'id,desc');
-    requestsByStatus.value = await getRequestByStatus(userStore, 'pendente');
-    
-    let data = new Date();
-    let actualMonth = data.getMonth() + 1;
-    let requestsData = await getRequests(userStore, 0);
-    for (let i = 1; i <= requestsData.totalPages; i++) {
-      for (let j = 0; j < requestsData.content.length; j++) {
-        if (requestsData.content[j].updatedDate.slice(5, 7) == actualMonth) {
-          if (requestsData.content[j].status == 'ACEITO') {
-            acceptedRequests.value++;
-          }
-          if (requestsData.content[j].status == 'RECUSADO') {
-            rejectedRequests.value++;
-          }
+const fetchRequests = async () => {
+  let requestsData = await getRequests(userStore, 0);
+  let data = new Date();
+  let actualMonth = data.getMonth() + 1;
+  for (let i = 1; i <= requestsData.totalPages; i++) {
+    for (let j = 0; j < requestsData.content.length; j++) {
+      if (requestsData.content[j].updatedDate.slice(5, 7) == actualMonth) {
+        if (requestsData.content[j].status == 'ACEITO') {
+          acceptedRequests.value++;
+        }
+        if (requestsData.content[j].status == 'RECUSADO') {
+          rejectedRequests.value++;
         }
       }
-      requestsData = await getRequests(userStore, i);
     }
-    
-    items.value = await getItems(userStore, 0);
+    requestsData = await getRequests(userStore, i);
+  }
+}
+const fetchItems = async () => {
+  items.value = await getItems(userStore, 0);
     for (let i = 1; i <= items.value.totalPages; i++) {
       for (let j = 0; j < items.value.content.length; j++) {
         itemsQtd.value += items.value.content[j].quantity;
       }
       items.value = await getItems(userStore, i);
     }
+}
+const fetchData = async () => {
+  try {
+    fetchUsers();
+    records.value = await getRecords(userStore, 0, 'id,desc');
+    requestsByStatus.value = await getRequestByStatus(userStore, 'pendente');
+
+    fetchRequests();
+    fetchItems();
+     
   } catch (error) {
     console.error('Failed to fetch data:', error);
   }
@@ -429,12 +435,17 @@ h5{
 .table-btn{
     border-radius: 4px;
     top: 0px;
-    font-size: 12px;
     padding: 4px 3px 4px 3px;
     z-index: 0;
     font-size: 13px;
     margin-right: 10px;
     margin-left: 10px;
+}
+.table-cell{
+  z-index: 1000 !important;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(51,51,51, 0.9);
 }
 .catalog-header{
     justify-content: space-between;
@@ -446,12 +457,6 @@ h5{
   font-weight: bold;
   margin-top: 0;
   text-wrap: nowrap;
-}
-.table-cell{
-  z-index: 1000 !important;
-  font-size: 14px;
-  font-weight: 400;
-  color: rgb(51,51,51, 0.9);
 }
 .card-img-top{
   transition: opacity 0.5s ease-in-out;
@@ -532,17 +537,6 @@ h5{
 .card:hover .card-img-top{
     opacity: 100%;
 }
-/* @media screen and (max-width: 1253px) {
-  .summary-text-re{
-    height: 60px;
-  }
-  .summary-text{
-    height: 100px;
-  }
-  .dashboard-scroll{
-    max-height: 250px !important;
-  }
-} */
 @media screen and (max-width: 1098px) {
   .users-management{
     width: 57%;
@@ -559,69 +553,10 @@ h5{
   .dashboard-section{
     margin-right: 0 !important;
   }
-  /* .summary-text{
-    font-size: 15px !important;
-  }
-  .dashboard-scroll{
-    max-height: 270px !important;
-  }
-  th{
-    padding: 3px!important;
-  }
-  .table-cell, .summary-text{
-    font-size: 13px !important;
-  }
-  .align-cell{
-    padding-top: 7px !important;
-  } */
 }
-/* @media screen and (max-width: 962px){
-  .table-cell, .summary-text{
-    font-size: 12px;
-  }
-  .card-text{
-    font-size: 14px !important;
-  }
-  .stretched-link{
-    font-size: 16px !important;
-  }
-}
-@media screen and (max-width: 854px){
-  .table-cell, .summary-text{
-    font-size: 14px;
-  }
-  .table-text{
-    font-size: 12px;
-  }
-  th{
-    padding: 8px !important;
-  }
-  .table-col{
-    padding: 0px;
-    font-size: 12px;
-  }
-} */
 @media screen and (max-width: 812px){
   .dashboard-container{
     display: block !important;
   }
-  /* .dashboard-viewcard{
-    margin-bottom: 30px;
-  }
-  .align-cell{
-    padding-top: 12px !important;
-  } */
 }   
-/* @media screen and (max-width: 435px){
-  .summary-text{
-    font-size: 12px;
-  }
-  th{
-    padding: 3px !important;
-  }
-  .container{
-    padding-left: 5px;
-    padding-right: 5px;
-  }
-} */
 </style>

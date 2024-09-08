@@ -1,6 +1,6 @@
 <template>
     <LoadersPageLoading :isLoading="loading" class="loader"/>
-	<div class="d-flex justify-content-center  bg-primary auth-container">
+	<div class="d-flex justify-content-center  bg-primary auth-container overflow-hidden">
 		<div class="container-fluid login-container d-flex justify-content-center" :class="{'login-movement': switchState}" :style="{ 'border-radius': delayedSwitchState ? '0px 8px 8px 0px' : '8px 0px 0px 8px'}">
 			<div :style="{height: switchState ? '100%' : '0%', width: switchState ? '100%' : '0%'}" class="bg-dark-emphasis position-absolute mobile-form"></div>
 			<div class="login-content" :class="switchState ? 'leave-text' :'return-text'">
@@ -207,7 +207,7 @@ const submitLogin = async () => {
 const submitRegister = async () => {
 	try{
 		const res = await postUser(username.value, email.value, password.value)
-		popUpStore.throwPopup('Sucesso ao se cadastrar', '#0B3B69')
+		popUpStore.throwPopup('Cadastro feito com sucesso', '#0B3B69')
 		switchAuth();
 		return 1;
 	}catch(err){	

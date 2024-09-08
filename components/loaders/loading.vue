@@ -1,5 +1,5 @@
 <template>
-    <div v-show="isLoading" class="spinner-border" role="status">
+    <div v-if="isLoading" class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
     </div>
 </template>

@@ -72,10 +72,6 @@ function isDelete(operation){
 </script>
 
 <style scoped>
-table{
-	width: 106%; 
-	margin: 0px 0px 0px -20px;
-}
 td{
 	vertical-align: middle;
 }
@@ -90,5 +86,12 @@ td{
 }
 .modal-btn{
     border-radius: 10px;
+}
+@media screen and (max-width: 700px){
+	table{
+		overflow-x: hidden;
+		margin: 0px 0px 0px -20px;
+		width: 108%;
+	}
 }
 </style>

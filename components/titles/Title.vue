@@ -59,9 +59,5 @@ h3{
 .route-link:hover{
   color: rgba(51, 51, 51, 0.6)
 }
-@media screen and (max-width: 600px){
-    .route{
-        top: 0px;
-    }
-}
+
 </style>
