@@ -14,9 +14,25 @@
             <IconsInformation class="me-2"/>
             Descrição da página
         </h6>
-        <p class="sub-catalog-text opacity-75">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
+        <p class="sub-catalog-text opacity-75">
+            Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
             Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
-        <span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
+            <span class="border-bottom border-dark-success pb-1">
+                Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/>
+            </span>
+        </p>
+        <br>
+        <p class="sub-catalog-text opacity-75">
+            O botão
+            <span class="border-bottom border-dark-success pb-1">
+                Filtro <IconsFilter style="margin-bottom: 0px;"  width="18px" height="18px"/>
+            </span>
+            permite alterar a forma como os itens são exibidos. 
+            Com ele, você pode ordenar os itens por diferentes critérios, 
+            como data de criação (do mais recente ao mais antigo ou vice-versa), 
+            nome e quantidade de itens em estoque 
+            (é possível escolher se deseja visualizar primeiro os itens com menor ou maior quantidade disponível).
+        </p>
     </div>
     <div class="table-box-title position-absolute bg-light-emphasis d-flex align-items-center">
         <IconsBox class="me-1" width="25" height="25"/>
