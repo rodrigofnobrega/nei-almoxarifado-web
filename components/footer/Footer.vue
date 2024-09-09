@@ -14,7 +14,9 @@
          </div>
          <div class="col-md-6 col-lg-4 col-xl-5 text-center d-flex justify-content-center flex-column"> 
 	        <h5 class="fw-bold"> Contatos </h5>
-          <p class="text-underline text-break">Email: almoxarifado957@gmail.com <br> Telefone: +55 (84) 98768-4609</p> 
+          <span class="text-underline text-break">Email: suportealmoxarifado@nei.ufrn.br</span>
+          <br>
+          <span class="text-underline text-break">Telefone: +55 (84) 98768-4609</span> 
         </div>
        </div>
     </div>
