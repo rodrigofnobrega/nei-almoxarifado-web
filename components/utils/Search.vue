@@ -102,7 +102,6 @@ export default {
     },
     async fetchSearchResults() {
       while (this.searchResults.length < 20 && this.pagination < this.totalPages) {
-
           const res = await getItems(this.userStore, this.pagination, 'id,desc');
           this.totalPages = res.totalPages;
           this.store.items.push(res.content);
