@@ -75,14 +75,14 @@
                    </th>
                 </tr>
                 <!--
-                <div v-else class="search-empty my-5" style="padding-bottom: 300px;">
+                    <div v-else class="search-empty my-5" style="padding-bottom: 300px;">
                     <p style="margin-top: 50px;" class="text-dark-emphasis fs-4 opacity-75 bg-transparent">
                         Nenhum item Encontrado
                     </p>
                 </div> -->
             </template>
             </TablesTable>
-            <div v-else-if="!initialLoading && itemsCache.length === 0" 
+            <div v-else-if="showResults && finded.length === 0" 
                 class="search-empty my-5">
                 <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
             </div> 
@@ -172,7 +172,6 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
         pagination.value = 0;
         paginationRet.value = 1;
         initialLoading.value = false
-
         pagesFocus.value[count] = false;
         count = 0;  
         pagesFocus.value[0] = true;
@@ -200,6 +199,7 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
                 return 0;
             }
             itemsCache.value.push(finded);
+            showResults.value = true;
             return 0;
         }
         for(let i = 0; i < totalPages.value; i++){
@@ -221,9 +221,11 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
         }
         if(finded.length === 0){
             itemsCache.value = [];
+            showResults.value = true;
             return 0;
         }
         itemsCache.value.push(finded);
+        showResults.value = true;
         return 0;
     }
     if(isInverted){
@@ -246,6 +248,7 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
 
 const searchInput = ref("");
 const initialLoading = ref(true);
+const showResults = ref(false);
 let reqsIndexCache = [0];
 let typingTimer; 
 const debounceTime = 1000; 
@@ -263,6 +266,7 @@ const itemsLoad = computed(async() => {
         return 0;
     }
     if(searchInput.value === '' && isSearching.value === true){
+        showResults.value = false;
         clearTimeout(typingTimer);
         typingTimer = setTimeout(() => {
             store.isReloadItems = true;
@@ -559,7 +563,6 @@ p{
     margin-top: 5%;
     display: flex;
     justify-content: center;
-    margin-left: 150%;
     white-space: nowrap;
 }
 .pagination{

@@ -718,6 +718,16 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.card-container {
+    scrollbar-width:none;
+    scrollbar-color: transparent; /* Fundo branco no Firefox */
+}
+.cards-box {
+    scrollbar-color: rgba(51,51,51,0.5) rgba(40,40,40, 0.1) !important
+}
+*::-moz-scrollbar-thumb:hover {
+    background: transparent; 
+}
 .resizeBox{
     display: flex !important;
 }
@@ -732,6 +742,9 @@ onMounted(() => {
 }
 .request-container{
     width: 99%; 
+}
+.sub-dropdown-item{
+    border: 0px;
 }
 .card-container{
     overflow-x: scroll;
@@ -792,7 +805,7 @@ onMounted(() => {
     height: 34px;
 }
 .list-group-item:hover{
-    background-color: rgb(214, 175, 0);
+    background-color: #FED51E;
 }
 .sub-dropdown{
     border-radius: 12px;

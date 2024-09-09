@@ -320,8 +320,10 @@ const fetchRequests = async () => {
 const fetchItems = async () => {
   items.value = await getItems(userStore, 0);
     for (let i = 1; i <= items.value.totalPages; i++) {
-      for (let j = 0; j < items.value.content.length; j++) {
-        itemsQtd.value += items.value.content[j].quantity;
+      for (let j = 0; j < items.value.pageElements; j++) {
+        if(items.value.content[j].available === true){
+          itemsQtd.value += items.value.content[j].quantity;
+        }
       }
       items.value = await getItems(userStore, i);
     }
@@ -333,7 +335,7 @@ const fetchData = async () => {
     requestsByStatus.value = await getRequestByStatus(userStore, 'pendente');
 
     fetchRequests();
-    fetchItems();
+    await fetchItems();
      
   } catch (error) {
     console.error('Failed to fetch data:', error);
@@ -559,4 +561,9 @@ h5{
     display: block !important;
   }
 }   
+@media screen and (max-width: 400px){
+  .summary-text{
+    font-size: 14px;
+  }
+}
 </style>

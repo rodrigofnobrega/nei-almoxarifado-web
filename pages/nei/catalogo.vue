@@ -74,10 +74,6 @@
                          </button>
                     </th>
                 </tr>
-                <div v-else-if="!initialLoading" 
-                    class="search-empty my-5">
-                    <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
-                </div> 
                 <!--
                 <div v-else class="search-empty my-5" style="padding-bottom: 300px;">
                     <p style="margin-top: 50px;" class="text-dark-emphasis fs-4 opacity-75 bg-transparent">
@@ -86,6 +82,10 @@
                 </div>-->
             </template>
             </TablesTable>
+            <div v-else-if="showResults && finded.length === 0" 
+                class="search-empty my-5">
+                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
+            </div> 
             <div v-else class="d-flex justify-content-center align-items-center my-5">
                 <LoadersComponentLoading :isLoading="true" class="p-5 my-5"/>
             </div>
