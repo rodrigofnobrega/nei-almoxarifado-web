@@ -61,7 +61,7 @@ definePageMeta({
     title: 'Andriel Vinicius',
     description: 'Contribuição no Front-End. Desenvolvedor da API no Back-End.',
     email: 'andriel.fernandes.095@ufrn.edu.br',
-    link1: 'http://github.com/leirdan',
+    link1: 'https://github.com/leirdan',
     link2: 'https://www.linkedin.com/in/andriel-vinicius-b6a734256/'
   },
   {
@@ -85,7 +85,7 @@ definePageMeta({
     title: 'Rodrigo Ferreira',
     description: 'Desenvolvedor Back-End.',
     email: 'rodrigofnobrega1@gmail.com',
-    link1: 'http://www.github.com/rodrigofnobrega',
+    link1: 'https://www.github.com/rodrigofnobrega',
     link2: 'https://www.linkedin.com/in/rodrigo-ferreira-da-n%C3%B3brega-509116305/'
   },
   {
@@ -93,8 +93,8 @@ definePageMeta({
     title: 'Clézio',
     description: 'Dev Description 5',
     email: 'cleziorsjunior@gmail.com',
-    link1: '#',
-    link2: '#'
+    link1: 'https://github.com/cleziojr',
+    link2: 'https://www.linkedin.com/in/cl%C3%A9zio-rog%C3%A9rio-550b17288'
   },
 ]);
 </script>
