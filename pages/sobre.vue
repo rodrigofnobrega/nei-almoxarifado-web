@@ -71,7 +71,7 @@ sendDataToParent();
     image: '/foto_andriel.jpg',
     title: 'Andriel Vinicius',
     description: 'Contribuição no Front-End. Desenvolvedor da API no Back-End.',
-    email: 'andriel.fernandes.095@ufrn.edu.br',
+    email: 'andrielvinnicius@gmail.com',
     link1: 'https://github.com/leirdan',
     link2: 'https://www.linkedin.com/in/andriel-vinicius-b6a734256/'
   },
@@ -87,7 +87,7 @@ sendDataToParent();
     image: '/foto_murilo.jpg',
     title: 'Murilo Costa',
     description: 'Desenvolvedor Front-End.',
-    email: 'murilo.costa.091@ufrn.edu.br',
+    email: 'muriloalimacosta@hotmail.com',
     link1: 'https://github.com/Mulirous',
     link2: 'https://www.linkedin.com/in/murilo-antonio-lima-da-costa-687b51273/'
   },
