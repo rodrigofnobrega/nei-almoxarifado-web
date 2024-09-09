@@ -101,24 +101,6 @@ export default {
                 this.expansibleInput.style.width = "100%";
             }
         },
-        setEdition(){       
-            this.editionActive = !this.editionActive;
-            this.inputs = document.getElementsByClassName("edit-control");
-            for(let i = 0; i < this.inputs.length; i++){
-                this.inputs[i].removeAttribute('readonly');
-            }
-        },
-        revertEdition(){
-            this.editionActive = false;
-            this.inputs = document.getElementsByClassName("edit-control");
-            for(let i = 0; i < this.inputs.length; i++){
-                this.inputs[i].setAttribute('readonly', '');
-            }
-        },
-        fetchNewData(){
-            this.store.updateItems(this.item_details.id, this.inputs[0].value, this.inputs[1].value);
-            this.revertEdition();
-        },
         async getRecord(){
             const res = await getRecordByItemId(this.userStore,this.item_details.id);
             this.store.itemRecord = res.content;

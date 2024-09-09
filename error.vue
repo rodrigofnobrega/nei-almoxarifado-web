@@ -10,7 +10,8 @@
 
 <script setup lang="ts">
 import type { NuxtError } from '#app'
-import { ref } from 'vue';
+import { navigateTo } from 'nuxt/app';
+import { onMounted, ref } from 'vue';
 
 definePageMeta({
     layout: 'error'
@@ -51,7 +52,12 @@ switch(props.error.statusCode){
         errorDescription.value = 'Algum erro ocorreu, contate o suporte.';
         break;
 }
-
+onMounted(() => {
+    let token = localStorage.getItem("session");
+    if(props.error.statusCode === 500 && token){
+        navigateTo('/login')
+    }
+})
 </script>
 
 <style scoped>

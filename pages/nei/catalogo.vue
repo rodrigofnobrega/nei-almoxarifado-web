@@ -31,62 +31,64 @@
                 <IconsSearchGlass class="search-glass"/>
             </span>
         </div>
-        <TablesTable v-if="itemsCache.length > 0">
-            <template v-slot:header>
-                <tr style="border: 1px #D9D9D9 solid;">
-                    <th class="col-title py-2 border" scope="col">Nome</th>
-                    <th class="col-title py-2 border" scope="col">Código Sipac</th>
-                    <th class="col-title py-2 border" scope="col">Tipo Unitário</th>
-                    <th class="col-title py-2 border" scope="col">Quantidade</th>
-                    <th class="col-title py-2" scope="col">Última atualização</th>
-                    <th class="col-title py-2" scope="col">Ações</th>
+        <div class="overflow-x-scroll p-0">
+            <TablesTable v-if="itemsCache.length > 0">
+                <template v-slot:header>
+                    <tr style="border: 1px #D9D9D9 solid;">
+                        <th class="col-title py-2 border" scope="col">Nome</th>
+                        <th class="col-title py-2 border" scope="col">Código Sipac</th>
+                        <th class="col-title py-2 border" scope="col">Tipo Unitário</th>
+                        <th class="col-title py-2 border" scope="col">Quantidade</th>
+                        <th class="col-title py-2" scope="col">Última atualização</th>
+                        <th class="col-title py-2" scope="col">Ações</th>
+                    </tr>
+                </template>
+                <template v-slot:content>
+                <tr v-if="itemsCache.length > 0" v-for="(item, index) in itemsCache[cacheIndex]" :key="index" :data-index="index">
+                   <th class="border" scope="row">
+                        <div class="cell-text">
+                            <span>{{ item.name }}</span>
+                        </div>
+                   </th>
+                   <th class="border">
+                        <span v-if="item.sipacCode">{{ item.sipacCode }}</span>
+                        <span v-else>nenhum</span>
+                    </th>
+                    <th class="border">
+                        <span>{{ item.type }}</span>
+                    </th>
+                   <th class="border">
+                       <span>{{ item.quantity }}</span>
+                    </th>
+                   <th class="border">
+                        <div class="cell-text">
+                            <span>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</span>
+                        </div>
+                   </th>
+                   <th class="border" width="5%">
+                        <button title="Detalhes" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#NeiItemDetailing">
+                            <IconsSearchGlass class="action-icon" width="18px" height="19px"/>
+                        </button>
+                        <button title="Solicitar" class="my-0 details-btn position-sticky table-btn btn btn-secondary" @click="showConfirm(index)" data-bs-toggle="modal" data-bs-target="#NeiItemRequest">
+                             <IconsSolicitation class="action-icon" width="16px" height="16px"/>
+                         </button>
+                    </th>
                 </tr>
+                <div v-else-if="!initialLoading" 
+                    class="search-empty my-5">
+                    <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
+                </div> 
+                <!--
+                <div v-else class="search-empty my-5" style="padding-bottom: 300px;">
+                    <p style="margin-top: 50px;" class="text-dark-emphasis fs-4 opacity-75 bg-transparent">
+                        Nenhum item Encontrado
+                    </p>
+                </div>-->
             </template>
-            <template v-slot:content>
-            <tr v-for="(item, index) in itemsCache[cacheIndex]" :key="index" :data-index="index">
-               <th class="border" scope="row">
-                    <div class="cell-text">
-                        <span>{{ item.name }}</span>
-                    </div>
-               </th>
-               <th class="border">
-                    <span v-if="item.sipacCode">{{ item.sipacCode }}</span>
-                    <span v-else>nenhum</span>
-                </th>
-                <th class="border">
-                    <span>{{ item.type }}</span>
-                </th>
-               <th class="border">
-                   <span>{{ item.quantity }}</span>
-                </th>
-               <th class="border">
-                    <div class="cell-text">
-                        <span>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</span>
-                    </div>
-               </th>
-               <th class="border" width="5%">
-                    <button title="Detalhes" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#NeiItemDetailing">
-                        <IconsSearchGlass class="action-icon" width="18px" height="19px"/>
-                    </button>
-                    <button title="Solicitar" class="my-0 details-btn position-sticky table-btn btn btn-secondary" @click="showConfirm(index)" data-bs-toggle="modal" data-bs-target="#NeiItemRequest">
-                         <IconsSolicitation class="action-icon" width="16px" height="16px"/>
-                     </button>
-                </th>
-            </tr>
-            <!--
-            <div v-else class="search-empty my-5" style="padding-bottom: 300px;">
-                <p style="margin-top: 50px;" class="text-dark-emphasis fs-4 opacity-75 bg-transparent">
-                    Nenhum item Encontrado
-                </p>
-            </div>-->
-        </template>
-        </TablesTable>
-        <div v-else-if="!initialLoading"
-         class="search-empty my-5">
-            <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
-        </div>
-        <div v-if="initialLoading" class="d-flex justify-content-center align-items-center my-5">
-            <LoadersLoading class="p-5 my-5"/>
+            </TablesTable>
+            <div v-else class="d-flex justify-content-center align-items-center my-5">
+                <LoadersComponentLoading :isLoading="true" class="p-5 my-5"/>
+            </div>
         </div>
     <div class="table-footer d-flex justify-content-between align-items-center  mt-2">
         <div class="d-flex justify-content-center py-2 me-3 ">
@@ -389,7 +391,9 @@ const showSearchingDetails = async (itemId) => {
     searchItem.value = res;
     currentItem.value = res;
     const searching = document.getElementsByClassName('searching-btn'); 
-    await searching[0].click();
+    setTimeout(() => {
+         searching[0].click();
+    }, 1000)
 }
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
@@ -438,10 +442,7 @@ onBeforeRouteLeave(() => {
 .box-title-text{
     font-size: 20px;
 }
-.table-actions{
-    border-bottom: 1px solid rgba(51,51,51,0.2);
-    width: 100%;
-}
+
 .sub-catalog{
     border-radius: 10px;
     margin-top: -14px;

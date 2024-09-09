@@ -27,7 +27,7 @@
         </span>
       </div>
     <div class="overflow-x-scroll p-0">
-        <TablesTable>
+        <TablesTable v-if="itemsCache.length > 0">
             <template v-slot:header>
                 <tr>
                     <th class="col-title py-2 border" scope="col">Item</th>
@@ -74,9 +74,9 @@
               </div>-->
         </template>
       </TablesTable>
-    </div>
-    <div v-if="initialLoading" class="d-flex justify-content-center align-items-center my-5">
-        <LoadersLoading class="p-5 my-5"/>
+      <div v-else class="d-flex justify-content-center align-items-center my-5">
+            <LoadersComponentLoading :isLoading="true" class="p-5 my-5"/>
+        </div>
     </div>
     <div class="table-footer d-flex justify-content-between align-items-center me-2 mt-2">
       <div class="d-flex justify-content-center py-2 me-3 ">

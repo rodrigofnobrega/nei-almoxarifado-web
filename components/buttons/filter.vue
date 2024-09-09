@@ -1,12 +1,18 @@
 <template>
-    <div class="dropdown" @click.stop>
-    <button @focusin="clearDropdown()" @focusout="clearDropdown()" 
-        class="dropdown-principal mt-1  action-btn d-flex btn btn-outline-primary mx-1 px-2"  
+    <div class="dropdown">
+        <button v-if="settingsStore.isMobile" @focusin="colorFocus" @focusout="colorUnfocus" 
+        class="dropdown-principal mt-1 filter-btn action-btn d-flex btn btn-outline-primary mx-1 px-2"  
         data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
         Filtro
         <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
     </button>
-        <ul class="dropdown-menu py-0 large-menu">
+    <button v-else @focusin="colorFocus" @focusout="colorUnfocus" 
+        class="dropdown-principal mt-1 filter-btn action-btn d-flex btn btn-outline-primary mx-1 px-2"  
+        data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
+        Filtro
+        <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
+    </button>
+        <ul @click.stop class="dropdown-menu py-0 large-menu">
             <!--<li>
                 <div class="vue-dropdown" @click="ClicktoggleDropdown(0)" @mouseover="toggleDropdown(0)" @mouseout="toggleDropdown(0)">
                     <div class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
@@ -29,7 +35,7 @@
             </li>-->
             <li>
                 <div class="vue-dropdown" @click="ClicktoggleDropdown(0)"  @mouseover="toggleDropdown(0)" @mouseout="toggleDropdown(0)">
-                    <div  class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
+                    <div class="filter-btn large-menu-btn d-flex justify-content-between btn align-items-center border-0" type="button">
                         criação
                         <IconsClock class="action-icon"/>
                     </div>
@@ -122,7 +128,9 @@ const clearDropdown = () => {
 
 const setItemsFilter = inject('setItemsFilter')
 const sendDataToParent = (filter, isInverted) => {
-    clearDropdown()
+    if(settingsStore.isMobile){
+        clearDropdown();
+    }
     setItemsFilter(filter, isInverted)
 }
 
@@ -142,7 +150,7 @@ li{
     border: 1px #D9D9D9 solid;
     position: absolute;
     margin-top: -55px;
-    left: 128px;
+    left: 138px;
     width: 65px;
     height: 65px;
     min-width: 40px;

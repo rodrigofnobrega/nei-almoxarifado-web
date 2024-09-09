@@ -5,7 +5,7 @@
             Mais ações
             <IconsSettings class="mx-1" width="1.5em" height="1.5em"/>
         </button>
-        <ul class="dropdown-menu large-menu py-0">
+        <ul @click.stop class="dropdown-menu large-menu py-0">
             <li class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2 pe-0 mb-0" style="padding-bottom: 4px;">
                 <a type="button" class="text-decoration-none import-text" href="/catalogo/importar-tabelas">importar tabelas</a>
             </li>
@@ -120,12 +120,7 @@ li{
     opacity: 90%;
 }
 @media screen and (max-width: 820px){
-    .action-btn{
-        font-size: 12px;
-    }
-    .filter-btn{
-        font-size: 12px;
-    }
+
     .action-icon{
         width: 15px;
         height: 15px;

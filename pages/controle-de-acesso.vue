@@ -12,8 +12,8 @@
 			</p>
     	</div>
 		<div class="row mt-3 d-flex align-items-center justify-content-center">
-			<div v-if="solicitations.length > 0" v-for="req in solicitations" :key="req.id" :class="{'extra-large': solicitations.length == 1, 'col-xl-6': solicitations.length == 2}" class="p-0 col-xl-4 col-lg-6 col-md-6 col-sm-12 mb-3 mb-xl-0"> 
-				<CardsSolicitation
+			<div v-if="solicitations.length > 0" v-for="req in solicitations" :key="req.id" :class="{'extra-large': solicitations.length == 1, 'col-xl-6': solicitations.length == 2}" class="p-0 col-xl-4 col-lg-6 col-md-6 col-sm-11 mb-3 mb-xl-0 px-3"> 
+				<CardsSolicitation 
 					:person="req.user.name"
 					:requestedAt="req.creationDate"	
 					:message="req.description"
@@ -87,7 +87,6 @@ provide('setSolicitations', async () => {
 }
 .container{
 	width: 100%;
-	padding-left: 30px;
 }
 .warning-text{
 	margin-top: 5%;
@@ -111,5 +110,11 @@ provide('setSolicitations', async () => {
 h6{
     font-weight: 400;
     color: rgb(51,51,51, 0.8);
+}
+@media screen and (max-width: 676px){
+	.sub-catalog{
+		margin-right: 5%;
+		margin-left: 5%;
+	}
 }
 </style>

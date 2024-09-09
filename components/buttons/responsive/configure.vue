@@ -1,11 +1,11 @@
 <template>
-    <div @click.stop class="dropdown">
+    <div class="dropdown">
         <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-primary mx-1 px-2 mt-1 text-nowrap" 
         data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2=" aria-expanded="false">
             Mais ações
             <IconsSettings class="mx-1" width="1.5em" height="1.5em"/>
         </button>
-        <ul class="dropdown-menu large-menu py-0">
+        <ul @click.stop class="dropdown-menu large-menu py-0">
             <a class="text-decoration-none" href="/catalogo/importar-tabelas">
                 <li type="button" class="dropdown-item d-flex py-2 justify-content-between align-items-center mb-0 fw-bold text-dark-emphasis" style="padding-bottom: 4px;">
                     importar tabelas
@@ -88,6 +88,7 @@ li{
     color: rgb(51,51,51, 0.9);
     font-weight: 600;
     margin: 0px;
+    padding: 10px !important;
 }
 .form-check-input{
     border: 1px solid rgb(0, 0, 0, 0.3);
@@ -135,6 +136,9 @@ li{
     .large-menu{
         width: 170px;
     }
+    .dropdown-item{
+        padding: 8px !important;
+    }
     .large-menu span{
         padding-right: 2px !important;
     }
@@ -150,10 +154,7 @@ li{
     .action-icon{
         width: 15px;
         height: 15px;
-    }
-    .dropdown-item{
-        font-size: 11px;
-    }
+    } 
 }
 @media screen and (max-width: 500px){
     .action-btn{

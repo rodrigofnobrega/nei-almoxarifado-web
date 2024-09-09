@@ -144,7 +144,6 @@ export default {
 
 <style scoped>
 .cards-grid{
-	width: 95%;
     border: 0px #c0c0c2 solid !important;
 }
 .cards-row{
@@ -180,6 +179,12 @@ export default {
 		font-size: 13.3px;
 	}
 }
+@media screen and (max-width: 852px){
+	.cards-grid{
+		width: 100%;
+	}
+}
+
 /*
 
 @media screen and (max-width: 1050px){

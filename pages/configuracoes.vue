@@ -209,8 +209,8 @@
             <button class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#categoryRegister">Adicionar</button>
         </div>
         <p class="fs-6 mx-2">Escolha um dos temas visuais abaixos para que a estilização do aplicativo esteja de acordo com suas preferências estéticas. O tema escolhido ficará salvo como preferências do usuário, ao sair da aplicação o tema continuará salvo.  </p>
-        <div class="section-content row d-flex justify-content-start ">
-            <div class="d-flex" style="width: 230px;" v-for="(category, index) in settingsStore.categories" :key="index">
+        <div class="section-content row d-flex justify-content-center ">
+            <div class="d-flex categories" style="width: 230px;" v-for="(category, index) in settingsStore.categories" :key="index">
                 <div class="bg-light my-3 d-flex align-items-center text-wrap me-3 rounded-2">
                     <input readonly class="form-control border-0" type="text" :placeholder="category" />
                     <IconsDelete class="trash me-2" @click="removeItemCategory(index)" width="27" height="27"/>
@@ -400,6 +400,9 @@ section {
     }
     .section-title{
         text-align: center;
+    }
+    .categories{
+        width: 180px !important; 
     }
 }
 </style>

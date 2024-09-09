@@ -75,7 +75,7 @@
         </template> 
     </Modal>
     <ModalItemHistory v-if="toggleHistory"/>
-    <ModalItemReposition v-if="item_details != undefined" :itemName="item_details.name" :itemSipac="item_details.sipacCode" :itemType="item_details.type" :itemIndex="item_index"/>
+    <ModalItemReposition v-if="item_details != undefined" :itemName="item_details.name ? item_details.name: ''" :itemSipac="item_details.sipacCode ? item_details.sipacCode : 0" :itemType="item_details.type ? item_details.type : ''" :itemIndex="item_index"/>
 </template>
 
 <script>

@@ -1,15 +1,15 @@
 <template>
-    <div v-if="isLoading" class="spinner-border" role="status">
+    <div v-if="isLoading" class="spinner-border p-1" role="status">
         <span class="visually-hidden">Loading...</span>
     </div>
 </template>
 
 <script setup>
-import {ref, onBeforeMount} from 'vue';
+import {ref, onBeforeMount, onMounted} from 'vue';
 
 const isLoading = ref(true);
 
-onBeforeMount(() => {
+onMounted(() => {
   isLoading.value = false
 })
 </script>

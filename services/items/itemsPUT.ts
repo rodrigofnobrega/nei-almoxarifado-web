@@ -1,7 +1,6 @@
 import { useApi } from '../../composables/axios';
 //Atualiza um item
 export const putUpdateItem = async (userStore, item_id, item_name, item_sipac, item_type, item_qtd) => {
-    console.log(typeof(item_id), typeof(item_name), typeof(item_sipac), typeof(item_type), typeof(item_qtd))
     try{
         await useApi().put(`/operacoes/atualiza/${item_id}`, {
             "name": item_name,

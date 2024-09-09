@@ -50,12 +50,12 @@ export const useStorageStore = defineStore('storage', {
           try{
             const res = await putUpdateItem(userStore, item_id, item_name, item_sipac, item_type, item_qtd);
             if(!res){
-              popupStore.throwPopup("Erro: Algum erro interno do sistema ocorreu, contante o suporte", 'red');
+              popupStore.throwPopup("Erro: Algum erro interno do sistema ocorreu, contate o suporte", 'red');
             }
             else{ popupStore.throwPopup("Item atualizado com sucesso", 'blue'); }
           }catch(error){
             console.log(error);
-            popupStore.throwPopup("Erro: Algum erro interno do sistema ocorreu, contante o suporte", 'red');
+            popupStore.throwPopup("Erro: Algum erro interno do sistema ocorreu, contate o suporte", 'red');
           }
         }
         this.isReloadItems = true;
@@ -67,11 +67,11 @@ export const useStorageStore = defineStore('storage', {
           try{
             const res = await deleteItem(userStore, item_id);
             if(!res){
-              popupStore.throwPopup("Erro: Algum erro interno do sistema ocorreu, contante o suporte", 'red');
+              popupStore.throwPopup("Erro: Algum erro interno do sistema ocorreu, contate o suporte", 'red');
             }
             else{ popupStore.throwPopup("Item deletado com sucesso", 'blue'); }
           } catch(err){
-            popupStore.throwPopup("Erro: Algum erro interno do sistema ocorreu, contante o suporte", 'red');
+            popupStore.throwPopup("Erro: Algum erro interno do sistema ocorreu, contate o suporte", 'red');
           }
         }
         this.isReloadItems = true;

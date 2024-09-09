@@ -4,15 +4,15 @@
 			<div class="modal-content"> 
 				<div class="modal-header">
             <div class="search-bar d-flex mx-1">
-                <form class="ms-0 NavigateToItem d-flex align-items-center" role="search">
+              <div class="ms-0 NavigateToItem d-flex align-items-center" role="search">
                   <label class="search-label">
                     <IconsSearchGlass class="search-icon p-1" width="40px" height="41px"/>
                   </label>
-                  <input class="form-control outline-warning p-0" v-model="searchQuery" @input="handleSearch" type="search" placeholder="Pesquisar" autofocus>
-                </form>
+                  <input class="form-control outline-warning p-0" v-model="searchQuery" @input="handleSearch" type="search"  placeholder="Pesquisar" autocomplete="off" autocorrect="off" autocapitalize="none" enterkeyhint="search" spellcheck="false" autofocus="true">
+                </div>
             </div>	
 				</div>
-				<div class="modal-body">
+				<div class="modal-body" >
             <ul v-if="showResults && searchQuery !== '' && searchResults.length != 0" class="list-group">
                 <a class="text-decoration-none" v-for="result in searchResults" :href="`/catalogo`" :key="result.id">
                   <li @click="NavigateToItem(result.id)" class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
@@ -87,6 +87,9 @@ export default {
       searchResult[this.searchCount - 1].click();
     },
     async handleSearch(e) {
+      if(this.searchResults.length > 0){
+        return 1;
+      }
       this.searchQuery = e.target.value;
       this.showResults = false;
       this.searchResults = [];

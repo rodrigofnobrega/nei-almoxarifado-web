@@ -1,5 +1,5 @@
 <template>
-    <div class="dropdown" @click.stop>
+    <div class="dropdown" >
     <button v-if="settingsStore.isMobile" @focusin="colorFocus" @focusout="colorUnfocus" 
         class="dropdown-principal mt-1 filter-btn action-btn d-flex btn btn-outline-primary mx-1 px-2"  
         data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
@@ -12,7 +12,7 @@
         Filtro
         <IconsFilter class="mx-1" width="1.5em" height="1.5em"/>
     </button>
-        <ul class="dropdown-menu py-0 large-menu">
+        <ul @click.stop class="dropdown-menu py-0 large-menu">
             <!--
             <li>
                 <div class="vue-dropdown" @click="ClicktoggleDropdown(0)" @mouseover="toggleDropdown(0)" @mouseout="toggleDropdown(0)">
@@ -126,6 +126,9 @@ const clearDropdown = () => {
 
 const setItemsFilter = inject('setItemsFilter')
 const sendDataToParent = async (filter, isInverted) => {
+    if(settingsStore.isMobile){
+        clearDropdown();
+    }
     setItemsFilter(filter, isInverted)
 }
 
@@ -200,32 +203,5 @@ li{
         color: white;
     }
 }
-/*
-@media screen and (max-width: 820px){
-    .action-btn{
-        font-size: 12px;
-    }
-    .filter-btn{
-        font-size: 12px;
-    }
-    .large-menu{
-        padding: 0;
-        width: 100px !important;
-    }
-    .small-menu{
-        width: 60px;
-        margin-top: -40px;
-        height: 50px;
-        padding: 0;
-        left: 128px;
-    }
-    .small-menu .filter-btn{
-        margin-top: 0px;
-        margin-bottom: -4px;  
-    }
-    .action-icon{
-        width: 15px;
-        height: 15px;
-    }
-} */
+
 </style>

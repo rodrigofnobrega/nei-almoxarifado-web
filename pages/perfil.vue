@@ -6,8 +6,8 @@
             <h5 class="text-center mt-2 fw-bold">Informações do perfil</h5>
         </div>
         <div>
-          <div :class="{'d-flex justify-content-center rounded-1 mx-5 pt-3 bg-light-background-header':userData.role === 'ADMIN'}" :style="{border: userData.role === 'ADMIN' ? '1px solid rgba(0, 0, 0, 0.2)' : ''}">
-            <div class="profile-picture aspect-ratio" :class="{'me-5 pe-5 mt-2':userData.role === 'ADMIN'}"> 
+          <div class="user-info-box" :class="{'d-flex justify-content-center rounded-1 mx-5 pt-3 bg-light-background-header':userData.role === 'ADMIN'}" :style="{border: userData.role === 'ADMIN' ? '1px solid rgba(0, 0, 0, 0.2)' : ''}">
+            <div class="profile-picture aspect-ratio" :class="{'mx-5 pe-5 mt-2':userData.role === 'ADMIN'}"> 
               <div class="img-container">
                 <!--<img :src="user.profilePicture" class="img-top" alt="Foto de Perfil">-->
                     <img src="/profile.png" class="img-top" alt="Foto de Perfil">
@@ -21,14 +21,14 @@
                 <p class="mt-3 users-info text-dark-emphasis"><strong>Encargo:</strong> {{ userData.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</p>
                 <p class="mt-3 users-info text-dark-emphasis"><strong>Status da conta:</strong> {{ userData.active ? 'Ativa' : 'Desativada' }}</p>
             </div>
-            <div v-else class="d-flex align-items-center">
-              <div class="d-block">
+            <div v-else class="user-info-box d-flex align-items-center">
+              <div class="d-block mobile-spacement">
                 <p class="fs-5 me-5 users-info text-dark-emphasis"><strong>Email</strong><br> {{ userData.email }}</p>
                 <p class="fs-5 me-5 users-info text-dark-emphasis"><strong>Encargo</strong><br> {{ userData.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</p>
               </div>
-              <div class="d-block">
-                <p class="fs-5 me-5 users-info text-dark-emphasis"><strong>Status da conta</strong><br> {{ userData.active ? 'Ativa' : 'Desativada' }}</p>
-                <p class="fs-5 me-5 users-info text-dark-emphasis"><strong>Status dos registros</strong><br> {{ userData.existRecord ? 'Ativo' : 'Desativado' }}</p>
+              <div class="d-block mobile-spacement">
+                <p class="fs-5 me-5 users-info text-dark-emphasis"><strong>Status do perfil</strong><br> {{ userData.active ? 'Ativado' : 'Desativada' }}</p>
+                <p class="fs-5 me-5 users-info text-dark-emphasis"><strong>Status dos registros</strong><br> {{ userData.existRecord ? 'Ativado' : 'Desativado' }}</p>
               </div>
             </div>
           </div>
@@ -596,11 +596,8 @@ onMounted(async () => {
 
 <style scoped>
 .profile{
-  padding-top: 80px;
-  padding-bottom: 40px;
-}
-.profile-container {
-  display: flex;
+  padding-top: 10px;
+  padding-bottom: 20px;
 }
 h3{
   color: rgb(51,51,51, 0.9);
@@ -641,6 +638,7 @@ h3{
 }
 
 .col-title{
+  text-wrap: nowrap;
   font-size: 14px;
   color: rgb(51,51,51, 0.9);
   opacity: 80%;
@@ -750,12 +748,34 @@ h5{
 .modal-btn{
   border-radius: 10px;
 }
+
 @media screen and (max-width: 975px){
-  .profile-container{
-    display: block;
+  .profile{
+    padding: 10px;
   }
+  .user-info-box{
+    text-align: center;
+    background: none !important;
+    border: none !important;
+    display: block !important;
+  }
+  .mobile-spacement p{
+    margin: 0px !important;
+    margin-top: 10px !important;
+    padding: 0px;
+  }
+  .profile-picture{
+    margin: 0px !important;
+    padding: 0px !important;
+  }
+  .profile-picture .img-container{
+    margin: 0px !important;
+    padding: 0px !important;
+  }
+}
+@media screen and (max-width: 430px){
   .profile-sidebar{
-    margin-right: 0px;
+    margin-right: 0px !important;
   }
 }
 </style>

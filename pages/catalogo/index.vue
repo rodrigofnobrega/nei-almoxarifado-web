@@ -1,6 +1,6 @@
 <template>
     <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" 
-        :item_details="searchStore.itemSearch.searching ? searchItem : store.itemDetails" />
+        :item_details="showSearchItem ? searchItem : store.itemDetails" />
     <ModalItemHistory v-if="itemsCache.length > 0"/>
 <div class="table-container d-block mt-2">
     <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
@@ -32,7 +32,7 @@
                 </span>   
             </div>
         <div class="overflow-x-scroll p-0">
-            <TablesTable>
+            <TablesTable v-if="itemsCache.length > 0">
                 <template v-slot:header>
                     <tr >
                         <th class="col-title py-2 border" scope="col">Nome</th>
@@ -74,10 +74,6 @@
                         </button>
                    </th>
                 </tr>
-                <div v-else-if="!initialLoading" 
-                    class="search-empty my-5">
-                    <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
-                </div> 
                 <!--
                 <div v-else class="search-empty my-5" style="padding-bottom: 300px;">
                     <p style="margin-top: 50px;" class="text-dark-emphasis fs-4 opacity-75 bg-transparent">
@@ -86,9 +82,13 @@
                 </div> -->
             </template>
             </TablesTable>
-        </div>
-        <div v-if="initialLoading" class="d-flex justify-content-center align-items-center my-5">
-            <LoadersLoading class="p-5 my-5"/>
+            <div v-else-if="!initialLoading && itemsCache.length === 0" 
+                class="search-empty my-5">
+                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
+            </div> 
+            <div v-else class="d-flex justify-content-center align-items-center my-5">
+                <LoadersComponentLoading :isLoading="true" class="p-5 my-5"/>
+            </div>
         </div>
         <div class="table-footer d-flex justify-content-between align-items-center  mt-2">
             <div class="d-flex justify-content-center py-2 me-3 ">
@@ -289,6 +289,7 @@ provide('setItemsFilter', (filter, inverted) => {
 //Variáveis que o front vai pegar em si
 const itemIndex = ref(0);
 
+const currentItem = ref(undefined);
 const currentRoute = useRoute().fullPath.split('/')[2];
 
 
@@ -395,8 +396,11 @@ const searchItem = ref(undefined)
 const showSearchingDetails = async (itemId) => {
     const res = await getItem(userStore, itemId);
     searchItem.value = res;
+    currentItem.value = res;
     const searching = document.getElementsByClassName('searching-btn'); 
-    searching[0].click();
+    setTimeout(() => {
+         searching[0].click();
+    }, 500)
 }
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {

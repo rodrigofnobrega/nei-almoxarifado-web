@@ -87,6 +87,9 @@ export default {
         searchResult[this.searchCount - 1].click();
     },
     async handleSearch(e) {
+      if(this.searchResults.length > 0){
+        return 1;
+      }
       this.searchQuery = e.target.value;
       this.showResults = false;
       this.searchResults = [];
@@ -159,13 +162,6 @@ border-right: 0;
 .modal-content{
 	overflow-y: hidden;
 }
-@media screen and (max-width: 676px) {
-  .modal-dialog{
-    margin-top: 10% !important;
-    margin-left: 10% !important;
-    margin-right: 5% !important;
-  }
-}
 @media screen and (max-width: 630px){
   .form-control{
     width: 75vw !important;
@@ -175,6 +171,13 @@ border-right: 0;
     width: 75vw;
   }
 }
+@media screen and (max-width: 676px) {
+	.modal-dialog{
+		margin-top: 10% !important;
+		margin-left: 10% !important;
+		margin-right: 5% !important;
+	}
+}
 @media screen and (max-width: 412px) {
 	.modal-dialog{
 		margin-left: 7% !important;
@@ -182,4 +185,5 @@ border-right: 0;
 	}
 }
 </style>
+
 
