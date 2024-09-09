@@ -15,8 +15,14 @@
                     <IconsClose v-if="request.status === 'RECUSADO'" width="20" height="20" class="me-2 text-dark-alert notification-text"/>
                     <IconsConfirm v-if="request.status === 'ACEITO'" width="20" height="20" class="me-2 text-light-success  notification-text"/>
                   </div>
-                  <p class="notification-text text-wrap m-0 p-0">
-                    Solicitação de {{ request.quantityRequested }} "{{request.item.name}}"
+                  <p class="notification-text m-0 p-0">
+                    Solicitação de {{ request.quantityRequested }}
+                  </p>
+                  <p class="notification-text notification-mobile m-0 p-0" style="max-width: 160px;">
+                    "{{request.item.name}}"
+                  </p>
+                  <p class="notification-text m-0 p-0">
+                    &nbsp;
                     {{ request.status === 'ACEITO' ? 'aceita' : 'recusada' }}
                   </p>
                  </div>
@@ -234,8 +240,7 @@ onMounted(async() => {
 p{
   white-space: nowrap;     
   overflow: hidden;        
-  text-overflow: ellipsis; 
-  max-width: 120px;   
+  text-overflow: ellipsis;    
 }
 .svg-button:hover{
   border-bottom: solid 1px #FED51E;
@@ -248,6 +253,9 @@ p{
 @media screen and (max-width: 600px){
   .notification-menu{
     min-width: 200px;
+  }
+  .notification-mobile{
+    max-width: 100px;
   }
 }
 </style>

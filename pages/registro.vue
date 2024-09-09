@@ -41,7 +41,7 @@
         </span>
       </div>
     <div class="overflow-x-scroll p-0">
-        <TablesTable v-if="itemsCache.length > 0">
+        <TablesTable v-if="recordsCache.length > 0">
             <template v-slot:header>
                 <tr>
                     <th class="col-title py-2 border" scope="col">Item</th>
@@ -193,15 +193,17 @@ const recordsReq = async (sort, isInverted, pagination_, loadRequest, pagination
                     };
                 }
                 if(finded.length >= 20){ 
-                        recordsCache.value.push(finded);
-                        return 0
+                    recordsCache.value.push(finded);
+                    return 0
                 };
             }
             if(finded.length === 0){
                 recordsCache.value = [];
+                showResults.value = true;
                 return 0;
             }
             recordsCache.value.push(finded);
+            showResults.value = true;
             return 0;
         }
         for(let i = 0; i < totalPages.value; i++){
@@ -223,9 +225,11 @@ const recordsReq = async (sort, isInverted, pagination_, loadRequest, pagination
         }
         if(finded.length === 0){
             recordsCache.value = [];
+            showResults.value = true;
             return 0;
         }
         recordsCache.value.push(finded);
+        showResults.value = true;
         return 0;
     }
     if(isInverted){
@@ -250,6 +254,7 @@ const searchInput = ref("");
 const initialLoading = ref(true);
 let reqsIndexCache = [0];
 let typingTimer; 
+const showResults = ref(false);
 const debounceTime = 1000; 
 const recordsLoad = computed(async() => {
     if(initialLoading.value === true){
@@ -265,6 +270,7 @@ const recordsLoad = computed(async() => {
         return 0;
     }
     if(searchInput.value === '' && isSearching.value === true){
+        showResults.value = false;
         clearTimeout(typingTimer);
         typingTimer = setTimeout(() => {
             store.isReloadItems = true;
@@ -290,38 +296,38 @@ provide('setItemsFilter', (filter, inverted) => {
 //Variáveis que o front vai pegar em si
 const recordIndex = ref(0);
 const currentItem = ref({
-	"id": 0,
-	"name": "",
-	"sipacCode": 0,
-	"quantity": 0,
-	"type": "",
-	"available": false,
-	"createdAt": "",
-	"createdBy": {
-		"id": 0,
-		"name": "",
-		"email": "",
-		"role": "",
-		"existRecord": false,
-		"active": false
-	},
-	"lastRecord": {
-		"id": 0,
-		"user": {
-			"id": 0,
-			"name": "",
-			"email": "",
-			"role": ""
-		},
-		"item": {
-			"id": 0,
-			"name": "",
-			"sipacCode": 0
-		},
-		"quantity": 0,
-		"operation": "",
-		"data": ""
-	}
+    "id": 0,
+    "name": "",
+    "sipacCode": 0,
+    "quantity": 0,
+    "type": "",
+    "available": false,
+    "createdAt": "",
+    "createdBy": {
+        "id": 0,
+        "name": "",
+        "email": "",
+        "role": "",
+        "existRecord": false,
+        "active": false
+    },
+    "lastRecord": {
+        "id": 0,
+        "user": {
+            "id": 0,
+            "name": "",
+            "email": "",
+            "role": ""
+        },
+        "item": {
+            "id": 0,
+            "name": "",
+            "sipacCode": 0
+        },
+        "quantity": 0,
+        "operation": "",
+        "data": ""
+    }
 });
 const currentRoute = 'registro';
 

@@ -39,7 +39,6 @@
                         <th class="col-title py-2 border" scope="col">Código Sipac</th>
                         <th class="col-title py-2 border" scope="col">Tipo Unitário</th>
                         <th class="col-title py-2 border" scope="col">Quantidade</th>
-                        <th class="col-title py-2" scope="col">Última atualização</th>
                         <th class="col-title py-2" scope="col">Ações</th>
                     </tr>
                 </template>
@@ -60,11 +59,6 @@
                    <th class="border">
                        <span>{{ item.quantity }}</span>
                     </th>
-                   <th class="border">
-                        <div class="cell-text">
-                            <span>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</span>
-                        </div>
-                   </th>
                    <th class="border" width="5%">
                         <button title="Detalhes" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#NeiItemDetailing">
                             <IconsSearchGlass class="action-icon" width="18px" height="19px"/>
@@ -204,6 +198,7 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
                 itemsCache.value = [];
                 return 0;
             }
+            showResults.value = true;
             itemsCache.value.push(finded);
             return 0;
         }
@@ -226,9 +221,11 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
         }
         if(finded.length === 0){
             itemsCache.value = [];
+            showResults.value = true;
             return 0;
         }
         itemsCache.value.push(finded);
+        showResults.value = true;
         return 0;
     }
     if(isInverted){
@@ -253,6 +250,7 @@ const initialLoading = ref(true);
 let reqsIndexCache = [0];
 let typingTimer; 
 const debounceTime = 1000; 
+const showResults = ref(false);
 const itemsLoad = computed(async() => {
     if(initialLoading.value === true){
         await itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
@@ -267,6 +265,7 @@ const itemsLoad = computed(async() => {
         return 0;
     }
     if(searchInput.value === '' && isSearching.value === true){
+            showResults.value = false;
             clearTimeout(typingTimer);
             typingTimer = setTimeout(() => {
                 store.isReloadItems = true;
