@@ -1,4 +1,10 @@
 <template>
+<div>
+    <Head>
+        <Title>NEI Almoxarifado | Catálogo</Title>
+        <Meta name="catálogo" content="Página para mostrar os itens existentes"/>
+    </Head>
+</div>
 <ModalNeiItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" 
     :item_details="showSearchItem ? searchItem : store.itemDetails" />
 <ModalNeiItemRequest v-if="itemsCache.length > 0" :item_index="itemIndex" 
