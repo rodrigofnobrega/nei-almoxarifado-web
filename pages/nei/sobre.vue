@@ -60,8 +60,8 @@ definePageMeta({
     image: '/foto_andriel.jpg',
     title: 'Andriel Vinicius',
     description: 'Contribuição no Front-End. Desenvolvedor da API no Back-End.',
-    email: 'caiodanielfonseca@gmail.com',
-    link1: 'http://github.com/leirdan',
+    email: 'andrielvinnicius@gmail.com',
+    link1: 'https://github.com/leirdan',
     link2: 'https://www.linkedin.com/in/andriel-vinicius-b6a734256/'
   },
   {
@@ -76,25 +76,25 @@ definePageMeta({
     image: '/foto_murilo.jpg',
     title: 'Murilo Costa',
     description: 'Desenvolvedor Front-End.',
-    email: 'caiodanielfonseca@gmail.com',
+    email: 'muriloalimacosta@hotmail.com',
     link1: 'https://github.com/Mulirous',
     link2: 'https://www.linkedin.com/in/murilo-antonio-lima-da-costa-687b51273/'
   },
   {
     image: '/foto_rodrigo.jpg',
     title: 'Rodrigo Ferreira',
-    description: 'Desenvolvedor Back-End.',
-    email: 'caiodanielfonseca@gmail.com',
-    link1: 'http://www.github.com/rodrigofnobrega',
+    description: 'Desenvolvedor Back-End e Front-End.',
+    email: 'rodrigofnobrega1@gmail.com',
+    link1: 'https://www.github.com/rodrigofnobrega',
     link2: 'https://www.linkedin.com/in/rodrigo-ferreira-da-n%C3%B3brega-509116305/'
   },
   {
-    image: 'https://via.placeholder.com/150',
+    image: '/foto_clezio.jpg',
     title: 'Clézio',
-    description: 'Dev Description 5',
-    email: 'caiodanielfonseca@gmail.com',
-    link1: '#',
-    link2: '#'
+    description: 'Gestão do time.',
+    email: 'cleziorsjunior@gmail.com',
+    link1: 'https://github.com/cleziojr',
+    link2: 'https://www.linkedin.com/in/cl%C3%A9zio-rog%C3%A9rio-550b17288'
   },
 ]);
 </script>
