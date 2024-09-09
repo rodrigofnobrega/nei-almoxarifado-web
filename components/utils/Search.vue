@@ -4,12 +4,12 @@
 			<div class="modal-content"> 
 				<div class="modal-header">
             <div class="search-bar d-flex mx-1">
-                <form class="ms-0 NavigateToItem d-flex align-items-center" role="search">
-                  <label>
-                    <IconsSearchGlass class="search-icon p-1" width="40px" height="41px" style="border: 1px solid rgb(51, 51, 51, 0.2); border-right: 0;"/>
+                <div class="ms-0 NavigateToItem d-flex align-items-center" role="search">
+                  <label class="search-label">
+                    <IconsSearchGlass class="search-icon p-1" width="40px" height="41px"/>
                   </label>
-                  <input class="form-control outline-warning p-0" v-model="searchQuery" @input="handleSearch" type="search" placeholder="Pesquisar" autofocus>
-                </form>
+                  <input class="form-control outline-warning p-0" v-model="searchQuery" @input="handleSearch" type="search"  placeholder="Pesquisar" autocomplete="off" autocorrect="off" autocapitalize="none" enterkeyhint="search" spellcheck="false" autofocus="true">
+                </div>
             </div>	
 				</div>
 				<div class="modal-body">
@@ -21,9 +21,17 @@
                   </li>
                 </a>
               </ul>
-            <p class="d-flex justify-content-center align-items-center pt-3" v-else>Nenhum Resultado Encontrado.</p>
+            <div class="d-flex justify-content-center align-items-center py-3" v-else-if="!showResults && searchQuery !== ''">
+              <LoadersComponentLoading :isLoading="true" />
+            </div>
+            <p class="d-flex justify-content-center align-items-center pt-3" v-else-if="showResults && searchQuery !== '' && searchResults.length === 0">
+            Nenhum Resultado Encontrado
+            </p>
+            <p class="d-flex justify-content-center align-items-center pt-3" v-else>
+              Sem Pesquisas Recentes
+            </p>
 				</div>
-				<div class="modal-footer">
+				<div v-if="!settingsStore.isMobile" class="modal-footer">
             <p class="fs-6"><IconsEnter class="bg-primary text-light" style="border-radius: 3px;"/> para selecionar <IconsBottomArrow class="bg-primary text-light" style="border-radius: 3px;"/> <IconsUpArrow class="bg-primary text-light" style="border-radius: 3px;"/> para navegar e <span class="bg-primary text-light" style="border-radius: 3px;">esc</span> para fechar</p>
 				</div>
 			</div>
@@ -37,6 +45,7 @@ import { useSearch } from '../../stores/search.ts';
 import { useStorageStore } from '../../stores/storage.ts';
 import { getItems } from '../../services/items/itemsGET.ts';
 import { useUser } from '../../stores/user.ts';
+import { useSettingsStore } from '../../stores/settings.ts';
 
 export default {
   data() {
@@ -53,7 +62,7 @@ export default {
   },
   methods: {
     NavigateToItem(id) {
-      this.searchStore.itemSearch = { searching: true, itemId: id }
+        this.searchStore.itemSearch = { searching: true, itemId: id }
     },
     SearchDown() {
       let searchResult = document.getElementsByClassName("searchResult");
@@ -74,33 +83,35 @@ export default {
       searchResult[this.searchCount - 1].focus();
     },
     Navigate() {
-      let searchResult = document.getElementsByClassName("searchResult");
-      searchResult[this.searchCount - 1].click();
+        let searchResult = document.getElementsByClassName("searchResult");
+        searchResult[this.searchCount - 1].click();
     },
-    async handleSearch() {
+    async handleSearch(e) {
+      if(this.searchResults.length > 0){
+        return 1;
+      }
+      this.searchQuery = e.target.value;
       this.showResults = false;
       this.searchResults = [];
       this.pagination = 0;
       clearTimeout(this.typingTimeout);
-      this.typingTimeout = setTimeout(() => {
-         this.fetchSearchResults();
+      this.typingTimeout = setTimeout(async () => {
+         await this.fetchSearchResults();
+         this.showResults = true;
       }, 1000);
-      this.showResults = true;
     },
     async fetchSearchResults() {
       while (this.searchResults.length < 20 && this.pagination < this.totalPages) {
-        
           const res = await getItems(this.userStore, this.pagination, 'id,desc');
           this.totalPages = res.totalPages;
           this.store.items.push(res.content);
           res.content.map((item) => {
-            if (item.name.toLowerCase().includes(this.searchQuery.toLowerCase())) {
+            if (item.name.includes(this.searchQuery)) {
               this.searchResults.push(item);
             }
           });
-        this.pagination++;
+          this.pagination++;
         }
-  
     },
     async itemsReq() {
       const res = await getItems(this.userStore, this.pagination, 'id,desc');
@@ -113,6 +124,7 @@ export default {
     this.itemsReq();
   },
   async setup() {
+    const settingsStore = useSettingsStore();
     const userStore = useUser();
     const searchStore = useSearch();
     const store = useStorageStore();
@@ -120,17 +132,21 @@ export default {
     return {
       store,
       searchStore,
-      userStore
+      userStore,
+      settingsStore
     }
   },
 }
 </script>
 
 <style scoped>
+.search-label{
+background-color: white;
+color: rgb(51,51,51, 0.9);
+}
 .search-icon{
-  border-right: 0;
-  color: #333333;
-  background-color: white;
+border: 1px solid rgb(51, 51, 51, 0.2); 
+border-right: 0;
 }
 .form-control{
   border: 1;
@@ -168,4 +184,5 @@ export default {
 	}
 }
 </style>
+
 

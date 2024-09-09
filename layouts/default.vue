@@ -1,7 +1,7 @@
 <template>
   <div id="content">
     <Header />
-    <div class="d-flex bg-fade"> 
+    <div class="d-flex bg-fade">  
       <div class="fluid-container"> 
         <NavbarNavSideBar />
       </div>
@@ -23,7 +23,7 @@
 		        </template>
             <template v-slot:rota>
               <li v-for="(route, index) in pageRoute" :key="index" class="breadcrumb-item active" aria-current="page">
-                <a type="button" :href="route"> {{ route }} </a>
+                <a type="button" :href="`/${route}`"> {{ route }} </a>
               </li>
             </template>
           </TitlesTitle>
@@ -81,8 +81,13 @@ export default {
 #content{
   background-color: #f3f4f7;
 }
+.main-content{
+  min-width: 83%;
+}
 .main{
   width: 100%;
+  max-width: 100%;
+  min-width: 82%;
   height: 100%;
 }
 .main-title{
@@ -124,36 +129,5 @@ export default {
     height: 25px;
   }
 }
-/*
-@media screen and (max-width: 1199px){
-  .main-content{  
-      width: 82vw;
-      margin-left: 1.1%;
-    }
-}
-@media screen and (max-width: 1159px){
-  .main-content{  
-      width: 84vw;
-      margin-left: -1%;
-    }
-}
-@media screen and (max-width: 1050px){
-  .main-content{
-      width: 82vw;
-      margin-left: -1%;
-  }
-}
-@media screen and (max-width: 990px){
-  .main-content{
-    width: calc(80vw*0.99);
-    margin-left: -0.6%;
-  }
-}
 
-@media screen and (max-width: 818px){
-  .main-content{
-    width: calc(74vw*0.98);
-    margin-left: 0.2%;
-  }
-}*/
 </style>

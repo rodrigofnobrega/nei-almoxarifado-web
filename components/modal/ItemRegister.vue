@@ -21,13 +21,16 @@
                     <select v-model="itemType" class="form-select me-5" aria-label="Default select">
                         <option disabled selected>Selecione o tipo</option>
                         <option v-for="(category, index) in settingsStore.categories" :key="index" :value="category">{{ category }}</option>
-
                     </select>
                 </div>
                 <div class="d-block ms-5">
                     <label class="fw-bold" for="item-qtd">Quantidade</label> 
                     <input class="form-control" v-model="itemQtd" type="number" pattern="[0,9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 </div>
+                <!-- <div class="d-block ms-5">
+                    <label class="fw-bold" for="item-qtd">Quantidade Mínima de Estoque</label> 
+                    <input class="form-control" v-model="itemMininumQtd" type="number" pattern="[0,9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                </div> -->
             </div>
         </template>
         <template v-slot:footer>
@@ -51,7 +54,8 @@ export default{
             itemName: '',
             itemSipac: '',
             itemType: '',
-            itemQtd: ''
+            itemQtd: '',
+            itemMininumQtd: ''
         }
     },
     methods: {
@@ -85,7 +89,7 @@ export default{
                 return false
             };
             try{
-                this.store.addItem({name: this.itemName, sipacCode: sipacHandeling(this.itemSipac), type: this.itemType.charAt(0).toUpperCase() + this.itemType.slice(1), /*Faltando o handler de qtd*/  quantity: this.itemQtd, history: '', storage: this.$route.path.split('/')[2]})
+                this.store.addItem({name: this.itemName, sipacCode: sipacHandeling(this.itemSipac), type: this.itemType.charAt(0).toUpperCase() + this.itemType.slice(1), /*Faltando o handler de qtd*/  quantity: this.itemQtd, history: '', minimumStock: this.itemMininumQtd})
             } catch(err){
                 this.popup.throwPopup("Erro: problema interno no servidor(Contate o Suporte)", '#B71C1C')
                 return false

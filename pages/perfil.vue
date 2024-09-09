@@ -1,33 +1,46 @@
 <template>
-  <div class="container-fluid d-block">
+  <div class="container-fluid profile d-block">
     <div class="profile-container">
       <div class="profile-sidebar bg-light rounded-3  flex-column align-items-center">
         <div class="d-flex justify-content-center mb-4 bg-light-background-header history-title">
             <h5 class="text-center mt-2 fw-bold">Informações do perfil</h5>
         </div>
-        <div class="profile-picture aspect-ratio">
-          <div class="img-container">
-            <!--<img :src="user.profilePicture" class="img-top" alt="Foto de Perfil">-->
-                <img src="/profile.png" class="img-top" alt="Foto de Perfil">
+        <div>
+          <div class="user-info-box" :class="{'d-flex justify-content-center rounded-1 mx-5 pt-3 bg-light-background-header':userData.role === 'ADMIN'}" :style="{border: userData.role === 'ADMIN' ? '1px solid rgba(0, 0, 0, 0.2)' : ''}">
+            <div class="profile-picture aspect-ratio" :class="{'mx-5 pe-5 mt-2':userData.role === 'ADMIN'}"> 
+              <div class="img-container">
+                <!--<img :src="user.profilePicture" class="img-top" alt="Foto de Perfil">-->
+                    <img src="/profile.png" class="img-top" alt="Foto de Perfil">
+              </div>
+              <input type="file" @change="uploadProfilePicture" ref="fileInput" hidden>
+              <!--<button @click="selectProfilePicture">Alterar Foto</button>-->
+              <h3 class="text-center mt-4">{{ userData.name }}</h3>
+            </div>
+            <div v-if="userData.role === 'USER'" class="profile-details">
+                <p class="mt-5 users-info text-dark-emphasis"><strong>Email:</strong> {{ userData.email }}</p>
+                <p class="mt-3 users-info text-dark-emphasis"><strong>Encargo:</strong> {{ userData.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</p>
+                <p class="mt-3 users-info text-dark-emphasis"><strong>Status da conta:</strong> {{ userData.active ? 'Ativa' : 'Desativada' }}</p>
+            </div>
+            <div v-else class="user-info-box d-flex align-items-center">
+              <div class="d-block mobile-spacement">
+                <p class="fs-5 me-5 users-info text-dark-emphasis"><strong>Email</strong><br> {{ userData.email }}</p>
+                <p class="fs-5 me-5 users-info text-dark-emphasis"><strong>Encargo</strong><br> {{ userData.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</p>
+              </div>
+              <div class="d-block mobile-spacement">
+                <p class="fs-5 me-5 users-info text-dark-emphasis"><strong>Status do perfil</strong><br> {{ userData.active ? 'Ativado' : 'Desativada' }}</p>
+                <p class="fs-5 me-5 users-info text-dark-emphasis"><strong>Status dos registros</strong><br> {{ userData.existRecord ? 'Ativado' : 'Desativado' }}</p>
+              </div>
+            </div>
           </div>
-          <input type="file" @change="uploadProfilePicture" ref="fileInput" hidden>
-          <!--<button @click="selectProfilePicture">Alterar Foto</button>-->
-        </div>
-        <div class="profile-details">
-          <div>
-            <h3 class="text-center mb-4">{{ userData.name }}</h3>
-            <p class="mt-5 users-info text-dark-emphasis"><strong>Email:</strong> {{ userData.email }}</p>
-            <p class="mt-3 users-info text-dark-emphasis"><strong>Encargo:</strong> {{ userData.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</p>
-            <p class="mt-3 users-info text-dark-emphasis"><strong>Status da conta:</strong> {{ userData.active ? 'Ativa' : 'Desativada' }}</p>
+          <div class="profile-actions mt-5">
+            <button :class="{'mx-5': userData.role === 'ADMIN'}" v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#updatePasswordModal" data-bs-toggle="modal" class="btn fw-bold btn-secondary">Alterar Senha</button>
+            <button v-else-if="userStore.role === 'ADMIN' && userStore.id !== route.currentRoute._rawValue.query.userId" data-bs-target="#updateRole" data-bs-toggle="modal" class="btn fs-6 fw-bold btn-secondary">Alterar Encargo</button>
+            <button :class="{'mx-5': userData.role === 'ADMIN'}" v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6  fw-bold btn-light-alert">Excluir Conta</button>
+            <button v-else-if="userStore.role === 'ADMIN' && userStore.id !== route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6 fw-bold btn-light-alert">Desativar Conta</button>
           </div>
-        </div>
-        <div class="profile-actions mt-5">
-          <button v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#updatePasswordModal" data-bs-toggle="modal" class="btn fw-bold btn-secondary">Alterar Senha</button>
-          <button v-if="userStore.id == route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6  fw-bold btn-light-alert">Excluir Conta</button>
-          <button v-else-if="userStore.role === 'ADMIN' && userStore.id !== route.currentRoute._rawValue.query.userId" data-bs-target="#deleteAccount" data-bs-toggle="modal" class="btn fs-6  fw-bold btn-light-alert">Desativar Conta</button>
         </div>
       </div>
-    <div>
+    <div v-if="userData.role === 'USER'" >
       <div class="profile-posts bg-light mb-4 mt-0 pb-0 pt-0 rounded-3" style="margin-right: 190px !important;">
         <div class="history-title pt-2 bg-light-background-header">
           <h5 class="ms-3 fw-bold">Solicitações Pendentes</h5>
@@ -72,7 +85,7 @@
                 </th>
               </tr>
               <tr v-else>
-                <th style="width: 100vh !important;" colspan="5" class="text-center fw-bold text-dark-emphasis py-5 mt-5">
+                <th style="width: 100vh !important; " colspan="5" class="text-center fw-bold text-dark-emphasis py-5 mt-5">
                   Nenhuma solicitação encontrada
                 </th>
               </tr>
@@ -136,7 +149,7 @@
     </div>
     
 <div class="profile-main-content mt-2">
-  <div class="profile-container" >
+  <div v-if="userData.role === 'USER'"  class="profile-container" >
   <div class="profile-posts me-2 bg-light mb-4 mt-0 pb-0 pt-0 rounded-3">
     <div class="history-title pt-2 bg-light-background-header">
       <h5 class="ms-3 fw-bold">Solicitações Recusadas</h5>
@@ -244,7 +257,7 @@
       <div class="history-title pt-2 bg-light-background-header">
         <h5 class="ms-3 fw-bold">Registros da conta</h5>
       </div>
-      <div class="posts-table">
+      <div class="posts-table" id="recordsTable">
         <TablesTable>
           <template v-slot:header>
             <tr class="bg-light">
@@ -341,7 +354,30 @@
       </div>
     </template>
   </Modal>
-
+  <Modal id="updateRole" tabindex="-1" data-bs-backdrop="true" aria-labelledby="scrollableModalLabel" aria-hidden="true">
+    <template v-slot:header>
+      <h6 class="header-title d-flex fw-bold justify-content-start align-items-center">Alterar Encargo</h6>
+        <button class="btn btn-transparent text-light border-0 close-btn" type="button" data-bs-dismiss="modal">
+            <IconsClose class="close ms-5" width="1.3em" height="1.3em"/>
+        </button>
+    </template>
+    <template v-slot:body>
+        <div class="d-flex align-items-center justify-content-center">
+          <p>Para alterar o Encargo do usuário você deve selecionar o seu novo encargo e confirmar a ação. </p>
+        </div>
+        <select v-model="newRole" class="form-select" aria-label="Default select">
+          <option disabled selected>Selecione o Encargo</option>
+          <option value="ADMIN">Administrador</option>
+          <option value="USER">Usuário</option>
+        </select>
+    </template>
+    <template v-slot:footer>
+      <div class="container-fluid d-flex justify-content-end align-items-center">
+              <button type="button" @click="patchAccountRole()" class="btn btn-dark-success inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Confirmar</button>
+              <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+    </template>
+  </Modal>
   <Modal id="deleteAccount" tabindex="-1" data-bs-backdrop="true" aria-labelledby="scrollableModalLabel" aria-hidden="true">
     <template v-slot:header>
       <h6 class="header-title d-flex fw-bold justify-content-start align-items-center">Confirmar exclusão de conta</h6>
@@ -352,13 +388,13 @@
     <template v-slot:body>
       <p class="fw-medium text-dark-emphasis text-center">Ao excluir você não terá mais acesso ao sistema por meio dela, porém seus dados ainda ficarão
          disponíveis para os administradores como históricos e registros.</p>
-         <p class="fw-bold text-center">Deseja realmente desativar a sua conta?</p>
+      <p class="fw-bold text-center">Deseja realmente desativar a sua conta?</p>
     </template>
     <template v-slot:footer>
       <div class="container-fluid d-flex justify-content-end align-items-center">
                 <button type="button" @click="deleteAccount" class="btn btn-dark-success inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Confirmar</button>
                 <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Cancelar</button>
-            </div>
+          </div>
     </template>
   </Modal>
 </template>
@@ -374,6 +410,8 @@ import { useUser } from '../stores/user';
 import { usePopupStore } from '../stores/popup';
 import { updatePasswordPUT } from '../services/users/userPUT';
 import { deleteUser } from '../services/users/userDELETE';
+import { useCookie } from 'nuxt/app';
+import { patchUSER } from '../services/users/userPATCH';
 
 definePageMeta({
   layout: 'profile'
@@ -384,7 +422,7 @@ const popUpStore = usePopupStore();
 const route = useRouter();
 const userData = await getUserId(userStore, route.currentRoute._rawValue.query.userId);
 const userRequests = ref([]);
-
+const newRole = ref();
 const pendingRequests = ref([]);
 const acceptedRequests = ref([]);
 const rejectedRequests = ref([]);
@@ -395,12 +433,12 @@ const reqsTotalPages = {
   rejectedRequests: 0,
   canceledRequests: 0,
 }
-const reqsTotalElements = {
+const reqsTotalElements = ref({
   pendingRequests:  0,
   acceptedRequests: 0,
   rejectedRequests: 0,
   canceledRequests: 0,
-}
+});
 
 const userRecords = ref([]);
 let currentPage = ref([0, 0, 0, 0, 0]);
@@ -423,24 +461,24 @@ const fetchRecords = async (page) => {
 
 const fetchRequests = async (page) => {
   let response = await getRequestByUser(userStore, userData.id, page);
-  for(let k = 1; k < response.totalPages; k++){
+  for(let k = 1; k <= response.totalPages; k++){
     for(let i = 0; i < response.content.length; i++){
       switch(response.content[i].status){
         case 'PENDENTE':
           pendingRequests.value.push(response.content[i]);
-          reqsTotalElements.pendingRequests++;
+          reqsTotalElements.value.pendingRequests++;
           break;
         case 'ACEITO':
           acceptedRequests.value.push(response.content[i]);
-          reqsTotalElements.acceptedRequests++;
+          reqsTotalElements.value.acceptedRequests++;
           break;
         case 'RECUSADO':
           rejectedRequests.value.push(response.content[i]);
-          reqsTotalElements.rejectedRequests++;
+          reqsTotalElements.value.rejectedRequests++;
           break;
         case 'CANCELADO':
           canceledRequests.value.push(response.content[i]);
-          reqsTotalElements.canceledRequests++;
+          reqsTotalElements.value.canceledRequests++;
           break;
         default:
           break;
@@ -504,9 +542,21 @@ const changePassword = async () => {
     popUpStore.throwPopup("Erro: Preencha os campos corretamente", "#B71C1C");
   }
 };
-
+const patchAccountRole = async() => {
+    const res = await patchUSER(userStore, userData.email, newRole.value);
+    if(res === true){
+      popUpStore.throwPopup('Encargo alterado com sucesso, atualize a página', 'blue');
+    } else if(res === false){
+      popUpStore.throwPopup('ERRO: Algum problema interno do sistema ocorreu, contate o suporte', 'red')
+    }
+}
 const deleteAccount = async () => {
-  const res = await deleteUser(userStore, userStore.id);
+  try {
+    await deleteUser(userStore, userStore.id);
+    popUpStore.throwPopup('Conta excluída com sucesso', 'blue');
+  } catch (err) {
+    popUpStore.throwPopup('ERRO: Algum problema interno do sistema ocorreu, contate o suporte', 'red');
+  }
 }
 // Define o título da página
 const setpageTitle = inject('setpageTitle');
@@ -518,7 +568,10 @@ const sendDataToParent = () => {
 sendDataToParent();
 
 onMounted(async () => {
-  await fetchRequests(0);
+  if(userData.role === 'USER'){
+    await fetchRequests(0);
+  }
+
   const currentPassWordInput = document.getElementById('currentPassword');
   currentPassWordInput.addEventListener('focusout', () => {
     if (currentPassword.value) {
@@ -526,8 +579,8 @@ onMounted(async () => {
     }
   });
   
-  if(userData.role === 'ADMIN'){
-    const postsTable = document.getElementsByClassName('posts-table')[4];
+  if(userStore.role === 'ADMIN'){
+    const postsTable = document.getElementById('recordsTable');
     postsTable.addEventListener('scroll', async () => {
       if(userRecords.value.length < recordsTotalElements.value){
         const isBottom = postsTable.scrollHeight - postsTable.scrollTop === postsTable.clientHeight;
@@ -542,8 +595,9 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.profile-container {
-  display: flex;
+.profile{
+  padding-top: 10px;
+  padding-bottom: 20px;
 }
 h3{
   color: rgb(51,51,51, 0.9);
@@ -584,6 +638,7 @@ h3{
 }
 
 .col-title{
+  text-wrap: nowrap;
   font-size: 14px;
   color: rgb(51,51,51, 0.9);
   opacity: 80%;
@@ -693,12 +748,34 @@ h5{
 .modal-btn{
   border-radius: 10px;
 }
+
 @media screen and (max-width: 975px){
-  .profile-container{
-    display: block;
+  .profile{
+    padding: 10px;
   }
+  .user-info-box{
+    text-align: center;
+    background: none !important;
+    border: none !important;
+    display: block !important;
+  }
+  .mobile-spacement p{
+    margin: 0px !important;
+    margin-top: 10px !important;
+    padding: 0px;
+  }
+  .profile-picture{
+    margin: 0px !important;
+    padding: 0px !important;
+  }
+  .profile-picture .img-container{
+    margin: 0px !important;
+    padding: 0px !important;
+  }
+}
+@media screen and (max-width: 430px){
   .profile-sidebar{
-    margin-right: 0px;
+    margin-right: 0px !important;
   }
 }
 </style>

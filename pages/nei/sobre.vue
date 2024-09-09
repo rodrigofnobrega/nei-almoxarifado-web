@@ -2,7 +2,6 @@
   <div class="container-fluid">
     <div class="description-container">
       <h1 class="d-flex description-title justify-content-center ">Sistema de Gerenciamento de Almoxarifado NEI</h1>
-
       <br>
       <p>Este sistema foi projetado para a gestão e organização eficiente dos itens do almoxarifado do 
         Núcleo de Educação da Infância (NEI) - CAp/UFRN, garantindo o controle preciso da entrada e saída de materiais. 
@@ -14,46 +13,49 @@
         oferecendo uma solução robusta e prática para as necessidades de gerenciamento do NEI.</p>
 
       <br>
-
     </div>
-      <h2 class="d-flex mb-5 justify-content-center">Desenvolvedores</h2>
-      <div class="row d-flex justify-content-center">
-        <div class="col-12 col-sm-6 col-md-4 mb-4" v-for="(card, index) in cards" :key="index">
-          <div class="card bg-light card-hover-effect fixed-height-card d-flex align-items-center flex-column" style="width: 100%;">
-            <a type="button" :href="`mailto:${card.email}`" class="mailto-btn btn btn-primary">Enviar email</a>
-            <div class="card-img-container mt-5">
-              <img :src="card.image" class="card-img-top" :alt="card.title">
+    <div class="my-5 description-container">
+      <h1 class="d-flex description-title justify-content-center ">Documentação e Guia de Uso</h1>
+      <br>
+      <p>O sistema consiste em 4 funções principais: organização e cadastro dos itens do almoxarifado, 
+        controle do acesso a estes itens por meio das solicitações feitas pelo sistema, registros das operações pertinentes realizadas para fins de auditoria 
+      e funcionalidades de análise gráfica, geração de relatórios e outras por meio dos dados obtidos pelo uso do sistema.  </p>
+      <br>
+    </div>
+    <h2 class="d-flex mb-5 justify-content-center">Desenvolvedores</h2>
+    <div class="row d-flex justify-content-center">
+      <div class="col-12 col-sm-6 col-md-4 mb-4" v-for="(card, index) in cards" :key="index">
+        <div class="card bg-light card-hover-effect fixed-height-card d-flex align-items-center flex-column" style="width: 100%;">
+          <a type="button" :href="`mailto:${card.email}`" class="mailto-btn btn btn-primary">Enviar email</a>
+          <div class="card-img-container mt-5">
+            <img :src="card.image" class="card-img-top" :alt="card.title">
+          </div>
+          <div class="card-body d-flex flex-column" style="width: 100%;">
+            <h5 class="card-title d-flex justify-content-center">{{ card.title }}</h5>
+            <p class="card-text flex-grow-1 text-center">{{ card.description }}</p>
+            <div class="mt-auto links d-flex justify-content-center align-items-center">
+              <a :href="card.link1" class="btn btn-dark btn-links p-1 d-flex align-items-center" target="_blank">GitHub
+                <img class="ms-1" src="/github.svg" width="16" height="16">
+              </a>
+              <a :href="card.link2" class="btn btn-primary btn-links p-1 d-flex align-items-center" target="_blank">LinkedIn
+                <img class="ms-1" src="/linkedin.png" width="18" height="15">
+              </a>
             </div>
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title d-flex justify-content-center">{{ card.title }}</h5>
-              <p class="card-text flex-grow-1 text-center">{{ card.description }}</p>
-
-              <div class="mt-auto links d-flex justify-content-center align-items-center">
-                <a :href="card.link1" class="btn btn-dark btn-links p-1 d-flex align-items-center" target="_blank">GitHub
-                  <img class="ms-1" src="/github.svg" width="16" height="16">
-                </a>
-                <a :href="card.link2" class="btn btn-primary btn-links p-1 d-flex align-items-center" target="_blank">LinkedIn
-                  <img class="ms-1" src="/linkedin.png" width="18" height="15">
-                </a>
-              </div>
-
-            </div>
-
           </div>
         </div>
-
       </div>
-
+    </div>
   </div>
 </template>
 
 <script setup>
-import { inject, ref } from 'vue';
+import { setPageLayout } from 'nuxt/app';
+import { ref } from 'vue';
+definePageMeta({
+    layout: 'client'
+})
 
 // Define o titulo da página
-definePageMeta({
-  layout: 'client'
-})
   // Lista de objetos com dados dos cards
   const cards = ref([
   {
@@ -89,7 +91,7 @@ definePageMeta({
     link2: 'https://www.linkedin.com/in/rodrigo-ferreira-da-n%C3%B3brega-509116305/'
   },
   {
-    image: 'https://via.placeholder.com/150',
+    image: '/foto_clezio.jpg',
     title: 'Clézio',
     description: 'Dev Description 5',
     email: 'caiodanielfonseca@gmail.com',
@@ -107,7 +109,6 @@ definePageMeta({
 .description-container {
   margin: 15px;
 }
-
 .card-hover-effect {
   border-radius: 20px;
   background: transparent;
@@ -125,6 +126,7 @@ definePageMeta({
   margin-right: 10px;
 }
 .mailto-btn{
+  color: transparent !important;
   border-radius: 0;
   padding: 0px 10px 0 10px;
   height: 0;
@@ -132,6 +134,7 @@ definePageMeta({
   position: absolute;
 }
 .card-hover-effect:hover .mailto-btn {
+  color: white !important;
   height: 37px;
   padding-top: 4px;
   transition: height 0.5s ease-in-out;

@@ -12,7 +12,7 @@ export const getUsers = async (userStore) => {
 };
 //Listar pelo ID
 export const getUserId = async (userStore, userId) => {
-    const { data } = await useApi().get(`http://localhost:8080/api/v1/users/${userId}`, {
+    const { data } = await useApi().get(`/users/${userId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

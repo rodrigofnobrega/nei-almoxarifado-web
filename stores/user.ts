@@ -10,13 +10,13 @@ export const useUser = defineStore('user', {
         token: '',
         email: '',
         id: null,
-        role: null,
+        role: null
     }),
     actions: {
         async fetchMetaData(){
             const response = await getUserByEmail({token: this.token}, this.email)
-            this.id = response.id
-            this.role = response.role
+            this.id = response.id;
+            this.role = response.role;
             localStorage.setItem('session', JSON.stringify(this.token));
             return navigateTo('/');
         },

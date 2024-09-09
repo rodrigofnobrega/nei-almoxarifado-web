@@ -1,5 +1,6 @@
 <template>
-    <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="searchItem ? searchItem : store.itemDetails" />
+    <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" 
+        :item_details="showSearchItem ? searchItem : store.itemDetails" />
     <ModalItemHistory v-if="itemsCache.length > 0"/>
 <div class="table-container d-block mt-2">
     <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
@@ -10,7 +11,7 @@
         </h6>
         <p class="sub-catalog-text opacity-75">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
             Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
-        <span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
+            <span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
     </div>
     <div class="table-box-title position-absolute bg-light-emphasis d-flex align-items-center">
         <IconsBox class="me-1" width="25" height="25"/>
@@ -20,75 +21,79 @@
     </div>
     <div class="table-box row d-block bg-light mx-2">
         <div class="table-actions d-flex justify-content-between aling-items-center">
-            <div class="d-flex align-items-center actions-btns">
+            <div class="d-flex align-items-center actions-btns bg-emphasis">
                 <ButtonsResponsiveNewItem class="res-action-btn mt-1" v-if="uploadReloader === 1" />
                 <ButtonsResponsiveFilter class="res-action-btn mt-1"/>
                 <ButtonsResponsiveConfigure class="res-action-btn mt-1"/>
             </div>
                 <span v-if="itemsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 7px;">
                     <IconsSearchGlass class="search-glass"/>
-                    <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
+                    <input id="tableSearch" v-model="searchInput" @input="searchInput = $event.target.value" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
                 </span>   
             </div>
-        <TablesTable>
-            <template v-slot:header>
-                <tr style="border: 1px #D9D9D9 solid;">
-                    <th class="col-title py-2 border" scope="col">Nome</th>
-                    <th class="col-title py-2 border" scope="col">Código Sipac</th>
-                    <th class="col-title py-2 border" scope="col">Tipo Unitário</th>
-                    <th class="col-title py-2 border" scope="col">Quantidade</th>
-                    <th class="col-title py-2" scope="col">Última atualização</th>
-                    <th class="col-title py-2" scope="col">Ações</th>
+        <div class="overflow-x-scroll p-0">
+            <TablesTable v-if="itemsCache.length > 0">
+                <template v-slot:header>
+                    <tr >
+                        <th class="col-title py-2 border" scope="col">Nome</th>
+                        <th class="col-title py-2 border" scope="col">Código Sipac</th>
+                        <th class="col-title py-2 border" scope="col">Tipo Unitário</th>
+                        <th class="col-title py-2 border" scope="col">Quantidade</th>
+                        <th class="col-title py-2 border" scope="col">Última atualização</th>
+                        <th class="col-title py-2 border" scope="col">Ações</th>
+                    </tr>
+                </template>
+                <template v-slot:content>
+                <tr v-if="itemsCache.length > 0" v-for="(item, index) in itemsCache[cacheIndex]" :key="index" :data-index="index">
+                   <th class="border" scope="row">
+                        <div class="cell-text">
+                            <span>{{ item.name }}</span>
+                        </div>
+                   </th>
+                   <th class="border">
+                        <span v-if="item.sipacCode">{{ item.sipacCode }}</span>
+                        <span v-else>nenhum</span>
+                    </th>
+                    <th class="border">
+                        <span>{{ item.type }}</span>
+                    </th>
+                   <th class="border">
+                       <span>{{ item.quantity }}</span>
+                    </th>
+                   <th class="border">
+                        <div class="cell-text">
+                            <span>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</span>
+                        </div>
+                   </th>
+                   <th class="border" width="5%">
+                       <button title="Detalhes" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                            <IconsSearchGlass width="18px" height="19px"/>
+                        </button>
+                        <button title="Histórico" class="my-0 position-sticky table-btn btn btn-secondary"   @click="showHistory(item.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
+                            <IconsHistory width="18px" height="19px"/>
+                        </button>
+                   </th>
                 </tr>
+                <!--
+                    <div v-else class="search-empty my-5" style="padding-bottom: 300px;">
+                    <p style="margin-top: 50px;" class="text-dark-emphasis fs-4 opacity-75 bg-transparent">
+                        Nenhum item Encontrado
+                    </p>
+                </div> -->
             </template>
-            <template v-slot:content>
-            <tr v-if="itemsCache.length > 0" v-for="(item, index) in itemsCache[cacheIndex]" :key="index" :data-index="index">
-               <th class="border" scope="row">
-                    <div class="cell-text">
-                        <span>{{ item.name }}</span>
-                    </div>
-               </th>
-               <th class="border">
-                    <span v-if="item.sipacCode">{{ item.sipacCode }}</span>
-                    <span v-else>nenhum</span>
-                </th>
-                <th class="border">
-                    <span>{{ item.type }}</span>
-                </th>
-               <th class="border">
-                   <span>{{ item.quantity }}</span>
-                </th>
-               <th class="border">
-                    <div class="cell-text">
-                        <span>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</span>
-                    </div>
-               </th>
-               <th class="border" width="5%">
-                   <TooltipsFastRectangular class="toolTip me-5 pe-5 mb-5" style="margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
-                   <TooltipsFastRectangular class="toolTip me-5 pe-5" style="margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Histórico'"/>
-                    <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
-                        <IconsSearchGlass width="18px" height="19px"/>
-                    </button>
-                    <button @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false" class="my-0 position-sticky table-btn btn btn-secondary"   @click="showHistory(item.id)" data-bs-toggle="modal" data-bs-target="#itemHistory">
-                        <IconsHistory width="18px" height="19px"/>
-                    </button>
-               </th>
-            </tr>
-            <div v-else-if="itemsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)"
-             class="search-empty my-5">
+            </TablesTable>
+            <div v-else-if="showResults && finded.length === 0" 
+                class="search-empty my-5">
                 <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
+            </div> 
+            <div v-else class="d-flex justify-content-center align-items-center my-5">
+                <LoadersComponentLoading :isLoading="true" class="p-5 my-5"/>
             </div>
-            <div v-else class="search-empty my-5" style="padding-bottom: 300px;">
-                <p style="margin-top: 50px;" class="text-dark-emphasis fs-4 opacity-75 bg-transparent">
-                    Nenhum item Encontrado
-                </p>
-            </div>
-        </template>
-        </TablesTable>
+        </div>
         <div class="table-footer d-flex justify-content-between align-items-center  mt-2">
-            <div class="d-flex justify-content-center me-3 ">
+            <div class="d-flex justify-content-center py-2 me-3 ">
                 <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span>
-                <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de itens: {{ totalElements }}</span>
+                <span v-if="itemsCache.length > 0 && finded.length === 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de itens: {{ totalElements }}</span>
             </div>
             <nav v-if="itemsCache.length > 0 && finded.length === 0" aria-label="Page navigation" class="pagination">
                 <ul class="pagination mb-2 mt-2">
@@ -129,6 +134,7 @@ import { useUser } from '../../stores/user.ts'
 import { getRecordByItemId } from '../../services/record/recordGET.ts';
 import { useRoute, useRouter } from 'vue-router';
 import { useSettingsStore } from '../../stores/settings';
+import { patchItem } from '../../services/items/itemsPATCH.ts';
 /*SETANDO STORES*/
 const userStore = useUser()
 const store = useStorageStore();
@@ -139,7 +145,9 @@ const paginationRet = ref(1)
 function range(start, end) {
   return Array.from({ length: end - start + 1 }, (_, index) => start + index);
 }
-
+// const teste = async () => {
+//     const res = await patchItem(userStore, 56, 100);
+// }
 
 let pagination = ref(0); //paginação padrão
 let invertedPagination = ref(0); //paginação invertida para filtro
@@ -164,7 +172,6 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
         pagination.value = 0;
         paginationRet.value = 1;
         initialLoading.value = false
-
         pagesFocus.value[count] = false;
         count = 0;  
         pagesFocus.value[0] = true;
@@ -192,6 +199,7 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
                 return 0;
             }
             itemsCache.value.push(finded);
+            showResults.value = true;
             return 0;
         }
         for(let i = 0; i < totalPages.value; i++){
@@ -213,9 +221,11 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
         }
         if(finded.length === 0){
             itemsCache.value = [];
+            showResults.value = true;
             return 0;
         }
         itemsCache.value.push(finded);
+        showResults.value = true;
         return 0;
     }
     if(isInverted){
@@ -238,6 +248,7 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
 
 const searchInput = ref("");
 const initialLoading = ref(true);
+const showResults = ref(false);
 let reqsIndexCache = [0];
 let typingTimer; 
 const debounceTime = 1000; 
@@ -255,12 +266,13 @@ const itemsLoad = computed(async() => {
         return 0;
     }
     if(searchInput.value === '' && isSearching.value === true){
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(() => {
-                store.isReloadItems = true;
-                isSearching.value = false;
-            }, debounceTime-500);
-            finded = [];
+        showResults.value = false;
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => {
+            store.isReloadItems = true;
+            isSearching.value = false;
+        }, debounceTime-500);
+        finded = [];
     }
     for(let i = 0; i < reqsIndexCache.length; i++){
         if(pagination.value === reqsIndexCache[i]){
@@ -281,6 +293,7 @@ provide('setItemsFilter', (filter, inverted) => {
 //Variáveis que o front vai pegar em si
 const itemIndex = ref(0);
 
+const currentItem = ref(undefined);
 const currentRoute = useRoute().fullPath.split('/')[2];
 
 
@@ -305,6 +318,7 @@ const uploadReloader = computed(() => {
         pagination.value = 0;
         cacheIndex.value = 0;
         itemsCache.value = [];
+        searchCache.value = [];
         reqsIndexCache = [0]
 
         itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
@@ -373,6 +387,7 @@ const backPage = (async () => {
 });
 /*FUNÇÕES PARA OS BOTÕES DE DETALHE E HISTÓRICO*/
 const showDetails = (index) => {
+    searchStore.itemSearch.searching = false;
     itemIndex.value = index;
     store.itemDetails = itemsCache.value[cacheIndex.value][itemIndex.value];
 }
@@ -385,18 +400,29 @@ const searchItem = ref(undefined)
 const showSearchingDetails = async (itemId) => {
     const res = await getItem(userStore, itemId);
     searchItem.value = res;
+    currentItem.value = res;
     const searching = document.getElementsByClassName('searching-btn'); 
-    searching[0].click()
+    setTimeout(() => {
+         searching[0].click();
+    }, 500)
 }
-const toolTipState = ref([[], []]);
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     initialLoading.value = false;
+});
+
+const showSearchItem = computed(() => {
     if(searchStore.itemSearch.searching){
         showSearchingDetails(searchStore.itemSearch.itemId);
         searchStore.itemSearch.searching = false;
+        return true;
     }
-});
+    return false;
+})
+
+onBeforeRouteLeave(() => {
+    searchStore.itemSearch.searching = false;
+})
 </script>
 
 <style scoped>
@@ -485,7 +511,7 @@ p{
     border: none;
     border-bottom: solid 1px #1F69B1;
     border-radius: 10px 10px 0px 0px;
-    box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
+    box-shadow: inset 0px -12px 15px -15px rgb(18, 104, 184);
     color: rgb(0, 0, 0, 0.7); 
     transition: box-shadow 0.3s ease;
 }
@@ -537,7 +563,6 @@ p{
     margin-top: 5%;
     display: flex;
     justify-content: center;
-    margin-left: 125%;
     white-space: nowrap;
 }
 .pagination{
@@ -624,8 +649,10 @@ tr:hover p{
     }.actions-btns{
         padding-bottom: 9px;
         border-radius: 0px 10px 0px 0px;
-        background-color: #D9D9D9;
+        box-shadow: 0px 10px 10px -13px rgba(51, 51, 51, 0.7);
         justify-content: center;
+        margin-right: -5px;
+        margin-left: -5px;
     }
     .table-searchbar{
         margin: 0px 20px 0px 20px;

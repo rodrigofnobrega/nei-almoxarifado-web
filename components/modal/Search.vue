@@ -4,15 +4,15 @@
 			<div class="modal-content"> 
 				<div class="modal-header">
             <div class="search-bar d-flex mx-1">
-                <form class="ms-0 NavigateToItem d-flex align-items-center" role="search">
+              <div class="ms-0 NavigateToItem d-flex align-items-center" role="search">
                   <label class="search-label">
                     <IconsSearchGlass class="search-icon p-1" width="40px" height="41px"/>
                   </label>
-                  <input class="form-control outline-warning p-0" v-model="searchQuery" @input="handleSearch" type="search" placeholder="Pesquisar" autofocus>
-                </form>
+                  <input class="form-control outline-warning p-0" v-model="searchQuery" @input="handleSearch" type="search"  placeholder="Pesquisar" autocomplete="off" autocorrect="off" autocapitalize="none" enterkeyhint="search" spellcheck="false" autofocus="true">
+                </div>
             </div>	
 				</div>
-				<div class="modal-body">
+				<div class="modal-body" >
             <ul v-if="showResults && searchQuery !== '' && searchResults.length != 0" class="list-group">
                 <a class="text-decoration-none" v-for="result in searchResults" :href="`/catalogo`" :key="result.id">
                   <li @click="NavigateToItem(result.id)" class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
@@ -20,10 +20,18 @@
                     <span class="badge bg-primary rounded-pill" v-if="result"> {{ result.quantity }} </span>
                   </li>
                 </a>
-              </ul>
-            <p class="d-flex justify-content-center align-items-center pt-3" v-else>Nenhum Resultado Encontrado.</p>
+            </ul>
+            <div class="d-flex justify-content-center align-items-center py-3" v-else-if="!showResults && searchQuery !== ''">
+              <LoadersComponentLoading :isLoading="true" />
+            </div>
+            <p class="d-flex justify-content-center align-items-center pt-3" v-else-if="showResults && searchQuery !== '' && searchResults.length === 0">
+            Nenhum Resultado Encontrado
+            </p>
+            <p class="d-flex justify-content-center align-items-center pt-3" v-else>
+              Sem Pesquisas Recentes
+            </p>
 				</div>
-				<div class="modal-footer">
+				<div v-if="!settingsStore.isMobile" class="modal-footer">
             <p class="fs-6"><IconsEnter class="bg-primary text-light" style="border-radius: 3px;"/> para selecionar <IconsBottomArrow class="bg-primary text-light" style="border-radius: 3px;"/> <IconsUpArrow class="bg-primary text-light" style="border-radius: 3px;"/> para navegar e <span class="bg-primary text-light" style="border-radius: 3px;">esc</span> para fechar</p>
 				</div>
 			</div>
@@ -37,6 +45,7 @@ import { useSearch } from '../../stores/search.ts';
 import { useStorageStore } from '../../stores/storage.ts';
 import { getItems } from '../../services/items/itemsGET.ts';
 import { useUser } from '../../stores/user.ts';
+import { useSettingsStore } from '../../stores/settings.ts';
 
 export default {
   data() {
@@ -77,15 +86,19 @@ export default {
       let searchResult = document.getElementsByClassName("searchResult");
       searchResult[this.searchCount - 1].click();
     },
-    async handleSearch() {
+    async handleSearch(e) {
+      if(this.searchResults.length > 0){
+        return 1;
+      }
+      this.searchQuery = e.target.value;
       this.showResults = false;
       this.searchResults = [];
       this.pagination = 0;
       clearTimeout(this.typingTimeout);
-      this.typingTimeout = setTimeout(() => {
-        this.fetchSearchResults();
+      this.typingTimeout = setTimeout(async () => {
+        await this.fetchSearchResults();
+        this.showResults = true;
       }, 1000);
-      this.showResults = true;
     },
     async fetchSearchResults() {
       while (this.searchResults.length < 20 && this.pagination < this.totalPages) {
@@ -111,6 +124,7 @@ export default {
     this.itemsReq();
   },
   async setup() {
+    const settingsStore = useSettingsStore();
     const userStore = useUser();
     const searchStore = useSearch();
     const store = useStorageStore();
@@ -118,7 +132,8 @@ export default {
     return {
       store,
       searchStore,
-      userStore
+      userStore,
+      settingsStore
     }
   },
 }

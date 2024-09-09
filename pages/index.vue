@@ -52,114 +52,139 @@
           </div>
         </div>
       </div>    
-      <div class="dashboard-section users-management me-3 bg-light mb-4 pb-0 pt-0 rounded-3">
-        <div class="section-title pt-2 bg-light-background-header">
-          <h5 class="header ps-2 fw-bold">Gestão de Usuários</h5>
+      <div class="dashboard-section users-management me-0 bg-light mb-4 pb-0 pt-0 rounded-3">
+        <div class="section-title d-flex align-items-center justify-content-between bg-light-background-header">
+          <h5 class="header ps-2 pt-2 fw-bold">Gestão de Usuários</h5>
+          <div @click.stop class="dropdown decoration-none">
+            <button class="btn btn-transparent border-0 m-0 p-0 text-dark-emphasis" data-bs-toggle="dropdown" aria-expanded="false">
+              <IconsSettingsDots class="me-1 opacity-75" width="28" height="28"/>
+            </button>
+            <ul class="dropdown-menu py-0">
+              <li @click="toggleAccounts()" type="button" class="dropdown-item py-2 d-flex align-items-center justify-content-center text-dark-emphasis">
+                <span class="fw-bold">Mostrar contas desativas</span>
+                <input type="checkbox" style="margin-bottom: 4px" class="form-check-input ms-2 border-1" v-model="showDisabledAccounts">
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="users-management-scroll">
+        <div class="dashboard-scroll">
           <TablesTable v-if="users.content && users.content.length">
             <template v-slot:header>
-              <tr>
+              <tr class="col-line">
                 <th class="col-title text-center py-2" scope="col">Usuário</th>
                 <th class="col-title text-center py-2" scope="col">Email</th>
                 <th class="col-title text-center py-2" scope="col">Encargo</th>
                 <th class="col-title text-center py-2 justify-content-center" scope="col">Ações</th>
               </tr>
             </template>
-            <template v-slot:content>
+            <template v-slot:content> 
               <tr v-for="user in users.content" :key="user.id">
-                <th class="text-center table-cell" scope="row">
-                  <div class=" d-flex align-items-center justify-content-start">
-                  <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
-                  {{ user.name }}
+                <th :class="{'user-disabled': !user.active}" class="table-cell" scope="row">
+                  <div class="d-flex justify-content-start align-items-center text-nowrap">
+                    <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
+                    <span style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width: 150px;">{{ user.name }}</span>
                   </div>
                 </th>
-                <th class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
+                <th :class="{'user-disabled': !user.active}" class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
                   {{ user.email }}
                 </th>
-                <th class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
+                <th :class="{'user-disabled': !user.active}" class="text-center table-cell align-cell" scope="row" style="padding-top: 11px;">
                   {{ user.role === 'USER' ? 'USUÁRIO' : 'ADMIN'}}
                 </th>
-                <th class="text-center table-cell user-actions pt-2" scope="row" width="5%">
+                <th :class="{'user-disabled': !user.active}" class="text-center table-cell user-actions pt-2" scope="row" width="5%">
                   <div class="position-sticky d-flex justify-content-center">
+                    <button v-if="user.active === true" title="Alterar Encargo" @click="BindUser.email = user.email" data-bs-toggle="modal" data-bs-target="#actionConfirm" class="ms-1 me-0 table-btn d-flex align-items-center justify-content-center btn btn-secondary">
+                      <IconsBarFilter width="16px" height="16px"/> 
+                    </button>
                     <a title="Perfil" :href="`/perfil?userId=${user.id}`" :route="`/perfil/${user.id}`" class="ms-1 me-0 table-btn d-flex align-items-center justify-content-center btn btn-primary">
                       <IconsLowProfile width="16px" height="16px"/>
                     </a>
+                    <button v-if="user.active === true" title="Anular Conta" @click="BindUser.id = user.id" data-bs-toggle="modal" data-bs-target="#removeUser" class="ms-1 me-0 table-btn d-flex align-items-center justify-content-center btn btn-dark-alert">
+                      <IconsReject width="16px" height="16px"/>
+                    </button>
                   </div>
                 </th>
               </tr>
             </template>
           </TablesTable>
-          <div v-if="loadContent && users.content.length === 0" class="search-empty d-flex justify-content-center">
-            <p class="text-dark-emphasis fs-5 opacity-50">Nenhum usuário encontrado</p>
-          </div>
+        </div>
+        <div v-if="loadContent && users.content.length === 0" class="search-empty d-flex justify-content-center">
+          <p class="text-dark-emphasis fs-5 opacity-50">Nenhum usuário encontrado</p>
+        </div>
+        <div v-if="!loadContent"class="d-flex justify-content-center">
+          <LoadersLoading class="p-5 m-5" style="margin-top: 30px;"/>
         </div>
       </div>
     </div>
-    <div class="dashboard-section  overflow-x-visible recent-records bg-light mb-4 pb-0 pt-0 rounded-3">
+    <div class="dashboard-section recent-records bg-light mb-4 pb-0 pt-0 rounded-3 overflow-hidden">
       <div class="section-title pt-2  bg-light-background-header">
         <h5 class="header ps-2  fw-bold">Movimentações mais recentes</h5>
       </div>
-      <TablesTable v-if="records.content && records.content.length">
-        <template v-slot:header>
-          <tr>
-            <th class="col-title table-col text-center py-2" scope="col">Usuário</th>
-            <th class="col-title table-col text-center py-2" scope="col">Movimentação</th>
-            <th class="col-title table-col text-center py-2" scope="col">Item</th>
-            <th class="col-title table-col text-center py-2" scope="col">Tipo unitário</th>
-            <th class="col-title table-col text-center py-2" scope="col">Quantidade</th>
-            <th class="col-title table-col text-center py-2" scope="col">Data e horário</th>
-            <th class="col-title table-col text-center py-2" scope="col">Ações</th>
-          </tr>
-        </template>
-        <template v-slot:content>
-          <tr v-for="(record, index) in records.content" :key="record.id" class="text-center"> 
-            <th class="table-cell mov-cell" scope="row">
-              <div class="d-flex table-text align-items-center " style="padding-top: 0px;">
-                <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
-                {{ record.user.name }}
-              </div>
-            </th>
-            <th class="table-cell mov-cell" scope="row">
-              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                {{ record.operation }}
-              </div>
-            </th>
-            <th class="table-cell mov-cell" scope="row">
-              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                {{ record.item.name }}
-              </div>
-            </th>
-            <th class="table-cell mov-cell" scope="row">
-              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                {{ record.item.type }}
-              </div>
-            </th>
-            <th class="table-cell mov-cell" scope="row">
-              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                {{ record.quantity }}
-              </div>
-            </th>
-            <th class="table-cell mov-cell" scope="row">
-              <div class="d-flex table-text align-items-end mt-1 justify-content-center">
-                {{ record.creationDate.slice(0, 19) }}
-              </div>
-            </th>
-            <th class="table-cell mov-cell" scope="row">
-              <div class="d-flex table-text justify-content-center">
-                <button @click="showDetails(index, record.item.id)" title="Detalhes" :route="`/registro/${record.id}`" class="table-btn d-flex align-items-center justify-content-center btn btn-secondary">
-                  <IconsSearchGlass width="16px" height="16px"/>
-                </button>
-                <a title="Perfil" :href="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="m-0 table-btn d-flex align-items-center justify-content-center btn btn-primary">
-                  <IconsLowProfile width="16px" height="16px"/>
-                </a>
-              </div>
-            </th>
-          </tr>
-        </template>
-      </TablesTable>
+      <div class="dashboard-scroll">
+        <TablesTable v-if="records.content && records.content.length">
+          <template v-slot:header>
+            <tr class="col-line">
+              <th class="col-title table-col text-center py-2" scope="col">Usuário</th>
+              <th class="col-title table-col text-center py-2" scope="col">Movimentação</th>
+              <th class="col-title table-col text-center py-2" scope="col">Item</th>
+              <th class="col-title table-col text-center py-2" scope="col">Tipo unitário</th>
+              <th class="col-title table-col text-center py-2" scope="col">Quantidade</th>
+              <th class="col-title table-col text-center py-2" scope="col">Data e horário</th>
+              <th class="col-title table-col text-center py-2" scope="col">Ações</th>
+            </tr>
+          </template>
+          <template v-slot:content>
+            <tr v-for="(record, index) in records.content" :key="record.id" class="text-center"> 
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-center " style="padding-top: 0px;">
+                  <IconsPerfil class="me-3 mb-0 opacity-75" width="30px" height="30px" />
+                  {{ record.user.name }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ record.operation }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ record.item.name }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ record.item.type }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ record.quantity }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text align-items-end mt-1 justify-content-center">
+                  {{ record.creationDate.slice(0, 19) }}
+                </div>
+              </th>
+              <th class="table-cell mov-cell" scope="row">
+                <div class="d-flex table-text justify-content-center">
+                  <button @click="showDetails(index, record.item.id)" title="Detalhes" class="table-btn d-flex align-items-center justify-content-center btn btn-secondary">
+                    <IconsSearchGlass width="16px" height="16px"/>
+                  </button>
+                  <a title="Perfil" :href="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`" class="m-0 table-btn d-flex align-items-center justify-content-center btn btn-primary">
+                    <IconsLowProfile width="16px" height="16px"/>
+                  </a>
+                </div>
+              </th>
+            </tr>
+          </template>
+        </TablesTable>
+      </div>
       <div v-if="loadContent && records.content.length === 0" class="search-empty d-flex justify-content-center">
         <p class="text-dark-emphasis fs-5 opacity-50">Nenhuma movimentação</p>
+      </div>
+      <div class="d-flex justify-content-center mt-5" v-else>
+        <LoadersLoading class="p-5 mt-4"/>
       </div>
     </div>  
     <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
@@ -168,11 +193,12 @@
     <div class="dashboard-section bg-light mb-4 pb-0 pt-0 rounded-3">
       <DashboardBarChartUtils />
     </div>
+
     <button id="modalToggle" data-bs-toggle="modal" data-bs-target="#itemDetailing" class="disabled d-none"></button>
     <ModalItemDetails v-if="currentItem" :item_index="itemIndex" :item_details="currentItem" />
     <Modal id="removeUser" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true" data-bs-backdrop="true">
       <template v-slot:header>
-        <h6 class="header-title d-flex fw-medium justify-content-start align-items-center">Invalidar usuário</h6>
+        <h6 class="header-title d-flex fw-medium justify-content-start align-items-center fw-bold fs-5">Desativar conta</h6>
         <button class="btn btn-transparent text-light border-0 close-btn" type="button" data-bs-dismiss="modal">
           <IconsClose class="close ms-5" width="1.3em" height="1.3em"/>
         </button>
@@ -183,11 +209,29 @@
       </template>
       <template v-slot:footer>
         <div class="container-fluid d-flex justify-content-end align-items-center">
+          <button type="button" @click="deleteAccount()" class="btn btn-secondary inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Desativar</button>
           <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" @click="deleteAccount" class="btn btn-secondary inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Desativar</button>
         </div>
       </template>
     </Modal>
+    <ModalActionConfirm>
+      <template v-slot:text>
+        <div class="d-flex align-items-center justify-content-center">
+          <p>Para alterar o Encargo do usuário você deve selecionar o seu novo encargo e confirmar a ação. </p>
+        </div>
+        <select v-model="BindUser.role" class="form-select" aria-label="Default select">
+          <option disabled selected>Selecione o Encargo</option>
+          <option value="ADMIN">Administrador</option>
+          <option value="USER">Usuário</option>
+        </select>
+      </template>
+      <template v-slot:buttons>
+        <div class="d-flex align-items-center justify-content-center">
+          <button data-bs-dismiss="modal" @click="patchAccountRole()" class="btn btn-dark-success text-light me-3  fw-bold">Confirmar</button>
+          <button data-bs-dismiss="modal" class="btn text-light btn-light-alert fw-bold">Cancelar</button>
+        </div>
+      </template>
+    </ModalActionConfirm>
   </div>
 </template>
 
@@ -202,6 +246,7 @@ import { useUser } from '../stores/user';
 import { useSearch } from '../stores/search.ts';
 import { deleteUser } from '../services/users/userDELETE';
 import { usePopupStore } from '../stores/popup.ts';
+import { patchUSER } from '../services/users/userPATCH.ts';
 
 const setpageTitle = inject('setpageTitle');
 const sendDataToParent = () => {
@@ -216,13 +261,19 @@ const searchStore = useSearch();
 const route = useRouter();
 const popUpStore = usePopupStore();
 
-const userRejectId = ref(0);
-const users = ref({ content: [] }); // Inicializa com um objeto com array vazio
-const records = ref({ content: [] }); // Inicializa com um objeto com array vazio
+const BindUser = ref({
+  id: null,
+  email: null,
+  role: null
+});
+const showDisabledAccounts = ref(false);
+
+const users = ref({ content: [], totalElements: 0}); 
+const records = ref({ content: [] });
 const requestsByStatus = ref({ totalElements: 0 });
 const acceptedRequests = ref(0);
 const rejectedRequests = ref(0);
-const items = ref({ content: [] }); // Inicializa com um objeto com array vazio
+const items = ref({ content: [] }); 
 const itemsQtd = ref(0);
 
 const currentItem = ref(undefined);
@@ -230,41 +281,67 @@ const itemIndex = ref(0);
 const isShowDetails = ref(false);
 
 const loadContent = ref(false);
+const toggleAccounts = async () => {
+  showDisabledAccounts.value = !showDisabledAccounts.value;
+  fetchUsers();
+}
 
-const fetchData = async () => {
-  try {
-    users.value = await getUsers(userStore, 0);
-    records.value = await getRecords(userStore, 0, 'id,desc');
-    requestsByStatus.value = await getRequestByStatus(userStore, 'pendente');
-    
-    let data = new Date();
-    let actualMonth = data.getMonth() + 1;
-    let requestsData = await getRequests(userStore, 0);
-    for (let i = 1; i < requestsData.totalPages; i++) {
-      for (let j = 0; j < requestsData.content.length; j++) {
-        if (requestsData.content[j].updatedDate.slice(5, 7) == actualMonth) {
-          if (requestsData.content[j].status == 'ACEITO') {
-            acceptedRequests.value++;
-          }
-          if (requestsData.content[j].status == 'RECUSADO') {
-            rejectedRequests.value++;
+const fetchUsers = async () => {
+    users.value.content = [];
+    let res = await getUsers(userStore, 0);
+    users.value.totalElements = res.totalElements;
+      for(let i = 1; i <= res.totalPages; i++){
+        for(let j = 0; j < res.pageElements; j++){
+          if(res.content[j].id != userStore.id && (showDisabledAccounts.value || res.content[j].active)){
+            users.value.content.push(res.content[j]);
           }
         }
-      }
-      requestsData = await getRequests(userStore, i);
+        res = await getUsers(userStore, i);
     }
-    
-    items.value = await getItems(userStore, 0);
-    for (let i = 1; i < items.value.totalPages; i++) {
-      for (let j = 0; j < items.value.content.length; j++) {
-        itemsQtd.value += items.value.content[j].quantity;
+}
+const fetchRequests = async () => {
+  let requestsData = await getRequests(userStore, 0);
+  let data = new Date();
+  let actualMonth = data.getMonth() + 1;
+  for (let i = 1; i <= requestsData.totalPages; i++) {
+    for (let j = 0; j < requestsData.content.length; j++) {
+      if (requestsData.content[j].updatedDate.slice(5, 7) == actualMonth) {
+        if (requestsData.content[j].status == 'ACEITO') {
+          acceptedRequests.value++;
+        }
+        if (requestsData.content[j].status == 'RECUSADO') {
+          rejectedRequests.value++;
+        }
+      }
+    }
+    requestsData = await getRequests(userStore, i);
+  }
+}
+const fetchItems = async () => {
+  items.value = await getItems(userStore, 0);
+    for (let i = 1; i <= items.value.totalPages; i++) {
+      for (let j = 0; j < items.value.pageElements; j++) {
+        if(items.value.content[j].available === true){
+          itemsQtd.value += items.value.content[j].quantity;
+        }
       }
       items.value = await getItems(userStore, i);
     }
+}
+const fetchData = async () => {
+  try {
+    fetchUsers();
+    records.value = await getRecords(userStore, 0, 'id,desc');
+    requestsByStatus.value = await getRequestByStatus(userStore, 'pendente');
+
+    fetchRequests();
+    await fetchItems();
+     
   } catch (error) {
     console.error('Failed to fetch data:', error);
   }
 };
+
 
 onMounted(() => {
   fetchData().finally(() => {
@@ -277,36 +354,48 @@ const showDetails = async (index, itemId) => {
   itemIndex.value = index;
   try {
     currentItem.value = await getItem(userStore, itemId);
-    modalToggleDom.click();
+    setTimeout((() => modalToggleDom.click()), 200)
+
   } catch (err) {
     console.error(err);
+    return 0;
   }
 };
 
+const patchAccountRole = async() => {
+    const res = await patchUSER(userStore, BindUser.value.email, BindUser.value.role);
+    if(res === true){
+      popUpStore.throwPopup('Encargo alterado com sucesso', 'blue');
+      fetchUsers();
+    } else if(res === false){
+      popUpStore.throwPopup('ERRO: Algum problema interno do sistema ocorreu, contate o suporte', 'red')
+    }
+}
 const deleteAccount = async () => {
   try {
-    await deleteUser(userStore, userRejectId.value);
-    popUpStore.throwPopup('Conta desativada com sucesso, atualize a página', 'blue');
+    await deleteUser(userStore, BindUser.value.id);
+    popUpStore.throwPopup('Conta desativada com sucesso', 'blue');
+    fetchUsers();
   } catch (err) {
-    popUpStore.throwPopup('ERRO: Algum problema interno do servidor ocorreu, contate o suporte', 'red');
+    popUpStore.throwPopup('ERRO: Algum problema interno do sistema ocorreu, contate o suporte', 'red');
   }
 };
 </script>
 
 <style scoped>
-.users-management-scroll{
+.dashboard-scroll{
   position: static !important;
   text-wrap: nowrap !important;
-  overflow-y: scroll !important;
-  max-height: 227px !important;
+  max-height: 247px !important;
+  overflow-x: scroll;
 }
 .users-management{
   position: static !important;
   text-wrap: nowrap !important;
-  overflow-y: scroll !important;
+  width: 60%;
 }
 .recent-records{
-  height: 317px;
+  height: 290px;
   overflow-y: scroll;
 }
 .container{
@@ -318,8 +407,11 @@ const deleteAccount = async () => {
 .record-btn{
   text-wrap: nowrap;
 }
+.container-fluid{
+  margin: 0;
+  min-width: 83%;
+}
 .dashboard-section{   
-  width: 99%;
   padding-top: 10px;
   padding-bottom: 0px;
   padding-left: 0;
@@ -345,12 +437,17 @@ h5{
 .table-btn{
     border-radius: 4px;
     top: 0px;
-    font-size: 12px;
     padding: 4px 3px 4px 3px;
     z-index: 0;
     font-size: 13px;
     margin-right: 10px;
     margin-left: 10px;
+}
+.table-cell{
+  z-index: 1000 !important;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(51,51,51, 0.9);
 }
 .catalog-header{
     justify-content: space-between;
@@ -361,12 +458,7 @@ h5{
   opacity: 90%;
   font-weight: bold;
   margin-top: 0;
-}
-.table-cell{
-  z-index: 1000 !important;
-  font-size: 14px;
-  font-weight: 400;
-  color: rgb(51,51,51, 0.9);
+  text-wrap: nowrap;
 }
 .card-img-top{
   transition: opacity 0.5s ease-in-out;
@@ -375,6 +467,9 @@ h5{
 .search-empty{
   margin-top: 7% !important;
   white-space: nowrap;
+}
+.col-line {
+  border-bottom: 1px solid rgba(80, 76, 76, 0.174);
 }
 .close{
     position: relative;
@@ -386,7 +481,7 @@ h5{
     padding: 0;
 }
 .user-disabled{
-  background-color: rgb(229, 57, 53, 0.3);
+  background-color: rgb(229, 57, 53, 0.3) !important;
 }
 .bg-warning-op80{
     opacity: 80%;
@@ -408,6 +503,15 @@ h5{
     width: 280px;
     transition: width 0.3s ease-in-out, box-shadow 0.4s ease-in-out;
 }
+.form-check-input{
+    border: 1px solid rgb(0, 0, 0, 0.3);
+}
+.form-check-input:active{
+    background-color: #1F69B1 !important;
+}
+.form-check-input:checked{
+    background-color: #1F69B1 !important;
+}
 .bg-warning-op80:hover{
     box-shadow: 0px 0px 15px 4px rgb(160, 152, 2);
     width: 290px;
@@ -419,6 +523,9 @@ h5{
 .bg-alert-op80:hover{
   width: 290px;
   box-shadow: 0px 0px 15px 2px rgb(111, 7, 7);
+}
+.table-cell{
+  text-wrap: nowrap;
 }
 .align-cell{
   padding-top: 12px !important;
@@ -432,93 +539,31 @@ h5{
 .card:hover .card-img-top{
     opacity: 100%;
 }
-tr:hover .disabled-account{
-  display: none;
-}
-tr:hover .user-invalided{
-  filter: blur(0px);
-}
-@media screen and (max-width: 1253px) {
-  .summary-text-re{
-    height: 60px;
+@media screen and (max-width: 1098px) {
+  .users-management{
+    width: 57%;
   }
-  .summary-text{
-    height: 100px;
-  }
-  .users-management-scroll{
-    max-height: 250px !important;
-  }
+  
 }
 @media screen and (max-width: 1040px){
   .paralalel-section{
     display: block !important;
   }
-  .summary-text{
-    font-size: 15px !important;
+  .users-management{
+    width: 100%;
   }
-  .users-management-scroll{
-    max-height: 270px !important;
-  }
-  th{
-    padding: 3px!important;
-  }
-  .table-cell, .summary-text{
-    font-size: 13px !important;
-  }
-  .align-cell{
-    padding-top: 7px !important;
-  }
-}
-@media screen and (max-width: 962px){
-  .table-cell, .summary-text{
-    font-size: 12px;
-  }
-  .card-text{
-    font-size: 14px !important;
-  }
-  .stretched-link{
-    font-size: 16px !important;
-  }
-}
-@media screen and (max-width: 854px){
-  .table-cell, .summary-text{
-    font-size: 14px;
-  }
-  .table-text{
-    font-size: 12px;
-  }
-  th{
-    padding: 8px !important;
-  }
-  .table-col{
-    padding: 0px;
-    font-size: 12px;
+  .dashboard-section{
+    margin-right: 0 !important;
   }
 }
 @media screen and (max-width: 812px){
   .dashboard-container{
     display: block !important;
   }
-  .dashboard-viewcard{
-    margin-bottom: 30px;
-  }
-  .align-cell{
-    padding-top: 12px !important;
-  }
 }   
-@media screen and (max-width: 558px){
-
-}
-@media screen and (max-width: 435px){
+@media screen and (max-width: 400px){
   .summary-text{
-    font-size: 12px;
-  }
-  th{
-    padding: 3px !important;
-  }
-  .container{
-    padding-left: 5px;
-    padding-right: 5px;
+    font-size: 14px;
   }
 }
 </style>
