@@ -30,7 +30,7 @@
       </p>
       <ol>
         <li>
-          <b>Organização e Cadastro de Itens</b>:
+          <b>Catálogo</b>:
           <p>
             Esta função permite o cadastro detalhado de todos os itens do almoxarifado, 
             incluindo informações como código sipac, tipo unitário, quantidade disponível e outras características pertinentes. 
@@ -49,7 +49,7 @@
           </p>
         </li>
         <li>
-          <b>Registros e Auditoria</b>
+          <b>Registros e Auditoria</b>:
           <p>
             Todas as operações realizadas no sistema, como entradas, saídas e movimentações internas de materiais, 
             são registradas em um banco de dados seguro para fins de auditoria. 
@@ -58,7 +58,7 @@
           </p>
         </li>
         <li>
-          <b>Análise de Dados e Relatórios</b>
+          <b>Análise de Dados e Relatórios</b>:
           <p>
             O sistema também oferece ferramentas avançadas para a análise gráfica e a geração de relatórios detalhados com base nos dados coletados. 
             Esses relatórios podem incluir informações sobre o consumo de materiais e a frequência de solicitações.
