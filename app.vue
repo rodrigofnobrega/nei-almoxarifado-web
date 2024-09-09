@@ -2,14 +2,13 @@
   <div :class="
   {
     layoutDefault: layoutBg === 0, 
-    darkLayout: layoutBg === 1, 
-    alternativeLayout: layoutBg === 2, 
-    lightLayout: layoutBg === 3,
+    alternativeLayout: layoutBg === 1, 
+    darkLayout: layoutBg === 2, 
     poppins: font === 0, 
     inter: font === 1, 
     montserrat: font === 2, 
     lora: font === 3, 
-  }">
+  }" id="aplication">
     <NuxtLayout>
       <Popup class="popUp" :isPopup="isPopup" :popupText="popupText" :popupBg="popupBg"/>
       <NuxtPage/>
@@ -64,6 +63,18 @@ function checkIfMobile() {
 </script>
 
 <style>
+
+/* Para Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) white; /* Fundo branco no Firefox */
+}
+
+*::-moz-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3); 
+}
+
+
 .poppins{
   font-family: 'Poppins', sans-serif;
 }
@@ -77,14 +88,84 @@ function checkIfMobile() {
   font-family: 'Lora', sans-serif;
 }
 
+.darkLayout *{
+  scrollbar-color: rgba(255, 255, 255, 0.3) #1A1A1A  !important;  
+}
+.darkLayout .bg-fade{
+  background: #111318 !important;
+}
+.darkLayout .btn-outline-primary{
+  border-color: #0054a7;
+}
+.darkLayout .btn-outline-primary:hover{
+  background-color: #010e23 !important;
+}
 .darkLayout .bg-primary{
+  background-color: #000000 !important;
+}
+.darkLayout .btn-primary{
   background-color: #020b15 !important;
 }
 .darkLayout .bg-light{
   background-color: #1A1A1A !important;
-  border: solid 1px #333333 !important;
+  border-color: #333333 !important;
+}
+.darkLayout .btn-outline-dark-success:hover{
+  background-color: #011e02 !important;
+}
+.darkLayout .btn-outline-warning:hover{
+  background-color: #786200 !important;
+}
+.darkLayout .bg-warning{
+  background-color: #786200 !important;
+}
+.darkLayout .btn-outline-secondary{
+  border-color: #2072c3 !important;
+  color: white !important;
+}
+.darkLayout .btn-outline-secondary:hover{
+  background-color: #113a62 !important;
+}
+.darkLayout .btn-secondary{
+  background-color: #113a62 !important;
+}
+.darkLayout .bg-success{
+  background-color: #015603 !important;
+}
+.darkLayout .btn-light-success{
+  background-color: #015603 !important;
+}
+.darkLayout .btn-dark-success{
+  background-color: #011e02 !important;
+}
+.darkLayout .btn-dark-alert{
+  background-color: rgb(98, 17, 17) !important;
+}
+.darkLayout .btn-light-alert{
+  background-color: rgb(139, 16, 16) !important;
+}
+.darkLayout .bg-degrade{
+  background: linear-gradient(to bottom, rgb(0, 0, 0, 0.9) 20%, rgb(255, 255, 255, 0.9) 150%) !important;
 }
 .darkLayout .modal-body{
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout .card{
+  border: none !important;
+}
+.darkLayout .card-header{
+  border: solid 1px #333333 !important;
+}
+.darkLayout .card-body{
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout .card-footer{
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout tbody{
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
 }
@@ -96,16 +177,36 @@ function checkIfMobile() {
   background-color: #020b15 !important;
   border: solid 1px #333333 !important;
 }
+.darkLayout .spinner-border{
+  color: white;
+}
 .darkLayout input{
   color: rgb(255,255,255,0.8) !important;
   background-color: #1A1A1A;
   border: solid 1px #333333;
-  border-left: none !important;
 }
-.darkLayout input:focus{
+.darkLayout textarea{
   color: rgb(255,255,255,0.8) !important;
   background-color: #1A1A1A;
   border: solid 1px #333333;
+}
+.darkLayout textarea:focus{
+  background-color: #1A1A1A;
+}
+.darkLayout input:focus{
+  background-color: #1A1A1A;
+}
+.darkLayout input::placeholder{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout .NavigateToItem input:focus{
+  color: rgb(255,255,255,0.8) !important;
+  background-color: #1A1A1A;
+  border: solid 1px #333333;
+  border-left: none;
+}
+.darkLayout .item-bg:hover{
+  background-color: #333333 !important; 
 }
 .darkLayout label{
   color: rgb(255,255,255,0.8) !important;
@@ -115,8 +216,8 @@ function checkIfMobile() {
   border: 1px solid rgb(51, 51, 51, 1) !important; 
   border-right: none !important; 
 }
-.darkLayout input::placeholder{
-  color: rgb(255,255,255,0.8) !important;
+.darkLayout .requests-box{
+  border: 1px solid rgb(255, 255, 255, 0.2) !important;
 }
 .darkLayout img{
   color: rgb(255,255,255,0.8) !important;
@@ -128,6 +229,12 @@ function checkIfMobile() {
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
 }
+.darkLayout .border-2{
+  border-color: #333333;
+}
+.darkLayout .section-title{
+  border-bottom: 1px solid #333333 !important;
+}
 .darkLayout td{
   color: rgb(255,255,255,0.8) !important;
   background-color: #1A1A1A;
@@ -136,7 +243,16 @@ function checkIfMobile() {
 .darkLayout p{
   color: rgb(255,255,255,0.8) !important;
 }
+.darkLayout h1{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout h2{
+  color: rgb(255,255,255,0.8) !important;
+}
 .darkLayout h3{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout h4{
   color: rgb(255,255,255,0.8) !important;
 }
 .darkLayout h5{
@@ -145,32 +261,75 @@ function checkIfMobile() {
 .darkLayout h6{
   color: rgb(255,255,255,0.8) !important;
 }
-.darkLayout li{
-  background-color: #1A1A1A !important;
-  border: solid 1px #333333 !important;
-  color: rgb(255,255,255,0.8) !important;
-}
 .darkLayout a{
-  color: rgb(255,255,255,0.8) !important;
+  color: rgba(255, 255, 255, 1) !important;
 }
-.darkLayout ul{
+.darkLayout ol li:hover{
+  background: none !important;
+}
+.darkLayout .page-item:hover{
+  background: none !important;
+}
+
+.darkLayout nav li{
+  color: rgb(255,255,255,0.8) !important;
+  background-color: #1A1A1A !important;
+  border: none !important;
+}
+.darkLayout li{
+  color: rgb(255,255,255,0.8) !important;
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
-  border-bottom: none !important;
+}
+.darkLayout li:hover{
+  background-color: #786200 !important;
+}
+.darkLayout .btn-search:hover{
+  background-color: #786200 !important;
+}
+.darkLayout li::before{
+  color: rgb(255,255,255,0.8) !important;
+}
+.darkLayout .small-menu{
+  background: #1A1A1A !important;
+}
+.darkLayout .small-menu:hover{
+  background: #1A1A1A !important;
+}
+
+.darkLayout .form-check-label{
+  background: none !important;
+}
+.darkLayout .form-check-input{
+  background-color: #2f2e2e !important;
+  border: solid 1px rgb(255,255,255,0.2) !important;
+}
+.darkLayout select{
+  color: rgb(255,255,255,0.8) !important;
+  background-color: #1A1A1A !important;
+  border: solid 1px rgb(255,255,255,0.2) !important;
+}
+.darkLayout select:focus{
+  box-shadow: none;
 }
 .darkLayout label{
+  background: #1A1A1A !important;
   color: rgb(255,255,255,0.8) !important;
 }
 .darkLayout span{
   color: rgb(255,255,255,0.8) !important;
 }
 .darkLayout svg{
-  color: rgb(255,255,255,0.8) !important;
+  color: rgb(255,255,255,0.8);
 }
 .darkLayout .btn{
   color: rgb(255,255,255,0.8) !important;
 }
 .darkLayout .light-background{
+  background-color: #1A1A1A !important;
+  border: solid 1px #333333 !important;
+}
+.darkLayout .btn-light{
   background-color: #1A1A1A !important;
   border: solid 1px #333333 !important;
 }
@@ -191,92 +350,49 @@ function checkIfMobile() {
   border: solid 1px #333333 !important;
 }
 .darkLayout [class*='dark']{
-  color: rgb(255,255,255,0.8) !important;
+  color: rgb(255,255,255,0.8) ;
 }
 .darkLayout [class*='dark-emphasis']{
   color: rgb(255,255,255,0.8) !important;
 }
-.darkLayout .bg-fade {
-  background: black;
+.darkLayout li .disabled{
+  background-color: rgb(62, 58, 58) !important;
 }
-/*
-.darkLayout [class*="primary"] {
+
+
+.alternativeLayout [class*="primary"] {
   background-color: #2C3E50 !important; 
 }
-.darkLayout .bg-dark{
+.alternativeLayout .bg-dark{
   background-color: #2C3E50 !important; 
 }
-.darkLayout .bg-light {
+.alternativeLayout .bg-light {
   background-color: #ECF0F1 !important; 
 }
-.darkLayout .bg-dark-emphasis {
+.alternativeLayout .bg-dark-emphasis {
   background-color: #34495E !important; 
 }
 
-.darkLayout [class*="light-alert"] {
+.alternativeLayout [class*="light-alert"] {
   background-color: #E74C3C !important; 
 }
-.darkLayout [class*="warning"] {
+.alternativeLayout [class*="warning"] {
   background-color: #F39C12 !important; 
 }
-.darkLayout [class*="light-emphasis"] {
+.alternativeLayout [class*="light-emphasis"] {
   background-color: #BDC3C7 !important; 
 }
-.darkLayout [class*="light-background"] {
+.alternativeLayout [class*="light-background"] {
   background-color: #ECF0F1 !important; 
 }
-.darkLayout [class*="light-background-header"] {
+.alternativeLayout [class*="light-background-header"] {
   background-color: #D0D3D4 !important; 
 }
-.darkLayout [class*="gray-light"] {
+.alternativeLayout [class*="gray-light"] {
   background-color: #AAB7B8 !important; 
 }
-.darkLayout [class*="new-gray"] {
-  background-color: #566573 !important; 
-}
- */ 
-
-.alternativeLayout [class*="primary"] {
-  background-color: #3e0d7a !important; /* Dark Slate Blue */
-}
-.alternativeLayout [class*="secondary"] {
-  background-color: #1E90FF !important; /* Dodger Blue */
-}
-.alternativeLayout [class*="light-success"] {
-  background-color: #008000 !important; /* Green */
-}
-.alternativeLayout [class*="light-alert"] {
-  background-color: #FF6347 !important; /* Tomato */
-}
-.alternativeLayout [class*="dark-alert"] {
-  background-color: #8B0000 !important; /* Dark Red */
-}
-.alternativeLayout [class*="warning"] {
-  background-color: #FFD700 !important; /* Gold */
-}
-.alternativeLayout .bg-light {
-  background-color: #FFFFFF !important; /* White */
-}
-.alternativeLayout .bg-dark {
-  background-color: #2F4F4F !important; /* Dark Slate Gray */
-}
-.alternativeLayout [class*="light-emphasis"] {
-  background-color: #D3D3D3 !important; /* Light Gray */
-}
-.alternativeLayout [class*="light-background"] {
-  background-color: #808080 !important; /* Gray */
-}
-.alternativeLayout [class*="light-background-header"] {
-  background-color: #C0C0C0 !important; /* Silver */
-}
-.alternativeLayout [class*="gray-light"] {
-  background-color: #A9A9A9 !important; /* Dark Gray */
-}
-.alternativeLayout .bg-dark-emphasis {
-  background-color: #333 !important; /* Dark */
-}
 .alternativeLayout [class*="new-gray"] {
-  background-color: #778899 !important; /* Light Slate Gray */
+  background-color: #566573 !important; 
 }
 
 .bg-fade {

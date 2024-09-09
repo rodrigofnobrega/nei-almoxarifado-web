@@ -1,13 +1,25 @@
 <template>
+    <ModalActionConfirm>
+        <template v-slot:text>
+            <div class="d-flex align-items-center justify-content-center">
+                <p class="fw-bold fs-5 my-3">Deseja cancelar a solicitação?</p>
+            </div>
+        </template>
+
+        <template v-slot:buttons>
+            <div class="d-flex align-items-center justify-content-end">
+                <button data-bs-dismiss="modal" class="btn btn-dark-alert fw-bold py-2 px-1 me-2 text-light">Cancelar</button>
+                <button data-bs-dismiss="modal" @click="cancelRequest(requestToCancel.id, requestToCancel.index)" class="btn btn-dark-success py-2 px-1 ms-2 fw-bold text-light">Confirmar</button>
+            </div>
+        </template>
+    </ModalActionConfirm>
     <div class="container-fluid">
-        <div class="sub-catalog bg-light mt-1 ps-2 pe-2">
+        <div class="sub-catalog bg-light mt-1 px-2">
             <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
                 <IconsInformation class="me-2"/>
                 Descrição da página
             </h6>
-            <p class="sub-catalog-text opacity-75">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
-                Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
-            <span class="border-bottom border-dark-success pb-1">Adicionar <IconsThinPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
+            <p class="sub-catalog-text opacity-75"></p>
         </div>
         <div class="table-box-title  d-flex justify-content-between align-items-center text">
             <div class="d-flex box-title align-items-center px-1 text bg-light-emphasis" style="padding-top: 5px; padding-bottom: 5px;">
@@ -17,287 +29,463 @@
                 </p>
             </div>
             <div class="d-flex justify-content-end aling-items-center me-4 actions" style="margin-top: 2px;">
-                <span v-if="!mobileView" @click="changeView = !changeView" type="button" style="color: rgb(0, 0, 0, 0.7);" class=" text-dark-emphasis box-title bg-light-emphasis px-2 table-searchbar me-2 position-sticky d-flex align-items-center">
-                    <IconsMenu v-if="changeView" class="me-1"/>
-                    <IconsGrid v-if="!changeView" class="me-1"/>
+                <span v-if="!mobileView && !loadRequests" @click="changeView = !changeView" type="button" style="color: rgb(0, 0, 0, 0.7);" class=" text-dark-emphasis box-title bg-light-emphasis px-2 table-searchbar me-2 position-sticky d-flex align-items-center">
                     Vizualização
+                    <IconsMenu v-if="changeView" class="ms-1"/>
+                    <IconsVerticalBars v-if="!changeView" class="ms-1"/>
                 </span>
                 <span v-if="requestsLoad" class="box-title bg-light-emphasis position-sticky d-flex align-items-center table-searchbar" style="margin-top: 0.8px;">
-                    <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
+                    <input id="tableSearch" v-model="searchInput" @input="searchInput = $event.target.value" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
                     <IconsSearchGlass class="search-glass"/>
                 </span>
             </div>
         </div>
         <div class="requests-container mx-2 bg-light">
-            <div :class="{'d-flex': !changeView, 'd-block': changeView}" class="justify-content-between mb-5">
-                <div class="mx-2 text-dark-emphasis mt-3 rounded-2">
-                    <div class="requests-box mt-0 pt-0 z-0">
-                        <div class="d-flex box-title align-items-center justify-content-between mx-3" >
-                            <div class="d-flex align-items-center">
-                                <IconsClock class="me-2 text-dark-warning" width="25" height="25"/>
+            <div :class="{'d-flex': !changeView, 'd-block': changeView}" class="justify-content-between mb-5 requests-view">
+                <div class="request-container mx-2 text-dark-emphasis mt-3 rounded-2">
+                    <div :class="{'box-bg-warning': requestsCache.inProgressRequests.length > 0}" class="requests-box mt-0 pt-0 z-0">
+                        <div :class="{'border-warning border-bottom': requestsCache.inProgressRequests.length > 0}" class="d-flex box-title align-items-center justify-content-between px-2" >
+                            <div class="d-flex align-items-center py-2">
+                                <IconsClock class="me-2 text-dark-warning" width="30" height="30"/>
                                 <h5 class="m-0 p-0">Em Progresso
                                 </h5>
                                 <span>({{requestsCache.inProgressRequests.length}})</span>
                             </div>
-                            <div class="dropdown">
+                            <div class="dropdown" @click.stop>
                                 <button title="Filtro" class="d-flex align-items-center btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
                                   <IconsBarFilter class="text-dark-emphasis me-1" width="25" height="25" />
                                 </button>
                                 <div class="dropdown-menu p-0">
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.inProgressRequests,'date', 'asc')">Data <IconsUpArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.inProgressRequests,'date', 'desc')">Data <IconsBottomArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.inProgressRequests,'name', 'asc')">Nome <IconsUpArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.inProgressRequests,'name', 'desc')">Nome <IconsBottomArrow width="22" height="22"/></li>
+                                    <li type=button class="dropdown-item fw-bold text-dark-emphasis" 
+                                         @click="ClicktoggleDropdown(1)"  @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
+                                        <div class="d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" type="button">
+                                            <span>Data</span>
+                                            <IconsClock class="action-icon"/>
+                                        </div>
+                                        <div v-show="dropdownStates[1]" class="sub-dropdown bg-light position-absolute">
+                                            <ul @click.stop class="list-group">
+                                                <li @click="applyFilter(requestsCache.inProgressRequests,'date', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">asc</span>
+                                                    <IconsUpArrow width="18" height="18"/>
+                                                </li>
+                                                <li @click="applyFilter(requestsCache.inProgressRequests,'date', 'desc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">dec</span>
+                                                    <IconsBottomArrow width="18" height="18"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li type=button class="dropdown-item fw-bold text-dark-emphasis" 
+                                         @click="ClicktoggleDropdown(2)"  @mouseover="toggleDropdown(2)" @mouseout="toggleDropdown(2)">
+                                        <div class="d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" type="button">
+                                            <span>Nome</span>
+                                            <IconsNameSort class="action-icon"/>
+                                        </div>
+                                        <div v-show="dropdownStates[2]" class="sub-dropdown bg-light position-absolute mb-5">
+                                            <ul @click.stop class="list-group">
+                                                <li @click="applyFilter(requestsCache.inProgressRequests,'name', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">asc</span>
+                                                    <IconsUpArrow width="18" height="18"/>
+                                                </li>
+                                                <li @click="applyFilter(requestsCache.inProgressRequests,'name', 'desc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">dec</span>
+                                                    <IconsBottomArrow width="18" height="18"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
                                 </div>
                             </div>
                         </div>
-                        <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}">
-                            <CardsCard :class="{'card-width-adjust': changeView}" 
-                            v-if="requestsCache.inProgressRequests.length > 0" 
-                            v-for="(request, index) in requestsCache.inProgressRequests.slice(0, requestsLoaded[0])" 
-                            :key="index" class="col-6 card-container mb-3 mx-2 bg-light-background">
-                                <template v-slot:header>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <p class="justify-content-start mb-3 fw-bold">
-                                            Solicitação
-                                        </p>
-                                        <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.creationDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
-                                    </div>
-                                </template>
-                                <template v-slot:default>
-                                    <div class="row cards-row">
-                                        <div class="mb-3"> 
-                                            <label class="form-label fw-semibold"> Item solicitado </label>
-                                            <div class="overflow-x-auto">
-                                                <input readonly class="form-control overflow-x-auto" :value="request.item.name"> 
+                        <div class="d-flex align-items-center cards-box">
+                            <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}">
+                                    <CardsCard :class="{'card-width-adjust': changeView}" 
+                                    v-if="requestsCache.inProgressRequests.length > 0" 
+                                    v-for="(request, index) in requestsCache.inProgressRequests.slice(0, requestsLoaded[0])" 
+                                    :key="index" class="col-6 card-container mb-3 mx-1 bg-light-background">
+                                        <template v-slot:header>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <p class="justify-content-start mb-3 fw-bold">
+                                                    Solicitação
+                                                </p>
                                             </div>
-                                        </div>
-                                        <div class="col-6 me-0">
-                                            <div class="mb-3"> 
-                                                <label class="form-label fw-semibold"> Quantidade Solicitada </label>
-                                                <input readonly class="form-control" :value="request.quantityRequested">
-                                            </div>		
-                                            <div class="mb-3"> 
-                                                <label class="form-label fw-semibold"> Código Sipac </label>
-                                                <input readonly class="form-control" :value="request.item.sipacCode"> 
+                                            <button type="button" data-bs-toggle="modal" data-bs-target="#actionConfirm" @click="requestToCancel = {id: request.id, index: index}" class="position-absolute response-toggle btn btn-dark-alert fw-bold px-2 pb-2 rounded-0 d-flex align-items-center">
+                                                Cancelar
+                                                <IconsClose height="21" width="22"/>
+                                            </button>
+                                        </template>
+                                        <template v-slot:default>
+                                            <div class="row cards-row">
+                                                <div class="mb-3"> 
+                                                    <label class="form-label fw-semibold"> Item solicitado </label>
+                                                    <div class="overflow-x-auto">
+                                                        <input readonly class="form-control overflow-x-auto" :value="request.item.name"> 
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 me-0">
+                                                    <div class="mb-3"> 
+                                                        <label class="form-label fw-semibold"> Quantidade Solicitada </label>
+                                                        <input readonly class="form-control" :value="request.quantityRequested">
+                                                    </div>		
+                                                    <div class="mb-3"> 
+                                                        <label class="form-label fw-semibold"> Código Sipac </label>
+                                                        <input readonly class="form-control" :value="request.item.sipacCode ? request.item.sipacCode : 'nenhum'"> 
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="mb-3"> 
+                                                        <label class="form-label fw-semibold"> Quantidade Disponível </label>
+                                                        <input readonly class="form-control" :value="request.item.quantity"> 
+                                                    </div>		
+                                                    <div class="mb-0"> 
+                                                        <label class="form-label fw-semibold"> Tipo </label>
+                                                        <input readonly class="form-control" :value="request.item.type">
+                                                    </div>	
+                                                </div>
+                                                <div class="mb-0"> 
+                                                    <label class="form-label fw-semibold"> Mensagem </label>
+                                                    <div class="d-flex">
+                                                        <textarea readonly class="form-control"> {{ request.description }} </textarea>
+                                                    </div>
+                                                </div>	
                                             </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="mb-3"> 
-                                                <label class="form-label fw-semibold"> Quantidade Disponível </label>
-                                                <input readonly class="form-control" :value="request.item.quantity"> 
-                                            </div>		
-                                            <div class="mb-0"> 
-                                                <label class="form-label fw-semibold"> Tipo </label>
-                                                <input readonly class="form-control" :value="request.item.type">
-                                            </div>	
-                                        </div>
-                                        <div class="mb-0"> 
-                                            <label class="form-label fw-semibold"> Mensagem </label>
-                                            <div class="d-flex">
-                                                <textarea readonly class="form-control"> {{ request.description }} </textarea>
+                                        </template>
+                                        <template v-slot:footer>
+                                            <div class="d-flex align-items-center fw-bold text-dark-emphasis justify-content-end">
+                                                Solicitação feita em: {{ request.creationDate.slice(0,19) }}
                                             </div>
-                                        </div>	
+                                        </template>
+                                    </CardsCard>
+                                    <div :class="{'d-flex align-items-center m-2': changeView}" v-if="requestsLoaded[0] < requestsCache.inProgressRequests.length">
+                                            <div class="d-flex justify-content-center">
+                                                <button title="Carregar Mais" @click="requestsLoaded[0] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold m-2" style="padding: 3px;">
+                                                    <IconsThinPlus width="30" height="30"/>
+                                                </button>
+                                            </div>
                                     </div>
-                                </template>
-                                <template v-slot:footer>
-                                    <div class="d-flex align-items-center justify-content-end">
-                                        <span type="button" @click="cancelRequest(request.id, index)" class="fw-bold text-dark-alert d-flex align-items-center">
-                                            Cancelar
-                                            <IconsClose style="margin-top: 2px;" height="21" width="22"/>
-                                        </span>
-                                    </div>
-                                </template>
-                            </CardsCard>
-                            <div v-else :style="{'width': !changeView ? '300px' : '100%', 'justify-content': !changeView ? '' : 'center'}" class="d-flex empty-text mt-5 pt-2 opacity-75">
-                                <p>
-                                    Nenhuma solicitação encontrada...
-                                </p>
                             </div>
-                    </div>
-                    <div :class="{'d-flex align-items-center ms-2': changeView}" v-if="requestsLoaded[0] < requestsCache.inProgressRequests.length">
-                        <div class="d-flex justify-content-center">
-                            <button title="Carregar Mais" @click="requestsLoaded[0] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold" style="padding: 3px;">
-                                <IconsThinPlus width="30" height="30"/>
-                            </button>
                         </div>
-                        <div class="d-flex justify-content-center">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <div v-if="requestsCache.inProgressRequests.length === 0" class="d-flex justify-content-center empty-text mt-5 pt-2 opacity-75 mx-0">
+                                <h5 class="fw-bold text-nowrap">
+                                    Nenhuma solicitação encontrada
+                                </h5>
+                            </div>
                         </div>
                     </div>
                 </div>
-                </div>
-                <div class="text-dark-emphasis rounded-2 mx-2" :class="{'mt-4': changeView}">
-                    <div class="requests-box pt-0 mt-3">
-                        <div class="d-flex align-items-center justify-content-between mx-3">
-                            <div class="d-flex align-items-center">
+                <div class="request-container text-dark-emphasis rounded-2 mx-2" :class="{'mt-4': changeView}">
+                    <div :class="{'box-bg-success': requestsCache.acceptedRequests.length > 0}" class="requests-box pt-0 mt-3">
+                        <div  :class="{'border-dark-success border-bottom': requestsCache.acceptedRequests.length > 0}"  class="d-flex align-items-center justify-content-between px-2">
+                            <div class="d-flex align-items-center py-2">
                                 <IconsConfirm class="text-light-success me-2" width="30" height="30"/>
-                                <h5 class="m-0 p-0">Aceitos
+                                <h5 class="m-0 p-0">Aceitas
                                 </h5>
                                 <span>({{requestsCache.acceptedRequests.length}})</span>
                             </div>
-                            <div class="dropdown">
+                            <div class="dropdown" @click.stop>
                                   <button title="Filtro" class="btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
                                     <IconsBarFilter class="text-dark-emphasis me-1" width="25" height="25" />
                                   </button>
                                   <div class="dropdown-menu p-0">
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.acceptedRequests,'date', 'asc')">Data <IconsUpArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.acceptedRequests,'date', 'desc')">Data <IconsBottomArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.acceptedRequests,'name', 'asc')">Nome <IconsUpArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.acceptedRequests,'name', 'desc')">Nome <IconsBottomArrow width="22" height="22"/></li>
+                                    <li type=button class="dropdown-item fw-bold text-dark-emphasis" 
+                                         @click="ClicktoggleDropdown(1)"  @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
+                                        <div class="d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" type="button">
+                                            <span>Data</span>
+                                            <IconsClock class="action-icon"/>
+                                        </div>
+                                        <div v-show="dropdownStates[1]" class="sub-dropdown bg-light position-absolute">
+                                            <ul @click.stop class="list-group">
+                                                <li @click="applyFilter(requestsCache.acceptedRequests,'date', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">asc</span>
+                                                    <IconsUpArrow width="18" height="18"/>
+                                                </li>
+                                                <li @click="applyFilter(requestsCache.acceptedRequests,'date', 'desc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">dec</span>
+                                                    <IconsBottomArrow width="18" height="18"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li type=button class="dropdown-item fw-bold text-dark-emphasis" 
+                                         @click="ClicktoggleDropdown(2)"  @mouseover="toggleDropdown(2)" @mouseout="toggleDropdown(2)">
+                                        <div class="d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" type="button">
+                                            <span>Nome</span>
+                                            <IconsNameSort class="action-icon"/>
+                                        </div>
+                                        <div v-show="dropdownStates[2]" class="sub-dropdown bg-light position-absolute mb-5">
+                                            <ul @click.stop class="list-group">
+                                                <li @click="applyFilter(requestsCache.acceptedRequests,'name', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">asc</span>
+                                                    <IconsUpArrow width="18" height="18"/>
+                                                </li>
+                                                <li @click="applyFilter(requestsCache.acceptedRequests,'name', 'desc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">dec</span>
+                                                    <IconsBottomArrow width="18" height="18"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
                                 </div>
                             </div>
                         </div>
-                        <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}">
-                            <CardsCard :class="{'card-width-adjust': changeView}" 
-                            v-if="requestsCache.acceptedRequests.length > 0"
-                             v-for="(request, index) in requestsCache.acceptedRequests.slice(0, requestsLoaded[1])" :key="index" class="col-6 card-container mb-3 mx-2 bg-light-background">
-                                <template v-slot:header>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <p class="justify-content-start mb-3 fw-bold">
-                                            Solicitação
-                                        </p>
-                                        <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.creationDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
-                                    </div>
-                                </template>
-                                <template v-slot:default>
-                                    <div class="row cards-row">
-                                        <div class="mb-3"> 
-                                            <label class="form-label fw-semibold"> Item solicitado </label>
-                                            <div class="overflow-x-auto">
-                                                <input readonly class="form-control overflow-x-auto" :value="request.item.name"> 
-                                            </div>
+                        <div class="d-flex align-items-center cards-box">
+                            <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}" class="requests-view">
+                                <CardsCard :class="{'card-width-adjust': changeView}" 
+                                v-if="requestsCache.acceptedRequests.length > 0"
+                                 v-for="(request, index) in requestsCache.acceptedRequests.slice(0, requestsLoaded[1])" 
+                                 :key="index" class="col-6 card-container mb-3 mx-1 bg-light-background"
+                                 >
+                                    <template v-slot:header>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <p class="justify-content-start mb-3 fw-bold">
+                                                Solicitação
+                                            </p>
+                                            <button :title="isResponseCard[0][index] ? 'Ver Solicitação' : 'Ver resposta da solicitação'"   @click="isResponseCard[0][index] = !isResponseCard[0][index]" class="d-flex align-items-center justify-content-center pb-2 response-toggle hide-toggle position-absolute text-light btn btn-secondary rounded-0 text-nowrap fw-bold">
+                                                <IconsExit v-if="!isResponseCard[0][index]" class="mt-1" width="20" height="20" />
+                                                <IconsRequest v-else class="mt-1" width="20" height="20" />
+                                            </button>
                                         </div>
-                                        <div class="col-6 me-0">
+                                    </template>
+                                    <template v-slot:default>
+                                        <div class="row cards-row">
                                             <div class="mb-3"> 
-                                                <label class="form-label fw-semibold"> Quantidade Solicitada </label>
-                                                <input readonly class="form-control" :value="request.quantityRequested">
-                                            </div>		
-                                            <div class="mb-3"> 
-                                                <label class="form-label fw-semibold"> Código Sipac </label>
-                                                <input readonly class="form-control" :value="request.item.sipacCode"> 
+                                                <label class="form-label fw-semibold"> Item solicitado </label>
+                                                <div class="overflow-x-auto">
+                                                    <input readonly class="form-control overflow-x-auto" :value="request.item.name"> 
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="mb-3"> 
-                                                <label class="form-label fw-semibold"> Quantidade Disponível </label>
-                                                <input readonly class="form-control" :value="request.item.quantity"> 
-                                            </div>		
+                                            <div class="col-6 me-0">
+                                                <div class="mb-3"> 
+                                                    <label class="form-label fw-semibold"> Quantidade Solicitada </label>
+                                                    <input readonly class="form-control" :value="request.quantityRequested">
+                                                </div>		
+                                                <div class="mb-3"> 
+                                                    <label class="form-label fw-semibold"> Código Sipac </label>
+                                                    <input readonly class="form-control" :value="request.item.sipacCode ? request.item.sipacCode : 'nenhum'">
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="mb-3"> 
+                                                    <label class="form-label fw-semibold"> Quantidade Disponível </label>
+                                                    <input readonly class="form-control" :value="request.item.quantity"> 
+                                                </div>		
+                                                <div class="mb-0"> 
+                                                    <label class="form-label fw-semibold"> Tipo </label>
+                                                    <input readonly class="form-control" :value="request.item.type">
+                                                </div>	
+                                            </div>
                                             <div class="mb-0"> 
-                                                <label class="form-label fw-semibold"> Tipo </label>
-                                                <input readonly class="form-control" :value="request.item.type">
+                                                <label class="form-label fw-semibold"> Mensagem </label>
+                                                <div class="d-flex">
+                                                    <textarea readonly class="form-control"> {{ request.description }} </textarea>
+                                                </div>
                                             </div>	
                                         </div>
-                                        <div class="mb-0"> 
-                                            <label class="form-label fw-semibold"> Mensagem </label>
-                                            <div class="d-flex">
-                                                <textarea readonly class="form-control"> {{ request.description }} </textarea>
+                                        <div  :style="{left: isResponseCard[0][index] ? '0px' : '100%', transition: 'left 0.9s ease-in-out'}" class="response-card position-absolute bg-light">
+                                            <div  class="row cards-row mx-0 text-nowrap">
+                                                <div class="d-flex bg-dark-emphasis text-light justify-content-between align-items-center">
+                                                    <p class="justify-content-start my-2 fw-bold">
+                                                        Resposta da Solicitação
+                                                    </p>
+                                                </div>
+                                                <div class="my-3"> 
+                                                    <label class="form-label fw-semibold"> Resposta a Solicitação </label>
+                                                    <input readonly class="form-control" :value="request.status"> 
+                                                </div>	
+                                                <div class="mb-3"> 
+                                                    <label class="form-label fw-semibold"> Horário da Resposta </label>
+                                                    <div class="overflow-x-auto">
+                                                        <input readonly class="form-control overflow-x-auto" :value="request.updatedDate.slice(0, 19)"> 
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0"> 
+                                                    <label class="form-label fw-semibold"> Mensagem da Administração </label>
+                                                    <div class="d-flex ">
+                                                        <textarea readonly class="form-control response-textarea"> {{ request.adminComment ? request.adminComment : 'nenhuma' }} </textarea>
+                                                    </div>
+                                                </div>	
                                             </div>
-                                        </div>	
+                                        </div>
+                                    </template>
+                                    <template v-slot:footer>
+                                        <div class="d-flex align-items-center fw-bold text-dark-emphasis justify-content-end">
+                                            Solicitação feita em: {{ request.creationDate.slice(0,19) }}
+                                            <!--<button class="btn btn-secondary fw-bold px-2 py-1">Ver resposta</button>-->
+                                        </div>
+                                    </template>
+                                </CardsCard>
+                                <div :class="{'d-flex align-items-center m-2': changeView}" v-if="requestsLoaded[1] < requestsCache.acceptedRequests.length">
+                                    <div class="d-flex justify-content-center">
+                                        <button title="Carregar Mais" @click="requestsLoaded[1] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold m-2" style="padding: 3px;">
+                                            <IconsThinPlus width="30" height="30"/>
+                                        </button>
                                     </div>
-                                </template>
-                                <template v-slot:footer>
-                                    <div class="d-flex align-items-center fw-bold text-dark-emphasis justify-content-end">
-                                        Resposta feita em: {{ request.updatedDate.slice(0,19) }}
-                                        <!--<button class="btn btn-secondary fw-bold px-2 py-1">Ver resposta</button>-->
-                                    </div>
-                                </template>
-                            </CardsCard>
-                            <p class="mt-5 pt-2 opacity-75" v-else>Nenhuma solicitação encontrada...</p>
-                            <div :class="{'d-flex align-items-center ms-2': changeView}" v-if="requestsLoaded[1] < requestsCache.acceptedRequests.length">
-                                <div class="d-flex justify-content-center">
-                                    <button title="Carregar Mais" @click="requestsLoaded[1] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold" style="padding: 3px;">
-                                        <IconsThinPlus width="30" height="30"/>
-                                    </button>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <div v-if="requestsCache.acceptedRequests.length === 0" class="d-flex justify-content-center empty-text mt-5 pt-2 opacity-75 mx-0">
+                                <h5 class="fw-bold text-nowrap">
+                                    Nenhuma solicitação encontrada
+                                </h5>
                             </div>
                         </div>
                     </div>    
                 </div>
-                <div class="text-dark-emphasis me-0 rounded-2 me-2 ms-2" :class="{'mt-4 ': changeView}">
-                    <div class="requests-box mt-3 pt-0">
-                        <div class="d-flex align-items-center justify-content-between mx-3">
-                            <div class="d-flex align-items-center">
+                <div class="request-container text-dark-emphasis rounded-2 mx-2" :class="{'mt-4 ': changeView}">
+                <div :class="{'box-bg-alert': requestsCache.rejectedRequests.length > 0}" class="requests-box mt-3 pt-0">
+                        <div :class="{'border-dark-alert border-bottom': requestsCache.rejectedRequests.length > 0}"  class="d-flex align-items-center justify-content-between px-2">
+                            <div class="d-flex align-items-center py-2">
                                 <IconsClose class="text-dark-alert me-2" width="30" height="30"/>
                                 <h5 class="m-0 p-0">Recusados
                                 </h5>
                                 <span>({{ requestsCache.rejectedRequests.length }})</span>
                             </div>
-                            <div class="dropdown">
+                            <div class="dropdown" @click.stop>
                                   <button class="btn btn-transparent px-0 border-0" data-bs-toggle="dropdown" aria-expanded="false">
                                     <IconsBarFilter class="text-dark-emphasis me-1" title="Filtro" width="25" height="25" />
                                   </button>
                                   <div class="dropdown-menu p-0">
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.rejectedRequests,'date', 'asc')">Data <IconsUpArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.rejectedRequests,'date', 'desc')">Data <IconsBottomArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.rejectedRequests,'name', 'asc')">Nome <IconsUpArrow width="22" height="22"/></li>
-                                    <li type=button class="dropdown-item d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" @click="applyFilter(requestsCache.rejectedRequests,'name', 'desc')">Nome <IconsBottomArrow width="22" height="22"/></li>
+                                    <li type=button class="dropdown-item fw-bold text-dark-emphasis"
+                                         @click="ClicktoggleDropdown(1)"  @mouseover="toggleDropdown(1)" @mouseout="toggleDropdown(1)">
+                                        <div class="d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" type="button">
+                                            <span>Data</span>
+                                            <IconsClock class="action-icon"/>
+                                        </div>
+                                        <div v-show="dropdownStates[1]" class="sub-dropdown bg-light position-absolute">
+                                            <ul @click.stop class="list-group">
+                                                <li @click="applyFilter(requestsCache.rejectedRequests,'date', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">asc</span>
+                                                    <IconsUpArrow width="18" height="18"/>
+                                                </li>
+                                                <li @click="applyFilter(requestsCache.rejectedRequests,'date', 'desc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">dec</span>
+                                                    <IconsBottomArrow width="18" height="18"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li type=button class="dropdown-item fw-bold text-dark-emphasis" 
+                                         @click="ClicktoggleDropdown(2)"  @mouseover="toggleDropdown(2)" @mouseout="toggleDropdown(2)">
+                                        <div class="d-flex justify-content-between align-items-center fw-bold text-dark-emphasis" type="button">
+                                            <span>Nome</span>
+                                            <IconsNameSort class="action-icon"/>
+                                        </div>
+                                        <div v-show="dropdownStates[2]" class="sub-dropdown bg-light position-absolute mb-5">
+                                            <ul @click.stop class="list-group">
+                                                <li @click="applyFilter(requestsCache.rejectedRequests,'name', 'asc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">asc</span>
+                                                    <IconsUpArrow width="18" height="18"/>
+                                                </li>
+                                                <li @click="applyFilter(requestsCache.rejectedRequests,'name', 'desc')" class="sub-dropdown-item p-0 list-group-item d-flex align-items-center justify-content-between">
+                                                    <span class="ps-1">dec</span>
+                                                    <IconsBottomArrow width="18" height="18"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
                                 </div>
                             </div>
                         </div>
-                        <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}">
-                            <CardsCard :class="{'card-width-adjust': changeView}" v-if="requestsCache.rejectedRequests.length > 0" 
-                                v-for="(request, index) in requestsCache.rejectedRequests.slice(0, requestsLoaded[2])" :key="index" 
-                                class="col-6 card-container mb-3 mx-2 bg-light-background">
-                                <template v-slot:header>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <p class="justify-content-start mb-3 fw-bold">
-                                            Solicitação
-                                        </p>
-                                        <p @mouseover="toolTip = true" @mouseout="toolTip = false" class="resquest-time mb-3">{{ request.creationDate.slice(0, 19) }}<IconsClock class="clock ms-2" style="margin-bottom: 2px;"/></p>
-                                    </div>
-                                </template>
-                                <template v-slot:default>
-                                    <div class="row cards-row">
-                                        <div class="mb-3"> 
-                                            <label class="form-label fw-semibold"> Item solicitado </label>
-                                            <div class="overflow-x-auto">
-                                                <input readonly class="form-control overflow-x-auto" :value="request.item.name"> 
-                                            </div>
+                        <div class="d-flex align-items-center cards-box">
+                            <div :class="{'d-flex': changeView, 'd-block': !changeView, 'width-adjust': changeView}" class="requests-view">
+                                <CardsCard :class="{'card-width-adjust': changeView}" v-if="requestsCache.rejectedRequests.length > 0" 
+                                    v-for="(request, index) in requestsCache.rejectedRequests.slice(0, requestsLoaded[2])" :key="index" 
+                                    class="col-6 card-container mb-3 mx-1 bg-light-background">
+                                    <template v-slot:header>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <p class="justify-content-start mb-3 fw-bold">
+                                                Solicitação
+                                            </p>
+                                        <button :title="isResponseCard[1][index] ? 'Ver Solicitação' : 'Ver resposta da solicitação'"   @click="isResponseCard[1][index] = !isResponseCard[1][index]" class="d-flex align-items-center justify-content-center pb-2 response-toggle hide-toggle position-absolute text-light btn btn-secondary rounded-0 text-nowrap fw-bold">
+                                                <IconsExit v-if="!isResponseCard[1][index]" class="mt-1" width="20" height="20" />
+                                                <IconsRequest v-else class="mt-1" width="20" height="20" />
+                                           </button>
                                         </div>
-                                        <div class="col-6 me-0">
+                                    </template>
+                                    <template v-slot:default>
+                                        <div class="row cards-row">
                                             <div class="mb-3"> 
-                                                <label class="form-label fw-semibold"> Quantidade Solicitada </label>
-                                                <input readonly class="form-control" :value="request.quantityRequested">
-                                            </div>		
-                                            <div class="mb-3"> 
-                                                <label class="form-label fw-semibold"> Código Sipac </label>
-                                                <input readonly class="form-control" :value="request.item.sipacCode"> 
+                                                <label class="form-label fw-semibold"> Item solicitado </label>
+                                                <div class="overflow-x-auto">
+                                                    <input readonly class="form-control overflow-x-auto" :value="request.item.name"> 
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="mb-3"> 
-                                                <label class="form-label fw-semibold"> Quantidade Disponível </label>
-                                                <input readonly class="form-control" :value="request.item.quantity"> 
-                                            </div>		
+                                            <div class="col-6 me-0">
+                                                <div class="mb-3"> 
+                                                    <label class="form-label fw-semibold"> Quantidade Solicitada </label>
+                                                    <input readonly class="form-control" :value="request.quantityRequested">
+                                                </div>		
+                                                <div class="mb-3"> 
+                                                    <label class="form-label fw-semibold"> Código Sipac </label>
+                                                    <input readonly class="form-control" :value="request.item.sipacCode ? request.item.sipacCode : 'nenhum'">
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="mb-3"> 
+                                                    <label class="form-label fw-semibold"> Quantidade Disponível </label>
+                                                    <input readonly class="form-control" :value="request.item.quantity"> 
+                                                </div>		
+                                                <div class="mb-0"> 
+                                                    <label class="form-label fw-semibold"> Tipo </label>
+                                                    <input readonly class="form-control" :value="request.item.type">
+                                                </div>	
+                                            </div>
                                             <div class="mb-0"> 
-                                                <label class="form-label fw-semibold"> Tipo </label>
-                                                <input readonly class="form-control" :value="request.item.type">
+                                                <label class="form-label fw-semibold"> Mensagem </label>
+                                                <div class="d-flex">
+                                                    <textarea readonly class="form-control"> {{ request.description }} </textarea>
+                                                </div>
                                             </div>	
                                         </div>
-                                        <div class="mb-0"> 
-                                            <label class="form-label fw-semibold"> Mensagem </label>
-                                            <div class="d-flex">
-                                                <textarea readonly class="form-control"> {{ request.description }} </textarea>
+                                        <div  :style="{left: isResponseCard[1][index] ? '0px' : '100%', transition: 'left 0.9s ease-in-out'}" class="response-card position-absolute bg-light">
+                                            <div  class="row cards-row mx-0 text-nowrap">
+                                                <div class="d-flex bg-dark-emphasis text-light justify-content-between align-items-center">
+                                                    <p class="justify-content-start my-2 fw-bold">
+                                                        Resposta da Solicitação
+                                                    </p>
+                                                </div>
+                                                <div class="mb-3 mt-3"> 
+                                                    <label class="form-label fw-semibold"> Horário da Resposta </label>
+                                                    <div class="overflow-x-auto">
+                                                        <input readonly class="form-control overflow-x-auto" :value="request.updatedDate.slice(0, 19)"> 
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"> 
+                                                    <label class="form-label fw-semibold"> Resposta a Solicitação </label>
+                                                    <input readonly class="form-control" :value="request.status"> 
+                                                </div>	
+                                                <div class="mb-0"> 
+                                                    <label class="form-label fw-semibold"> Mensagem da Administração </label>
+                                                    <div class="d-flex ">
+                                                        <textarea readonly class="form-control response-textarea"> {{ request.adminComment ? request.adminComment : 'nenhuma' }} </textarea>
+                                                    </div>
+                                                </div>	
                                             </div>
-                                        </div>	
-                                    </div>
-                                </template>
-                                <template v-slot:footer>
-                                    <div class="d-flex align-items-center justify-content-center fw-bold text-dark-emphasis ">
-                                        Resposta feita em: {{ request.updatedDate.slice(0,19) }}
-                                        <!--<button class="btn btn-secondary fw-bold px-2 py-1">Ver resposta</button>-->
-                                    </div>
-                                </template>
-                            </CardsCard>
-                            <p class="mt-5 pt-2 opacity-75" v-else>Nenhuma solicitação encontrada...</p>
-                        <div :class="{'d-flex align-items-center ms-2': changeView}" v-if="requestsLoaded[2] < requestsCache.rejectedRequests.length">
-                            <div class="d-flex justify-content-center">
-                                <button title="Carregar Mais" @click="requestsLoaded[2] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold" style="padding: 3px;">
-                                    <IconsThinPlus width="30" height="30"/>
-                                </button>
+                                        </div>
+                                    </template>
+                                    <template v-slot:footer>
+                                        <div class="d-flex align-items-center justify-content-center fw-bold text-dark-emphasis ">
+                                            Solicitação feita em: {{ request.creationDate.slice(0,19) }}
+                                            <!--<button class="btn btn-secondary fw-bold px-2 py-1">Ver resposta</button>-->
+                                        </div>
+                                    </template>
+                                </CardsCard>
+                            <div :class="{'d-flex align-items-center m-2': changeView}" v-if="requestsLoaded[2] < requestsCache.rejectedRequests.length">
+                                <div class="d-flex justify-content-center">
+                                    <button title="Carregar Mais" @click="requestsLoaded[2] += 3" class="btn btn-dark-success text-light text-nowrap fw-bold m-2" style="padding: 3px;">
+                                        <IconsThinPlus width="30" height="30"/>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="d-flex justify-content-center">
                         </div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <div v-if="requestsCache.rejectedRequests.length === 0" class="d-flex justify-content-center empty-text mt-5 pt-2 opacity-75 mx-0">
+                            <h5 class="fw-bold text-nowrap">
+                                Nenhuma solicitação encontrada
+                            </h5>
                         </div>
                     </div>
                     </div>
@@ -325,6 +513,31 @@ const popUpStore = usePopupStore();
 const store = useStorageStore();
 const settingsStore = useSettingsStore();
 
+const isResponseCard = ref([[], []]);
+const requestToCancel = ref({
+    id: null,
+    index: null
+});
+
+const dropdownStates = ref([false, false, false, false]);
+const toggleDropdown = (dropdown_id) => {
+    if(!settingsStore.isMobile){
+        dropdownStates.value[dropdown_id-1] = false
+        dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
+        dropdownStates.value[dropdown_id+1] = false
+    }
+}
+const ClicktoggleDropdown = (dropdown_id) => {
+    if(settingsStore.isMobile){
+        clearDropdown();
+        dropdownStates.value[dropdown_id] = !dropdownStates.value[dropdown_id]
+    }
+}
+const clearDropdown = () => {
+    dropdownStates.value = [false, false, false, false]
+}
+
+
 const requestsCache = ref({
     acceptedRequests: [],
     inProgressRequests: [],
@@ -341,6 +554,7 @@ const filter = ref({ type: '', order: '' });
 const changeView = ref(false);
 
 const applyFilter = (requests, type, order) => {
+    clearDropdown();
     filter.value.type = type;
     filter.value.order = order;
     sortRequests(requests, filter.value.type, filter.value.order);
@@ -485,7 +699,7 @@ const cancelRequest = async (requestId, index) => {
 }
 settingsStore.isMobile ? changeView.value = true : null;
 const mobileView = ref(false);
-const teste = () => {
+const resizeBox = () => {
     if(window.innerWidth <= 1115){
         changeView.value = true;
         mobileView.value = changeView.value;
@@ -494,13 +708,27 @@ const teste = () => {
     }
 }
 onMounted(() => {   
+    if(store.isMobile){
+        changeView.value = true;
+        mobileView.value = changeView.value;
+    }
     loadRequests.value = false;
-    window.addEventListener('resize', teste)
+    window.addEventListener('resize', resizeBox);
 })
 </script>
 
 <style scoped>
-.teste{
+.card-container {
+    scrollbar-width:none;
+    scrollbar-color: transparent; /* Fundo branco no Firefox */
+}
+.cards-box {
+    scrollbar-color: rgba(51,51,51,0.5) rgba(40,40,40, 0.1) !important
+}
+*::-moz-scrollbar-thumb:hover {
+    background: transparent; 
+}
+.resizeBox{
     display: flex !important;
 }
 .container-fluid{
@@ -512,11 +740,26 @@ onMounted(() => {
     border-radius: 0px 10px 10px 10px;
     border-top: solid 1px #ccc;
 }
+.request-container{
+    width: 99%; 
+}
+.sub-dropdown-item{
+    border: 0px;
+}
 .card-container{
-    box-shadow: 0px 0px 10px 1px rgb(0, 0, 0, 0.3);
+    overflow-x: scroll;
+    margin-top: 4px;
     border-radius: 10px;
-    width: 100%;
+    width: 98.4%;
     transition: box-shadow 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+.requests-box{
+    border: 1px solid rgb(0, 0, 0, 0.2);
+    border-radius: 10px;
+    z-index: 1000 !important;
+}
+.cards-box{
+    overflow-x: scroll;
 }
 .table-box-title{
     margin-left: 8px;
@@ -528,17 +771,50 @@ onMounted(() => {
 .box-title{
     border-radius: 10px 10px 0px 0px;
 }
-.requests-box{
-    width: 100%;
-    padding: 10px 20px 0px 0px;
-    overflow-x: scroll;
-    z-index: 10000 !important;
-}
 .box-title-text{
     font-size: 20px;
 }
-.card-container:hover {
-    transform: scale(1.03)
+.border-warning{
+    border-color: rgb(181, 147, 0) !important;
+    box-shadow: inset 0px -12px 15px -10px rgb(181, 147, 0, 0.5);
+}
+.border-dark-alert{
+    border-color: rgb(183, 28, 28, 1) !important;
+    box-shadow: inset 0px -12px 15px -10px rgb(183, 28, 28, 0.5);
+}
+.border-dark-success{
+    border-color: rgb(51, 158, 56, 1) !important;
+    box-shadow: inset 0px -12px 15px -10px rgb(51, 158, 56, 0.5);
+}
+.box-bg-warning{
+    background-color: rgba(254, 213, 30, 0.2);
+}
+.box-bg-success{
+    background-color: rgba(51, 158, 56, 0.2)
+}
+.box-bg-alert{
+    background-color: rgba(183, 28, 28, 0.2);
+}
+.dropdown-menu{
+    min-width: 130px;
+    width: 60px !important;
+    margin-left: -100px !important;
+}
+.list-group-item{
+    color: #494b50;
+    height: 34px;
+}
+.list-group-item:hover{
+    background-color: #FED51E;
+}
+.sub-dropdown{
+    border-radius: 12px;
+    border: 1px #D9D9D9 solid;
+    position: absolute;
+    left: -54px !important;
+    width: 65px;
+    margin-top: -45px;
+    min-width: 40px;
 }
 .response-container{
     box-shadow: 0px 0px 10px 1px rgb(0, 0, 0, 0.3);
@@ -573,6 +849,21 @@ onMounted(() => {
 .sub-catalog-text{
     padding: 0px 10px 0px 10px;
     font-size: 15px;
+}
+.response-card{
+    overflow: hidden;
+    right: 0px;
+    top: 0px;
+    height: 475px;
+    transition: width 0.5s ease-in-out;
+    box-shadow: inset 0px 0px 100px 1px rgba(0, 0, 0, 0.1)
+}
+.response-toggle{
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
+    right: 0px;
+    top: 0px;
+    z-index: 100;
+    transition: top 0.3s ease-in-out;
 }
 h6{
     font-weight: 400;
@@ -644,16 +935,24 @@ p{
 .card-width-adjust{
     width: 30%;
 }
+.response-textarea{
+    padding-bottom: 30%;
+}
 @media screen and (max-width: 1115px){
     .card-width-adjust{
         width: 48%;
     }   
     .empty-text{
-        width: 100%;
         justify-content: center !important;
     }
 }
 @media screen and (max-width: 670px){
+    .requests-view{
+        margin-right: 10px;
+    }
+    .cards-box{
+        margin-right: 5px;
+    }
     .box-title-text{
         font-size: 18px;
     }
@@ -669,14 +968,14 @@ p{
 }
 @media screen and (max-width: 450px){
     .box-title-text{
-        font-size: 16px;
+        font-size: 14px;
     }
     .actions{
         margin-top: -1px !important;
     }
     .table-searchbar{
         margin-top: 2px !important;  
-        width: 115px;
+        width: 135px;
     }
     .searchbar{
         font-size: 14px;
@@ -687,7 +986,7 @@ p{
 }
 @media screen and (max-width: 370px){
     .box-title-text{
-        font-size: 15px;
+        font-size: 14px;
     }
     .actions{
         margin-top: -1px !important;

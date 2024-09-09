@@ -77,7 +77,7 @@
           <div class="card-img-container mt-5">
             <img :src="card.image" class="card-img-top" :alt="card.title">
           </div>
-          <div class="card-body d-flex flex-column">
+          <div class="card-body d-flex flex-column" style="width: 100%;">
             <h5 class="card-title d-flex justify-content-center">{{ card.title }}</h5>
             <p class="card-text flex-grow-1 text-center">{{ card.description }}</p>
             <div class="mt-auto links d-flex justify-content-center align-items-center">
@@ -159,7 +159,6 @@ sendDataToParent();
 .description-container {
   margin: 15px;
 }
-
 .card-hover-effect {
   border-radius: 20px;
   background: transparent;
@@ -177,6 +176,7 @@ sendDataToParent();
   margin-right: 10px;
 }
 .mailto-btn{
+  color: transparent !important;
   border-radius: 0;
   padding: 0px 10px 0 10px;
   height: 0;
@@ -184,6 +184,7 @@ sendDataToParent();
   position: absolute;
 }
 .card-hover-effect:hover .mailto-btn {
+  color: white !important;
   height: 37px;
   padding-top: 4px;
   transition: height 0.5s ease-in-out;

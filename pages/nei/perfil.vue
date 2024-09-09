@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid d-block">
+  <div class="container-fluid profile d-block">
     <div class="profile-container">
       <div class="profile-sidebar bg-light rounded-3  flex-column align-items-center">
         <div class="d-flex justify-content-center mb-4 bg-light-background-header history-title">
@@ -252,7 +252,7 @@
     </template>
     <template v-slot:body>
       <div class="container-fluid">
-        <p class="fw-medium text-dark-emphasis">Digite sua senha atual para prosseguir:</p>
+        <p class="fw-medium text-dark-emphasis text-nowrap">Digite sua senha atual para prosseguir:</p>
         <label class="form-label fw-bold" for="currentPassword">Senha atual:</label>
         <div class="d-flex justify-content-end">
           <input id="currentPassword" :class="handleUpdateBtn && currentPassword ? 'bg-light-emphasis' : 'bg-light'" class="form-control mb-2" :type="showPassword[0] ? 'text' : 'password'" v-model="currentPassword">
@@ -298,7 +298,7 @@
          <p class="fw-bold text-center">Deseja realmente desativar a sua conta?</p>
     </template>
     <template v-slot:footer>
-      <div class="container-fluid d-flex justify-content-end align-items-center">
+      <div class="container-fluid p-0 d-flex justify-content-end align-items-center">
                 <button type="button" @click="deleteAccount" class="btn btn-dark-success inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Confirmar</button>
                 <button type="button" class="btn btn-light-alert inset-shadow text-light mx-1 fw-bold" data-bs-dismiss="modal">Cancelar</button>
             </div>
@@ -319,7 +319,7 @@ import { getRequestByStatusUserId, getRequestByUser } from '../../services/reque
 
 
 definePageMeta({
-  layout: 'profile'
+  layout: 'client'
 });
 const userStore = useUser();
 const popUpStore = usePopupStore();
@@ -352,7 +352,7 @@ const recordsTotalElements = ref(0);
 
 const fetchRequests = async (page) => {
   let response = await getRequestByUser(userStore, userData.id, page);
-  for(let k = 1; k < response.totalPages; k++){
+  for(let k = 1; k <= response.totalPages; k++){
     for(let i = 0; i < response.content.length; i++){
       switch(response.content[i].status){
         case 'PENDENTE':
@@ -429,16 +429,16 @@ const changePassword = async () => {
 };
 
 const deleteAccount = async () => {
-  const res = await deleteUser(userStore, userStore.id);
+  try {
+    await deleteUser(userStore, userStore.id);
+    popUpStore.throwPopup('Conta excluída com sucesso', 'blue');
+    userStore.logout();
+  } catch (err) {
+    popUpStore.throwPopup('ERRO: Algum problema interno do sistema ocorreu, contate o suporte', 'red');
+  }
 }
 // Define o título da página
-const setpageTitle = inject('setpageTitle');
-const sendDataToParent = () => {
-  const title = "Perfil";
-  const route = `${useRoute().fullPath.slice(0, 0)}`;
-  setpageTitle(title, route, 'profile');
-};
-sendDataToParent();
+
 
 onMounted(async () => {
   await fetchRequests(0);
@@ -453,6 +453,10 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.profile{
+  padding-top: 80px;
+  padding-bottom: 40px;
+}
 .profile-container {
   display: flex;
 }
@@ -495,6 +499,7 @@ h3{
 }
 
 .col-title{
+  text-wrap: nowrap;
   font-size: 14px;
   color: rgb(51,51,51, 0.9);
   opacity: 80%;

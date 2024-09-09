@@ -1,8 +1,8 @@
 <template>
   <ModalAlmoReport :id="1" :data="datasets"/>
   <div class="graph-header d-flex align-items-end justify-content-between section-title pt-2  bg-light-background-header">
-        <h5 class="ps-2 fw-bold">Gráfico da quantidade de itens solicitados</h5>
-          <div class="dropdown mb-1 mx-2 d-flex">
+        <h5 class="ps-2 fw-bold">Gráfico das solicitações de itens</h5>
+          <div class="dropdown mb-1 mx-2 d-flex" @click.stop>
             <button class="d-flex align-items-center graph-btn btn btn-outline-secondary fw-bold px-2 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <IconsTimer class="me-1" width="20px" height="20px"/>
               Período
@@ -21,7 +21,7 @@
                         mensal   
                     </div>
                     <ul class="vue-dropdown-menu" v-show="dropdownState">
-                        <li class="small-menu">
+                        <li class="small-menu" :class="{'mobile-small-menu': store.isMobile}">
                           <div v-for="(month, index) in labels.month" :key="index" @click="changeLabel('week', index)" class="filter-btn d-flex fw-bold justify-content-between text-align-center align-items-center btn btn-transparent border-0" type="button">
                             {{ month.slice(0,3) }}
                           </div>
@@ -32,16 +32,16 @@
             </ul>
       </div>
   </div>
-  <div class="d-flex justify-content-end position-absolute me-3 fw-bold opacity-75" style="right: 2%;">
+  <div class="d-flex justify-content-end position-absolute me-3 mt-3 fw-bold opacity-75" style="right: 2%;">
     <p>Período: {{ monthSelected === -1 ? 'anual' : `${labels.month[monthSelected]}` }}</p>
   </div>
   <div>
     <div class="d-flex justify-content-center z-5 loader">
-      <LoadersLoading class="position-absolute graph-loader p-5 mt-5"/>
+      <LoadersLoading class="position-absolute graph-loader p-5"/>
     </div>
     <Bar v-if="chartData.datasets[0].data.reduce((acc, current) => acc+current) > 0" class="chart-graph " :data="chartData" :options="chartOptions" />
     <div v-else class="d-flex justify-content-center mb-5">
-      <p class="fw-bold fs-5 opacity-75 py-5 mb-5">Nenhum dado encontrado</p>
+      <p class="fw-bold fs-5 opacity-75 py-5 my-5">Nenhum dado encontrado</p>
     </div>
   </div>
 </template>
@@ -77,15 +77,16 @@ const userStore = useUser();
 const store = useStorageStore();
 
 const dropdownState = ref(false);
-const toggleDropdown = (dropdown_id) => {
-    dropdownState.value = !dropdownState.value
+const toggleDropdown = () => {
+    if(!store.isMobile){
+      dropdownState.value = !dropdownState.value
+    }
 }
 
-const ClicktoggleDropdown = (dropdown_id) => {
-    if(!store.isMobile){
-        return 0
+const ClicktoggleDropdown = () => {
+    if(store.isMobile){
+        dropdownState.value = !dropdownState.value
     }
-    dropdownState.value = !dropdownState.value
 }
 
 const qtdRequestedByMonths = [];
@@ -166,6 +167,76 @@ for(let i = 1; i <= 12; i++){
   qtdRequestsRejectByMonths.push(requestsRejectedSum);
 };
 
+/*PROJEÇÕES SOBRE A QUANTIDADE DE SOLICITAÇÕES */
+
+function projectWithSeasonality(qtdRequestedByMonths) {
+  const projectedData = [...qtdRequestedByMonths];
+  
+  // Definimos os meses de baixa demanda (Janeiro, Fevereiro, Dezembro) e meses fortes (Julho e Agosto)
+  const weakMonths = [0, 1, 9, 10,11];  // índices para Janeiro, Fevereiro e Dezembro
+  const strongMonths = [6, 7];    // índices para Julho e Agosto
+  
+  // Encontra os índices dos meses com dados
+  const nonZeroMonths = qtdRequestedByMonths
+    .map((value, index) => (value !== 0 ? index : -1))
+    .filter(index => index !== -1);
+  
+  // Verifica se há pelo menos um mês com dados
+  if (nonZeroMonths.length === 0) {
+    console.error("Não há dados para calcular a projeção.");
+    return projectedData;
+  }
+
+  // Se houver apenas um mês com dados, mantemos o valor constante
+  const lastMonthIndex = nonZeroMonths[nonZeroMonths.length - 1];
+  const lastValue = qtdRequestedByMonths[lastMonthIndex];
+
+  let growthRate = 0;
+  let trend = 0;
+
+  if (nonZeroMonths.length > 1) {
+    // Calcula a taxa de crescimento entre os dois últimos meses
+    const prevMonthIndex = nonZeroMonths[nonZeroMonths.length - 2];
+    const prevValue = qtdRequestedByMonths[prevMonthIndex];
+    growthRate = (lastValue - prevValue) / prevValue;
+    
+    // Calcula a tendência entre os últimos 3 meses com dados, se disponível
+    if (nonZeroMonths.length > 2) {
+      const prevPrevMonthIndex = nonZeroMonths[nonZeroMonths.length - 3];
+      const prevPrevValue = qtdRequestedByMonths[prevPrevMonthIndex];
+
+      // Identifica a taxa de variação ao longo do tempo e extrai a tendência
+      const trend1 = (prevValue - prevPrevValue) / prevPrevValue;
+      const trend2 = (lastValue - prevValue) / prevValue;
+      
+      // A média dos dois últimos crescimentos será usada para ajustar a tendência
+      trend = (trend1 + trend2) / 4;  // Reduzido para refletir crescimento moderado
+    }
+  }
+
+  // Projeta os meses subsequentes com base na taxa de crescimento e tendência
+  for (let i = lastMonthIndex + 1; i < projectedData.length; i++) {
+    let baseProjection = projectedData[i - 1] * (1 + growthRate + trend);
+    
+    // Ajusta para os meses fortes e fracos
+    if (weakMonths.includes(i % 12)) {
+      baseProjection *= 0.5;  // Reduz o valor para os meses fracos em 80%
+    } else if (strongMonths.includes(i % 12)) {
+      baseProjection *= 1.2;  // Aumenta o valor para os meses fortes em 20%
+    }
+
+    projectedData[i] = Math.max(parseInt(baseProjection), 0);  // Evita valores negativos
+
+    // Ajusta a taxa de crescimento para seguir a tendência
+    growthRate = trend;
+  }
+
+  return projectedData;
+}
+
+// Exemplo de projeção dos dados
+const projectedData = projectWithSeasonality(qtdRequestedByMonths);
+
 const labels = {
   month: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
   week: ['1ª Semana', '2ª Semana', '3ª Semana', '4ª Semana']
@@ -190,30 +261,30 @@ const chartData = ref({
   datasets: [
     {
       type: 'bar',
-      label: 'Itens solicitados',
+      label: 'Quantidade de itens solicitados',
       backgroundColor: '#0B3B69',
       data: datasets.requests[currentIndex.value]
     },
     {
       type: 'bar',
-      label: 'Solicitações aceitas',
+      label: 'Quantidade de itens consumidos',
       backgroundColor: '#388E3C',
       data: datasets.requestsAccepted[currentIndex.value]
     },
     {
       type: 'bar',
-      label: 'Solicitações recusadas',
+      label: 'Quantidade de itens recusados',
       backgroundColor: '#B71C1C',
       data: datasets.requestsRejected[currentIndex.value]
     },
     {
       type: 'line',
-      label: 'Quantidade disponível',
+      label: 'Projeção das quantidades',
       backgroundColor: '#1F69B1',
       borderColor: '#1F69B1',
       pointBackgroundColor: '#1F69B1',
       pointBorderColor: '#1F69B1',
-      data: datasets.available
+      data: projectedData
     },
   ],
 });
@@ -229,7 +300,8 @@ const chartOptions = ref({
           size: (context) => {
             const width = context.chart.width;
             if (width > 1000) return 14;
-            if (width > 600) return 12;
+             if (600 < width && width < 1000) return 12;
+            else if (width < 500) return 9;
             return 10;
           }
         }
@@ -252,33 +324,32 @@ const changeLabel = (labelType, index) => {
         {
           ...chartData.value.datasets[0], 
           type: 'bar',
-          label: 'Itens solicitados',
+          label: 'Quantidade de itens solicitados',
           backgroundColor: '#0B3B69',
           data: datasets.requests[currentIndex.value]
         },
         {
           ...chartData.value.datasets[1],
           type: 'bar',
-          label: 'Solicitações aceitas',
+          label: 'Quantidade de itens consumidos',
           backgroundColor: '#388E3C',
           data: datasets.requestsAccepted[currentIndex.value]
         },
         {
           ...chartData.value.datasets[2],
           type: 'bar',
-          label: 'Solicitações recusadas',
+          label: 'Quantidade de itens recusados ao consumo',
           backgroundColor: '#B71C1C',
           data: datasets.requestsRejected[currentIndex.value]
         },
         {
-            ...chartData.value.datasets[3],
-            type: 'line',
-            label: 'Quantidade disponível',
-            backgroundColor: '#1F69B1',
-            borderColor: '#1F69B1',
-            pointBackgroundColor: '#1F69B1',
-            pointBorderColor: '#1F69B1',
-            data: datasets.available
+              type: 'line',
+          label: 'Projeção das quantidades',
+          backgroundColor: '#1F69B1',
+          borderColor: '#1F69B1',
+          pointBackgroundColor: '#1F69B1',
+          pointBorderColor: '#1F69B1',
+          data: projectedData
         },
       ]
     }
@@ -292,21 +363,21 @@ const changeLabel = (labelType, index) => {
         {
           ...chartData.value.datasets[0], 
           type: 'bar',
-          label: 'Itens solicitados',
+          label: 'Quantidade de itens solicitados',
           backgroundColor: '#0B3B69',
           data: datasets.requests[currentIndex.value][index]
         },
         {
           ...chartData.value.datasets[1],
           type: 'bar',
-          label: 'Solicitações aceitas',
+          label: 'Quantidade de itens consumidos',
           backgroundColor: '#388E3C',
           data: datasets.requestsAccepted[currentIndex.value][index]
         },
         {
           ...chartData.value.datasets[2],
           type: 'bar',
-          label: 'Solicitações recusadas',
+          label: 'Quantidade de itens recusados',
           backgroundColor: '#B71C1C',
           data: datasets.requestsRejected[currentIndex.value][index]
         },
@@ -329,7 +400,7 @@ onMounted(() => {
 
 <style scoped>
 .graph-loader{
-  margin-top: 100 px !important;
+  margin-top: 100px !important;
   height: 100px;
 }
 h5{
@@ -365,6 +436,9 @@ li{
     width: 65px;
     height: 400px;
     min-width: 40px;
+}
+.mobile-small-menu{
+  left: 100px;
 }
 .btn-transparent{
     font-size: 14px;
@@ -404,7 +478,11 @@ li{
         height: 15px;
     }
 }
-@media screen and (max-width: 500px){
+@media screen and (max-width: 583px){
+  .chart-graph {
+    height: 350px !important;
+    
+  }
   .graph-header{
     display: block !important;
   }

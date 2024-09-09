@@ -1,6 +1,7 @@
 <template>
    <div>
-    <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="new-btn action-btn btn-outline-ligth justify-content-end d-flex btn mx-1 px-2 mt-1" data-bs-toggle="modal" data-bs-target="#itemRegistration" aria-expanded="false">
+    <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" 
+    @focusout="colorUnfocus" class="new-btn action-btn btn-outline-dark-success justify-content-end d-flex btn mx-1 px-2 mt-1" data-bs-toggle="modal" data-bs-target="#itemRegistration" aria-expanded="false">
         Adicionar
         <IconsPlus class="mx-1" width="1.5em" height="1.5em"/>
     </button>   
@@ -31,17 +32,12 @@ const toolTip = ref(false);
     border-radius: 10px 10px 0px 0px;
     border-bottom: 1px ridge #388E3C;
 }
-.btn-outline-ligth{
-    box-shadow: inset 0px -12px 16px -18px rgb(56, 142, 60, 0.7);
+.btn-outline-dark-success{
+    box-shadow: inset 0px -12px 15px -15px rgb(12, 192, 21);
     color: rgb(0, 0, 0, 0.7); 
 }
-.btn-outline-ligth:hover{
+.btn-outline-dark-success:hover{
     color: white; 
-    background-color: #388E3C; 
-}
-.btn-transparent:hover{
-    color: white;
-    background-color: #FED51E;
 }
 .action-btn:hover{
     opacity: 90%;

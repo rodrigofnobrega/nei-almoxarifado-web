@@ -16,10 +16,6 @@ const props = defineProps({
         required: true
     }
 })
-
-
-const store = useStorageStore();
-const isLoading = ref(true);
 </script>
 
 <style scoped>

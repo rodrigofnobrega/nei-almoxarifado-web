@@ -13,6 +13,9 @@
 </template>
 
 <style scoped> 
+/* .card{
+    box-shadow: 0px 0px 10px 2px rgb(0, 0, 0, 0.3);
+} */
 .card-header{
 	height: 40px;
 }

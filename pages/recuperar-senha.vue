@@ -6,8 +6,8 @@
 		</Head>
 	</div>
     <LoadersPageLoading :isLoading="loading" class="loader"/>
-	<div class="d-flex justify-content-center  bg-primary auth-container">
-		<div class="container-fluid login-container d-flex justify-content-center" :style="{'transform': switchState ? 'translateX(94.52%)' : '', 'border-radius': delayedSwitchState ? '0px 8px 8px 0px' : '8px 0px 0px 8px'}">
+	<div class="d-flex justify-content-center  bg-primary auth-container overflow-hidden">
+		<div class="container-fluid login-container d-flex justify-content-center" :class="{'login-movement': switchState}"  :style="{'border-radius': delayedSwitchState ? '0px 8px 8px 0px' : '8px 0px 0px 8px'}">
 			<div class="header d-flex justify-content-center align-items-center">
 				<p v-if="delayedSwitchState === false" class="texto text-light">Recuperar Senha</p>
 				<p v-else class="texto text-light">Verificar Código</p>
@@ -31,7 +31,7 @@
 					:class="!isValidSimpleEmail(email)  ? 'disabled-button' : ''" 
 					:disabled="!isValidSimpleEmail(email)" 
 					id="forgetPassword" 
-					class="fw-bold mt-4 disabled" 
+					class="fw-bold mt-4 disabled auth-btn" 
 					type="submit"
 					>
 					Enviar
@@ -55,7 +55,7 @@
 					:class="!token ? 'disabled-button' : ''" 
 					:disabled="!token" 
 					id="validateToken" 
-					class="fw-bold mt-3 disabled" 
+					class="fw-bold mt-3 disabled auth-btn" 
 					type="submit">
 					Verificar
 				</button>
@@ -63,7 +63,10 @@
 			<div class="info">
 				<a class="text-light text-decoration-underline" href="/login">Voltar para o login.</a>
 				<br class="mb-2">
-				<a class="text-light text-decoration-underline" href="mailto:almoxarifado957@gmail.com">Dúvidas? Clique aqui para contato.</a>
+				<div>
+
+					<a class="text-light text-decoration-underline" href="mailto:almoxarifado957@gmail.com">Dúvidas? Clique aqui para contato.</a>
+				</div>
 			</div>
 		</div>
 
@@ -114,7 +117,7 @@ const switchAuth = async () => {
     delayedSwitchState.value = !delayedSwitchState.value;
 };
 const isValidSimpleEmail = (email) => {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailRegex = /^[^\s@]+@ufrn\.edu\.br$/;
       return emailRegex.test(email);
 }
 const isValidEmail = (email) => {
@@ -144,6 +147,7 @@ const validateToken = async () => {
 	} catch(err){
 		popUpStore.throwPopup('ERRO: Código de verificação inválido', 'red');
 		resetSubmit();
+		return 0;
 	}
 	store.recoveryToken = token.value;
 	userStore.email = email.value
@@ -216,7 +220,9 @@ onBeforeRouteLeave(() => {
 	padding: 12px;
 
 }
-
+.login-movement{
+	transform: translateX(94.52%);
+}
 .login-form .form-group {
 	position: relative;
 }
@@ -290,11 +296,114 @@ onBeforeRouteLeave(() => {
 .login-form button:hover {
 	background-color: #71DD90;
 }
-
+.mobile-form{
+	display: none;
+}
 .label-focus {
 	top: 0;
 	font-size: 12px;
 	background-color: #fff; /* Ajuste conforme necessário */
 	padding: 0 5px;
+}
+.mobile-btn{
+	display: none;
+}
+@keyframes leaveDisplay{
+	0% { display: none;}
+	50% { display: none; }
+	100% { display: block;}
+}
+@keyframes returnDisplay{
+	0% { display: none;}
+	50% { display: none; }
+	100% { display: block;}
+}
+@keyframes leaveOpacity {
+	0% { opacity: 100%; }		
+	50% { opacity: 0%; }
+	100% { opacity: 100%; }
+}
+@keyframes returnOpacity {
+	0% { opacity: 100%; }		
+	50% { opacity: 0%; }
+	100% { opacity: 100%; }
+}
+@media screen and (max-width: 680px){
+	.auth-container{
+		width: 90%;
+	}
+	.login-content{
+		margin-bottom: 70px;
+	}
+	.info-container{
+		display: none !important;
+	}
+	.info-container p, h2{
+		display: none !important;
+	}
+	.login-movement{
+		transform: translateX(0px);
+	}
+	.mobile-form{
+		border-radius: 8px;
+		display: block;
+		top: 0;
+		right: 0;
+		transition: height 1s ease-in-out, width 1s ease-in-out;
+		z-index: -1;
+	}
+	.mobile-btn{
+		border-radius: 10px 10px 0px 0px;
+		display: block;
+		bottom: 0; 
+		left: 35%; 
+		width: 100px;
+	}
+	.mobile-btn:focus{
+		background-color: transparent;
+		color: #FED51E;
+	}
+	@keyframes leaveText {
+		0% { transform: translateX(0%); }		
+		50% { transform: translateX(140%); }	
+		100% { transform: translateX(0%); }
+	}
+	@keyframes returnText {
+		0% { transform: translateX(0%); }		
+		50% { transform: translateX(-140%); }
+		100% { transform: translateX(0%); }
+	}
+	.leave-op{
+		animation: leaveDisplay 2s;
+	}
+	.return-op{
+		animation: returnDisplay 2s;
+	}
+	.leave-text{
+		animation: leaveText 1.7s, leaveOpacity 1.9s;
+	}
+	.return-text{
+		animation: returnText 1.7s, returnOpacity 1.9s;
+	}
+	.login-container{
+		overflow: hidden !important;
+	}
+	.auth-btn{
+		margin-bottom: 30px;
+		margin-top: 12px !important;
+	}
+	.login-form{
+		margin-left: 10px;
+		margin-right: 10px;
+		padding-left: 2px;
+		padding-right: 2px;
+	}
+	.texto{
+		font-size: 37px !important;
+	}
+	.info{
+		margin-top: 2px !important;
+		font-size: 18px;
+	}
 }
 </style>

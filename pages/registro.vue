@@ -31,65 +31,69 @@
         </p>
     </div>
   <div class="table-box row d-block bg-light mx-2">
-      <div class="table-actions d-flex justify-content-between aling-items-center" style="margin-bottom: 0px !important;">
+      <div class="table-actions d-flex justify-content-between aling-items-center">
         <div class="d-flex me-1">
-            <ButtonsFilter class="action-sbtn" v-if="uploadReloader === 1" style="margin-top: 0px;"/>
+            <ButtonsFilter v-if="uploadReloader === 1" />
         </div>
         <span v-if="recordsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 3px;">
             <IconsSearchGlass class="search-glass"/>
-            <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
+            <input id="tableSearch" v-model="searchInput" @input="searchInput = $event.target.value" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
         </span>
       </div>
-      <TablesTable>
-          <template v-slot:header>
-              <tr>
-                  <th class="col-title py-2 border" scope="col">Item</th>
-                  <th class="col-title py-2 border" scope="col">Autor</th>
-                  <th class="col-title py-2 border" scope="col">Operação</th>
-                  <th class="col-title py-2 border" scope="col">Quantidade</th>
-                  <th class="col-title py-2" scope="col">Data e horário </th>
-                  <th class="col-title py-2" scope="col">Ações</th>
-              </tr>
-          </template>
-          <template v-slot:content>
-          <tr v-if="recordsCache.length > 0" v-for="(record, index) in recordsCache[cacheIndex]" :key="index" :data-index="index">
-             <th class="border">
-                 <span>{{ record.item.name }}</span>
-             </th>
-             <th class="border" scope="row">
-                  <span>{{ record.user.name }}</span>
-             </th>
-             <th class="border">
-                 <span>{{ record.operation }}</span>
-              </th>
-             <th class="border">
-                 <span>{{ record.quantity }}</span>
-              </th>
-             <th class="border">
-                 <span>{{ record.creationDate.slice(0, 19) }}</span>
-             </th>
-             <th class="border" width="5%">
-                    <TooltipsFastRectangular class="toolTip me-5 pe-5 mb-5" style="margin-top: -50px;" :toolTipState="toolTipState[0][index] ? toolTipState[0][index] : false" :toolTipText="'Detalhes'"/>
-                   <TooltipsFastRectangular class="toolTip me-5 pe-5" style="margin-top: -50px;" :toolTipState="toolTipState[1][index] ? toolTipState[1][index] : false" :toolTipText="'Perfil'"/>
-                   <button @mouseover="toolTipState[0][index] = true" @mouseout="toolTipState[0][index] = false" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary"  @click="showDetails(index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
-                        <IconsSearchGlass width="18px" height="19px"/>
-                    </button>
-                    <NuxtLink  @mouseover="toolTipState[1][index] = true" @mouseout="toolTipState[1][index] = false"  :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`"  class="my-0 details-btn position-sticky table-btn btn btn-secondary">
-                      <IconsLowProfile width="16px" height="16px"/>  
-                    </NuxtLink>
+    <div class="overflow-x-scroll p-0">
+        <TablesTable v-if="itemsCache.length > 0">
+            <template v-slot:header>
+                <tr>
+                    <th class="col-title py-2 border" scope="col">Item</th>
+                    <th class="col-title py-2 border" scope="col">Autor</th>
+                    <th class="col-title py-2 border" scope="col">Operação</th>
+                    <th class="col-title py-2 border" scope="col">Quantidade</th>
+                    <th class="col-title py-2 border" scope="col">Data e horário </th>
+                    <th class="col-title py-2 border" scope="col">Ações</th>
+                </tr>
+            </template>
+            <template v-slot:content>
+            <tr v-if="recordsCache.length > 0" v-for="(record, index) in recordsCache[cacheIndex]" :key="index" :data-index="index">
+               <th class="border">
+                   <span>{{ record.item.name }}</span>
                </th>
-          </tr>
-          <div v-else-if="recordsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)"
-             class="search-empty my-5">
-                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado.</p>
-            </div>
-            <div v-else class="search-empty  my-5" style="padding-bottom: 300px;">
-                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent"></p>
-            </div>
-      </template>
-  </TablesTable>
+               <th class="border" scope="row">
+                    <span>{{ record.user.name }}</span>
+               </th>
+               <th class="border">
+                   <span>{{ record.operation }}</span>
+                </th>
+               <th class="border">
+                   <span>{{ record.quantity }}</span>
+                </th>
+               <th class="border">
+                   <span>{{ record.creationDate.slice(0, 19) }}</span>
+               </th>
+               <th class="border" width="5%">
+                     <button class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary"  @click="showDetails(index, record.item.id)" data-bs-toggle="modal" data-bs-target="#itemDetailing">
+                          <IconsSearchGlass width="18px" height="19px"/>
+                      </button>
+                      <NuxtLink :to="`/perfil?userId=${record.user.id}`" :route="`/perfil/${record.user.id}`"  class="my-0 details-btn position-sticky table-btn btn btn-secondary">
+                        <IconsLowProfile width="16px" height="16px"/>  
+                      </NuxtLink>
+                 </th>
+            </tr>
+              <!--
+              <div v-else class="search-empty  my-5" style="padding-bottom: 300px;">
+                  <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent"></p>
+              </div>-->
+        </template>
+      </TablesTable>
+      <div v-else-if="showResults && finded.length === 0" 
+          class="search-empty my-5">
+          <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
+      </div> 
+      <div v-else class="d-flex justify-content-center align-items-center my-5">
+          <LoadersComponentLoading :isLoading="true" class="p-5 my-5"/>
+      </div>
+    </div>
     <div class="table-footer d-flex justify-content-between align-items-center me-2 mt-2">
-      <div class="d-flex justify-content-center me-3 ">
+      <div class="d-flex justify-content-center py-2 me-3 ">
           <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de registros da página: {{ recordsCache[cacheIndex].length }}</span>
           <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de registros: {{ totalElements }}</span>
       </div>
@@ -155,6 +159,7 @@ let queryParams = ref({
     sort: 'id,desc', 
     isInverted: false
 });
+
 const recordsCache = ref([]);
 const searchCache = ref([])
 const cacheIndex = ref(0);
@@ -251,12 +256,12 @@ const recordsLoad = computed(async() => {
         await recordsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
         return 0;
     }
-    if(searchInput.value != ''){
-        isSearching.value = true;
+    if(searchInput.value !== ''){
         clearTimeout(typingTimer);
         typingTimer = setTimeout(() => {
             recordsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted)
         }, debounceTime);
+        isSearching.value = true;
         return 0;
     }
     if(searchInput.value === '' && isSearching.value === true){
@@ -426,15 +431,15 @@ onMounted(async () => {
     display: block !important;
 }
 .table-box{
-    margin-top: 75px;
+    margin-top: 74px;
     border-radius: 0px 10px 10px 10px;
     box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.5);
     border: 1px #D9D9D9 solid;
 }
 .table-box-title{
     margin-left: 8px;
-    margin-top: 33px !important;
-    padding: 4px 4px 4px 4px;
+    margin-top: 32px;
+    padding: 4px;
     font-weight: 400;
     color: rgb(51,51,51, 0.8);
     border-radius: 10px 10px 0px 0px;
@@ -500,7 +505,7 @@ p{
     border: none;
     border-bottom: solid 1px #1F69B1;
     border-radius: 10px 10px 0px 0px;
-    box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
+    box-shadow: inset 0px -12px 15px -15px rgb(18, 104, 184);
     color: rgb(0, 0, 0, 0.7); 
     transition: box-shadow 0.3s ease;
 }
@@ -552,7 +557,7 @@ p{
     margin-top: 5%;
     display: flex;
     justify-content: center;
-    margin-left: 120%;
+    margin-left: 150%;
     white-space: nowrap;
 }
 .pagination{
@@ -578,20 +583,22 @@ tr:hover p{
     opacity: 50%;
 }
 /*RESPONSIVIDADE*/
+
 @media screen and (max-width: 900px){
     .actions-buttons{
         justify-content: center;
         align-content: center;
     }
-    .action-sbtn{
-        margin-top: 4px !important;
-    }
+
     .pages-info{
         text-wrap: wrap;
         text-align: center;
     }
 }
 @media screen and (max-width: 790px) {
+    .res-action-btn{
+        margin-top: 9px !important;
+    }
     .col-title{
         padding: 0px 5px 0px 5px;
     }
@@ -599,14 +606,8 @@ tr:hover p{
         display: block !important;
         padding-right: 0px !important;
     }
-
     .searchbar{
         font-size: 14px;
-    }
-    .table-searchbar{
-        min-width: 120px;
-        margin-top: 3px !important; 
-        display: block;
     }
 }
 @media screen and (max-width: 600px){

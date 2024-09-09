@@ -1,42 +1,8 @@
 <template>
-<ModalNeiItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" :item_details="searchItem ? searchItem : currentItem" />
-<ModalActionConfirm v-if="itemsCache.length > 0">
-    <template v-slot:title> Confirmar aceitação </template>
-    <template v-slot:text> 
-        <div v-if="!initialLoading && itemsCache.length && currentItem != undefined" class="d-block">
-            <div class="d-flex">
-                <div class="d-block mb-2 pe-2">
-                    <label for="item-name">Nome do Item</label>
-                    <input readonly class="form-control bg-light-emphasis" :value="currentItem.name">
-                </div>
-                <div class="d-block mb-2 ps-2">
-                    <label for="item-name">Quantidade Disponível</label>
-                    <input readonly class="form-control bg-light-emphasis" :value="currentItem.quantity">
-                </div>
-            </div>
-            <div class="d-flex">
-                <div class="d-block mb-2 pe-2">
-                    <label for="item-name">Tipo unitário</label>
-                    <input readonly class="form-control bg-light-emphasis" :value="currentItem.type">
-                </div>
-                <div class="d-block mb-2 ps-2">
-                    <label for="item-name">Situação</label>
-                    <input readonly class="form-control bg-light-emphasis" :value="currentItem.available === true ? 'disponível' : 'indisponível'">
-                </div>
-            </div>
-            <h6 class="text-dark"> Mensagem para a solicitação </h6>
-            <textarea v-model="description" class="form-control textarea"> </textarea>
-            <div class="d-block mt-2">
-                <label for="item-qtd">Quantidade a ser solicitada</label> 
-                <input class="form-control" style="width: 225px !important;" v-model="itemQtd" type="number" pattern="[0,9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-            </div>
-        </div>
-    </template>
-    <template v-slot:buttons> 
-        <button @click="sendRequest()" data-bs-dismiss="modal" class="btn btn-secondary fw-bold mx-2"> Enviar </button>
-        <button data-bs-dismiss="modal" class="btn btn-light-alert fw-bold text-light mx-2"> Cancelar </button>
-    </template>
-</ModalActionConfirm>
+<ModalNeiItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" 
+    :item_details="showSearchItem ? searchItem : store.itemDetails" />
+<ModalNeiItemRequest v-if="itemsCache.length > 0" :item_index="itemIndex" 
+    :item_details="showSearchItem ? searchItem : store.itemDetails" />
 
 <div class="table-container d-block mt-2">
     <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#NeiItemDetailing"></button>
@@ -61,65 +27,71 @@
                 <ButtonsFilter v-if="uploadReloader === 1"/>
             </div>
             <span v-if="itemsLoad" class="position-sticky d-flex align-items-center table-searchbar" style="margin-top: 4px;">
-                <input id="tableSearch" v-model="searchInput" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
+                <input id="tableSearch" v-model="searchInput" @input="searchInput = $event.target.value" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
                 <IconsSearchGlass class="search-glass"/>
             </span>
         </div>
-        <TablesTable>
-            <template v-slot:header>
-                <tr style="border: 1px #D9D9D9 solid;">
-                    <th class="col-title py-2 border" scope="col">Nome</th>
-                    <th class="col-title py-2 border" scope="col">Código Sipac</th>
-                    <th class="col-title py-2 border" scope="col">Tipo Unitário</th>
-                    <th class="col-title py-2 border" scope="col">Quantidade</th>
-                    <th class="col-title py-2" scope="col">Última atualização</th>
-                    <th class="col-title py-2" scope="col">Ações</th>
+        <div class="overflow-x-scroll p-0">
+            <TablesTable v-if="itemsCache.length > 0">
+                <template v-slot:header>
+                    <tr style="border: 1px #D9D9D9 solid;">
+                        <th class="col-title py-2 border" scope="col">Nome</th>
+                        <th class="col-title py-2 border" scope="col">Código Sipac</th>
+                        <th class="col-title py-2 border" scope="col">Tipo Unitário</th>
+                        <th class="col-title py-2 border" scope="col">Quantidade</th>
+                        <th class="col-title py-2" scope="col">Última atualização</th>
+                        <th class="col-title py-2" scope="col">Ações</th>
+                    </tr>
+                </template>
+                <template v-slot:content>
+                <tr v-if="itemsCache.length > 0" v-for="(item, index) in itemsCache[cacheIndex]" :key="index" :data-index="index">
+                   <th class="border" scope="row">
+                        <div class="cell-text">
+                            <span>{{ item.name }}</span>
+                        </div>
+                   </th>
+                   <th class="border">
+                        <span v-if="item.sipacCode">{{ item.sipacCode }}</span>
+                        <span v-else>nenhum</span>
+                    </th>
+                    <th class="border">
+                        <span>{{ item.type }}</span>
+                    </th>
+                   <th class="border">
+                       <span>{{ item.quantity }}</span>
+                    </th>
+                   <th class="border">
+                        <div class="cell-text">
+                            <span>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</span>
+                        </div>
+                   </th>
+                   <th class="border" width="5%">
+                        <button title="Detalhes" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#NeiItemDetailing">
+                            <IconsSearchGlass class="action-icon" width="18px" height="19px"/>
+                        </button>
+                        <button title="Solicitar" class="my-0 details-btn position-sticky table-btn btn btn-secondary" @click="showConfirm(index)" data-bs-toggle="modal" data-bs-target="#NeiItemRequest">
+                             <IconsSolicitation class="action-icon" width="16px" height="16px"/>
+                         </button>
+                    </th>
                 </tr>
+                <!--
+                <div v-else class="search-empty my-5" style="padding-bottom: 300px;">
+                    <p style="margin-top: 50px;" class="text-dark-emphasis fs-4 opacity-75 bg-transparent">
+                        Nenhum item Encontrado
+                    </p>
+                </div>-->
             </template>
-            <template v-slot:content>
-            <tr v-if="itemsCache.length > 0" v-for="(item, index) in itemsCache[cacheIndex]" :key="index" :data-index="index">
-               <th class="border" scope="row">
-                    <div class="cell-text">
-                        <span>{{ item.name }}</span>
-                    </div>
-               </th>
-               <th class="border">
-                    <span v-if="item.sipacCode">{{ item.sipacCode }}</span>
-                    <span v-else>nenhum</span>
-                </th>
-                <th class="border">
-                    <span>{{ item.type }}</span>
-                </th>
-               <th class="border">
-                   <span>{{ item.quantity }}</span>
-                </th>
-               <th class="border">
-                    <div class="cell-text">
-                        <span>{{ item.lastRecord.operation }} {{  item.lastRecord.creationDate.slice(0, 16) }} {{ item.lastRecord.user.name }}</span>
-                    </div>
-               </th>
-               <th class="border" width="5%">
-                    <button title="Detalhes" class="my-0 ms-2 details-btn position-sticky table-btn btn btn-primary" :class="{'d-none': store.isMobile}"  @click="showDetails(index)" data-bs-toggle="modal" data-bs-target="#NeiItemDetailing">
-                        <IconsSearchGlass class="action-icon" width="18px" height="19px"/>
-                    </button>
-                    <button title="Solicitar" class="my-0 details-btn position-sticky table-btn btn btn-secondary" :class="{'d-none': store.isMobile}"  @click="showConfirm(index)" data-bs-toggle="modal" data-bs-target="#actionConfirm">
-                         <IconsSolicitation class="action-icon" width="16px" height="16px"/>
-                     </button>
-                </th>
-            </tr>
-            <div v-else-if="itemsCache.length === 0 && !initialLoading && (isSearching && finded.length === 0)"
-             class="search-empty my-5">
+            </TablesTable>
+            <div v-else-if="showResults && finded.length === 0" 
+                class="search-empty my-5">
                 <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
+            </div> 
+            <div v-else class="d-flex justify-content-center align-items-center my-5">
+                <LoadersComponentLoading :isLoading="true" class="p-5 my-5"/>
             </div>
-            <div v-else class="search-empty my-5" style="padding-bottom: 300px;">
-                <p style="margin-top: 50px;" class="text-dark-emphasis fs-4 opacity-75 bg-transparent">
-                    Nenhum item Encontrado
-                </p>
-            </div>
-        </template>
-        </TablesTable>
+        </div>
     <div class="table-footer d-flex justify-content-between align-items-center  mt-2">
-        <div class="d-flex justify-content-center me-3 ">
+        <div class="d-flex justify-content-center py-2 me-3 ">
             <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span>
             <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de itens: {{ totalElements }}</span>
         </div>
@@ -161,6 +133,9 @@ import { getItem, getItems } from '../../services/items/itemsGET.ts';
 import { useUser } from '../../stores/user.ts';
 import { usePopupStore } from '../../stores/popup.ts';
 import { postRequest } from '../../services/requests/requestsPOST.ts';
+import { storeToRefs } from 'pinia';
+import Index from '../catalogo/index.vue';
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
 definePageMeta({
     layout: 'client'
 })
@@ -194,10 +169,21 @@ const totalPages = ref(0);
 const totalElements = ref(0);
 const isSearching = ref(false);
 let finded = [];
-const itemsReq = async (sort, isInverted, pagination, loadRequest, paginationInverted) => {
-    if(searchInput.value != ''){
+const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationInverted) => {
+    if(searchInput.value !== ''){
+        cacheIndex.value = 0;
+        itemsCache.value = [];
+        reqsIndexCache = [0]
+        pagination.value = 0;
+        paginationRet.value = 1;
+        initialLoading.value = false
+
+        pagesFocus.value[count] = false;
+        count = 0;  
+        pagesFocus.value[0] = true;
+
+
         finded = [];
-        store.isReloadItems = true;
         if(searchCache.value.length >= totalPages.value){
             for(let i = 0; i < searchCache.value.length; i++){
                 for(let j = 0; j < searchCache.value[i].length; j++){
@@ -253,7 +239,7 @@ const itemsReq = async (sort, isInverted, pagination, loadRequest, paginationInv
         itemsCache.value.push(res.content);
         return res.totalPages
     } 
-    const res = await getItems(userStore, pagination, sort)
+    const res = await getItems(userStore, pagination_, sort)
     totalPages.value = res.totalPages;
     totalElements.value = res.totalElements;
     invertedPagination.value = totalPages-1;
@@ -261,7 +247,6 @@ const itemsReq = async (sort, isInverted, pagination, loadRequest, paginationInv
     res.content.length === 0 ? null : itemsCache.value.push(res.content);
     return res.totalPages
 }; 
-
 
 const searchInput = ref("");
 const initialLoading = ref(true);
@@ -273,22 +258,21 @@ const itemsLoad = computed(async() => {
         await itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted);
         return 0;
     }
-    if(searchInput.value != ''){
+    if(searchInput.value !== ''){
         clearTimeout(typingTimer);
         typingTimer = setTimeout(() => {
             itemsReq(queryParams.value.sort, false, 0, false, queryParams.value.isInverted)
         }, debounceTime);
         isSearching.value = true;
+        return 0;
     }
-    if(searchInput.value === ''){
-        if(isSearching.value === true){
+    if(searchInput.value === '' && isSearching.value === true){
             clearTimeout(typingTimer);
             typingTimer = setTimeout(() => {
                 store.isReloadItems = true;
                 isSearching.value = false;
             }, debounceTime-500);
             finded = [];
-        }
     }
     for(let i = 0; i < reqsIndexCache.length; i++){
         if(pagination.value === reqsIndexCache[i]){
@@ -308,8 +292,7 @@ provide('setItemsFilter', (filter, inverted) => {
 });
 //Variáveis que o front vai pegar em si
 const itemIndex = ref(0);
-const currentItem = computed(() => itemsCache.value[cacheIndex.value][itemIndex.value]);
-
+const currentItem = ref(undefined);
 const currentRoute = useRoute().fullPath.split('/')[2];
 
 
@@ -394,73 +377,41 @@ const backPage = (async () => {
 });
 /*FUNÇÕES PARA OS BOTÕES DE DETALHE E HISTÓRICO*/
 const showDetails = (index) => {
+    searchStore.itemSearch.searching = false;
     itemIndex.value = index;
+    store.itemDetails = itemsCache.value[cacheIndex.value][itemIndex.value];
 }
-
 const showConfirm = (index) => {
     itemIndex.value = index;
-}
-const sendRequest = async () => {
-    try{
-        const res = await postRequest(userStore, currentItem.value.id, itemQtd.value, description.value)
-    }catch(err){
-        console.log(err)
-        return popUpStore.throwPopup('Erro: digite uma mensagem de solicitação', '#B71C1C')
-    }
-    return popUpStore.throwPopup('Solicitação enviada', '#0B3B69')
+    store.itemDetails = itemsCache.value[cacheIndex.value][itemIndex.value];
 }
 const searchItem = ref(undefined)
 const showSearchingDetails = async (itemId) => {
     const res = await getItem(userStore, itemId);
     searchItem.value = res;
+    currentItem.value = res;
     const searching = document.getElementsByClassName('searching-btn'); 
-    searching[0].click()
+    setTimeout(() => {
+         searching[0].click();
+    }, 1000)
 }
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     initialLoading.value = false;
+});
+
+const showSearchItem = computed(() => {
     if(searchStore.itemSearch.searching){
         showSearchingDetails(searchStore.itemSearch.itemId);
         searchStore.itemSearch.searching = false;
+        return true;
     }
-    if(store.isMobile){
-        const catalogTextElement = document.querySelector('.sub-catalog p')
-        const textElements = document.querySelectorAll('tr p');
-        const searchBar = document.querySelector('.searchbar');
-        const searchBox = document.querySelector('.table-searchbar');
-        const tableLines = document.querySelectorAll('tr');
+    return false;
+})
 
-        searchBox.style.fontSize = '8px';
-        searchBar.style.width = '100%';
-        searchBar.style.fontSize = '8px';
-        catalogTextElement.style.fontSize = '8px';
-        tableLines.forEach(element => {
-            element.addEventListener('click', (() => {
-                element.children[4].children[1].children[0].click()
-            }))
-        });
-        textElements.forEach(element => element.style.fontSize = '7px');
-    }
-});
-onUpdated(async () => {  
-    if(store.isMobile){
-        const catalogTextElement = document.querySelector('.sub-catalog p')
-        const textElements = document.querySelectorAll('tr p');
-        const searchBar = document.querySelector('.searchbar');
-        const tableLines = document.querySelectorAll('tr');
-
-        tableLines.forEach((element, index) => {
-            element.addEventListener('click', (() => {
-                element.children[4].children[1].children[0].click()
-            }))
-        });
-
-        searchBar.style.width = '100%';
-        searchBar.style.fontSize = '8px';
-        catalogTextElement.style.fontSize = '8px';
-        textElements.forEach(element => element.style.fontSize = '7px');
-    }
-});
+onBeforeRouteLeave(() => {
+    searchStore.itemSearch.searching = false;
+})
 </script>
 
 <style scoped>
@@ -469,8 +420,8 @@ onUpdated(async () => {
     display: block;
 }
 .table-container{
-    padding-top: 65px;
-    margin-bottom: 80px;
+    padding-top: 70px;
+    margin-bottom: 62px;
     width: 100%;
     display: block !important;
 }
@@ -491,9 +442,7 @@ onUpdated(async () => {
 .box-title-text{
     font-size: 20px;
 }
-.table-actions{
-    width: 100%;
-}
+
 .sub-catalog{
     border-radius: 10px;
     margin-top: -14px;
@@ -549,7 +498,7 @@ p{
     border: none;
     border-bottom: solid 1px #1F69B1;
     border-radius: 10px 10px 0px 0px;
-    box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
+    box-shadow: inset 0px -12px 15px -15px rgb(18, 104, 184);
     color: rgb(0, 0, 0, 0.7); 
     transition: box-shadow 0.3s ease;
 }
@@ -598,10 +547,10 @@ p{
     margin-left: 35%;
 }
 .search-empty{
-    margin-top: 5%;
+    margin-top: 80px !important;
+    margin-bottom: 100px !important;
     display: flex;
     justify-content: center;
-    margin-left: 125%;
     white-space: nowrap;
 }
 .pagination{
@@ -652,10 +601,6 @@ tr:hover p{
     }
     .searchbar{
         font-size: 14px;
-    }
-    .table-searchbar{
-        min-width: 120px;
-        margin-top: -1px !important; 
     }
 }
 @media screen and (max-width: 600px){
