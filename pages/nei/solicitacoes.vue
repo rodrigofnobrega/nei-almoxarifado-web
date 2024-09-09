@@ -19,7 +19,17 @@
                 <IconsInformation class="me-2"/>
                 Descrição da página
             </h6>
-            <p class="sub-catalog-text opacity-75"></p>
+            <p class="sub-catalog-text opacity-75">
+                Nessa página é possível verificar todas as solicitações feitas,
+                dividindo entre as solicitações pendentes, aceitas e recusadas.
+                <br>
+                É possível também mudar a forma de visualização das solicitações ao clicar no botão
+                <span class="border-bottom border-primary pb-1">
+                    Visualização
+                    <IconsMenu v-if="changeView" class="ms-1"/>
+                    <IconsVerticalBars v-if="!changeView" class="ms-1"/>
+                </span>
+            </p>
         </div>
         <div class="table-box-title  d-flex justify-content-between align-items-center text">
             <div class="d-flex box-title align-items-center px-1 text bg-light-emphasis" style="padding-top: 5px; padding-bottom: 5px;">
