@@ -339,9 +339,9 @@ const fetchData = async () => {
     fetchUsers();
     records.value = await getRecords(userStore, 0, 'id,desc');
     requestsByStatus.value = await getRequestByStatus(userStore, 'pendente');
-
+    
     fetchRequests();
-    await fetchItems();
+    fetchItems();
      
   } catch (error) {
     console.error('Failed to fetch data:', error);
