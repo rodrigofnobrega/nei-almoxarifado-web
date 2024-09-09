@@ -1,4 +1,10 @@
 <template>
+    <div>
+		<Head>
+			<Title>NEI Almoxarifado | Solicitações</Title>
+			<Meta name="solicitações" content="Página para mostrar todas as solicitações de itens dos usuários"/>
+		</Head>
+	</div>
     <ModalActionConfirm>
         <template v-slot:text>
             <div class="d-flex align-items-center justify-content-center">
