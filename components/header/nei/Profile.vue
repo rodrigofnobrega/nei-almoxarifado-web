@@ -8,7 +8,7 @@
                 <span class="visually-hidden">unread messages</span>
               </span>
             </button>
-            <ul class="dropdown-menu notification-menu py-2">
+            <ul class="dropdown-menu notification-menu text-center">
               <li v-for="(request, index) in requests" :key="index" class="text-end dropdown-item notification">
                 <div class="text-dark-emphasis d-flex align-items-center">
                   <div>
@@ -26,12 +26,12 @@
                   <IconsClose @mouseenter="closeNot[index] = true" @mouseover="closeNot[index] = true" @click="removeNot(index)" class="position-fixed mb-1" width="30" height="30"/>
                 </div>-->
               </li>
-              <li v-show="!isNotification || requests.length === 0" class="dropdown-item fs-6 text-dark-emphasis" style="background-color: white;">Nenhuma notificação enviada.</li>
+              <li v-show="!isNotification || requests.length === 0" class="dropdown-item fs-6 text-dark-emphasis py-2" style="background-color: white;">Nenhuma notificação enviada.</li>
             </ul>
           </div>
           <div class="nav-item dropdown">
             <button class="svg-button  d-flex bg-primary align-items-center" @click="rotate" data-bs-toggle="dropdown" data-bs-offset="10,0" data-bs-auto-close="inside" aria-expanded="false">
-              <p class="profile-drop user-text text-light px-1 m-0 fw-light"> {{ user.username }} </p>
+              <p class="profile-drop user-text text-light px-1 m-0 fw-light text-nowrap"> {{ user.username }} </p>
               <LoadersLoading class="small-loader text-light p-1"/>
                 <IconsDownArrow class="rotate-arrow" :style="{ transform: isRoted ? 'rotate(180deg)' : 'rotate(0deg)'}" width="24px" height="24px"/>
             </button>
@@ -46,7 +46,7 @@
                 Configurações
                 <IconsSettings />
               </a></li>  
-              <li><button @click="logout()" class="exit-options py-1 ps-2 dropdown-item d-flex align-items-center justify-content-between">
+              <li><button @click="logout()" class="btn exit-options py-1 ps-2 dropdown-item d-flex align-items-center justify-content-between">
                 Sair
                 <IconsExit />
               </button></li>
@@ -231,6 +231,12 @@ onMounted(async() => {
 .dropdown-item:hover .notification-text{
   font-weight: bold
 }
+p{
+  white-space: nowrap;     
+  overflow: hidden;        
+  text-overflow: ellipsis; 
+  max-width: 120px;   
+}
 .svg-button:hover{
   border-bottom: solid 1px #FED51E;
   box-shadow: inset 0px -12px 15px -13px rgb(254, 213, 30, 0.7);
@@ -238,5 +244,10 @@ onMounted(async() => {
 .profile-drop:hover{
   transition: filter 0.3s ease-in;
   filter: drop-shadow(0px 0px 8px rgba(254, 213, 30, 1));
+}
+@media screen and (max-width: 600px){
+  .notification-menu{
+    min-width: 200px;
+  }
 }
 </style>

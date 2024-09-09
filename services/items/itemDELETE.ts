@@ -1,16 +1,14 @@
 import { useApi } from "../../composables/axios";
 
-export const patchItem = async(userStore, itemId, idealAmount) => {
+export const deleteItem = async (userStore, itemId) => {
     try{
-        const { data } = await useApi().patch(`/itens/${itemId}`, {
-            'idealAmount': idealAmount
-        }, {
+        await useApi().delete(`/operacoes/deleta/${itemId}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${userStore.token}`
-            },
-        });
-        return data
+            }
+        })
+        return true
     } catch(err){
         console.log(err)
         return false

@@ -2,6 +2,9 @@
     <div id="content">
         <Header />
         <div class="d-flex bg-fade">
+          <div class="fluid-container"> 
+          <NavbarNavSideBar />
+        </div>
           <div class="main">
               <div class="main-title">
                 <TitlesTitle>

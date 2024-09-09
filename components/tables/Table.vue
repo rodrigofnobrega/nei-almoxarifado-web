@@ -1,7 +1,7 @@
 <template>
     <ModalItemRegister />
-    <div style="overflow-x: scroll;" class="container-fluid mx-0 px-0 col-12 rounded">
-        <table class="table table-hover border">
+    <div class="container-fluid mx-0 px-0 col-12 rounded">
+        <table class="table table-hover">
           <thead>
             <slot name="header" />
           </thead>
@@ -35,9 +35,10 @@ table{
     width: 100%;
 }
 thead {
-    position: sticky !important;
-    top: -1px !important;
-}   
+    position: sticky;
+    top: 0px;
+    z-index: 200;
+}
 .col-title{
     font-size: 18px;
     opacity: 80%;

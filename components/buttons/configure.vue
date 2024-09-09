@@ -1,11 +1,11 @@
 <template>
     <div class="dropdown">
-        <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-ligth mx-1 px-2 mt-1 text-nowrap" 
+        <button @mouseover="toolTip = true" @mouseout="toolTip = false" @focusin="colorFocus" @focusout="colorUnfocus" class="filter-btn action-btn d-flex btn btn-outline-primary mx-1 px-2 mt-1 text-nowrap" 
         data-bs-toggle="dropdown" data-bs-close="outside" data-bs-offset="0,2" aria-expanded="false">
             Mais ações
             <IconsSettings class="mx-1" width="1.5em" height="1.5em"/>
         </button>
-        <ul class="dropdown-menu large-menu py-0">
+        <ul @click.stop class="dropdown-menu large-menu py-0">
             <li class="dropdown-item form-check d-flex py-2 justify-content-between align-items-center ps-2 pe-0 mb-0" style="padding-bottom: 4px;">
                 <a type="button" class="text-decoration-none import-text" href="/catalogo/importar-tabelas">importar tabelas</a>
             </li>
@@ -84,8 +84,8 @@ li{
 .dropdown-item, .dropdown-item a{
     font-size: 14px;
     color: rgb(51,51,51, 0.9);
-
     font-weight: 600;
+    margin: 0px;
 }
 .form-check-input{
     border: 1px solid rgb(0, 0, 0, 0.3);
@@ -104,13 +104,8 @@ li{
     border-bottom: 1px ridge #1F69B1;
 }
 
-.btn-outline-ligth{
-    box-shadow: inset 0px -12px 15px -18px rgb(11, 59, 105, 0.7);
-    color: rgb(0, 0, 0, 0.7); 
-}
-.btn-outline-ligth:hover{
-    color: white; 
-    background-color: #0B3B69; 
+.btn-outline-primary{
+    box-shadow: inset 0px -12px 15px -15px rgb(18, 104, 184);
 }
 .form-check-input:active{
     background-color: #1F69B1 !important;
@@ -125,12 +120,7 @@ li{
     opacity: 90%;
 }
 @media screen and (max-width: 820px){
-    .action-btn{
-        font-size: 12px;
-    }
-    .filter-btn{
-        font-size: 12px;
-    }
+
     .action-icon{
         width: 15px;
         height: 15px;

@@ -11,10 +11,10 @@
       mostRequesters: [labels.mostRequesters[0].slice(0, 50), labels.mostRequesters[1].slice(0, 15)]
       }}"/>
   <div class="graph-header d-flex align-items-end justify-content-between section-title pt-2 mb-3 bg-light-background-header">
-        <h5 class="ps-2 fw-bold">Gráfico dos mais solicitados</h5>
-        <div class="dropdown mb-1 mx-2 d-flex">
-            <button class="d-flex align-items-center graph-btn btn btn-outline-warning px-2 fw-bold " @click="toggleDataType">
-              <IconsLoop class="me-1" width="20" height="20"/>
+        <h5 class="ps-2 fw-bold">Distribuição das solicitações</h5>
+        <div class="dropdown mb-1 mx-2 d-flex" @click.stop>
+            <button class="d-flex align-items-center graph-btn btn btn-outline-warning px-2 fw-bold text-nowrap " @click="toggleDataType">
+              <IconsLoop class="me-1" width="20px" height="20px"/>
               {{ currentDataTypeLabel }}
             </button>
             <button class="d-flex align-items-center graph-btn btn btn-outline-secondary px-2 fw-bold dropdown-toggle mx-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -26,7 +26,7 @@
                 anual
               </li>
               <li>
-                <div class="vue-dropdown" @mouseover="toggleDropdown" @mouseout="toggleDropdown">
+                <div class="vue-dropdown" @click="ClicktoggleDropdown" @mouseover="toggleDropdown" @mouseout="toggleDropdown">
                     <div class="filter-btn dropdown-item large-menu-btn d-flex btn align-items-center border-0 fw-bold" type="button">
                         mensal  
                       </div>
@@ -46,12 +46,12 @@
             </button>
         </div>
   </div>
-  <div class="d-flex justify-content-end me-3 fw-bold opacity-75">
+  <div class="d-flex justify-content-end me-3 fw-bold mt-1 opacity-75">
     <p>Período: {{ monthSelected === -1 ? 'anual' : `${months[monthSelected-1]}` }}</p>
   </div>
   <div>
     <div class="d-flex justify-content-center z-5">
-      <LoadersLoading class="position-absolute p-5 mt-5"/>
+      <LoadersLoading class="position-absolute p-5 mt-5 mb-0"/>
     </div>
     <Chart v-if="chartData.labels.length > 0" :type="'pie'" class="chart-graph" :data="chartData" :options="chartOptions" />
     <div v-else class="d-flex justify-content-center mb-5">
@@ -101,9 +101,15 @@ const store = useStorageStore();
 
 const dropdownState = ref(false);
 const toggleDropdown = () => {
-  dropdownState.value = !dropdownState.value;
+  if(!store.isMobile){
+    dropdownState.value = !dropdownState.value;
+  }
 };
-
+const ClicktoggleDropdown = () => {
+    if(store.isMobile){
+        dropdownState.value = !dropdownState.value
+    }
+}
 const months = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
 const labels = {
   mostItems: [[], []],
@@ -232,15 +238,15 @@ do{
 }while(count < allRequests.totalPages)
 
 const currentIndex = ref(0);
-const currentLabelName = ref('Itens mais solicitados');
+const currentLabelName = ref('Solicitações');
 const currentDataType = ref('mostItems'); 
-const currentDataTypeLabel = ref('Usuários com mais solicitações');
+const currentDataTypeLabel = ref('Distribuição: Itens');
 
 const chartData = ref({
   labels: labels[currentDataType.value][0].slice(0, 15),
   datasets: [
     {
-      label: currentLabelName.value,
+      label: currentLabelName,
       backgroundColor: [
   "#FF5733", "#C70039", "#900C3F", "#581845", "#1C1C1C",
   "#2E4053", "#2980B9", "#76D7C4", "#239B56", "#D68910",
@@ -292,8 +298,9 @@ const changeLabel = (monthIndex) => {
 
 const toggleDataType = () => {
   currentDataType.value = currentDataType.value === 'mostItems' ? 'mostRequesters' : 'mostItems';
-  currentLabelName.value = currentDataType.value === 'mostItems' ? 'Itens mais solicitados' : 'Usuários com mais solicitações';
-  currentDataTypeLabel.value = currentDataType.value === 'mostItems' ? 'Usuários com mais solicitações' : 'Itens mais solicitados';
+  // currentLabelName.value = currentDataType.value === 'mostItems' ? 'Usuários com mais solicitações' : 'Itens mais solicitados';
+  currentDataTypeLabel.value = currentDataType.value === 'mostItems' ? 'Distribuição: Itens' : 'Distribuição: Usuários';
+
   changeLabel(monthSelected);
 };
 
@@ -359,7 +366,14 @@ li{
     border-radius: 10px 10px 0px 0px;
     border-bottom: 1px ridge #1F69B1;
 }
-
+.btn-outline-secondary{
+  color: rgb(51,51,51, 0.9);
+  background-color: transparent !important;
+}
+.btn-outline-secondary:hover{
+  color: white !important;
+  background-color: #1F69B1 !important;
+}
 .dropdown-item{
   font-size: 14px;
 }
@@ -389,9 +403,17 @@ li{
         height: 15px;
     }
 }
-@media screen and (max-width: 500px){
+@media screen and (max-width: 706px){
   .graph-header{
     display: block !important;
+  }
+  .graph-btn{
+    font-size: 11px;
+  }
+}
+@media screen and (max-width: 380px){
+  .graph-btn{
+    font-size: 10px;
   }
 }
 </style>
