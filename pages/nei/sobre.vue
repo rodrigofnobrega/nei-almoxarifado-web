@@ -60,7 +60,7 @@ definePageMeta({
     image: '/foto_andriel.jpg',
     title: 'Andriel Vinicius',
     description: 'Contribuição no Front-End. Desenvolvedor da API no Back-End.',
-    email: 'caiodanielfonseca@gmail.com',
+    email: 'andriel.fernandes.095@ufrn.edu.br',
     link1: 'http://github.com/leirdan',
     link2: 'https://www.linkedin.com/in/andriel-vinicius-b6a734256/'
   },
@@ -76,7 +76,7 @@ definePageMeta({
     image: '/foto_murilo.jpg',
     title: 'Murilo Costa',
     description: 'Desenvolvedor Front-End.',
-    email: 'caiodanielfonseca@gmail.com',
+    email: 'murilo.costa.091@ufrn.edu.br',
     link1: 'https://github.com/Mulirous',
     link2: 'https://www.linkedin.com/in/murilo-antonio-lima-da-costa-687b51273/'
   },
@@ -84,15 +84,15 @@ definePageMeta({
     image: '/foto_rodrigo.jpg',
     title: 'Rodrigo Ferreira',
     description: 'Desenvolvedor Back-End.',
-    email: 'caiodanielfonseca@gmail.com',
+    email: 'rodrigofnobrega1@gmail.com',
     link1: 'http://www.github.com/rodrigofnobrega',
     link2: 'https://www.linkedin.com/in/rodrigo-ferreira-da-n%C3%B3brega-509116305/'
   },
   {
-    image: 'https://via.placeholder.com/150',
+    image: '/foto_clezio.jpg',
     title: 'Clézio',
     description: 'Dev Description 5',
-    email: 'caiodanielfonseca@gmail.com',
+    email: 'cleziorsjunior@gmail.com',
     link1: '#',
     link2: '#'
   },
