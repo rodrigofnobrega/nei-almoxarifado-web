@@ -94,7 +94,7 @@ sendDataToParent();
   {
     image: '/foto_rodrigo.jpg',
     title: 'Rodrigo Ferreira',
-    description: 'Desenvolvedor Back-End.',
+    description: 'Desenvolvedor Back-End e Front-End.',
     email: 'rodrigofnobrega1@gmail.com',
     link1: 'https://www.github.com/rodrigofnobrega',
     link2: 'https://www.linkedin.com/in/rodrigo-ferreira-da-n%C3%B3brega-509116305/'
@@ -102,7 +102,7 @@ sendDataToParent();
   {
     image: '/foto_clezio.jpg',
     title: 'Clézio',
-    description: 'Dev Description 5',
+    description: 'Gestão do time.',
     email: 'cleziorsjunior@gmail.com',
     link1: 'https://github.com/cleziojr',
     link2: 'https://www.linkedin.com/in/cl%C3%A9zio-rog%C3%A9rio-550b17288'
