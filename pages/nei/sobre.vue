@@ -61,7 +61,7 @@ definePageMeta({
   {
     image: '/foto_andriel.jpg',
     title: 'Andriel Vinicius',
-    description: 'Contribuição no Front-End. Desenvolvedor da API no Back-End.',
+    description: 'Desenvolvedor da API no Back-End. Contribuição no Front-End.',
     email: 'andrielvinnicius@gmail.com',
     link1: 'https://github.com/leirdan',
     link2: 'https://www.linkedin.com/in/andriel-vinicius-b6a734256/'
@@ -69,7 +69,7 @@ definePageMeta({
   {
     image: '/foto_caio.jpg',
     title: 'Caio Daniel',
-    description: 'Desenvolvedor Front-End.',
+    description: 'Desenvolvedor Front-End. Contribuições no Back-End.',
     email: 'caiodanielfonseca@gmail.com',
     link1: 'https://github.com/Caio2a7',
     link2: 'https://www.linkedin.com/in/caio-daniel-1b8951269/'

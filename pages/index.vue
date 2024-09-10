@@ -68,13 +68,13 @@
             <ul class="dropdown-menu py-0">
               <li @click="toggleAccounts()" type="button" class="dropdown-item py-2 d-flex align-items-center justify-content-center text-dark-emphasis">
                 <span class="fw-bold">Mostrar contas desativas</span>
-                <input type="checkbox" style="margin-bottom: 4px" class="form-check-input ms-2 border-1" v-model="showDisabledAccounts">
+                <input type="checkbox" style="margin-bottom: 6px" class="form-check-input ms-2 border-1" v-model="showDisabledAccounts">
               </li>
             </ul>
           </div>
         </div>
         <div class="dashboard-scroll">
-          <TablesTable v-if="users.content && users.content.length">
+          <TablesTable v-if="0">
             <template v-slot:header>
               <tr class="col-line">
                 <th class="col-title text-center py-2" scope="col">Usuário</th>
@@ -84,7 +84,7 @@
               </tr>
             </template>
             <template v-slot:content> 
-              <tr v-for="user in users.content" :key="user.id">
+              <tr v-for="user in user" :key="user.id">
                 <th :class="{'user-disabled': !user.active}" class="table-cell" scope="row">
                   <div class="d-flex justify-content-start align-items-center text-nowrap">
                     <IconsPerfil class="me-3 opacity-75" width="30px" height="30px" />
@@ -114,8 +114,8 @@
             </template>
           </TablesTable>
         </div>
-        <div v-if="loadContent && users.content.length === 0" class="search-empty d-flex justify-content-center">
-          <p class="text-dark-emphasis fs-5 opacity-50">Nenhum usuário encontrado</p>
+        <div v-if="loadContent " class="search-empty d-flex justify-content-center align-items-center text-center">
+          <p class="text-dark-emphasis fs-5 fw-bold p-5">Nenhum usuário encontrado</p>
         </div>
         <div v-if="!loadContent"class="d-flex justify-content-center">
           <LoadersLoading class="p-5 m-5" style="margin-top: 30px;"/>
@@ -464,7 +464,8 @@ h5{
   opacity: 90%;
   font-weight: bold;
   margin-top: 0;
-  text-wrap: nowrap;
+  vertical-align: middle;
+  text-wrap: nowrap !important;
 }
 .card-img-top{
   transition: opacity 0.5s ease-in-out;
