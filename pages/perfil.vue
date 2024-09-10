@@ -331,13 +331,13 @@
         <p class="fw-medium text-dark-emphasis">Digite sua senha atual para prosseguir:</p>
         <label class="form-label fw-bold" for="currentPassword">Senha atual:</label>
         <div class="d-flex justify-content-end">
-          <input id="currentPassword" :class="handleUpdateBtn && currentPassword ? 'bg-light-emphasis' : 'bg-light'" class="form-control mb-2" :type="showPassword[0] ? 'text' : 'password'" v-model="currentPassword">
+          <input id="currentPassword" :class="handleUpdateBtn && currentPassword ? 'bg-light-emphasis' : 'bg-light'" class="form-control mb-2 pe-5" :type="showPassword[0] ? 'text' : 'password'" v-model="currentPassword">
           <IconsOpenEye v-if="!showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
           <IconsCloseEye v-if="showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
         </div>
         <label v-if="currentPassword" class="form-label fw-bold" for="newPassword">Nova senha:</label>
         <div v-if="currentPassword" id="newPassword" class="d-flex justify-content-end">
-          <input :class="newPassword === currentPassword || newPassword && newPassword.length < 6 ? 'border-light-alert' : ''" class="form-control mb-2" :type="showPassword[1] ? 'text' : 'password'" v-model="newPassword">
+          <input :class="newPassword === currentPassword || newPassword && newPassword.length < 6 ? 'border-light-alert' : ''" class="form-control mb-2 pe-5" :type="showPassword[1] ? 'text' : 'password'" v-model="newPassword">
           <IconsOpenEye v-if="!showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
           <IconsCloseEye v-if="showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
         </div>
@@ -346,7 +346,7 @@
 
         <label v-if="currentPassword && newPassword != currentPassword && newPassword.length >= 6" class="form-label fw-bold" for="confirmPassword">Confirmar senha:</label>
         <div v-if="currentPassword && newPassword != currentPassword && newPassword.length >= 6" class="d-flex justify-content-end">
-          <input id="confirmPassword" :class="confirmPassword && newPassword != confirmPassword ? 'border-light-alert' : ''" class="form-control" :type="showPassword[2] ? 'text' : 'password'" v-model="confirmPassword">
+          <input id="confirmPassword" :class="confirmPassword && newPassword != confirmPassword ? 'border-light-alert' : ''" class="form-control mb-2 pe-5" :type="showPassword[2] ? 'text' : 'password'" v-model="confirmPassword">
           <IconsOpenEye v-if="!showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
           <IconsCloseEye v-if="showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 text-light-emphasis" width="25" height="40"/>
         </div>
