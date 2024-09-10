@@ -1,4 +1,10 @@
 <template>
+<div>
+    <Head>
+        <Title>NEI Almoxarifado | Catálogo</Title>
+        <Meta name="catálogo" content="Página para mostrar os itens existentes"/>
+    </Head>
+</div>
 <ModalNeiItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" 
     :item_details="showSearchItem ? searchItem : store.itemDetails" />
 <ModalNeiItemRequest v-if="itemsCache.length > 0" :item_index="itemIndex" 
@@ -11,9 +17,10 @@
             <IconsInformation class="me-2"/>
             Descrição da página
         </h6>
-        <p class="sub-catalog-text opacity-75">Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
-            Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
-        <span class="border-bottom border-dark-success pb-1">Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/></span></p>
+        <p class="sub-catalog-text opacity-75">
+            Nesta página temos todos os itens disponíveis do almoxarifado mostrando informações importantes
+            como nome e quantidade. 
+        </p>
     </div>
     <div class="table-box-title position-absolute bg-light-emphasis d-flex align-items-center">
         <IconsBox class="me-1" width="25" height="25"/>

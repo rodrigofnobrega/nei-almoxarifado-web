@@ -18,7 +18,7 @@
 					<div class="form-group">
 						<div class="input-container">
 							<input 
-								:class="{'border-dark-alert border-2': email && !isValidSimpleEmail(email)}"
+								:class="{'border-dark-alert border-2': email && !isValidEmail(email)}"
 								type="email" 
 								id="email"  
 								v-model="email" 
@@ -26,7 +26,7 @@
 								@focus="isEmailFocused = true"
 								@blur="isEmailFocused = false"
 								placeholder="">
-						<label class="fw-bold rounded-1" :class="{'label-focus': isEmailFocused || email, 'text-light-alert': email && !isValidSimpleEmail(email)  }" for="email">{{email && !isValidSimpleEmail(email) ? 'Email inválido' : 'Email:'}}</label>
+						<label class="fw-bold rounded-1" :class="{'label-focus': isEmailFocused || email, 'text-light-alert': email && !isValidEmail(email)  }" for="email">{{email && !isValidEmail(email) ? 'Email inválido' : 'Email:'}}</label>
 						</div>
 					</div>
 					<div class="form-group">
@@ -40,7 +40,9 @@
 									required
 									@focus="isPasswordFocused = true"
 									@blur="isPasswordFocused = false"
-									placeholder="">
+									placeholder=""
+									class="form-control pe-5"
+								>
 								<label class="fw-bold rounded-1" :class="{'label-focus': isPasswordFocused || password, 'text-light-alert': !password && email}" for="password">{{ !password && email ? 'Digite a senha' : 'Senha:'}}</label>
 								<IconsOpenEye v-if="!showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
 								<IconsCloseEye v-if="showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
@@ -48,8 +50,8 @@
 						</div>
 					</div>
 					<button 
-						:class="!isValidSimpleEmail(email) || !password ? 'disabled-button' : ''" 
-						:disabled="!isValidSimpleEmail(email) || !password" 
+						:class="!isValidEmail(email) || !password ? 'disabled-button' : ''" 
+						:disabled="!isValidEmail(email) || !password" 
 						id="submitLogin" 
 						class="fw-bold auth-btn mt-4 disabled" 
 						type="submit"
@@ -96,10 +98,23 @@
 									required
 									@focus="isPasswordFocused = true"
 									@blur="isPasswordFocused = false"
-									placeholder="">
+									placeholder=""
+									class="form-control pe-5"
+								>
 								<label class="fw-bold rounded-1" :class="{'label-focus': isPasswordFocused || password, 'text-light-alert': password && password.length < 6}" for="password">{{password && password.length < 6 ? 'Senha deve ser de 6 a mais caracteres' : 'Senha:'}}</label>
-								<IconsOpenEye v-if="!showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
-								<IconsCloseEye v-if="showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
+								<IconsOpenEye 
+									v-if="!showPassword[1]" 
+									@click="showPassword[1] = !showPassword[1]" 
+									class="position-absolute me-2 mb-2 text-light-emphasis" 
+									width="25" 
+									height="40"
+								/>
+								<IconsCloseEye 
+									v-if="showPassword[1]" 
+									@click="showPassword[1] = !showPassword[1]"
+									class="position-absolute me-2 mb-2 text-light-emphasis"
+									width="25" height="40"
+								/>
 							</div>
 						</div>
 					</div>
@@ -114,7 +129,9 @@
 									required
 									@focus="isRePasswordFocused = true"
 									@blur="isRePasswordFocused = false"
-									placeholder="">
+									placeholder=""
+									class="form-control pe-5"
+								>
 								<label class="fw-bold rounded-1" :class="{'label-focus': isRePasswordFocused || rePassword, 'text-dark-alert': rePassword && rePassword !== password}" for="rePassword">{{rePassword && rePassword !== password ? 'As senhas não conferem' : 'Confirmar senha:'}}</label>
 								<IconsOpenEye v-if="!showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
 								<IconsCloseEye v-if="showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
@@ -194,13 +211,9 @@ const switchAuth = async () => {
     delayedSwitchState.value = !delayedSwitchState.value;
 };
 
-const isValidSimpleEmail = (email) => {
-	  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      return emailRegex.test(email);
-};
 const isValidEmail = (email) => {
-	  const emailRegex = /^[^\s@]+@ufrn\.edu\.br$/;
-      return emailRegex.test(email);
+	const emailRegex = /^[a-zA-Z0-9._%+-]+@nei\.ufrn\.br$/;
+	return emailRegex.test(email);
 };
 
 const loading = ref(false);

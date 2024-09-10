@@ -79,6 +79,7 @@ onMounted(() => {
     .brand-box{
         bottom: 60px;
         right: 0;
+        position: static !important;
     }
 }
 </style>

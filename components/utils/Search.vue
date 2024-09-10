@@ -87,12 +87,8 @@ export default {
         searchResult[this.searchCount - 1].click();
     },
     async handleSearch(e) {
-      if(this.searchResults.length > 0){
-        return 1;
-      }
       this.searchQuery = e.target.value;
       this.showResults = false;
-      this.searchResults = [];
       this.pagination = 0;
       clearTimeout(this.typingTimeout);
       this.typingTimeout = setTimeout(async () => {
@@ -106,7 +102,7 @@ export default {
           this.totalPages = res.totalPages;
           this.store.items.push(res.content);
           res.content.map((item) => {
-            if (item.name.includes(this.searchQuery)) {
+            if (item.name.toLowerCase().includes(this.searchQuery.toLowerCase())) {
               this.searchResults.push(item);
             }
           });

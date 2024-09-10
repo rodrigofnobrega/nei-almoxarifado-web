@@ -1,25 +1,52 @@
 <template>
+  <div>
+    <Head>
+        <Title>NEI Almoxarifado | Sobre</Title>
+        <Meta name="sobre" content="Página para mostrar informações adicionais sobre o sistema"/>
+    </Head>
+  </div>
   <div class="container-fluid">
     <div class="description-container">
       <h1 class="d-flex description-title justify-content-center ">Sistema de Gerenciamento de Almoxarifado NEI</h1>
       <br>
-      <p>Este sistema foi projetado para a gestão e organização eficiente dos itens do almoxarifado do 
+      <p>
+        Este sistema foi projetado para fornecer uma solução abrangente e eficiente para a gestão e organização dos itens do almoxarifado do 
         Núcleo de Educação da Infância (NEI) - CAp/UFRN, garantindo o controle preciso da entrada e saída de materiais. 
-        Desenvolvido por estudantes do curso de 
-        <a href="https://www.metropoledigital.ufrn.br/portal/">Bacharelado em Tecnologia da Informação</a>
-        da Universidade Federal do Rio Grande do Norte 
-        <a href="https://www.ufrn.br/">UFRN</a>, de forma totalmente voluntária e de acordo com as normas da instituição
-        . O sistema reflete um compromisso com a inovação e a excelência acadêmica, 
-        oferecendo uma solução robusta e prática para as necessidades de gerenciamento do NEI.</p>
+        Desenvolvido por estudantes do curso de <a href="https://www.metropoledigital.ufrn.br/portal/">Bacharelado em Tecnologia da Informação</a>
+        da Universidade Federal do Rio Grande do Norte <a href="https://www.ufrn.br/">UFRN</a>,
+        de forma totalmente voluntária e de acordo com as normas da instituição. 
+        O sistema reflete um compromisso com a inovação e a excelência acadêmica, 
+        oferecendo uma solução robusta e prática para as necessidades de gerenciamento do NEI.
+      </p>
 
       <br>
     </div>
     <div class="my-5 description-container">
       <h1 class="d-flex description-title justify-content-center ">Documentação e Guia de Uso</h1>
       <br>
-      <p>O sistema consiste em 4 funções principais: organização e cadastro dos itens do almoxarifado, 
-        controle do acesso a estes itens por meio das solicitações feitas pelo sistema, registros das operações pertinentes realizadas para fins de auditoria 
-      e funcionalidades de análise gráfica, geração de relatórios e outras por meio dos dados obtidos pelo uso do sistema.  </p>
+      <p>
+        O sistema é estruturado em torno de duas funções principais,
+        cada uma desempenhando um papel crucial na operação e gestão do almoxarifado, são elas:
+      </p>
+      <ol>
+        <li>
+          <b>Catálogo</b>:
+          <p>
+            Esta função permite a listagem detalhada de todos os itens do almoxarifado, 
+            incluindo informações como código sipac, tipo unitário, quantidade disponível e outras características pertinentes. 
+            A organização eficiente dos itens facilita o acesso rápido e preciso, otimizando o espaço físico e o tempo de busca.
+          </p>
+        </li>
+        <li>
+          <b>Solicitações</b>:
+          <p>
+            O sistema inclui um mecanismo para realizar a solicitações aos itens do almoxarifado, 
+            registrando todas os pedidos efetuados. 
+            As autorizações de retirada de materiais são registradas, 
+            facilitando o acesso a determinados itens.
+          </p>
+        </li>
+      </ol>
       <br>
     </div>
     <h2 class="d-flex mb-5 justify-content-center">Desenvolvedores</h2>

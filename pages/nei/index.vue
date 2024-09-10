@@ -1,4 +1,10 @@
 <template>
+    <div>
+        <Head>
+            <Title>NEI Almoxarifado | Início</Title>
+            <Meta name="início" content="Página inicial"/>
+        </Head>
+	</div>
     <div class="d-block bg-fade">
         <div class="d-flex justify-content-center mx-0 px-0">
             <svg class="d-flex align-items-center bg-degrade mb-3" width="150" height="150">
