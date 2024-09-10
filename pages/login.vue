@@ -40,7 +40,9 @@
 									required
 									@focus="isPasswordFocused = true"
 									@blur="isPasswordFocused = false"
-									placeholder="">
+									placeholder=""
+									class="form-control pe-5"
+								>
 								<label class="fw-bold rounded-1" :class="{'label-focus': isPasswordFocused || password, 'text-light-alert': !password && email}" for="password">{{ !password && email ? 'Digite a senha' : 'Senha:'}}</label>
 								<IconsOpenEye v-if="!showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
 								<IconsCloseEye v-if="showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
@@ -96,10 +98,23 @@
 									required
 									@focus="isPasswordFocused = true"
 									@blur="isPasswordFocused = false"
-									placeholder="">
+									placeholder=""
+									class="form-control pe-5"
+								>
 								<label class="fw-bold rounded-1" :class="{'label-focus': isPasswordFocused || password, 'text-light-alert': password && password.length < 6}" for="password">{{password && password.length < 6 ? 'Senha deve ser de 6 a mais caracteres' : 'Senha:'}}</label>
-								<IconsOpenEye v-if="!showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
-								<IconsCloseEye v-if="showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
+								<IconsOpenEye 
+									v-if="!showPassword[1]" 
+									@click="showPassword[1] = !showPassword[1]" 
+									class="position-absolute me-2 mb-2 text-light-emphasis" 
+									width="25" 
+									height="40"
+								/>
+								<IconsCloseEye 
+									v-if="showPassword[1]" 
+									@click="showPassword[1] = !showPassword[1]"
+									class="position-absolute me-2 mb-2 text-light-emphasis"
+									width="25" height="40"
+								/>
 							</div>
 						</div>
 					</div>
@@ -114,7 +129,9 @@
 									required
 									@focus="isRePasswordFocused = true"
 									@blur="isRePasswordFocused = false"
-									placeholder="">
+									placeholder=""
+									class="form-control pe-5"
+								>
 								<label class="fw-bold rounded-1" :class="{'label-focus': isRePasswordFocused || rePassword, 'text-dark-alert': rePassword && rePassword !== password}" for="rePassword">{{rePassword && rePassword !== password ? 'As senhas não conferem' : 'Confirmar senha:'}}</label>
 								<IconsOpenEye v-if="!showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
 								<IconsCloseEye v-if="showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
