@@ -18,7 +18,7 @@
 					<div class="form-group">
 						<div class="input-container">
 							<input 
-								:class="{'border-dark-alert border-2': email && !isValidSimpleEmail(email)}"
+								:class="{'border-dark-alert border-2': email && !isValidEmail(email)}"
 								type="email" 
 								id="email"  
 								v-model="email" 
@@ -26,7 +26,7 @@
 								@focus="isEmailFocused = true"
 								@blur="isEmailFocused = false"
 								placeholder="">
-						<label class="fw-bold rounded-1" :class="{'label-focus': isEmailFocused || email, 'text-light-alert': email && !isValidSimpleEmail(email)  }" for="email">{{email && !isValidSimpleEmail(email) ? 'Email inválido' : 'Email:'}}</label>
+						<label class="fw-bold rounded-1" :class="{'label-focus': isEmailFocused || email, 'text-light-alert': email && !isValidEmail(email)  }" for="email">{{email && !isValidEmail(email) ? 'Email inválido' : 'Email:'}}</label>
 						</div>
 					</div>
 					<div class="form-group">
@@ -48,8 +48,8 @@
 						</div>
 					</div>
 					<button 
-						:class="!isValidSimpleEmail(email) || !password ? 'disabled-button' : ''" 
-						:disabled="!isValidSimpleEmail(email) || !password" 
+						:class="!isValidEmail(email) || !password ? 'disabled-button' : ''" 
+						:disabled="!isValidEmail(email) || !password" 
 						id="submitLogin" 
 						class="fw-bold auth-btn mt-4 disabled" 
 						type="submit"
@@ -194,13 +194,9 @@ const switchAuth = async () => {
     delayedSwitchState.value = !delayedSwitchState.value;
 };
 
-const isValidSimpleEmail = (email) => {
-	  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      return emailRegex.test(email);
-};
 const isValidEmail = (email) => {
-	  const emailRegex = /^[^\s@]+@ufrn\.edu\.br$/;
-      return emailRegex.test(email);
+	const emailRegex = /^[a-zA-Z0-9._%+-]+@nei\.ufrn\.br$/;
+	return emailRegex.test(email);
 };
 
 const loading = ref(false);
