@@ -298,9 +298,10 @@ const fetchUsers = async () => {
     users.value.totalElements = res.totalElements;
       for(let i = 1; i <= res.totalPages; i++){
         for(let j = 0; j < res.pageElements; j++){
-          if(res.content[j].id != userStore.id && (showDisabledAccounts.value || res.content[j].active)){
-            users.value.content.push(res.content[j]);
+          if (res.content[j].id == userStore.id && (showDisabledAccounts.value || res.content[j].active)) {
+            res.content[j].name = "Eu";
           }
+          users.value.content.push(res.content[j]);
         }
         res = await getUsers(userStore, i);
     }
