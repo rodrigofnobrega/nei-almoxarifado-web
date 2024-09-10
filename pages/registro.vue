@@ -185,7 +185,7 @@ const recordsReq = async (sort, isInverted, pagination_, loadRequest, pagination
         if(searchCache.value.length >= totalPages.value){
             for(let i = 0; i < searchCache.value.length; i++){
                 for(let j = 0; j < searchCache.value[i].length; j++){
-                    if(toLowerCase(searchCache.value[i][j].item.name).includes(toLowerCase(searchInput.value))){
+                    if(searchCache.value[i][j].item.name.toLowerCase().includes(searchInput.value.toLowerCase())){
                         finded.push(searchCache.value[i][j]);
                     }
                     if(finded.length >= 20){ 
