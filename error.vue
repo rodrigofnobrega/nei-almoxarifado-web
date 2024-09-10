@@ -3,7 +3,7 @@
         <h1 class="text-warning">{{error.statusCode}}</h1>
         <h2>{{ errorTitle }}</h2>
         <p>{{ errorDescription }}</p>
-        <p v-if="errorFlag" class="p-2 rounded-2 bg-primary text-light" type="text">Contato do suporte: almoxarifado957@gmail.com</p>
+        <p v-if="errorFlag" class="p-2 rounded-2 bg-primary text-light" type="text">Contato do suporte: suportealmoxarifado@nei.ufrn.br</p>
         <a v-if="!errorFlag" class="btn btn-primary rounded-1" href="/">Voltar para a Página Inicial</a>
     </div>
 </template>

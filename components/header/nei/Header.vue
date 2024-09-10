@@ -5,14 +5,14 @@
         <Brand class="ms-3"/>
         <TooltipsRectangular class="ms-5 ps-5 pt-2" :toolTipState="toolTip" :toolTipText="'Página Inicial'"/>
       </div> 
-      <nav v-if="!settingsStore.isMobile" class="navbar navbar-expand py-0 ps-5">
+      <nav v-if="!settingsStore.isMobile" class="navbar navbar-expand py-0 ps-0">
           <div class="container-fluid">
             <ul class="navbar-nav d-flex ms-0">
-                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/'}" class="px-1 nav-item nav-link text-light" href="/nei/" type="button">Início</a>
-                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/catalogo'}" class="px-1 nav-item nav-link text-light" href="/nei/catalogo" type="button">Catálogo</a>
-                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/solicitacoes'}" class="px-1 nav-item nav-link text-light" href="/nei/solicitacoes" type="button">Solicitações</a>
-                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/configuracoes'}" class="px-1 nav-item nav-link text-light" href="/nei/configuracoes" type="button">Configurações</a>
-                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/sobre'}" class="px-1 nav-item nav-link text-light" href="/nei/sobre" type="button">Sobre</a>  
+                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/'}" class="px-1 nav-item nav-link text-light mx-3" href="/nei/" type="button">Início</a>
+                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/catalogo'}" class="px-1 nav-item nav-link text-light mx-3" href="/nei/catalogo" type="button">Catálogo</a>
+                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/solicitacoes'}" class="px-1 nav-item nav-link text-light mx-3" href="/nei/solicitacoes" type="button">Solicitações</a>
+                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/configuracoes'}" class="px-1 nav-item nav-link text-light mx-3" href="/nei/configuracoes" type="button">Configurações</a>
+                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/sobre'}" class="px-1 nav-item nav-link text-light mx-3" href="/nei/sobre" type="button">Sobre</a>  
             </ul>
           </div>
       </nav>

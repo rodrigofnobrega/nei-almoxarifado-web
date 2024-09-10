@@ -104,7 +104,7 @@
                 </div> -->
             </template>
             </TablesTable>
-            <div v-else-if="showResults && finded.length === 0" 
+            <div v-else-if="!showResults && finded.length === 0" 
                 class="search-empty my-5">
                 <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
             </div> 
