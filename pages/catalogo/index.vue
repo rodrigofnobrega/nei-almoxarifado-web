@@ -18,7 +18,7 @@
         <p class="sub-catalog-text opacity-75">
             Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
             Ademais, o cadastro de novos itens e reposição da quantidade de algum item já existente é feito pelo botão 
-            <span class="border-bottom border-primary pb-1">
+            <span class="border-bottom border-dark-success pb-1 text-nowrap">
                 Adicionar <IconsPlus style="margin-bottom: 0px;"  width="18px" height="18px"/>
             </span>
         </p>
@@ -431,6 +431,7 @@ const showSearchingDetails = async (itemId) => {
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     initialLoading.value = false;
+    toLowerCase("AA");
 });
 
 const showSearchItem = computed(() => {
@@ -671,10 +672,8 @@ tr:hover p{
     }.actions-btns{
         padding-bottom: 9px;
         border-radius: 0px 10px 0px 0px;
-        box-shadow: 0px 10px 10px -13px rgba(51, 51, 51, 0.7);
+        background-color: rgba(51,51,51,0.1);
         justify-content: center;
-        margin-right: -5px;
-        margin-left: -5px;
     }
     .table-searchbar{
         margin: 0px 20px 0px 20px;
