@@ -130,13 +130,13 @@ function checkIfMobile() {
   background-color: #113a62 !important;
 }
 .darkLayout .bg-success{
-  background-color: #015603 !important;
+  background-color: #238a27  !important;
 }
 .darkLayout .btn-light-success{
-  background-color: #015603 !important;
+  background-color: #238a27  !important;
 }
 .darkLayout .btn-dark-success{
-  background-color: #011e02 !important;
+  background-color: #238a27 !important;
 }
 .darkLayout .btn-dark-alert{
   background-color: rgb(98, 17, 17) !important;
