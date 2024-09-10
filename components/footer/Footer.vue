@@ -9,7 +9,7 @@
           <h5 class="fw-bold "> Sistema de Gerenciamento de Almoxarifado </h5>
           <p>&copy; 2024 Núcleo de Educação da Infânica - CAp/UFRN.
             <br> Licenciado sob 
-            <a class="text-warning" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.pt-br">CC BY-NC-SA</a>
+            <a class="text-warning license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.pt-br">CC BY-NC-SA</a>
           </p>
 	       </div>
          <div class="d-none d-lg-flex col-md-1 col-lg-1 col-xl-2 justify-content-center align-items-center"> 

@@ -360,24 +360,28 @@ function checkIfMobile() {
 }
 
 
-.alternativeLayout [class*="primary"] {
-  background-color: #2C3E50 !important; 
-}
-.alternativeLayout .bg-dark{
-  background-color: #2C3E50 !important; 
-}
-.alternativeLayout .bg-light {
-  background-color: #ECF0F1 !important; 
-}
-.alternativeLayout .bg-dark-emphasis {
-  background-color: #34495E !important; 
+:root {
+  --alternativelayout-bg-color-primary: #2C3E50; 
+  --alternativelayout-bg-color-light: #ECF0F1; 
+  --alternativelayout-bg-color-dark-emphasis: #34495E; 
 }
 
+.alternativeLayout .bg-primary {
+  background-color: var(--alternativelayout-bg-color-primary) !important; 
+}
+.alternativeLayout .bg-dark{
+  background-color: var(--alternativelayout-bg-color-primary) !important; 
+}
+.alternativeLayout .bg-light {
+  background-color: var(--alternativelayout-bg-color-light) !important; 
+}
+.alternativeLayout .bg-dark-emphasis {
+  background-color: var(--alternativelayout-bg-color-dark-emphasis) !important; 
+}
+
+/* Tava esquisito com essas propriedades, verificar depois
 .alternativeLayout [class*="light-alert"] {
   background-color: #E74C3C !important; 
-}
-.alternativeLayout [class*="warning"] {
-  background-color: #F39C12 !important; 
 }
 .alternativeLayout [class*="light-emphasis"] {
   background-color: #BDC3C7 !important; 
@@ -385,14 +389,21 @@ function checkIfMobile() {
 .alternativeLayout [class*="light-background"] {
   background-color: #ECF0F1 !important; 
 }
-.alternativeLayout [class*="light-background-header"] {
-  background-color: #D0D3D4 !important; 
-}
+
 .alternativeLayout [class*="gray-light"] {
   background-color: #AAB7B8 !important; 
 }
 .alternativeLayout [class*="new-gray"] {
   background-color: #566573 !important; 
+} 
+*/
+
+.alternativeLayout [class*="light-background-header"] {
+  background-color: #D0D3D4 !important; 
+}
+
+.alternativeLayout .license {
+  background-color: var(--alternativelayout-bg-color-primary) !important; 
 }
 
 .bg-fade {

@@ -2,7 +2,7 @@
 	<div class="modal fade" tabindex="-1"> 
 		<div class="modal-dialog modal-dialog-start modal-dialog-scrollable"> 
 			<div class="modal-content"> 
-				<div class="modal-header justify-content-between small text-nowrap">
+				<div class="modal-header justify-content-between small text-nowrap bg-primary">
 					<slot name="header" />	
 				</div>
 				<div class="modal-body">
