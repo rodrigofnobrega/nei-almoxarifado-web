@@ -93,8 +93,8 @@ export default {
       this.pagination = 0;
       clearTimeout(this.typingTimeout);
       this.typingTimeout = setTimeout(async () => {
-         await this.fetchSearchResults();
-         this.showResults = true;
+        await this.fetchSearchResults();
+        this.showResults = true;
       }, 1000);
     },
     async fetchSearchResults() {
@@ -103,7 +103,10 @@ export default {
           this.totalPages = res.totalPages;
           this.store.items.push(res.content);
           res.content.map((item) => {
-            if (item.name.toLowerCase().includes(this.searchQuery.toLowerCase())) {
+            const normalizedItemName = item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            const normalizedSearchQuery = this.searchQuery.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      
+            if (normalizedItemName.includes(normalizedSearchQuery)) {
               this.searchResults.push(item);
             }
           });
