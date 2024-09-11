@@ -5,6 +5,7 @@
             <Meta name="catálogo" content="Página para mostrar os itens existentes"/>
         </Head>
     </div>
+    <ModalItemRegister />
     <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" 
         :item_details="showSearchItem ? searchItem : store.itemDetails" />
     <ModalItemHistory v-if="itemsCache.length > 0"/>
@@ -53,8 +54,8 @@
                     <input id="tableSearch" v-model="searchInput" @input="searchInput = $event.target.value" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
                 </span>   
             </div>
-        <div class="overflow-x-scroll p-0">
-            <TablesTable v-if="itemsCache.length > 0">
+        <div v-if="itemsCache.length > 0" class="overflow-x-scroll p-0">
+            <TablesTable >
                 <template v-slot:header>
                     <tr >
                         <th class="col-title py-2 border" scope="col">Nome</th>
@@ -104,13 +105,13 @@
                 </div> -->
             </template>
             </TablesTable>
-            <div v-else-if="!showResults && finded.length === 0" 
-                class="search-empty my-5">
-                <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
-            </div> 
-            <div v-else class="d-flex justify-content-center align-items-center my-5">
-                <LoadersComponentLoading :isLoading="true" class="p-5 my-5"/>
-            </div>
+        </div>
+        <div v-else-if="(showResults && finded.length === 0) || (!initialLoading && itemsCache.length === 0 && showResults)" 
+            class="search-empty my-5">
+            <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent p-5">Nenhum item Encontrado</p>
+        </div> 
+        <div v-else class="d-flex justify-content-center align-items-center my-5">
+            <LoadersComponentLoading :isLoading="true" class="p-5 my-5"/>
         </div>
         <div class="table-footer d-flex justify-content-between align-items-center  mt-2">
             <div class="d-flex justify-content-center py-2 me-3 ">
@@ -203,7 +204,7 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
         if(searchCache.value.length >= totalPages.value){
             for(let i = 0; i < searchCache.value.length; i++){
                 for(let j = 0; j < searchCache.value[i].length; j++){
-                    if(searchCache.value[i][j].name.includes(searchInput.value)){
+                    if(searchCache.value[i][j].name.toLowerCase().includes(searchInput.value.toLowerCase())){
                         finded.push(searchCache.value[i][j]);
                     }
                     if(finded.length >= 20){ 
@@ -218,6 +219,7 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
             }
             if(finded.length === 0){
                 itemsCache.value = [];
+                showResults.value = true;
                 return 0;
             }
             itemsCache.value.push(finded);
@@ -228,7 +230,7 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
             const res = await getItems(userStore, i, sort);
             searchCache.value.push(res.content);
             for(let j = 0; j < res.content.length; j++){
-                if(res.content[j].name.includes(searchInput.value)){
+                if(searchCache.value[i][j].name.toLowerCase().includes(searchInput.value.toLowerCase())){
                     finded.push(res.content[j]);
                 }
                 if(finded.length >= 20){ 
@@ -431,7 +433,6 @@ const showSearchingDetails = async (itemId) => {
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     initialLoading.value = false;
-    toLowerCase("AA");
 });
 
 const showSearchItem = computed(() => {

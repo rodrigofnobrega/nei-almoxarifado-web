@@ -4,7 +4,7 @@
             <div class="d-flex justify-content-center align-items-center">
                 <slot />
             </div>
-            <div class="d-flex align-items-center justify-content-center brand-box">
+            <div class="d-flex align-items-center justify-content-center brand-box me-3">
                 <svg class="brand d-flex align-items-center mt-1 ms-1" width="60" height="60">
                     <image class="custom-logo" xlink:href="/logo.svg" width="55" height="55"/>
                 </svg>
@@ -79,7 +79,6 @@ onMounted(() => {
     .brand-box{
         bottom: 60px;
         right: 0;
-        position: static !important;
     }
 }
 </style>

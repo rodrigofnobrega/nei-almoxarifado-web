@@ -16,13 +16,6 @@
     </button>
 </template>
 -->
-<script setup>
-import { onMounted } from 'vue';
-import { useStorageStore } from '../../../stores/storage';
-const store = useStorageStore();
-const toolTip = ref(false);
-
-</script>
 
 <style scoped>
 .action-btn{

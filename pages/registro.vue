@@ -41,8 +41,8 @@
             <input id="tableSearch" v-model="searchInput" @input="searchInput = $event.target.value" class="searchbar bg-transparent form-control" placeholder="Pesquisar"/>          
         </span>
       </div>
-    <div class="overflow-x-scroll p-0">
-        <TablesTable v-if="recordsCache.length > 0">
+    <div v-if="recordsCache.length > 0" class="overflow-x-scroll p-0">
+        <TablesTable>
             <template v-slot:header>
                 <tr>
                     <th class="col-title py-2 border" scope="col">Item</th>
@@ -85,13 +85,13 @@
               </div>-->
         </template>
       </TablesTable>
-      <div v-else-if="showResults && finded.length === 0" 
-          class="search-empty my-5">
-          <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent">Nenhum item Encontrado</p>
-      </div> 
-      <div v-else class="d-flex justify-content-center align-items-center my-5">
-          <LoadersComponentLoading :isLoading="true" class="p-5 my-5"/>
-      </div>
+    </div>
+    <div v-else-if="(showResults && finded.length === 0) || (!initialLoading && recordsCache.length === 0 && showResults)" 
+        class="search-empty my-5">
+        <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent p-5">Nenhum item Encontrado</p>
+    </div> 
+    <div v-else class="d-flex justify-content-center align-items-center my-5">
+        <LoadersComponentLoading :isLoading="true" class="p-5 my-5"/>
     </div>
     <div class="table-footer d-flex justify-content-between align-items-center me-2 mt-2">
       <div class="d-flex justify-content-center py-2 me-3 ">
@@ -208,10 +208,10 @@ const recordsReq = async (sort, isInverted, pagination_, loadRequest, pagination
             return 0;
         }
         for(let i = 0; i < totalPages.value; i++){
-            const res = await getRecords(userStore, i, sort);
+            const res = await getRecords(userStore, i, sort);1
             searchCache.value.push(res.content);
             for(let j = 0; j < res.content.length; j++){
-                if(toLowerCase(searchCache.value[i][j].item.name).includes(toLowerCase(searchInput.value))){
+                if(searchCache.value[i][j].item.name.toLowerCase().includes(searchInput.value.toLowerCase())){
                     finded.push(res.content[j]);
                 }
                 if(finded.length >= 20){ 

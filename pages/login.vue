@@ -44,14 +44,14 @@
 									class="form-control pe-5"
 								>
 								<label class="fw-bold rounded-1" :class="{'label-focus': isPasswordFocused || password, 'text-light-alert': !password && email}" for="password">{{ !password && email ? 'Digite a senha' : 'Senha:'}}</label>
-								<IconsOpenEye v-if="!showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
-								<IconsCloseEye v-if="showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
+								<IconsOpenEye v-if="!showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 mb-2 text-light-emphasis eye" width="25" height="40"/>
+								<IconsCloseEye v-if="showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 mb-2 text-light-emphasis eye" width="25" height="40"/>
 							</div>
 						</div>
 					</div>
 					<button 
 						:class="!isValidEmail(email) || !password ? 'disabled-button' : ''" 
-						:disabled="!isValidEmail(email) || !password" 
+						:disabled="!isValidEmail(email) || !password"
 						id="submitLogin" 
 						class="fw-bold auth-btn mt-4 disabled" 
 						type="submit"
@@ -105,14 +105,14 @@
 								<IconsOpenEye 
 									v-if="!showPassword[1]" 
 									@click="showPassword[1] = !showPassword[1]" 
-									class="position-absolute me-2 mb-2 text-light-emphasis" 
+									class="position-absolute me-2 mb-2 text-light-emphasis eye" 
 									width="25" 
 									height="40"
 								/>
 								<IconsCloseEye 
 									v-if="showPassword[1]" 
 									@click="showPassword[1] = !showPassword[1]"
-									class="position-absolute me-2 mb-2 text-light-emphasis"
+									class="position-absolute me-2 mb-2 text-light-emphasis eye"
 									width="25" height="40"
 								/>
 							</div>
@@ -133,8 +133,8 @@
 									class="form-control pe-5"
 								>
 								<label class="fw-bold rounded-1" :class="{'label-focus': isRePasswordFocused || rePassword, 'text-dark-alert': rePassword && rePassword !== password}" for="rePassword">{{rePassword && rePassword !== password ? 'As senhas não conferem' : 'Confirmar senha:'}}</label>
-								<IconsOpenEye v-if="!showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
-								<IconsCloseEye v-if="showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
+								<IconsOpenEye v-if="!showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 mb-2 text-light-emphasis eye" width="25" height="40"/>
+								<IconsCloseEye v-if="showPassword[2]" @click="showPassword[2] = !showPassword[2]" class="position-absolute me-2 mb-2 text-light-emphasis eye" width="25" height="40"/>
 							</div>
 						</div>
 					</div>
@@ -311,7 +311,10 @@ onMounted(() => {
 .alert-text{
 	z-index: 10000;
 }
-
+.eye{
+	background-color: white;
+	margin-bottom: 10px !important;
+}
 .login-form {
 	margin-top: 1px;
 	margin-left: 10px;
@@ -427,7 +430,7 @@ onMounted(() => {
 	50% { opacity: 0%; }
 	100% { opacity: 100%; }
 }
-@media screen and (max-width: 680px){
+@media screen and (max-width: 580px){
 	.auth-container{
 		width: 90%;
 	}
@@ -459,8 +462,8 @@ onMounted(() => {
 		border-radius: 10px 10px 0px 0px;
 		display: block;
 		bottom: 0; 
-		left: 35%; 
-		width: 100px;
+		left: 40%; 
+		min-width: 100px !important;
 	}
 	.mobile-btn:focus{
 		background-color: transparent;
@@ -506,6 +509,16 @@ onMounted(() => {
 	.info{
 		margin-top: 2px !important;
 		font-size: 18px;
+	}
+}
+@media screen and (max-width: 470px){
+	.mobile-btn{
+		left: 37%;
+	}
+}
+@media screen and (max-width: 440px){
+	.mobile-btn{
+		left: 35%;
 	}
 }
 </style>

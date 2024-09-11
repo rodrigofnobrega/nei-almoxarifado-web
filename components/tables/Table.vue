@@ -1,5 +1,4 @@
 <template>
-    <ModalItemRegister />
     <div class="container-fluid mx-0 px-0 col-12 rounded">
         <table class="table table-hover">
           <thead>

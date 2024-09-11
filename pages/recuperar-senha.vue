@@ -16,7 +16,7 @@
 				<div class="form-group">
 					<div class="input-container">
 						<input 
-							:class="{'border-dark-alert border-2': email && !isValidSimpleEmail(email)}"
+							:class="{'border-dark-alert border-2': email && !isValidEmail(email)}"
 							type="email" 
 							id="email"  
 							v-model="email" 
@@ -24,12 +24,12 @@
 							@focus="isEmailFocused = true"
 							@blur="isEmailFocused = false"
 							placeholder="">
-					<label class="fw-bold rounded-1" :class="{'label-focus': isEmailFocused || email, 'text-light-alert': email && !isValidSimpleEmail(email)  }" for="email">{{email && !isValidSimpleEmail(email) ? 'Email inválido' : 'Email:'}}</label>
+					<label class="fw-bold rounded-1" :class="{'label-focus': isEmailFocused || email, 'text-light-alert': email && !isValidEmail(email)  }" for="email">{{email && !isValidEmail(email) ? 'Email inválido' : 'Email:'}}</label>
 					</div>
 				</div>
 				<button 
-					:class="!isValidSimpleEmail(email)  ? 'disabled-button' : ''" 
-					:disabled="!isValidSimpleEmail(email)" 
+					:class="!isValidEmail(email)  ? 'disabled-button' : ''" 
+					:disabled="!isValidEmail(email)" 
 					id="forgetPassword" 
 					class="fw-bold mt-4 disabled auth-btn" 
 					type="submit"
@@ -116,14 +116,10 @@ const switchAuth = async () => {
     await new Promise(resolve => setTimeout(resolve, 370)); 
     delayedSwitchState.value = !delayedSwitchState.value;
 };
-const isValidSimpleEmail = (email) => {
-      const emailRegex = /^[^\s@]+@ufrn\.edu\.br$/;
+const isValidEmail = (email) => {
+	  const emailRegex = /^[a-zA-Z0-9._%+-]+@nei\.ufrn\.br$/;
       return emailRegex.test(email);
 }
-const isValidEmail = (email) => {
-	  const emailRegex = /^[^\s@]+@ufrn\.edu\.br$/;
-      return emailRegex.test(email);
-};
 
 
 const resetSubmit = () => {
@@ -137,6 +133,10 @@ const forgetPassword = async () => {
 		isSubmited.value = true;
 		switchAuth();
 	} catch(err){
+		if(err.response.status === 400){
+			popUpStore.throwPopup('ERRO: Este email não está cadastrado no sistema', 'red');
+			return 0;
+		}
 		popUpStore.throwPopup('ERRO: Algum problema interno ocorreu, contate a administração', 'red');
 	}
 }

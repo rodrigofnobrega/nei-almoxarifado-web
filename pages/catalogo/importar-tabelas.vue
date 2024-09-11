@@ -88,17 +88,21 @@ const sendUploadedData = async () => {
     loading.value = true;
     const concurrencyLimit = 10; // Limite de requisições simultâneas
     let index = 0;
+    let response = true;
     let itemsUploaded = 0;
-
     const executeBatch = async () => {
         const batchPromises = [];
-
         while (index < tableData.length && batchPromises.length < concurrencyLimit) {
             if (tableData[index][4] > 0) {
                 batchPromises.push(
                     postCreateItem(userStore, tableData[index][1], '', tableData[index][4], tableData[index][2])
+                    .then(() => {
+                            itemsUploaded++;
+                    })
+                    .catch((error) => {
+                        console.error(`Erro ao importar item ${tableData[index][1]}:`, error);
+                    })
                 );
-                itemsUploaded++;
             }
             index++;
         }

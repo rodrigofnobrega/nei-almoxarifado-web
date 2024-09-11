@@ -77,7 +77,7 @@ const sendDataToParent = (filter, isInverted) => {
 
 <style scoped>
 .large-menu{
-    width: 180px;
+    width: 175px;
     min-width: 110px;
 }
 li{
@@ -134,16 +134,16 @@ li{
 }
 @media screen and (max-width: 820px){
     .large-menu{
-        width: 170px;
+        width: 160px;
+    }
+    .large-menu li{
+        font-size: 13px;
     }
     .dropdown-item{
         padding: 8px !important;
     }
     .large-menu span{
         padding-right: 2px !important;
-    }
-    .form-check-input{
-        margin-bottom: 2px !important;
     }
     .action-btn{
         font-size: 12px;

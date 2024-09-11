@@ -7,12 +7,12 @@
       </div> 
       <nav v-if="!settingsStore.isMobile" class="navbar navbar-expand py-0 ps-0">
           <div class="container-fluid">
-            <ul class="navbar-nav d-flex ms-0">
-                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/'}" class="px-1 nav-item nav-link text-light mx-3" href="/nei/" type="button">Início</a>
-                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/catalogo'}" class="px-1 nav-item nav-link text-light mx-3" href="/nei/catalogo" type="button">Catálogo</a>
-                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/solicitacoes'}" class="px-1 nav-item nav-link text-light mx-3" href="/nei/solicitacoes" type="button">Solicitações</a>
-                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/configuracoes'}" class="px-1 nav-item nav-link text-light mx-3" href="/nei/configuracoes" type="button">Configurações</a>
-                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/sobre'}" class="px-1 nav-item nav-link text-light mx-3" href="/nei/sobre" type="button">Sobre</a>  
+            <ul class="navbar-nav d-flex justify-content-center">
+                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/'}" class="px-1 nav-item nav-link text-light mx-2" href="/nei/" type="button">Início</a>
+                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/catalogo'}" class="px-1 nav-item nav-link text-light mx-2" href="/nei/catalogo" type="button">Catálogo</a>
+                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/solicitacoes'}" class="px-1 nav-item nav-link text-light mx-2" href="/nei/solicitacoes" type="button">Solicitações</a>
+                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/configuracoes'}" class="px-1 nav-item nav-link text-light mx-2" href="/nei/configuracoes" type="button">Configurações</a>
+                <a :class="{'navbar-active': currentRoute.fullPath === '/nei/sobre'}" class="px-1 nav-item nav-link text-light mx-2" href="/nei/sobre" type="button">Sobre</a>  
             </ul>
           </div>
       </nav>
@@ -90,7 +90,7 @@ export default{
   z-index: 1050;
 }
 .navbar{
-  margin-left: 18%;
+  margin-left: 22%;
 }
 .nav-link{
   font-weight: bold;
@@ -113,6 +113,11 @@ export default{
 }
 .mobile-search{
   margin-top: 2.9px;
+}
+@media screen and (max-width: 1120px){
+  .navbar{
+    margin-left: 14%;
+  }
 }
 @media screen and (max-width: 984px){
   .navbar{
