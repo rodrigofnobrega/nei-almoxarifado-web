@@ -11,7 +11,7 @@
 	       </div>
          <div class="col-md-5 col-lg-5 col-xl-5 d-flex justify-content-center flex-column contact"> 
            <h6 class="fw-bold"> Contatos para suporte</h6>
-           <p class="text-underline text-break">Email: suportealmoxarifado@nei.ufrn.br | Telefone: +55 (84) 98768-4609</p> 
+           <p class="text-underline text-break">Email: suportealmoxarifado@nei.ufrn.br | Telefone: +55 84 9193-6261</p> 
           </div>
           <div class="d-none d-lg-flex col-md-1 col-lg-1 col-xl-1 justify-content-center align-items-center"> 
             <svg class="d-flex align-items-center bg-degrade" width="55" height="55">
