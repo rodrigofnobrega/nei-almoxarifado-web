@@ -89,6 +89,7 @@ export default {
     async handleSearch(e) {
       this.searchQuery = e.target.value;
       this.showResults = false;
+      this.searchResults = [];
       this.pagination = 0;
       clearTimeout(this.typingTimeout);
       this.typingTimeout = setTimeout(async () => {
