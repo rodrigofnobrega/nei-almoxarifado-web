@@ -27,9 +27,11 @@
             <p class="d-flex justify-content-center align-items-center pt-3" v-else-if="showResults && searchQuery !== '' && searchResults.length === 0">
             Nenhum Resultado Encontrado
             </p>
-            <p class="d-flex justify-content-center align-items-center pt-3" v-else>
+            <!--
+             <p class="d-flex justify-content-center align-items-center pt-3" v-else>
               Sem Pesquisas Recentes
             </p>
+            --> 
 				</div>
 				<div v-if="!settingsStore.isMobile" class="modal-footer">
             <p class="fs-6"><IconsEnter class="bg-primary text-light" style="border-radius: 3px;"/> para selecionar <IconsBottomArrow class="bg-primary text-light" style="border-radius: 3px;"/> <IconsUpArrow class="bg-primary text-light" style="border-radius: 3px;"/> para navegar e <span class="bg-primary text-light" style="border-radius: 3px;">esc</span> para fechar</p>
