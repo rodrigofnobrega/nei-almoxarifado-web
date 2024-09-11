@@ -314,7 +314,7 @@ const fetchRequests = async () => {
   let data = new Date();
   let actualMonth = data.getMonth() + 1;
   for (let i = 1; i <= requestsData.totalPages; i++) {
-    for (let j = 0; j < requestsData.content.length; j++) {
+    for (let j = 0; j <= requestsData.content.length; j++) {
       if (requestsData.content[j].updatedDate.slice(5, 7) == actualMonth) {
         if (requestsData.content[j].status == 'ACEITO') {
           acceptedRequests.value++;
