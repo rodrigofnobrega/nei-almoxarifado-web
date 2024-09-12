@@ -49,7 +49,7 @@ onBeforeMount(() => {
 	margin-bottom: 20px;
 }
 h3{
-    font-weight: 300;
+    font-weight: 500;
     color: rgb(51,51,51, 0.8);
 }
 .catalog-header{
