@@ -23,7 +23,7 @@
 		        </template>
             <template v-slot:rota>
               <li v-for="(route, index) in pageRoute" :key="index" class="breadcrumb-item active" aria-current="page">
-                <a type="button" :href="`${pageRoute.slice(0, index+1).joint('/')}`"> {{ route }} </a>
+                <a type="button" :href="`${pageRoute.slice(0, index+1).join('/')}`"> {{ route }} </a>
               </li>
             </template>
           </TitlesTitle>
