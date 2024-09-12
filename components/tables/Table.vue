@@ -35,6 +35,7 @@ table{
 }
 thead {
     position: sticky;
+    background-color: #757474;
     top: 0px;
     z-index: 200;
 }
