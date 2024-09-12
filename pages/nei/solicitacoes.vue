@@ -954,6 +954,11 @@ p{
 .response-textarea{
     padding-bottom: 30%;
 }
+@media screen and (min-height: 780px) {
+    .container-fluid {
+        height: 90vh;
+    }
+}
 @media screen and (max-width: 1115px){
     .card-width-adjust{
         width: 48%;

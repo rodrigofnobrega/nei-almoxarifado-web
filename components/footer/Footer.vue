@@ -1,9 +1,9 @@
 <script setup> </script>
 
 <template>
-<footer class="custom-footer bg-primary border-0 position-absolute text-center text-lg-start align-items-center">
+<footer class="custom-footer bg-primary border-0 position-sticky text-center text-lg-start align-items-center">
   <section id="info">
-    <div class="container text-center text-md-start my-3 p-0 me-5">
+    <div class="text-center text-md-start my-3 p-0">
        <div class="row d-flex m-0 ms-lg-2"> 
         <div class="col-md-6 col-lg-6 col-xl-6 d-flex flex-column justify-content-center text-start system"> 
           <h6 class="fw-bold "> Sistema de Gerenciamento de Almoxarifado </h6>
@@ -32,6 +32,7 @@ p{
 .custom-footer {
   z-index: 1000;
   width: 100%;
+  padding: 5px;
   color: white;
 }
 .bg-degrade{

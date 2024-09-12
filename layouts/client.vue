@@ -26,4 +26,10 @@
   height: 100%;
 }
 
+@media screen and (min-height: 1300px) {
+  .container-fluid {
+    height: 100vh;
+  }
+}
+
 </style>

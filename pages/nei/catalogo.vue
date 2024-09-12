@@ -583,6 +583,12 @@ tr:hover p{
 }
 /*RESPONSIVIDADE*/
 
+@media screen and (min-height: 780px) {
+    .table-container {
+        height: 83vh;
+    }
+}
+
 @media screen and (max-width: 900px){
     .actions-buttons{
         justify-content: center;

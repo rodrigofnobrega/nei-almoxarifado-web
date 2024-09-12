@@ -74,6 +74,19 @@ definePageMeta({
                 radial-gradient(ellipse at center right, rgba(254, 213, 30, 0.8), transparent 50%),
                 radial-gradient(ellipse at center left, rgba(254, 213, 30, 0.8), transparent 50%);
 }
+
+@media screen and (min-height: 780px) {
+    .bg-fade {
+        height: 90vh;
+    }
+}
+
+@media screen and (min-height: 848px) {
+    .bg-fade {
+        height: 91vh;
+    }
+}
+
 @media screen and (max-width: 700px){
     .btn-search{
         width: 400px;
