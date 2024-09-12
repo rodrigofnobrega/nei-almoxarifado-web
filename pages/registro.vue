@@ -86,7 +86,7 @@
         </template>
       </TablesTable>
     </div>
-    <div v-else-if="(showResults && finded.length === 0) || (!initialLoading && recordsCache.length === 0 && showResults)" 
+    <div v-else-if="(showResults && finded.length === 0) || (!initialLoading && recordsCache.length === 0 && !showResults)" 
         class="search-empty my-5">
         <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent p-5">Nenhum item Encontrado</p>
     </div> 
