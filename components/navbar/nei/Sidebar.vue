@@ -1,8 +1,9 @@
 <template>
     <div class="modal-backdrop" :style="{'display': responsive && isMobile ? 'block' : 'none' }"></div>
-    <div v-if="responsive" class="sidebar pt-0 nav bg-light d-flex offcanvas show showing" 
-    :class="{ 'collapsed': isCollapsed, 'hide': responsive && !isMobile, 'mobile-spacement': responsive && isMobile, 'mobile-fixed': responsive }"
-     data-bs-scroll="true" data-bs-backdrop="true" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+    <div class="sidebar pt-0 nav bg-light d-flex offcanvas show showing" 
+    :class="{ 'collapsed': isCollapsed, 'mobile-spacement': responsive && isMobile, 'mobile-fixed': responsive }"
+    :style="{'width': responsive && !isMobile ? '180px' : '01px'}" 
+    data-bs-scroll="true" data-bs-backdrop="true" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-body ps-0" :class="{'mobile-padding': responsive }">
             <div class="mobile-sidebar-header bg-primary m-0 p-0 text-light" :class="{'show': responsive && isMobile}" :style="{'width': responsive && isMobile ? '165px': '0px'}">
                 <IconsClose @click="hideSidebar()" class="exit-btn me-3" style="width: 25px; height: 25px;"/>

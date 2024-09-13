@@ -188,93 +188,110 @@ const totalElements = ref(0);
 const isSearching = ref(false);
 let finded = [];
 const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationInverted) => {
-    if(searchInput.value !== ''){
+    if (searchInput.value !== '') {
         cacheIndex.value = 0;
         itemsCache.value = [];
-        reqsIndexCache = [0]
+        reqsIndexCache = [0];
         pagination.value = 0;
         paginationRet.value = 1;
-        initialLoading.value = false
+        initialLoading.value = false;
         pagesFocus.value[count] = false;
-        count = 0;  
+        count = 0;
         pagesFocus.value[0] = true;
 
+        let finded = [];
 
-        finded = [];
-        if(searchCache.value.length >= totalPages.value){
-            console.log("Entrou no if")
-            for(let i = 0; i < searchCache.value.length; i++){
-                for(let j = 0; j < searchCache.value[i].length; j++){
+        if (searchCache.value.length >= totalPages.value) {
+            console.log("Entrou no if");
+            for (let i = 0; i < searchCache.value.length; i++) {
+                for (let j = 0; j < searchCache.value[i].length; j++) {
                     const normalizedItemName = searchCache.value[i][j].name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                     const normalizedSearchQuery = searchInput.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-                    if(normalizedItemName.includes(normalizedSearchQuery)){
+                    if (normalizedItemName.includes(normalizedSearchQuery)) {
                         finded.push(searchCache.value[i][j]);
                     }
-                    if(finded.length >= 20){ 
+
+                    if (finded.length >= 20) {
                         itemsCache.value.push(finded);
-                        return 0
-                    };
+                        return 0;
+                    }
                 }
-                if(finded.length >= 20){ 
-                        itemsCache.value.push(finded);
-                        return 0
-                };
+
+                if (finded.length >= 20) {
+                    itemsCache.value.push(finded);
+                    return 0;
+                }
             }
-            if(finded.length === 0){
+
+            if (finded.length === 0) {
                 itemsCache.value = [];
                 showResults.value = true;
                 return 0;
             }
+
             itemsCache.value.push(finded);
             showResults.value = true;
             return 0;
         }
-        for(let i = 0; i < totalPages.value; i++){
+
+        for (let i = 0; i < totalPages.value; i++) {
             const res = await getItems(userStore, i, sort);
             searchCache.value.push(res.content);
-            for(let j = 0; j < res.content.length; j++){
-                const normalizedItemName = searchCache.value[i][j].name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+            for (let j = 0; j < res.content.length; j++) {
+                const normalizedItemName = res.content[j].name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                 const normalizedSearchQuery = searchInput.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-                if(normalizedItemName.includes(normalizedSearchQuery)){
-                    finded.push(searchCache.value[i][j]);
+                if (normalizedItemName.includes(normalizedSearchQuery)) {
+                    finded.push(res.content[j]);
                 }
-                if(finded.length >= 20){ 
+
+                if (finded.length >= 20) {
                     itemsCache.value.push(finded);
-                    return 0
-                };
+                    return 0;
+                }
             }
-            if(finded.length >= 20){ 
+
+            if (finded.length >= 20) {
                 itemsCache.value.push(finded);
-                return 0
-            };
+                return 0;
+            }
         }
-        if(finded.length === 0){
+
+        if (finded.length === 0) {
             itemsCache.value = [];
             showResults.value = true;
             return 0;
         }
+
         itemsCache.value.push(finded);
         showResults.value = true;
         return 0;
     }
-    if(isInverted){
-        const res = await getItems(userStore, paginationInverted, sort)
+
+    if (isInverted) {
+        const res = await getItems(userStore, paginationInverted, sort);
         totalPages.value = res.totalPages;
         totalElements.value = res.totalElements;
-        invertedPagination.value = totalPages-1;
+        invertedPagination.value = totalPages.value - 1;
         itemsCache.value.push(res.content);
-        return res.totalPages
-    } 
-    const res = await getItems(userStore, pagination_, sort)
-    totalPages.value = res.totalPages;
-    totalElements.value = res.totalElements;
-    invertedPagination.value = totalPages-1;
-    loadRequest ? cacheIndex.value++ : 0;
-    res.content.length === 0 ? null : itemsCache.value.push(res.content);
-    return res.totalPages
-}; 
+    } else {
+        const res = await getItems(userStore, pagination_, sort);
+        totalPages.value = res.totalPages;
+        totalElements.value = res.totalElements;
+        invertedPagination.value = totalPages.value - 1;
+
+        if (loadRequest) {
+            cacheIndex.value++;
+        }
+
+        if (res.content.length > 0) {
+            itemsCache.value.push(res.content);
+        }
+    }
+};
+
 
 
 const searchInput = ref("");
