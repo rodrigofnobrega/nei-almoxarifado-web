@@ -106,19 +106,19 @@
             </template>
             </TablesTable>
         </div>
-        <div v-else-if="(showResults && finded.length === 0) || (!initialLoading && itemsCache.length === 0 && !showResults)" 
-            class="search-empty my-5">
-            <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent p-5">Nenhum item Encontrado</p>
-        </div> 
-        <div v-else class="d-flex justify-content-center align-items-center my-5">
+        <div v-else-if="!showSearchResults && !emptyItems" class="d-flex justify-content-center align-items-center my-5">
             <LoadersComponentLoading :isLoading="true" class="p-5 my-5"/>
         </div>
+        <div v-else-if="(showSearchResults && finded.length === 0) || (!initialLoading && totalPages === 0 && itemsCache.length === 0 && !showSearchResults)" 
+            class="search-empty my-5">
+            <p class="text-dark-emphasis fs-3 opacity-75 bg-transparent p-5">Nenhum item Encontrado</p>
+        </div> 
         <div class="table-footer d-flex justify-content-between align-items-center  mt-2">
             <div class="d-flex justify-content-center py-2 me-3 ">
                 <span v-if="itemsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de itens da página: {{ itemsCache[cacheIndex].length }}</span>
                 <span v-if="itemsCache.length > 0 && finded.length === 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de itens: {{ totalElements }}</span>
             </div>
-            <nav v-if="itemsCache.length > 0 && finded.length === 0" aria-label="Page navigation" class="pagination">
+            <nav v-if="itemsCache.length > 0 && finded.length === 0 && !showSearchResults" aria-label="Page navigation" class="pagination">
                 <ul class="pagination mb-2 mt-2">
                     <li class="page-item">
                         <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
@@ -202,7 +202,6 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
         let finded = [];
 
         if (searchCache.value.length >= totalPages.value) {
-            console.log("Entrou no if");
             for (let i = 0; i < searchCache.value.length; i++) {
                 for (let j = 0; j < searchCache.value[i].length; j++) {
                     const normalizedItemName = searchCache.value[i][j].name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -226,12 +225,12 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
 
             if (finded.length === 0) {
                 itemsCache.value = [];
-                showResults.value = true;
+                showSearchResults.value = true;
                 return 0;
             }
 
             itemsCache.value.push(finded);
-            showResults.value = true;
+            showSearchResults.value = true;
             return 0;
         }
 
@@ -261,42 +260,30 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
 
         if (finded.length === 0) {
             itemsCache.value = [];
-            showResults.value = true;
+            showSearchResults.value = true;
             return 0;
         }
 
         itemsCache.value.push(finded);
-        showResults.value = true;
+        showSearchResults.value = true;
         return 0;
     }
 
-    if (isInverted) {
-        const res = await getItems(userStore, paginationInverted, sort);
-        totalPages.value = res.totalPages;
-        totalElements.value = res.totalElements;
-        invertedPagination.value = totalPages.value - 1;
-        itemsCache.value.push(res.content);
-    } else {
-        const res = await getItems(userStore, pagination_, sort);
-        totalPages.value = res.totalPages;
-        totalElements.value = res.totalElements;
-        invertedPagination.value = totalPages.value - 1;
-
-        if (loadRequest) {
-            cacheIndex.value++;
-        }
-
-        if (res.content.length > 0) {
-            itemsCache.value.push(res.content);
-        }
-    }
+    const res = await getItems(userStore, pagination_, sort);
+    totalPages.value = res.totalPages;
+    totalElements.value = res.totalElements;
+    invertedPagination.value = totalPages.value - 1;
+    loadRequest ? cacheIndex.value++ : 0;
+    res.content.length === 0 ? emptyItems.value = true : itemsCache.value.push(res.content);
+    
 };
 
 
 
 const searchInput = ref("");
+const emptyItems = ref(false)
 const initialLoading = ref(true);
-const showResults = ref(false);
+const showSearchResults = ref(false);
 let reqsIndexCache = [0];
 let typingTimer; 
 const debounceTime = 1000; 
@@ -314,7 +301,7 @@ const itemsLoad = computed(async() => {
         return 0;
     }
     if(searchInput.value === '' && isSearching.value === true){
-        showResults.value = false;
+        showSearchResults.value = false;
         clearTimeout(typingTimer);
         typingTimer = setTimeout(() => {
             store.isReloadItems = true;

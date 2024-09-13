@@ -14,7 +14,7 @@
             Descrição da página
         </h6>
         <p class="sub-catalog-text opacity-75">
-            Nesta página temos todos os registros das operações feitas no sistema, sendo estas operações de dois tipos: 
+            Nesta página temos todos os registros das operações feitas no sistema, sendo estas operações de três tipos: 
             <b>CADASTRO</b>, <b>CONSUMO</b> e <b>EXCLUSÃO</b>. 
             Registrando também o usuário, item e horário da operação.
         </p>
@@ -86,19 +86,19 @@
         </template>
       </TablesTable>
     </div>
-    <div v-else-if="(showResults && finded.length === 0) || (!initialLoading && recordsCache.length === 0 && !showResults)" 
-        class="search-empty my-5">
-        <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent p-5">Nenhum item Encontrado</p>
-    </div> 
-    <div v-else class="d-flex justify-content-center align-items-center my-5">
-        <LoadersComponentLoading :isLoading="true" class="p-5 my-5"/>
+    <div v-else-if="!showSearchResults && !emptyRecords" class="d-flex justify-content-center align-items-center my-5">
+            <LoadersComponentLoading :isLoading="true" class="p-5 my-5"/>
     </div>
+    <div v-else-if="(showSearchResults && finded.length === 0) || (!initialLoading && totalPages === 0 && itemsCache.length === 0 && !showSearchResults)" 
+            class="search-empty my-5">
+            <p class="text-dark-emphasis fs-3 opacity-75 bg-transparent p-5">Nenhum Registro Encontrado</p>
+        </div> 
     <div class="table-footer d-flex justify-content-between align-items-center me-2 mt-2">
       <div class="d-flex justify-content-center py-2 me-3 ">
           <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade de registros da página: {{ recordsCache[cacheIndex].length }}</span>
           <span v-if="recordsCache.length > 0" class="ms-2 text-light-emphasis bg-gray-light fw-bold py-2 text-center px-2 pages-info">Quantidade total de registros: {{ totalElements }}</span>
       </div>
-      <nav v-if="recordsCache.length > 0 && finded.length === 0" aria-label="Page navigation" class="pagination">
+      <nav v-if="recordsCache.length > 0 && finded.length === 0 && !showSearchResults" aria-label="Page navigation" class="pagination">
             <ul class="pagination mb-2 mt-2">
                 <li class="page-item">
                     <button class="page-link bg-primary text-light page-nav-radius" :class="{'bg-dark-emphasis disabled': pagination == 0}" id="backPageBtn" @click="backPage"><span aria-hidden="true">&laquo;</span></button>
@@ -185,7 +185,10 @@ const recordsReq = async (sort, isInverted, pagination_, loadRequest, pagination
         if(searchCache.value.length >= totalPages.value){
             for(let i = 0; i < searchCache.value.length; i++){
                 for(let j = 0; j < searchCache.value[i].length; j++){
-                    if(searchCache.value[i][j].item.name.toLowerCase().includes(searchInput.value.toLowerCase())){
+                    const normalizedItemName = searchCache.value[i][j].item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    const normalizedSearchQuery = searchInput.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+                    if(normalizedItemName.includes(normalizedSearchQuery)){
                         finded.push(searchCache.value[i][j]);
                     }
                     if(finded.length >= 20){ 
@@ -200,19 +203,22 @@ const recordsReq = async (sort, isInverted, pagination_, loadRequest, pagination
             }
             if(finded.length === 0){
                 recordsCache.value = [];
-                showResults.value = true;
+                showSearchResults.value = true;
                 return 0;
             }
             recordsCache.value.push(finded);
-            showResults.value = true;
+            showSearchResults.value = true;
             return 0;
         }
         for(let i = 0; i < totalPages.value; i++){
             const res = await getRecords(userStore, i, sort);1
             searchCache.value.push(res.content);
             for(let j = 0; j < res.content.length; j++){
-                if(searchCache.value[i][j].item.name.toLowerCase().includes(searchInput.value.toLowerCase())){
-                    finded.push(res.content[j]);
+                const normalizedItemName = searchCache.value[i][j].item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                const normalizedSearchQuery = searchInput.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+                if(normalizedItemName.includes(normalizedSearchQuery)){
+                    finded.push(searchCache.value[i][j]);
                 }
                 if(finded.length >= 20){ 
                     recordsCache.value.push(finded);
@@ -226,11 +232,11 @@ const recordsReq = async (sort, isInverted, pagination_, loadRequest, pagination
         }
         if(finded.length === 0){
             recordsCache.value = [];
-            showResults.value = true;
+            showSearchResults.value = true;
             return 0;
         }
         recordsCache.value.push(finded);
-        showResults.value = true;
+        showSearchResults.value = true;
         return 0;
     }
     if(isInverted){
@@ -246,16 +252,18 @@ const recordsReq = async (sort, isInverted, pagination_, loadRequest, pagination
     totalElements.value = res.totalElements;
     invertedPagination.value = totalPages-1;
     loadRequest ? cacheIndex.value++ : 0;
-    recordsCache.value.push(res.content);
+
+
+    res.content.length === 0 ? emptyRecords.value = true : recordsCache.value.push(res.content);;
     return res.totalPages
 };
 
-
+const emptyRecords = ref(false);
 const searchInput = ref("");
 const initialLoading = ref(true);
 let reqsIndexCache = [0];
 let typingTimer; 
-const showResults = ref(false);
+const showSearchResults = ref(false);
 const debounceTime = 1000; 
 const recordsLoad = computed(async() => {
     if(initialLoading.value === true){
@@ -271,7 +279,7 @@ const recordsLoad = computed(async() => {
         return 0;
     }
     if(searchInput.value === '' && isSearching.value === true){
-        showResults.value = false;
+        showSearchResults.value = false;
         clearTimeout(typingTimer);
         typingTimer = setTimeout(() => {
             store.isReloadItems = true;
@@ -438,14 +446,14 @@ onMounted(async () => {
     display: block !important;
 }
 .table-box{
-    margin-top: 74px;
+    margin-top: 80px;
     border-radius: 0px 10px 10px 10px;
     box-shadow: 3px 3px 13px 0px rgb(0, 0, 0, 0.5);
     border: 1px #D9D9D9 solid;
 }
 .table-box-title{
     margin-left: 8px;
-    margin-top: 32px;
+    margin-top: 38px;
     padding: 4px;
     font-weight: 400;
     color: rgb(51,51,51, 0.8);
@@ -564,7 +572,6 @@ p{
     margin-top: 5%;
     display: flex;
     justify-content: center;
-    margin-left: 150%;
     white-space: nowrap;
 }
 .pagination{
@@ -616,6 +623,11 @@ tr:hover p{
     .searchbar{
         font-size: 14px;
     }
+    .table-searchbar{
+        min-width: 120px;
+        margin-top: 8px !important; 
+        display: block;
+    }
 }
 @media screen and (max-width: 600px){
     .pages-info{
@@ -638,7 +650,19 @@ tr:hover p{
         font-size: 18px;
     }
     .table-box-title{
-        margin-top: 35px;
+        margin-top: 41px;
+    }
+    .table-actions{
+        padding-right: 0px !important;
+        display: block !important;
+    }.actions-btns{
+        padding-bottom: 9px;
+        border-radius: 0px 10px 0px 0px;
+        background-color: rgba(51,51,51,0.1);
+        justify-content: center;
+    }
+    .table-searchbar{
+        margin: 0px 20px 0px 20px;
     }
 }
 </style>
