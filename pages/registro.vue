@@ -19,10 +19,10 @@
             Registrando também o usuário, item e horário da operação.
         </p>
         <br>
-        <ul class="opacity-75">
-            <li><b>CADASTRO</b>: Quando um item é adicionado ao estoque.</li>
-            <li><b>CONSUMO</b>: Quando um item é retirado do estoque por um usuário.</li>
-            <li><b>EXCLUSÃO</b>: Quando um item é removido do almoxarifado sem ter sido consumido.</li>
+        <ul class="opacity-75 list-group">
+            <li class="list-group-item"><b>CADASTRO</b>: Quando um item é adicionado ao estoque.</li>
+            <li class="list-group-item"><b>CONSUMO</b>: Quando um item é retirado do estoque por um usuário.</li>
+            <li class="list-group-item"><b>EXCLUSÃO</b>: Quando um item é removido do almoxarifado sem ter sido consumido.</li>
         </ul>
   </div>
   <div class="table-box-title position-absolute bg-light-emphasis d-flex align-items-center">
@@ -62,7 +62,7 @@
                     <span>{{ record.user.name }}</span>
                </th>
                <th class="border">
-                   <span>{{ record.operation }}</span>
+                   <span class="text-light p-2 rounded-1 fw-bold record-operation" :class="{'bg-dark-alert': record.operation === 'EXCLUSAO', 'bg-dark-warning': record.operation === 'CONSUMO', 'bg-dark-success': record.operation === 'CADASTRO'}">{{ record.operation }}</span>
                 </th>
                <th class="border">
                    <span>{{ record.quantity }}</span>
@@ -643,6 +643,10 @@ tr:hover p{
     .table-actions{
         width: 600px;
         padding-left: 0px;
+    }
+    .record-operation{
+        font-size: 10px;
+        padding: 7px 4px 7px 4px !important;
     }
 } 
 @media screen and (max-width: 500px){
