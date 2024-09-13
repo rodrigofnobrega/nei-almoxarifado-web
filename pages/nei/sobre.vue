@@ -199,6 +199,12 @@ definePageMeta({
 .card-text {
   flex-grow: 1;
 }
+
+@media screen and (min-height: 1300px) {
+  .container-fluid {
+    height: 100vh;
+  }
+}
 @media screen and (max-width: 859px){
   .description-title{
     text-align: center;

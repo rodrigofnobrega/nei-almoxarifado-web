@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     NavigateToItem(id) {
-      this.searchStore.itemSearch = { searching: true, itemId: id }
+        this.searchStore.itemSearch = { searching: true, itemId: id }
     },
     SearchDown() {
       let searchResult = document.getElementsByClassName("searchResult");
@@ -87,9 +87,6 @@ export default {
       searchResult[this.searchCount - 1].click();
     },
     async handleSearch(e) {
-      if(this.searchResults.length > 0){
-        return 1;
-      }
       this.searchQuery = e.target.value;
       this.showResults = false;
       this.searchResults = [];
@@ -106,7 +103,10 @@ export default {
           this.totalPages = res.totalPages;
           this.store.items.push(res.content);
           res.content.map((item) => {
-            if (item.name.includes(this.searchQuery)) {
+            const normalizedItemName = item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            const normalizedSearchQuery = this.searchQuery.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      
+            if (normalizedItemName.includes(normalizedSearchQuery)) {
               this.searchResults.push(item);
             }
           });

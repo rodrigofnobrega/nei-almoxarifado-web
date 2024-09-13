@@ -350,6 +350,13 @@ section {
     background-color: #1F69B1;
     box-shadow: none;
 }
+
+@media screen and (min-height: 780px) {
+    .container {
+        height: 100vh;
+    }
+}
+
 @media screen and (max-width: 750px){
     .dashboard-container{
         display: block !important;

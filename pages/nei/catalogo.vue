@@ -84,7 +84,7 @@
             </template>
             </TablesTable>
         </div>
-        <div v-else-if="(showResults && finded.length === 0) || (!initialLoading && itemsCache.length === 0 && showResults)" 
+        <div v-else-if="(showResults && finded.length === 0) || (!initialLoading && itemsCache.length === 0 && !showResults)" 
             class="search-empty my-5">
             <p class="text-dark-emphasis fs-5 opacity-75 bg-transparent p-5">Nenhum item Encontrado</p>
         </div> 
@@ -187,7 +187,10 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
         if(searchCache.value.length >= totalPages.value){
             for(let i = 0; i < searchCache.value.length; i++){
                 for(let j = 0; j < searchCache.value[i].length; j++){
-                    if(searchCache.value[i][j].name.toLowerCase().includes(searchInput.value.toLowerCase())){
+                    const normalizedItemName = searchCache.value[i][j].name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    const normalizedSearchQuery = searchInput.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+                    if(normalizedItemName.includes(normalizedSearchQuery)){
                         finded.push(searchCache.value[i][j]);
                     }
                     if(finded.length >= 20){ 
@@ -213,8 +216,11 @@ const itemsReq = async (sort, isInverted, pagination_, loadRequest, paginationIn
             const res = await getItems(userStore, i, sort);
             searchCache.value.push(res.content);
             for(let j = 0; j < res.content.length; j++){
-                if(searchCache.value[i][j].name.toLowerCase().includes(searchInput.value.toLowerCase())){
-                    finded.push(res.content[j]);
+                const normalizedItemName = searchCache.value[i][j].name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                const normalizedSearchQuery = searchInput.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+                if(normalizedItemName.includes(normalizedSearchQuery)){
+                    finded.push(searchCache.value[i][j]);
                 }
                 if(finded.length >= 20){ 
                     itemsCache.value.push(finded);
@@ -582,6 +588,12 @@ tr:hover p{
     opacity: 50%;
 }
 /*RESPONSIVIDADE*/
+
+@media screen and (min-height: 780px) {
+    .table-container {
+        height: 83vh;
+    }
+}
 
 @media screen and (max-width: 900px){
     .actions-buttons{
