@@ -65,7 +65,7 @@ onMounted(() => {
     justify-content: center;         
     display: flex;              
 }
-.brand-box{
+.brand-box{;
     bottom: 0;
     left: 0;
     position: absolute;
@@ -77,6 +77,7 @@ onMounted(() => {
 }
 @media screen and (max-width: 680px){
     .brand-box{
+        z-index: -1;
         bottom: 60px;
         right: 0;
     }

@@ -14,18 +14,19 @@
 				</div>
 				<div class="modal-body">
             <ul v-if="showResults && searchQuery !== '' && searchResults.length != 0" class="list-group">
-                <a class="text-decoration-none" v-for="result in searchResults" :href="`/nei/catalogo`" :key="result.id">
-                  <li @click="NavigateToItem(result.id)" class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
-                    {{ result.name }} 
-                    <span class="badge bg-primary rounded-pill" v-if="result"> {{ result.quantity }} </span>
-                  </li>
-                </a>
+                <li v-for="result in searchResults" :key="result.id" @click="NavigateToItem(result.id)" class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
+                  {{ result.name }} 
+                  <span class="badge bg-primary rounded-pill" v-if="result"> {{ result.quantity }} </span>
+                </li>
               </ul>
-            <div class="d-flex justify-content-center align-items-center py-3" v-else-if="!showResults && searchQuery !== ''">
+              <div class="d-flex justify-content-center align-items-center py-3" v-else-if="!showResults && searchQuery !== ''">
               <LoadersComponentLoading :isLoading="true" />
             </div>
             <p class="d-flex justify-content-center align-items-center pt-3" v-else-if="showResults && searchQuery !== '' && searchResults.length === 0">
             Nenhum Resultado Encontrado
+            </p>
+            <p class="d-flex justify-content-center align-items-center pt-3" v-else>
+              Sem Pesquisas Recentes
             </p>
             <!--
              <p class="d-flex justify-content-center align-items-center pt-3" v-else>
@@ -48,6 +49,7 @@ import { useStorageStore } from '../../stores/storage.ts';
 import { getItems } from '../../services/items/itemsGET.ts';
 import { useUser } from '../../stores/user.ts';
 import { useSettingsStore } from '../../stores/settings.ts';
+import { navigateTo } from 'nuxt/app';
 
 export default {
   data() {
@@ -65,6 +67,7 @@ export default {
   methods: {
     NavigateToItem(id) {
         this.searchStore.itemSearch = { searching: true, itemId: id }
+        navigateTo('/nei/catalogo')
     },
     SearchDown() {
       let searchResult = document.getElementsByClassName("searchResult");

@@ -6,16 +6,16 @@
     </Head>
 </div>
 <ModalNeiItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" 
-    :item_details="showSearchItem ? searchItem : store.itemDetails" />
+    :item_details="showSearchItem && showSearchModal ? searchItem : store.itemDetails" />
 <ModalNeiItemRequest v-if="itemsCache.length > 0" :item_index="itemIndex" 
-    :item_details="showSearchItem ? searchItem : store.itemDetails" />
+    :item_details="showSearchItem && showSearchModal ? searchItem : store.itemDetails" />
 
 <div class="table-container d-block mt-2">
-    <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#NeiItemDetailing"></button>
+    <button v-if="!searchStore.itemSearch.searching" class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#NeiItemDetailing"></button>
     <div class="sub-catalog bg-light mt-2 ps-2 pe-2">
         <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
-            Descrição da página
+            Descrição da página 
         </h6>
         <p class="sub-catalog-text opacity-75">
             Nesta página temos todos os itens disponíveis do almoxarifado mostrando informações importantes
@@ -381,14 +381,16 @@ const backPage = (async () => {
 });
 /*FUNÇÕES PARA OS BOTÕES DE DETALHE E HISTÓRICO*/
 const showDetails = (index) => {
-    searchStore.itemSearch.searching = false;
+    showSearchModal.value = false;
     itemIndex.value = index;
     store.itemDetails = itemsCache.value[cacheIndex.value][itemIndex.value];
 }
 const showConfirm = (index) => {
+    showSearchModal.value = false;
     itemIndex.value = index;
     store.itemDetails = itemsCache.value[cacheIndex.value][itemIndex.value];
 }
+const showSearchModal = ref(false);
 const searchItem = ref(undefined)
 const showSearchingDetails = async (itemId) => {
     const res = await getItem(userStore, itemId);
@@ -396,14 +398,10 @@ const showSearchingDetails = async (itemId) => {
     currentItem.value = res;
     const searching = document.getElementsByClassName('searching-btn'); 
     setTimeout(() => {
+         showSearchModal.value = true;
          searching[0].click();
-    }, 1000)
+    }, 500)
 }
-/*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
-onMounted(async () => {
-    initialLoading.value = false;
-});
-
 const showSearchItem = computed(() => {
     if(searchStore.itemSearch.searching){
         showSearchingDetails(searchStore.itemSearch.itemId);
@@ -412,10 +410,12 @@ const showSearchItem = computed(() => {
     }
     return false;
 })
+/*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
+onMounted(async () => {
+    initialLoading.value = false;
+});
 
-onBeforeRouteLeave(() => {
-    searchStore.itemSearch.searching = false;
-})
+
 </script>
 
 <style scoped>

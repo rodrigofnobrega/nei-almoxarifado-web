@@ -7,14 +7,14 @@
     </div>
     <ModalItemRegister />
     <ModalItemDetails v-if="itemsCache.length > 0" :item_index="itemIndex" :item_route="currentRoute" 
-        :item_details="showSearchItem ? searchItem : store.itemDetails" />
+        :item_details="showSearchItem && showSearchModal ? searchItem : store.itemDetails" />
     <ModalItemHistory v-if="itemsCache.length > 0"/>
 <div class="table-container d-block mt-2">
-    <button class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
+    <button v-if="!searchStore.itemSearch.searching" class="d-none searching-btn" data-bs-toggle="modal" data-bs-target="#itemDetailing"></button>
     <div class="sub-catalog bg-light mt-2 ps-2 pe-2">
         <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
-            Descrição da página
+            Descrição da página 
         </h6>
         <p class="sub-catalog-text opacity-75">
             Nesta página temos todos os itens disponíveis do almoxarifado(itens esgotados devem ser cadastrados novamente). 
@@ -422,15 +422,17 @@ const backPage = (async () => {
 });
 /*FUNÇÕES PARA OS BOTÕES DE DETALHE E HISTÓRICO*/
 const showDetails = (index) => {
-    searchStore.itemSearch.searching = false;
+    showSearchModal.value = false;
     itemIndex.value = index;
     store.itemDetails = itemsCache.value[cacheIndex.value][itemIndex.value];
 }
 
 const showHistory = async (itemId) => {
+    showSearchModal.value = false;
     const res = await getRecordByItemId(userStore, itemId)
     store.itemRecord = res.content
 }
+const showSearchModal = ref(false);
 const searchItem = ref(undefined)
 const showSearchingDetails = async (itemId) => {
     const res = await getItem(userStore, itemId);
@@ -438,6 +440,7 @@ const showSearchingDetails = async (itemId) => {
     currentItem.value = res;
     const searching = document.getElementsByClassName('searching-btn'); 
     setTimeout(() => {
+        showSearchModal.value = true;
          searching[0].click();
     }, 500)
 }
