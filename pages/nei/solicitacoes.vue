@@ -63,7 +63,7 @@
                         <div :class="{'border-warning border-bottom': requestsCache.inProgressRequests.length > 0}" class="d-flex box-title align-items-center justify-content-between px-2" >
                             <div class="d-flex align-items-center py-2">
                                 <IconsClock class="me-2 text-dark-warning" width="30" height="30"/>
-                                <h5 class="m-0 p-0">Em Progresso
+                                <h5 class="m-0 p-0">Pendentes
                                 </h5>
                                 <span>({{requestsCache.inProgressRequests.length}})</span>
                             </div>
@@ -953,11 +953,6 @@ p{
 }
 .response-textarea{
     padding-bottom: 30%;
-}
-@media screen and (min-height: 780px) {
-    .container-fluid {
-        height: 90vh;
-    }
 }
 @media screen and (max-width: 1115px){
     .card-width-adjust{
