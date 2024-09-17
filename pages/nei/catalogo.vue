@@ -393,43 +393,13 @@ const showConfirm = (index) => {
 const showSearchModal = ref(false);
 const searchItem = ref(undefined);
 
-const isItemInArray = (array, item) => {
-    const index = array.findIndex(
-        (element) =>
-            element.itemId === item.itemId
-    );
-
-    return {
-        isInside: index > -1,
-        index: index, 
-    }
-}
-
 const showSearchingDetails = async (itemId) => {
     const res = await getItem(userStore, itemId);
     searchItem.value = res;
     currentItem.value = res;
-
-    const item = {
-        itemId: res.id,
-        itemName: res.name,
-        itemQuantity: res.quantity,
-    };
-
-    const { isInside, index } = isItemInArray(searchStore.recentSearch, item);
-
-    if (isInside) {
-        searchStore.recentSearch.splice(index, 1);
-    }
-
-    searchStore.recentSearch.unshift(item);
-
-    if (searchStore.recentSearch.length > 5) {
-         searchStore.recentSearch.pop();
-     }
-    
     const searching = document.getElementsByClassName('searching-btn'); 
     setTimeout(() => {
+         showSearchModal.value = true;
          searching[0].click();
     }, 500)
 }
