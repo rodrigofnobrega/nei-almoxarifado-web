@@ -29,7 +29,7 @@ export const useStorageStore = defineStore('storage', {
         const popupStore = usePopupStore();
         if(item){
           try{
-            const res = await postCreateItem(userStore, item.name, item.sipacCode, item.quantity, item.type, item.minimumStock);
+            const res = await postCreateItem(userStore, item.name, item.sipacCode ? item.sipacCode : '', item.quantity, item.type, item.minimumStock);
             if(res === false){
               popupStore.throwPopup('Erro: Existe um item com mesmo código sipac', '#B71C1C');
             }

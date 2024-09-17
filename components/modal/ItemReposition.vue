@@ -9,7 +9,7 @@
         <template v-slot:body>
             <div class="row">
                 <div class="mb-3"> 
-                        <label class="mb-2 fw-bold">Quantidade a ser reposta </label>
+                        <label class="mb-2 fw-bold">Quantidade a ser reposta</label>
 						<input v-model="repositionQtd" class="form-control edit-control" type="number" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
 				</div>
             </div>   
@@ -59,7 +59,7 @@ const reposition = () => {
         return 0
     }
     try{
-        store.addItem({name: props.itemName, sipacCode: props.itemSipac === null? '': props.itemSipac, type: props.itemType, quantity: repositionQtd.value, storage: 'teste'})
+        store.addItem({name: props.itemName, sipacCode: props.itemSipac === null ? ' ': props.itemSipac, type: props.itemType, quantity: repositionQtd.value, storage: 'teste'})
         popUpStore.throwPopup(`Reposição de ${repositionQtd.value} ${props.itemName} feita com sucesso`, '#0B3B69')
     } catch(err){
         popUpStore.throwPopup('Erro: Algo de errado ocorreu, contate o suporte', '#B71C1C')

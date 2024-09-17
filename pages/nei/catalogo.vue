@@ -15,11 +15,11 @@
     <div class="sub-catalog bg-light mt-2 ps-2 pe-2">
         <h6 class="sub-catalog-title ps-2 d-flex align-items-center opacity-75">
             <IconsInformation class="me-2"/>
-            Descrição da página 
+            Descrição da página  
         </h6>
         <p class="sub-catalog-text opacity-75">
             Nesta página temos todos os itens disponíveis do almoxarifado mostrando informações importantes
-            como nome e quantidade. 
+            como nome e quantidade.
         </p>
     </div>
     <div class="table-box-title position-absolute bg-light-emphasis d-flex align-items-center">
@@ -433,19 +433,17 @@ const showSearchingDetails = async (itemId) => {
          searching[0].click();
     }, 500)
 }
-const showSearchItem = computed(() => {
-    if(searchStore.itemSearch.searching){
-        showSearchingDetails(searchStore.itemSearch.itemId);
-        searchStore.itemSearch.searching = false;
-        return true;
-    }
-    return false;
-})
 /*HOOKS PARA RESPONSIVIDADE E MODO MOBILE*/
 onMounted(async () => {
     initialLoading.value = false;
 });
-
+const showSearchItem = computed(() => {
+    if(searchStore.itemSearch.searching){
+        showSearchingDetails(searchStore.itemSearch.itemId);
+        searchStore.itemSearch.searching = false;
+    }
+    return true;
+})
 
 </script>
 
