@@ -22,10 +22,20 @@
             <div class="d-flex justify-content-center align-items-center py-3" v-else-if="!showResults && searchQuery !== ''">
               <LoadersComponentLoading :isLoading="true" />
             </div>
-            <p class="d-flex justify-content-center align-items-center pt-3" v-else-if="showResults && searchQuery !== '' && searchResults.length === 0">
+            <p class="d-flex justify-content-center align-items-center pt-3" v-else-if=" searchQuery !== '' && searchResults.length === 0">
             Nenhum Resultado Encontrado
             </p>
-            <p class="d-flex justify-content-center align-items-center pt-3" v-else>
+            
+            <ul v-if="searchQuery.length === 0 && searchStore.recentSearch.length  > 0" class="list-group">
+              <a class="text-decoration-none" v-for="result in searchStore.recentSearch" :key="result.itemId">
+                <li @click="NavigateToItem(result.itemId)" class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
+                  {{ result.itemName }} 
+                  <span class="badge bg-primary rounded-pill" v-if="result"> {{ result.itemQuantity }} </span>
+                </li>
+              </a>
+            </ul> 
+            
+             <p class="d-flex justify-content-center align-items-center pt-3" v-if="searchStore.recentSearch.length === 0 && searchQuery.length === 0">
               Sem Pesquisas Recentes
             </p>
 				</div>
@@ -61,6 +71,8 @@ export default {
   methods: {
     NavigateToItem(id) {
         this.searchStore.itemSearch = { searching: true, itemId: id };
+        const selectedItem = this.searchResults.find(item => item.id == id);
+        this.addItemToRecentSearch(selectedItem);
         navigateTo('/catalogo');
     },
     SearchDown() {
@@ -84,6 +96,36 @@ export default {
     Navigate() {
       let searchResult = document.getElementsByClassName("searchResult");
       searchResult[this.searchCount - 1].click();
+    },
+    isItemInArray(array, item) {
+      const index = array.findIndex(
+          (element) =>
+              element.itemId === item.itemId
+      )
+
+      return {
+        isInside: index > -1,
+        index: index, 
+      } 
+    },
+    addItemToRecentSearch(res) {
+      const item = {
+          itemId: res.id,
+          itemName: res.name,
+          itemQuantity: res.quantity,
+      };
+
+      const { isInside, index } = this.isItemInArray(this.searchStore.recentSearch, item);
+
+      if (isInside) {
+          this.searchStore.recentSearch.splice(index, 1);
+      }
+
+      this.searchStore.recentSearch.unshift(item);
+
+      if (this.searchStore.recentSearch.length > 5) {
+        this.searchStore.recentSearch.pop();
+      }
     },
     async handleSearch(e) {
       this.searchQuery = e.target.value;
