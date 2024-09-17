@@ -22,17 +22,23 @@
               <div class="d-flex justify-content-center align-items-center py-3" v-else-if="!showResults && searchQuery !== ''">
               <LoadersComponentLoading :isLoading="true" />
             </div>
-            <p class="d-flex justify-content-center align-items-center pt-3" v-else-if="showResults && searchQuery !== '' && searchResults.length === 0">
+            <p class="d-flex justify-content-center align-items-center pt-3" v-else-if=" searchQuery !== '' && searchResults.length === 0">
             Nenhum Resultado Encontrado
             </p>
-            <p class="d-flex justify-content-center align-items-center pt-3" v-else>
+            
+            <ul v-if="searchQuery.length === 0 && searchStore.recentSearch.length  > 0" class="list-group">
+              <a class="text-decoration-none" v-for="result in searchStore.recentSearch" :href="`/nei/catalogo`" :key="result.itemId">
+                <li @click="NavigateToItem(result.itemId)" class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
+                  {{ result.itemName }} 
+                  <span class="badge bg-primary rounded-pill" v-if="result"> {{ result.itemQuantity }} </span>
+                </li>
+              </a>
+            </ul> 
+            
+             <p class="d-flex justify-content-center align-items-center pt-3" v-if="searchStore.recentSearch.length === 0 && searchQuery.length === 0">
               Sem Pesquisas Recentes
             </p>
-            <!--
-             <p class="d-flex justify-content-center align-items-center pt-3" v-else>
-              Sem Pesquisas Recentes
-            </p>
-            --> 
+            
 				</div>
 				<div v-if="!settingsStore.isMobile" class="modal-footer">
             <p class="fs-6"><IconsEnter class="bg-primary text-light" style="border-radius: 3px;"/> para selecionar <IconsBottomArrow class="bg-primary text-light" style="border-radius: 3px;"/> <IconsUpArrow class="bg-primary text-light" style="border-radius: 3px;"/> para navegar e <span class="bg-primary text-light" style="border-radius: 3px;">esc</span> para fechar</p>
