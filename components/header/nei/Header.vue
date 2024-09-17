@@ -1,9 +1,9 @@
 <template>
     <div class="header container-fluid d-flex justify-content-between align-items-center bg-primary p-0">  
       <IconsMenu @click="expandSidebar()" class="d-none menu-color mx-3" :class="{'show-menu': settingsStore.isMobile}"/>
-      <div @mouseover="toolTip = true" @mouseout="toolTip = false" class=" align-items-center" :class="{'d-none': settingsStore.isMobile}">
-        <Brand class="ms-3"/>
-        <TooltipsRectangular class="ms-5 ps-5 pt-2" :toolTipState="toolTip" :toolTipText="'Página Inicial'"/>
+      <div class="d-flex align-items-center" :class="{'d-none': settingsStore.isMobile}">
+        <Brand title="Página incial" />
+        <SearchBar :class="{'d-none': settingsStore.isMobile}"  class="pb-1"/>
       </div> 
       <nav v-if="!settingsStore.isMobile" class="navbar navbar-expand py-0 ps-0">
           <div class="container-fluid">
@@ -17,11 +17,9 @@
           </div>
       </nav>
       <div class="d-flex justify-content-end align-items-center pb-0">
-        <SearchBar :class="{'d-none': settingsStore.isMobile}"  class="pb-1"/>
         <div :class="{'d-none': !settingsStore.isMobile}" class="d-flex align-items-center text-light me-1" type="button" tabindex="-1" data-bs-target="#neiSearchModal" data-bs-toggle="modal">
           <IconsSearchGlass class="mobile-search text-light" height="26px" style="margin-bottom: 2px;"/>
         </div>
-        <ThemeSwitch v-if="!settingsStore.isMobile" class="mt-1"/>
         <Profile />
       </div>     
     </div>
@@ -60,13 +58,11 @@ export default{
       }
     },
     setup(){
-      const toolTip = ref(false);
       const currentRoute = useRoute();
       const settingsStore = useSettingsStore();
       const store = useStorageStore();
       return{
         store,
-        toolTip,
         currentRoute,
         settingsStore
       }
@@ -88,9 +84,6 @@ export default{
 .header{
   position: fixed;
   z-index: 1050;
-}
-.navbar{
-  margin-left: 22%;
 }
 .nav-link{
   font-weight: bold;
@@ -114,14 +107,5 @@ export default{
 .mobile-search{
   margin-top: 2.9px;
 }
-@media screen and (max-width: 1120px){
-  .navbar{
-    margin-left: 14%;
-  }
-}
-@media screen and (max-width: 984px){
-  .navbar{
-    margin-left: 0px;
-  }
-}
+
 </style>

@@ -739,10 +739,12 @@ onMounted(() => {
     scrollbar-color: transparent; /* Fundo branco no Firefox */
 }
 .cards-box {
-    scrollbar-color: rgba(51,51,51,0.5) rgba(40,40,40, 0.1) !important
+    scrollbar-color: rgba(51, 51, 51, 0.5) transparent !important; 
+    scrollbar-width: thin !important;
 }
+
 *::-moz-scrollbar-thumb:hover {
-    background: transparent; 
+    background: transparent;
 }
 .resizeBox{
     display: flex !important;

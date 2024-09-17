@@ -1,23 +1,30 @@
 <template>
     <div class="logo">
-          <a class="navbar-brand d-flex align-items-center" href="/nei">
-            <svg class="d-flex align-items-center" width="50" height="50">
-              <image class="custom-logo" xlink:href="/logo.svg" width="45" height="45"/>
+          <a class="navbar-brand ms-2 text-light d-flex align-items-center" href="/nei">
+            <svg width="37" height="30">
+              <image class="custom-logo" xlink:href="/logo.svg" width="35" height="30"/>
             </svg>
+            <h5 class="fw-bold mt-2">
+              NEI
+            </h5>
           </a>
         </div>
 </template>
 
 <style scoped>
 h5{
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Comic Neue', cursive;
 }
 .navbar-brand{
-  transition: transform 0.3s ease-in-out;
-  padding-right: 20px;
+  height: 49px;
+  padding-left: 2px;
+  padding-right: 10px;
+  transition: box-shadow 0.4s ease, border-bottom 0.4s ease-in-out, transform 0.2s ease-in-out;
 }
 .navbar-brand:hover{
-  border-radius: 15px;
-  transform: scale(1.07);
+  transform: scaleX(1.05);
+  border-bottom: solid 1px #FED51E;
+  box-shadow: inset 0px -12px 15px -13px rgb(254, 213, 30, 0.7);
 }
+
 </style>

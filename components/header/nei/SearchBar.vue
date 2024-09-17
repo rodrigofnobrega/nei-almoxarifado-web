@@ -1,8 +1,8 @@
 <template>
     <div class="d-flex search-bar me-2 mt-1" tabindex="-1">
             <button class="d-flex btn btn-transparent border-0 text-light align-items-center ps-0" type="button" tabindex="-1" data-bs-target="#neiSearchModal" data-bs-toggle="modal">
-              <IconsSearchGlass />
-              <span class="ms-1">Pesquisar</span>
+              <IconsSearchGlass class=""/>
+              <span class="ms-1 fw-bold">Pesquisar</span>
             </button>
       </div>
 </template>

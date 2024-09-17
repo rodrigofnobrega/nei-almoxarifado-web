@@ -63,6 +63,7 @@ function checkIfMobile() {
 </script>
 
 <style>
+@import url('https://fontlibrary.org//face/dejavu-sans');
 
 /* Para Firefox */
 * {
@@ -76,7 +77,7 @@ function checkIfMobile() {
 
 
 .poppins{
-  font-family: 'Poppins', sans-serif;
+  font-family: system-ui, 'Poppins', sans-serif;
 }
 .inter{
   font-family: 'Inter', sans-serif !important;

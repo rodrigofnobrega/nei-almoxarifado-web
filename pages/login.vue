@@ -312,7 +312,7 @@ onMounted(() => {
 	z-index: 10000;
 }
 .eye{
-	background-color: white;
+	background-color: transparent;
 	margin-bottom: 10px !important;
 }
 .login-form {

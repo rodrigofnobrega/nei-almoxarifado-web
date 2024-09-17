@@ -12,7 +12,7 @@
             </svg>
         </div>
         <div class="d-flex justify-content-center mb-2 mx-0 px-0">
-            <h1 class="homepage-title fw-bold">Nei Almoxarifado</h1>
+            <h1 class="homepage-title fw-bold">NEI Almoxarifado</h1>
         </div>
         <div class="d-flex justify-content-center mb-5 homepage-text">
             <h4 class="homepage-title text-center fw-medium opacity-75">Para fazer as solicitações de itens navegue<br class="text-spacement"> para a página 

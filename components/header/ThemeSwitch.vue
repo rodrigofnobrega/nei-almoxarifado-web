@@ -1,5 +1,5 @@
 <template>
-    <div class="pe-4">
+    <div class="pe-3">
         <div class="form-check mx-0 px-0 form-switch">
             <input @click="themeSwitch" v-model="isDark" class="form-check-input shadow-none mx-0" type="checkbox" role="switch" id="flexSwitchCheckDefault"> 
         </div>

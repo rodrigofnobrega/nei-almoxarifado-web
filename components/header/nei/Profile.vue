@@ -28,13 +28,14 @@
                  </div>
                 <span class="notification-text ms-0 opacity-75 text-dark-emphasis">Feita em {{request.updatedDate.slice(0, 19)}}</span>
                 <!--
-                <div v-if="closeNot[index] === true" class="d-flex justify-content-end align-items-end">
-                  <IconsClose @mouseenter="closeNot[index] = true" @mouseover="closeNot[index] = true" @click="removeNot(index)" class="position-fixed mb-1" width="30" height="30"/>
-                </div>-->
-              </li>
-              <li v-show="!isNotification || requests.length === 0" class="dropdown-item fs-6 text-dark-emphasis py-2" style="background-color: white;">Nenhuma notificação enviada.</li>
-            </ul>
-          </div>
+                  <div v-if="closeNot[index] === true" class="d-flex justify-content-end align-items-end">
+                    <IconsClose @mouseenter="closeNot[index] = true" @mouseover="closeNot[index] = true" @click="removeNot(index)" class="position-fixed mb-1" width="30" height="30"/>
+                  </div>-->
+                </li>
+                <li v-show="!isNotification || requests.length === 0" class="dropdown-item fs-6 text-dark-emphasis py-2" style="background-color: white;">Nenhuma notificação enviada.</li>
+              </ul>
+            </div>
+          <ThemeSwitch class="ms-2 mt-1"/>
           <div class="nav-item dropdown">
             <button class="svg-button  d-flex bg-primary align-items-center" @click="rotate" data-bs-toggle="dropdown" data-bs-offset="10,0" data-bs-auto-close="inside" aria-expanded="false">
               <p class="profile-drop user-text text-light px-1 m-0 fw-light text-nowrap"> {{ user.username }} </p>
@@ -66,6 +67,7 @@ import { useNotifications } from '../../../stores/notifications';
 import { getUserByEmail } from '../../../services/users/userGET';
 import { getRequestByStatus, getRequestByUser } from '../../../services/requests/requestsGET';
 import { onMounted, ref } from 'vue';
+import ThemeSwitch from '../ThemeSwitch.vue';
 const toolTip = ref(false)
 
 

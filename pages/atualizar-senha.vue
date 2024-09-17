@@ -27,8 +27,8 @@
 								class="form-control pe-5 "
 								>
 							<label class="fw-bold rounded-1" :class="{'label-focus': isPasswordFocused || newPassword, 'text-light-alert': newPassword && newPassword.length < 6}" for="newPassword">{{newPassword && newPassword.length < 6 ? 'Senha deve ser de 6 a mais caracteres' : 'Nova senha:'}}</label>
-							<IconsOpenEye v-if="!showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 mb-2 bg-white" width="25" height="40"/>
-							<IconsCloseEye v-if="showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 mb-2 bg-white" width="25" height="40"/>
+							<IconsOpenEye v-if="!showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 mb-2 bg-transparent" width="25" height="40"/>
+							<IconsCloseEye v-if="showPassword[0]" @click="showPassword[0] = !showPassword[0]" class="position-absolute me-2 mb-2 bg-transparent" width="25" height="40"/>
 						</div>
 					</div>
 				</div>
@@ -47,8 +47,8 @@
 								class="form-control pe-5"
 								>
 							<label class="fw-bold rounded-1" :class="{'label-focus': isRePasswordFocused || newRePassword, 'text-dark-alert': newRePassword && newRePassword !== newPassword}" for="newRePassword">{{newRePassword && newRePassword !== newPassword ? 'As senhas não conferem' : 'Confirmar senha:'}}</label>
-							<IconsOpenEye v-if="!showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
-							<IconsCloseEye v-if="showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 mb-2 text-light-emphasis" width="25" height="40"/>
+							<IconsOpenEye v-if="!showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 mb-2 text-light-emphasis bg-transparent" width="25" height="40"/>
+							<IconsCloseEye v-if="showPassword[1]" @click="showPassword[1] = !showPassword[1]" class="position-absolute me-2 mb-2 text-light-emphasis bg-transparent" width="25" height="40"/>
 						</div>
 					</div>
 				</div>

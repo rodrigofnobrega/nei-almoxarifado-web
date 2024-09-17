@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   alias: {"@": "/<rootDir>"},
   css: [
     'bootstrap/dist/css/bootstrap.min.css',
-    '~/assets/scss/styles.scss'
+    '~/assets/scss/styles.scss',
   ],
   modules: [
     '@pinia/nuxt',
@@ -29,7 +29,8 @@ export default defineNuxtConfig({
     families: {
       Inter: [400, 500, 600, 700, 800],
       Montserrat: [400, 500, 600, 700, 800],
-      Lora: [400, 500, 600, 700, 800]
+      Lora: [400, 500, 600, 700, 800],
+      'Comic Neue': [400, 700],
     },
     display: 'swap',
     prefetch: true, 
