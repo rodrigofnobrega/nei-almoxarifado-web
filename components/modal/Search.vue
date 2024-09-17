@@ -71,7 +71,19 @@ export default {
   methods: {
     NavigateToItem(id) {
         this.searchStore.itemSearch = { searching: true, itemId: id };
-        const selectedItem = this.searchResults.find(item => item.id == id);
+        console.log(this.searchStore.itemSearch);
+        console.log(this.searchStore.recentSearch)
+        console.log(this.searchResults);
+        let selectedItem;
+
+        // Verifica se searchResults possui elementos
+        if (this.searchResults.length > 0) {
+            console.log("Search results 0")
+            selectedItem = this.searchResults.find(item => item.id === id);
+        } else {
+          console.log("Search results maior que 0")
+            selectedItem = this.searchStore.recentSearch.find(item => item.itemId === this.searchStore.itemSearch.itemId);
+        }
         this.addItemToRecentSearch(selectedItem);
         navigateTo('/catalogo');
     },
@@ -95,6 +107,7 @@ export default {
     },
     Navigate() {
       let searchResult = document.getElementsByClassName("searchResult");
+      console.log("Navigate")
       searchResult[this.searchCount - 1].click();
     },
     isItemInArray(array, item) {
@@ -109,6 +122,7 @@ export default {
       } 
     },
     addItemToRecentSearch(res) {
+      console.log(res);
       const item = {
           itemId: res.id,
           itemName: res.name,
