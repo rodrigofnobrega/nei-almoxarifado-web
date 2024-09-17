@@ -27,7 +27,7 @@
             </p>
             
             <ul v-if="searchQuery.length === 0 && searchStore.recentSearch.length  > 0" class="list-group">
-              <a class="text-decoration-none" v-for="result in searchStore.recentSearch" :key="result.itemId">
+              <a class="text-decoration-none" v-for="result in searchStore.recentSearch" :key="result.id">
                 <li @click="NavigateToItem(result.id)" class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
                   {{ result.name }} 
                   <span class="badge bg-primary rounded-pill" v-if="result"> {{ result.quantity }} </span>

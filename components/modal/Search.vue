@@ -103,7 +103,6 @@ export default {
     },
     Navigate() {
       let searchResult = document.getElementsByClassName("searchResult");
-      console.log("Navigate")
       searchResult[this.searchCount - 1].click();
     },
     isItemInArray(array, item) {
