@@ -27,10 +27,10 @@
             </p>
             
             <ul v-if="searchQuery.length === 0 && searchStore.recentSearch.length  > 0" class="list-group">
-              <a class="text-decoration-none" v-for="result in searchStore.recentSearch" :key="result.itemId">
-                <li @click="NavigateToItem(result.itemId)" class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
-                  {{ result.itemName }} 
-                  <span class="badge bg-primary rounded-pill" v-if="result"> {{ result.itemQuantity }} </span>
+              <a class="text-decoration-none" v-for="result in searchStore.recentSearch" :key="result.id">
+                <li @click="NavigateToItem(result.id)" class="searchResult list-group-item list-group-item-action d-flex justify-content-between align-items-center" tabindex="0"> 
+                  {{ result.name }}
+                  <span class="badge bg-primary rounded-pill" v-if="result"> {{ result.quantity }} </span>
                 </li>
               </a>
             </ul> 
@@ -70,22 +70,18 @@ export default {
   },
   methods: {
     NavigateToItem(id) {
-        this.searchStore.itemSearch = { searching: true, itemId: id };
-        console.log(this.searchStore.itemSearch);
-        console.log(this.searchStore.recentSearch)
-        console.log(this.searchResults);
-        let selectedItem;
+      this.searchStore.itemSearch = { searching: true, itemId: id }
+      let selectedItem;
 
-        // Verifica se searchResults possui elementos
-        if (this.searchResults.length > 0) {
-            console.log("Search results 0")
-            selectedItem = this.searchResults.find(item => item.id === id);
-        } else {
-          console.log("Search results maior que 0")
-            selectedItem = this.searchStore.recentSearch.find(item => item.itemId === this.searchStore.itemSearch.itemId);
-        }
-        this.addItemToRecentSearch(selectedItem);
-        navigateTo('/catalogo');
+      if (this.searchResults.length > 0) {
+          selectedItem = this.searchResults.find(item => item.id === id);
+      } else {
+        selectedItem = this.searchStore.recentSearch.find(item => item.id === id);
+      }
+
+      this.addItemToRecentSearch(selectedItem);
+
+      navigateTo('/catalogo');
     },
     SearchDown() {
       let searchResult = document.getElementsByClassName("searchResult");
@@ -113,7 +109,7 @@ export default {
     isItemInArray(array, item) {
       const index = array.findIndex(
           (element) =>
-              element.itemId === item.itemId
+              element.id === item.id
       )
 
       return {
@@ -122,17 +118,16 @@ export default {
       } 
     },
     addItemToRecentSearch(res) {
-      console.log(res);
       const item = {
-          itemId: res.id,
-          itemName: res.name,
-          itemQuantity: res.quantity,
+          id: res.id,
+          name: res.name,
+          quantity: res.quantity,
       };
 
       const { isInside, index } = this.isItemInArray(this.searchStore.recentSearch, item);
 
       if (isInside) {
-          this.searchStore.recentSearch.splice(index, 1);
+        this.searchStore.recentSearch.splice(index, 1);
       }
 
       this.searchStore.recentSearch.unshift(item);
