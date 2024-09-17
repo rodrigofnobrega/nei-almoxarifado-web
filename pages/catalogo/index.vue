@@ -453,9 +453,8 @@ const showSearchItem = computed(() => {
     if(searchStore.itemSearch.searching){
         showSearchingDetails(searchStore.itemSearch.itemId);
         searchStore.itemSearch.searching = false;
-        return true;
     }
-    return false;
+    return true
 })
 
 onBeforeRouteLeave(() => {
