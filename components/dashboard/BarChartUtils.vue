@@ -62,7 +62,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { Bar } from 'vue-chartjs';
+import { Bar, Line } from 'vue-chartjs';
 import { useUser } from '../../stores/user.ts';
 import { useStorageStore } from '../../stores/storage.ts';
 import { getRequestByItem, getRequestByUser, getRequests } from '../../services/requests/requestsGET.ts';
@@ -80,7 +80,8 @@ import {
   LinearScale,
   PointElement, 
   ArcElement,
-  LineElement
+  LineElement,
+  PieController
 } from 'chart.js';
 
 ChartJS.register(
@@ -88,6 +89,7 @@ ChartJS.register(
   Tooltip,
   Legend,
   Filler,
+  PieController,
   BarElement,
   CategoryScale,
   LinearScale,

@@ -51,11 +51,12 @@ import { ref, onMounted, inject } from 'vue';
 import { useUser } from '../../stores/user.ts';
 import { useStorageStore } from '../../stores/storage.ts';
 import { getRequests } from '../../services/requests/requestsGET.ts';
-import { Bar } from 'vue-chartjs';
+import { Bar, Line, Pie } from 'vue-chartjs';
 import {
   Chart as ChartJS,
   Title,
   Tooltip,
+  LineController,
   Legend,
   Filler,
   BarElement,
@@ -68,6 +69,7 @@ ChartJS.register(
   Tooltip,
   Legend,
   Filler,
+  LineController,
   BarElement,
   CategoryScale,
   LinearScale
